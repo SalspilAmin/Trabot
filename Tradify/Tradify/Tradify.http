@@ -1,0 +1,6 @@
+@Tradify_HostAddress = http://localhost:5262
+
+GET {{Tradify_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

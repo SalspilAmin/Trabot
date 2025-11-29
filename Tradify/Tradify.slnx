@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="Tradify.Core/Tradify.Core.csproj" />
+  <Project Path="Tradify.Data/Tradify.Data.csproj" />
+  <Project Path="Tradify.Infrastructure/Tradify.Infrastructure.csproj" />
+  <Project Path="Tradify.Service/Tradify.Service.csproj" />
+  <Project Path="Tradify/Tradify.csproj" />
+</Solution>
