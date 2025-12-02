@@ -7,8 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="AppMetaData\" />
-    <Folder Include="Entities\Identity\" />
     <Folder Include="LoclaizationEntities\" />
   </ItemGroup>
 
