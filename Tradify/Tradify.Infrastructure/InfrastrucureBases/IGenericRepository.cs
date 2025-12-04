@@ -11,8 +11,8 @@ namespace Tradify.Infrastructure.InfrastrucureBases
         Task<T> GetByIdAsync(int id);
         Task SaveChangesAsync();
         IDbContextTransaction BeginTransaction();
-        void Commit();
-        void RollBack();
+        void Commit(IDbContextTransaction dbContextTransaction);
+        void RollBack(IDbContextTransaction dbContextTransaction);
         IQueryable<T> GetTableNoTracking();
         IQueryable<T> GetTableAsTracking();
         Task<T> AddAsync(T entity);
@@ -22,7 +22,7 @@ namespace Tradify.Infrastructure.InfrastrucureBases
         Task DeleteAsync(T entity);
 
         Task<IDbContextTransaction> BeginTransactionAsync();
-        Task CommitAsync();
-        Task RollBackAsync();
+        Task CommitAsync(IDbContextTransaction dbContextTransaction);
+        Task RollBackAsync(IDbContextTransaction dbContextTransaction);
     }
 }

@@ -56,10 +56,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="AbstractsRepositories\" />
     <Folder Include="Configurations\" />
     <Folder Include="Dependencies\" />
-    <Folder Include="Repositories\" />
   </ItemGroup>
 
   <ItemGroup>

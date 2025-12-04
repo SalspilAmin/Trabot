@@ -1,90 +1,121 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
+using Tradify.Infrastructure.Context;
 
 namespace Tradify.Infrastructure.InfrastrucureBases
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
-        public Task<T> AddAsync(T entity)
+
+        #region Properties
+        private readonly ApplicationDbContext applicationDbContext;
+
+
+        #endregion
+        #region Constructor
+        public GenericRepository(ApplicationDbContext applicationDbContext)
         {
-            throw new NotImplementedException();
+            this.applicationDbContext = applicationDbContext;
         }
 
-        public Task AddRangeAsync(ICollection<T> entities)
+        #endregion
+        public async Task<T> AddAsync(T entity)
         {
-            throw new NotImplementedException();
+            
+             await applicationDbContext.Set<T>().AddAsync(entity);
+            return entity;
+        }
+
+        public async Task AddRangeAsync(ICollection<T> entities)
+        {
+            await applicationDbContext.Set<T>().AddRangeAsync(entities);
+
         }
 
         public IDbContextTransaction BeginTransaction()
         {
-            throw new NotImplementedException();
+           return applicationDbContext.Database.BeginTransaction();
         }
 
-        public Task<IDbContextTransaction> BeginTransactionAsync()
+        public async Task<IDbContextTransaction> BeginTransactionAsync()
         {
-            throw new NotImplementedException();
+            return await applicationDbContext.Database.BeginTransactionAsync();
         }
 
-        public void Commit()
+      
+
+        public void Commit(IDbContextTransaction dbContextTransaction)
         {
-            throw new NotImplementedException();
+            dbContextTransaction.Commit();
         }
 
-        public Task CommitAsync()
+        
+
+        public async Task CommitAsync(IDbContextTransaction dbContextTransaction)
         {
-            throw new NotImplementedException();
+           await dbContextTransaction.CommitAsync();
         }
 
-        public Task DeleteAsync(T entity)
+        public async Task DeleteAsync(T entity)
         {
-            throw new NotImplementedException();
+             applicationDbContext.Set<T>().Remove(entity);
+            await applicationDbContext.SaveChangesAsync();
         }
 
-        public Task DeleteRangeAsync(ICollection<T> entities)
+        public async Task DeleteRangeAsync(ICollection<T> entities)
         {
-            throw new NotImplementedException();
+            applicationDbContext.Set<T>().RemoveRange(entities);
         }
 
-        public Task<T> GetByIdAsync(int id)
+        public async Task<T?> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await applicationDbContext.Set<T>().FindAsync(id);
         }
 
-        public IQueryable<T> GetTableAsTracking()
+        public  IQueryable<T> GetTableAsTracking()
         {
-            throw new NotImplementedException();
+            return applicationDbContext.Set<T>().AsQueryable();
         }
 
         public IQueryable<T> GetTableNoTracking()
         {
-            throw new NotImplementedException();
+            return  applicationDbContext.Set<T>().AsNoTracking().AsQueryable();
+          
+
         }
 
-        public void RollBack()
+      
+
+        public void RollBack(IDbContextTransaction dbContextTransaction)
         {
-            throw new NotImplementedException();
+            dbContextTransaction.Rollback();
         }
 
-        public Task RollBackAsync()
+       
+        public async Task RollBackAsync(IDbContextTransaction dbContextTransaction)
         {
-            throw new NotImplementedException();
+            await dbContextTransaction.RollbackAsync();
         }
 
-        public Task SaveChangesAsync()
+        public async Task SaveChangesAsync()
         {
-            throw new NotImplementedException();
+            await applicationDbContext.SaveChangesAsync();
         }
 
-        public Task UpdateAsync(T entity)
+        public async Task UpdateAsync(T entity)
         {
-            throw new NotImplementedException();
+              applicationDbContext.Set<T>().Update(entity);
+            await applicationDbContext.SaveChangesAsync();
         }
 
-        public Task UpdateRangeAsync(ICollection<T> entities)
+        public async Task UpdateRangeAsync(ICollection<T> entities)
         {
-            throw new NotImplementedException();
+            applicationDbContext.Set<T>().UpdateRange(entities);
+            await applicationDbContext.SaveChangesAsync();
         }
     }
 
