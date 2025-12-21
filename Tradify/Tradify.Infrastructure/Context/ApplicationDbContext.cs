@@ -50,20 +50,14 @@ namespace Tradify.Infrastructure.Context
         #region Constructors
 
 
-        public ApplicationDbContext()
-        {
-
-        }
+       
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
             encryptionProvider = new GenerateEncryptionProvider("HS12@#$");
         }
 
-        public ApplicationDbContext(DbContextOptions options) : base(options)
-        {
-        }
-
+        
 
         #endregion
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace Tradify.Data.Entities
@@ -12,7 +13,10 @@ namespace Tradify.Data.Entities
 
         public List<string> Colors { get; set; }
 
-        public string MetaData { get; set; }    
+        public string MetaData { get; set; }
+
+        [ForeignKey(nameof(ProductId))] 
+        public Products? Product {  get; set; }
 
 
     }
