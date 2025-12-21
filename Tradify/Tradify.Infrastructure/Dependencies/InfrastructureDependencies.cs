@@ -13,7 +13,7 @@ namespace Tradify.Infrastructure.Dependencies
         public static IServiceCollection AddInfrasturcureDepndencies(this IServiceCollection services) 
         {
             services.AddTransient(typeof(IGenericRepository<>),typeof(GenericRepository<>));
-            services.AddTransient<ICateforyRepository, CategoryRepository>();
+            services.AddTransient<ICategoryRepository, CategoryRepository>();
             services.AddTransient<IOrderRepository, OrderRepository>();
             services.AddTransient<IPaymentRepository, PaymentRepository>();
             services.AddTransient<IPayoutRepository, PayoutRepository>();

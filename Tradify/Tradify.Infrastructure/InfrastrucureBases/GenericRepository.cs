@@ -64,6 +64,7 @@ namespace Tradify.Infrastructure.InfrastrucureBases
         {
              applicationDbContext.Set<T>().Remove(entity);
             await applicationDbContext.SaveChangesAsync();
+
         }
 
         public async Task DeleteRangeAsync(ICollection<T> entities)

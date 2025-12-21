@@ -6,7 +6,7 @@ using Tradify.Infrastructure.InfrastrucureBases;
 
 namespace Tradify.Infrastructure.AbstractsRepositories
 {
-    public interface ICateforyRepository : IGenericRepository<Categories>
+    public interface ICategoryRepository : IGenericRepository<Categories>
     {
     }
 }
