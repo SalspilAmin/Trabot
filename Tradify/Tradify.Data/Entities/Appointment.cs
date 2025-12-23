@@ -12,20 +12,25 @@ namespace Tradify.Data.Entities
 
         public DateTime DateTime { get; set; }
 
+      
+        public int? CustomerId { get; set; }
+          
         [ForeignKey(nameof(CustomerId))]
-        public int CustomerId { get; set; }
         public User? Customer { get; set; }
 
 
+        
+        public int? InstructorId { get; set; }
         [ForeignKey(nameof(InstructorId))]
-        public int InstructorId { get; set; }
         public User? Instructor { get; set; }
 
 
 
-        [ForeignKey(nameof(StoreBookingId))]
+        
 
-        public int StoreBookingId { get; set; }
+        public int? StoreBookingId { get; set; }
+        
+        [ForeignKey(nameof(StoreBookingId))]
         public StoreBooking? StoreBooking { get; set; }
 
     }
