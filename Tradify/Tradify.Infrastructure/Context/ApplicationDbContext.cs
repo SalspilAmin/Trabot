@@ -41,16 +41,19 @@ namespace Tradify.Infrastructure.Context
 
         public DbSet<Stores> Stores { get; set; }
 
-        public DbSet<SubOrders> SubOrders { get; set; } 
-        
-      
+        public DbSet<SubOrders> SubOrders { get; set; }
+        public DbSet<Appointment> Appointments { get; set; }
+
+        public DbSet<StoreBooking> StoreBookings { get; set; }
+
+
 
         #endregion
 
         #region Constructors
 
 
-       
+
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
