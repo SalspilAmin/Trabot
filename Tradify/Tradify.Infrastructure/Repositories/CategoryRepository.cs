@@ -9,7 +9,7 @@ using Tradify.Infrastructure.InfrastrucureBases;
 
 namespace Tradify.Infrastructure.Repositories
 {
-    public class CategoryRepository : GenericRepository<Categories>, ICateforyRepository
+    public class CategoryRepository : GenericRepository<Categories>, ICategoryRepository
     {
         #region Filds
         private  DbSet<Categories> categories;
