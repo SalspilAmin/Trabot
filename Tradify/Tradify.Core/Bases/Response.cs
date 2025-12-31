@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Text;
 
 namespace Tradify.Core.Bases
@@ -11,6 +12,7 @@ namespace Tradify.Core.Bases
         public bool Succeeded { get; set; } 
         public List<string> Errors { get; set; }
         public T Data {  get; set; }
+        public HttpStatusCode StatusCode { get; set; }
 
         public Response() { }
 
