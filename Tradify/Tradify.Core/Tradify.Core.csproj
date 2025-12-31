@@ -7,15 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Dependencies\" />
     <Folder Include="Wrappers\" />
-    <Folder Include="Resources\" />
     <Folder Include="Mapping\" />
     <Folder Include="Filters\" />
     <Folder Include="Features\" />
     <Folder Include="MiddleWare\" />
-    <Folder Include="Behaviors\" />
-    <Folder Include="Bases\" />
   </ItemGroup>
 
   <ItemGroup>

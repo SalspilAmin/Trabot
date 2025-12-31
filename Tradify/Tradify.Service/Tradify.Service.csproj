@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Dependencies\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Tradify.Infrastructure\Tradify.Infrastructure.csproj" />
   </ItemGroup>
 
