@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System.Globalization;
+using Tradify.Core.Resources.Service;
 using Tradify.Infrastructure.Context;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +14,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("First")));
 
+#region Dependencies
+
+#endregion
 #region Localization
 builder.Services.AddControllersWithViews();
 builder.Services.AddLocalization(opt =>
