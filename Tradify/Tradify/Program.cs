@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System.Globalization;
+using Tradify.Core.MiddleWare;
 using Tradify.Core.Resources.Service;
 using Tradify.Infrastructure.Context;
 
@@ -57,7 +58,7 @@ if (app.Environment.IsDevelopment())
 var options = app.Services.GetService<IOptions<RequestLocalizationOptions>>();
 app.UseRequestLocalization(options!.Value);
 #endregion
-
+app.UseMiddleware<ErrorHandlerMiddleware>();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
