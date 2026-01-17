@@ -16,7 +16,7 @@ namespace Tradify.Infrastructure.Configurations
                            .WithOne(x => x.Store)
                            .HasForeignKey(x => x.StoreId).OnDelete(DeleteBehavior.Restrict);
 
-
+            builder.HasOne(x=> x.StoreBooking).WithOne(x=>x.Store).HasForeignKey<StoreBooking>( x => x.StoreId).IsRequired().OnDelete(DeleteBehavior.Restrict);
 
         }
     }

@@ -7,10 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Features\User\Commands\Handlers\" />
+    <Folder Include="Features\User\Commands\Models\" />
+    <Folder Include="Features\User\Commands\Validations\" />
+    <Folder Include="Features\User\Queries\Handlers\" />
+    <Folder Include="Features\User\Queries\Models\" />
+    <Folder Include="Features\User\Queries\Validations\" />
     <Folder Include="Wrappers\" />
     <Folder Include="Mapping\" />
     <Folder Include="Filters\" />
-    <Folder Include="Features\" />
   </ItemGroup>
 
   <ItemGroup>
