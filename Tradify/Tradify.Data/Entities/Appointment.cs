@@ -22,7 +22,7 @@ namespace Tradify.Data.Entities
         
         public int? InstructorId { get; set; }
         [ForeignKey(nameof(InstructorId))]
-        public User? Instructor { get; set; }
+        public Sellers? Instructor { get; set; }
 
 
 

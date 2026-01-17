@@ -23,7 +23,7 @@ namespace Tradify.Data.Entities
 
         public  virtual ICollection<Products>? Products { get; set; }
         public virtual ICollection<Categories>? Categories { get; set; }
-        public StoreBooking StoreBooking { get; set; }
+        public StoreBooking? StoreBooking { get; set; }
 
     }
 }
