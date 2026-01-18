@@ -13,12 +13,12 @@ namespace Tradify.Data.Entities
         
         public int? StoreId { get; set; }
         [ForeignKey(nameof(StoreId))]
-        public Stores? Store { get; set; }
+        public Stores Store { get; set; }
 
         
         public int InstructorId { get; set; }
-        [ForeignKey(nameof(InstructorId))]
-        public User? Instructor { get; set; }
+      
+    
 
         public virtual ICollection<Appointment>? Appointments { get; set; }
     }
