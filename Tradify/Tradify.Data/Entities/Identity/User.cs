@@ -17,7 +17,6 @@ namespace Tradify.Data.Entities.Identity
             UserRefreshTokens = new HashSet<UserRefreshToken>();
         }
    
-        public UserName FullName { get; set; }
 
         public string? Address { get; set; }
         public  int? SellerId { get; set; }

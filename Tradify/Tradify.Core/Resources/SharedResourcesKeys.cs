@@ -21,7 +21,7 @@ namespace Tradify.Core.Resources
         public const string IsNotExist = "IsNotExist";
         public const string DepartmementId = "DepartmementId";
         public const string PasswordNotEqualConfirmPass = "PasswordNotEqualConfirmPass";
-        public const string EmailIsExist = "EmailIsExist";
+        public const string EmailOrPhoneIsExist = "EmailOrPhoneIsExist";
         public const string UserNameIsExist = "UserNameIsExist";
         public const string FaildToAddUser = "FaildToAddUser";
         public const string UpdateFailed = "UpdateFailed";

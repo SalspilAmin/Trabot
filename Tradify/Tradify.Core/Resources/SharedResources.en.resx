@@ -147,8 +147,8 @@
   <data name="Email" xml:space="preserve">
     <value>Email</value>
   </data>
-  <data name="EmailIsExist" xml:space="preserve">
-    <value>Email is Already Exist</value>
+  <data name="EmailOrPhoneIsExist" xml:space="preserve">
+    <value>Email or Phone is Already Exist</value>
   </data>
   <data name="EmailNotConfirmed" xml:space="preserve">
     <value>Please Confirm Your Email</value>
