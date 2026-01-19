@@ -147,8 +147,8 @@
   <data name="Email" xml:space="preserve">
     <value>الايميل</value>
   </data>
-  <data name="EmailIsExist" xml:space="preserve">
-    <value>الايميل الذي ادخلته موجود بالفعل</value>
+  <data name="EmailOrPhoneIsExist" xml:space="preserve">
+    <value>الايميل او رقم الهاتف الذي ادخلته موجود بالفعل</value>
   </data>
   <data name="EmailNotConfirmed" xml:space="preserve">
     <value>من فضلك قم بتأكيد الايميل</value>

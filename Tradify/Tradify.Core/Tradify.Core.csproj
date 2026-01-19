@@ -11,7 +11,6 @@
     <Folder Include="Features\User\Queries\Models\" />
     <Folder Include="Features\User\Queries\Validations\" />
     <Folder Include="Mapping\UserMapping\Queries\" />
-    <Folder Include="Wrappers\" />
     <Folder Include="Filters\" />
   </ItemGroup>
 
