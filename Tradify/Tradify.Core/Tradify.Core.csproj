@@ -8,9 +8,7 @@
 
   <ItemGroup>
     <Folder Include="Features\User\Queries\Handlers\" />
-    <Folder Include="Features\User\Queries\Models\" />
     <Folder Include="Features\User\Queries\Validations\" />
-    <Folder Include="Mapping\UserMapping\Queries\" />
     <Folder Include="Filters\" />
   </ItemGroup>
 
