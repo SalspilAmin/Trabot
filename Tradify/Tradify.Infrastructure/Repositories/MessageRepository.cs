@@ -3,22 +3,23 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Tradify.Data.Entities;
+using Tradify.Data.Entities.Chat;
 using Tradify.Infrastructure.AbstractsRepositories;
 using Tradify.Infrastructure.Context;
 using Tradify.Infrastructure.InfrastrucureBases;
 
 namespace Tradify.Infrastructure.Repositories
 {
-    public class AppointmentsRepository : GenericRepository<Appointment>, IAppointmentsRepository
+    public class MessageRepository : GenericRepository<Message>, IMessageRepository
     {
         #region Filds
-        private DbSet<Appointment> Appointments;
+        private DbSet<Message> Messages;
         #endregion
 
         #region Constructor
-        public AppointmentsRepository(ApplicationDbContext applicationDbContext) : base(applicationDbContext)
+        public MessageRepository(ApplicationDbContext applicationDbContext) : base(applicationDbContext)
         {
-            Appointments = applicationDbContext.Set<Appointment>();
+            Messages = applicationDbContext.Set<Message>();
         }
 
         #endregion

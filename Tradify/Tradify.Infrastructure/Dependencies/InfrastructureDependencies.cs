@@ -26,7 +26,8 @@ namespace Tradify.Infrastructure.Dependencies
             services.AddTransient<IShipmentTrackingRepository, ShipmentTrackingRepository>();
             services.AddTransient<IStoreRepository, StoreRepository>();
             services.AddTransient<ISubOrderRepository, SubOrderRepository>();
-            services.AddTransient<ISellerRepository, SellerRepository>();
+            services.AddTransient<ISellerRepository, SellerRepository>(); 
+
             return services;
         }
     }
