@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
+using Tradify.Data.Entities.Chat;
 using Tradify.Data.Helpers;
 
 namespace Tradify.Data.Entities.Identity
@@ -33,6 +34,9 @@ namespace Tradify.Data.Entities.Identity
         public virtual ICollection<Reviews>? Reviews { get; set; }   
         public virtual ICollection<Payouts>? Payouts { get; set; }
         public virtual ICollection<Appointment>? Appointments { get; set; }
+
+        public virtual ICollection<Message>? SentMessages { get; set; }
+        public virtual ICollection<Message>? ReceiveMessages { get; set; }
 
     }
 }
