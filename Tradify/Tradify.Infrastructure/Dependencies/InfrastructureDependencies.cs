@@ -26,7 +26,20 @@ namespace Tradify.Infrastructure.Dependencies
             services.AddTransient<IShipmentTrackingRepository, ShipmentTrackingRepository>();
             services.AddTransient<IStoreRepository, StoreRepository>();
             services.AddTransient<ISubOrderRepository, SubOrderRepository>();
-            services.AddTransient<ISellerRepository, SellerRepository>(); 
+            services.AddTransient<ISellerRepository, SellerRepository>();
+            services.AddTransient<IMessageRepository, MessageRepository>();
+            services.AddTransient<IMessageMediaPathRepository, MessageMediaPathRepository>();
+            services.AddTransient<ICommentRepository , CommentRepository>();    
+            services.AddTransient<IReplyOFCommentRepository , ReplyOFCommentRepository>();  
+            services.AddTransient<IImageOrVideoPathRepository , ImageOrVideoPathRepository>();  
+            services.AddTransient<IInteractionWithPostRepository , InteractionWithPostRepository>();    
+            services.AddTransient<IPostRepository , PostRepository>();  
+            services.AddTransient<IAppointmentsRepository , AppointmentsRepository>();  
+            services.AddTransient<IStoreBookingRepository, StoreBookingRepository>();  
+            
+           
+
+
 
             return services;
         }

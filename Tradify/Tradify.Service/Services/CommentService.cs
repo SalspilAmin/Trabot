@@ -1,19 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Tradify.Data.Entities;
-using Tradify.Data.Entities.Posts;
+using Tradify.Data.Entities.Chat;
+using Tradify.Data.Entities.Comments;
 using Tradify.Infrastructure.InfrastrucureBases;
 using Tradify.Service.AbstractsServices;
 using Tradify.Service.ServiceBases;
 
 namespace Tradify.Service.Services
 {
-    public class StoreBookingService : Service<StoreBooking>, IStoreBookingService
+    public class CommentService : Service<Comment>, ICommentService
     {
-        public StoreBookingService(IGenericRepository<StoreBooking> repository) : base(repository)
+        public CommentService(IGenericRepository<Comment> repository) : base(repository)
         {
         }
-    {
     }
 }
