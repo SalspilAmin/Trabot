@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Text;
 using Tradify.Service.AbstractsServices;
 using Tradify.Service.Services;
+using Tradify.Infrastructure.AbstractsRepositories;
 
 namespace Tradify.Service.Dependencies
 {
@@ -27,9 +28,19 @@ namespace Tradify.Service.Dependencies
             services.AddTransient<IShipmentService, ShipmentService>();
             services.AddTransient<IShipmentTrackingService, ShipmentTrackingService>();
             services.AddTransient<IStoreService, StoreService>();
-            services.AddTransient<ISubOrderService, ISubOrderService>();
+            services.AddTransient<ISubOrderService, SubOrderService>();
+            services.AddTransient<IMessageService, MessageService>();   
+            services.AddTransient< IMessageMediaPathService , MessageMediaPathService>();
+            services.AddTransient<ICommentService, CommentService>();   
+            services.AddTransient<IReplyOFCommentService , ReplyOFCommentService>();    
+            services.AddTransient<IImageOrVideoPathService , ImageOrVideoPathService>();    
+            services.AddTransient<IInteractionWithPostService , InteractionWithPostService>();  
+            services.AddTransient<IPostService , PostService>();    
+            services.AddTransient< IAppointmerntService ,AppointmentService>(); 
+            services.AddTransient<IStoreBookingService , StoreBookingService>();   
+            
 
-
+       
             return services;
 
         }

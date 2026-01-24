@@ -11,7 +11,21 @@ namespace Tradify.Infrastructure.Configurations
     {
         public void Configure(EntityTypeBuilder<Message> builder)
         {
-          
+            
+            builder.HasOne(m => m.SenderUser)
+                   .WithMany(u => u.SentMessages)
+                   .HasForeignKey(m => m.SenderId)
+                   .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasOne(m => m.ReceiverUser)
+                   .WithMany(u => u.ReceiveMessages)
+                   .HasForeignKey(m => m.ReceiverId)
+                   .OnDelete(DeleteBehavior.Restrict);
+
+            
+           
+
+            
         }
     }
 }

@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Text;
 using Tradify.Infrastructure.AbstractsRepositories;
 
+
 namespace Tradify.Service.AbstractsServices
 {
-    public interface IStoreBookingService : IStoreBookingRepository
+    public interface ICommentService : ICommentRepository
     {
     }
 }

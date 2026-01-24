@@ -8,7 +8,11 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 using Tradify.Data.Entities;
+using Tradify.Data.Entities.Chat;
+using Tradify.Data.Entities.Comments;
 using Tradify.Data.Entities.Identity;
+using Tradify.Data.Entities.Posts;
+using Tradify.Infrastructure.Configurations;
 
 namespace Tradify.Infrastructure.Context
 {
@@ -45,6 +49,16 @@ namespace Tradify.Infrastructure.Context
         public DbSet<Appointment> Appointments { get; set; }
 
         public DbSet<StoreBooking> StoreBookings { get; set; }
+
+        public DbSet<Message> Messages { get; set; }
+        public DbSet<MessageMediaPath> MessageMediaPaths { get; set; }
+        public DbSet<Comment> Comments { get; set; }
+        public DbSet<ReplyOFComment> ReplyOFComments { get; set; }
+        public DbSet<ImageOrVideoPath> ImageOrVideoPaths { get; set; }
+        public DbSet<InteractionWithPost> InteractionWithPosts { get; set; }
+        public DbSet<Post> Posts { get; set; }
+
+
 
 
 
