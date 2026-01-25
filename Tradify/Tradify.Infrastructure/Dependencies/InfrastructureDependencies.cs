@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -35,7 +36,8 @@ namespace Tradify.Infrastructure.Dependencies
             services.AddTransient<IInteractionWithPostRepository , InteractionWithPostRepository>();    
             services.AddTransient<IPostRepository , PostRepository>();  
             services.AddTransient<IAppointmentsRepository , AppointmentsRepository>();  
-            services.AddTransient<IStoreBookingRepository, StoreBookingRepository>();  
+            services.AddTransient<IStoreBookingRepository, StoreBookingRepository>();
+            
             
            
 
