@@ -5,7 +5,7 @@ using Tradify.Infrastructure.AbstractsRepositories;
 
 namespace Tradify.Service.AbstractsServices
 {
-    public interface IStoreBookingService : IStoreBookingRepository
+    public interface IReplyOFCommentService : IReplyOFCommentRepository
     {
     }
 }
