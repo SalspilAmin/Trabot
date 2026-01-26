@@ -8,8 +8,8 @@ namespace Tradify.Service.AbstractsServices.IdentityServices
 {
     public interface IUserService
     {
-        public UserManager<User> UserManager { get; }
+       
 
-        public Task<string>  AddUser(User user,string Password);
+        public Task<string>  AddUserAsync(User user,string Password);
     }
 }
