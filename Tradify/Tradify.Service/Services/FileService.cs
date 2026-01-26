@@ -44,7 +44,7 @@ namespace Tradify.Service.Services
 
 
             //fileName
-            var fileName = new Guid().ToString().Replace("-",string.Empty)+extension;
+            var fileName = Guid.NewGuid().ToString("N") + extension;
 
             if (File.Length >0)
             {
