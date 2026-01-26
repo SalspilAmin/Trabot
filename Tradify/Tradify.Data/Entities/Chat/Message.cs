@@ -12,9 +12,9 @@ namespace Tradify.Data.Entities.Chat
         public int Id { get; set; }
         public string? Content { get; set; }
         [ForeignKey("SenderUser")]
-        public string SenderId { get; set; }
+        public int SenderId { get; set; }
         [ForeignKey("ReceiverUser")]
-        public string ReceiverId { get; set; }
+        public int ReceiverId { get; set; }
         public bool IsRead { get; set; } = false;
         public bool IsDeleted { get; set; } = false;
         public bool IsUpdated { get; set; } = false;

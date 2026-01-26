@@ -13,7 +13,7 @@ namespace Tradify.Data.Entities.Posts
         public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
 
         [ForeignKey("User")]
-        public string UserId { get; set; }
+        public int   UserId { get; set; }
         public bool IsDeleted { get; set; } = false;
         public InteractionType InteractionBy { get; set; }
         [ForeignKey("Post")]
