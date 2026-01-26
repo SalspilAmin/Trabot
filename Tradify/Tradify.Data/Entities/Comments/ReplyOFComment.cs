@@ -14,9 +14,9 @@ namespace Tradify.Data.Entities.Comments
         [ForeignKey("Comment")]
         public int CommentId { get; set; }
         [ForeignKey("UserThatWriteAComment")]
-        public string UserIdThatWriteAComment { get; set; }
+        public int UserIdThatWriteAComment { get; set; }
         [ForeignKey("UserThatWriteAReplyOFComment")]
-        public string UserIdThatWriteAReplyOFComment { get; set; }
+        public int UserIdThatWriteAReplyOFComment { get; set; }
         public bool IsDeleted { get; set; } = false;
         // Navigation properties
         public virtual Comment? Comment { get; set; }

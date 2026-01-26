@@ -14,7 +14,7 @@ namespace Tradify.Data.Entities.Posts
         public string? Content { get; set; }
         public string? Caption { get; set; }
         [ForeignKey("User")]
-        public string UserId { get; set; }
+        public int UserId { get; set; }
         public bool IsDeleted { get; set; } = false;
         public bool IsUpdated { get; set; } = false;
         public DateTimeOffset CreatedDate { get; set; } = DateTimeOffset.UtcNow;

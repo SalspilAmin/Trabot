@@ -12,8 +12,8 @@ using Tradify.Infrastructure.Context;
 namespace Tradify.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251214125620_add-migration Mig")]
-    partial class addmigrationMig
+    [Migration("20260126111709_least")]
+    partial class least
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -128,6 +128,42 @@ namespace Tradify.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Tradify.Data.Entities.Appointment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("CustomerId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("InstructorId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("StoreBookingId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("StoreBookingId1")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("InstructorId");
+
+                    b.HasIndex("StoreBookingId");
+
+                    b.HasIndex("StoreBookingId1");
+
+                    b.ToTable("Appointments");
+                });
+
             modelBuilder.Entity("Tradify.Data.Entities.Categories", b =>
                 {
                     b.Property<int>("Id")
@@ -158,6 +194,147 @@ namespace Tradify.Infrastructure.Migrations
                     b.HasIndex("StoresId");
 
                     b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("Tradify.Data.Entities.Chat.Message", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Content")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsUpdated")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("MessageType")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ReceiverId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SenderId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ReceiverId");
+
+                    b.HasIndex("SenderId");
+
+                    b.ToTable("Messages");
+                });
+
+            modelBuilder.Entity("Tradify.Data.Entities.Chat.MessageMediaPath", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("MediaPath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("MessageId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MessageId");
+
+                    b.ToTable("MessageMediaPaths");
+                });
+
+            modelBuilder.Entity("Tradify.Data.Entities.Comments.Comment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasMaxLength(5000)
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsUpdated")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("PostId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PostId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Comments");
+                });
+
+            modelBuilder.Entity("Tradify.Data.Entities.Comments.ReplyOFComment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CommentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("UserIdThatWriteAComment")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserIdThatWriteAReplyOFComment")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CommentId");
+
+                    b.HasIndex("UserIdThatWriteAComment");
+
+                    b.HasIndex("UserIdThatWriteAReplyOFComment");
+
+                    b.ToTable("ReplyOFComments");
                 });
 
             modelBuilder.Entity("Tradify.Data.Entities.Identity.Role", b =>
@@ -421,6 +598,102 @@ namespace Tradify.Infrastructure.Migrations
                     b.ToTable("Payouts");
                 });
 
+            modelBuilder.Entity("Tradify.Data.Entities.Posts.ImageOrVideoPath", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Image_Or_VideoPath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsUpdated")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("PostId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PostId");
+
+                    b.ToTable("ImageOrVideoPaths");
+                });
+
+            modelBuilder.Entity("Tradify.Data.Entities.Posts.InteractionWithPost", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<int>("InteractionBy")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("PostId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PostId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("InteractionWithPosts");
+                });
+
+            modelBuilder.Entity("Tradify.Data.Entities.Posts.Post", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Caption")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Content")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsUpdated")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("PostType")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Posts");
+                });
+
             modelBuilder.Entity("Tradify.Data.Entities.ProductImage", b =>
                 {
                     b.Property<int>("Id")
@@ -680,6 +953,28 @@ namespace Tradify.Infrastructure.Migrations
                     b.ToTable("Shipments");
                 });
 
+            modelBuilder.Entity("Tradify.Data.Entities.StoreBooking", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("InstructorId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StoreId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StoreId")
+                        .IsUnique();
+
+                    b.ToTable("StoreBookings");
+                });
+
             modelBuilder.Entity("Tradify.Data.Entities.Stores", b =>
                 {
                     b.Property<int>("Id")
@@ -797,6 +1092,34 @@ namespace Tradify.Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Tradify.Data.Entities.Appointment", b =>
+                {
+                    b.HasOne("Tradify.Data.Entities.Identity.User", "Customer")
+                        .WithMany("Appointments")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Tradify.Data.Entities.Sellers", "Instructor")
+                        .WithMany()
+                        .HasForeignKey("InstructorId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Tradify.Data.Entities.StoreBooking", "StoreBooking")
+                        .WithMany()
+                        .HasForeignKey("StoreBookingId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Tradify.Data.Entities.StoreBooking", null)
+                        .WithMany("Appointments")
+                        .HasForeignKey("StoreBookingId1");
+
+                    b.Navigation("Customer");
+
+                    b.Navigation("Instructor");
+
+                    b.Navigation("StoreBooking");
+                });
+
             modelBuilder.Entity("Tradify.Data.Entities.Categories", b =>
                 {
                     b.HasOne("Tradify.Data.Entities.Categories", "Parent")
@@ -813,6 +1136,82 @@ namespace Tradify.Infrastructure.Migrations
                         .HasForeignKey("StoresId");
 
                     b.Navigation("Parent");
+                });
+
+            modelBuilder.Entity("Tradify.Data.Entities.Chat.Message", b =>
+                {
+                    b.HasOne("Tradify.Data.Entities.Identity.User", "ReceiverUser")
+                        .WithMany("ReceiveMessages")
+                        .HasForeignKey("ReceiverId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Tradify.Data.Entities.Identity.User", "SenderUser")
+                        .WithMany("SentMessages")
+                        .HasForeignKey("SenderId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("ReceiverUser");
+
+                    b.Navigation("SenderUser");
+                });
+
+            modelBuilder.Entity("Tradify.Data.Entities.Chat.MessageMediaPath", b =>
+                {
+                    b.HasOne("Tradify.Data.Entities.Chat.Message", "Message")
+                        .WithMany("MessageMediaPaths")
+                        .HasForeignKey("MessageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Message");
+                });
+
+            modelBuilder.Entity("Tradify.Data.Entities.Comments.Comment", b =>
+                {
+                    b.HasOne("Tradify.Data.Entities.Posts.Post", "Post")
+                        .WithMany("Comments")
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Tradify.Data.Entities.Identity.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Post");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Tradify.Data.Entities.Comments.ReplyOFComment", b =>
+                {
+                    b.HasOne("Tradify.Data.Entities.Comments.Comment", "Comment")
+                        .WithMany("ReplyOFComments")
+                        .HasForeignKey("CommentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Tradify.Data.Entities.Identity.User", "UserThatWriteAComment")
+                        .WithMany()
+                        .HasForeignKey("UserIdThatWriteAComment")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Tradify.Data.Entities.Identity.User", "UserThatWriteAReplyOFComment")
+                        .WithMany()
+                        .HasForeignKey("UserIdThatWriteAReplyOFComment")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Comment");
+
+                    b.Navigation("UserThatWriteAComment");
+
+                    b.Navigation("UserThatWriteAReplyOFComment");
                 });
 
             modelBuilder.Entity("Tradify.Data.Entities.Identity.UserRefreshToken", b =>
@@ -873,6 +1272,45 @@ namespace Tradify.Infrastructure.Migrations
                     b.HasOne("Tradify.Data.Entities.Identity.User", null)
                         .WithMany("Payouts")
                         .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("Tradify.Data.Entities.Posts.ImageOrVideoPath", b =>
+                {
+                    b.HasOne("Tradify.Data.Entities.Posts.Post", "Posts")
+                        .WithMany("ImageOrVideo_Paths")
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Posts");
+                });
+
+            modelBuilder.Entity("Tradify.Data.Entities.Posts.InteractionWithPost", b =>
+                {
+                    b.HasOne("Tradify.Data.Entities.Posts.Post", "Post")
+                        .WithMany("interactionWithPosts")
+                        .HasForeignKey("PostId");
+
+                    b.HasOne("Tradify.Data.Entities.Identity.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Post");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Tradify.Data.Entities.Posts.Post", b =>
+                {
+                    b.HasOne("Tradify.Data.Entities.Identity.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Tradify.Data.Entities.ProductImage", b =>
@@ -988,6 +1426,17 @@ namespace Tradify.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Tradify.Data.Entities.StoreBooking", b =>
+                {
+                    b.HasOne("Tradify.Data.Entities.Stores", "Store")
+                        .WithOne("StoreBooking")
+                        .HasForeignKey("Tradify.Data.Entities.StoreBooking", "StoreId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Store");
+                });
+
             modelBuilder.Entity("Tradify.Data.Entities.Stores", b =>
                 {
                     b.HasOne("Tradify.Data.Entities.Sellers", "Seller")
@@ -1031,15 +1480,31 @@ namespace Tradify.Infrastructure.Migrations
                     b.Navigation("Products");
                 });
 
+            modelBuilder.Entity("Tradify.Data.Entities.Chat.Message", b =>
+                {
+                    b.Navigation("MessageMediaPaths");
+                });
+
+            modelBuilder.Entity("Tradify.Data.Entities.Comments.Comment", b =>
+                {
+                    b.Navigation("ReplyOFComments");
+                });
+
             modelBuilder.Entity("Tradify.Data.Entities.Identity.User", b =>
                 {
+                    b.Navigation("Appointments");
+
                     b.Navigation("Orders");
 
                     b.Navigation("Payouts");
 
+                    b.Navigation("ReceiveMessages");
+
                     b.Navigation("Reviews");
 
                     b.Navigation("Seller");
+
+                    b.Navigation("SentMessages");
 
                     b.Navigation("UserRefreshTokens");
                 });
@@ -1051,6 +1516,15 @@ namespace Tradify.Infrastructure.Migrations
                     b.Navigation("products");
 
                     b.Navigation("subOrders");
+                });
+
+            modelBuilder.Entity("Tradify.Data.Entities.Posts.Post", b =>
+                {
+                    b.Navigation("Comments");
+
+                    b.Navigation("ImageOrVideo_Paths");
+
+                    b.Navigation("interactionWithPosts");
                 });
 
             modelBuilder.Entity("Tradify.Data.Entities.Products", b =>
@@ -1075,11 +1549,18 @@ namespace Tradify.Infrastructure.Migrations
                     b.Navigation("Store");
                 });
 
+            modelBuilder.Entity("Tradify.Data.Entities.StoreBooking", b =>
+                {
+                    b.Navigation("Appointments");
+                });
+
             modelBuilder.Entity("Tradify.Data.Entities.Stores", b =>
                 {
                     b.Navigation("Categories");
 
                     b.Navigation("Products");
+
+                    b.Navigation("StoreBooking");
                 });
 
             modelBuilder.Entity("Tradify.Data.Entities.SubOrders", b =>
