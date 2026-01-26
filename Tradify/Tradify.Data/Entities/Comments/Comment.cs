@@ -18,7 +18,7 @@ namespace Tradify.Data.Entities.Comments
 
         public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
         [ForeignKey("User")]
-        public string UserId { get; set; }
+        public int  UserId { get; set; }
         [ForeignKey("Post")]
         public int PostId { get; set; }
 
