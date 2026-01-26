@@ -1,16 +1,18 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using Tradify.Data.Entities.Identity;
+using Tradify.Data.Helpers;
 using Tradify.Infrastructure.Context;
 
 namespace Tradify.Infrastructure.Dependencies
 {
     public static class ServiceRegisteration
     {
-        public static IServiceCollection AdServiceRegisteration(this IServiceCollection services)
+        public static IServiceCollection AdServiceRegisteration(this IServiceCollection services,IConfiguration configuration)
         {
 
             services.AddIdentity<User, Role>(options =>
@@ -36,6 +38,8 @@ namespace Tradify.Infrastructure.Dependencies
                 options.SignIn.RequireConfirmedEmail = true;
 
             }).AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+            var EmailSettings = new EmailSettings();
+            configuration.GetSection(nameof(EmailSettings)).Bind(EmailSettings);
 
 
             return services; 

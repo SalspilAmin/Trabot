@@ -37,7 +37,9 @@ namespace Tradify.Service.Dependencies
             services.AddTransient<IInteractionWithPostService , InteractionWithPostService>();  
             services.AddTransient<IPostService , PostService>();    
             services.AddTransient< IAppointmerntService ,AppointmentService>(); 
-            services.AddTransient<IStoreBookingService , StoreBookingService>();   
+            services.AddTransient<IStoreBookingService , StoreBookingService>();  
+            services.AddTransient<IFileService , FileService>();
+            services.AddTransient<IEmailService , EmailService>();
             
 
        
