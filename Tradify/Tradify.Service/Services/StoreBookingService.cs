@@ -14,6 +14,6 @@ namespace Tradify.Service.Services
         public StoreBookingService(IGenericRepository<StoreBooking> repository) : base(repository)
         {
         }
-    {
+    
     }
 }
