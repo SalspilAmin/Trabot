@@ -17,8 +17,6 @@ namespace Tradify.Data.Entities
 
         
         public int InstructorId { get; set; }
-      
-    
 
         public virtual ICollection<Appointment>? Appointments { get; set; }
     }

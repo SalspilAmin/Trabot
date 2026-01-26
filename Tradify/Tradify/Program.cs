@@ -59,6 +59,7 @@ var options = app.Services.GetService<IOptions<RequestLocalizationOptions>>();
 app.UseRequestLocalization(options!.Value);
 #endregion
 app.UseMiddleware<ErrorHandlerMiddleware>();
+app.UseStaticFiles();   
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
