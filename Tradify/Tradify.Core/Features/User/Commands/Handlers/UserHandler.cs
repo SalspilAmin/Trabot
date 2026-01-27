@@ -25,7 +25,7 @@ namespace Tradify.Core.Features.User.Commands.Handlers
         #region constructor
 
         public UserHandler(LocalizationService localization,UserManager<Data.Entities.Identity.User>  _userManager,
-            IMapper mappe,IUserService userService) : base(localization)
+            IMapper mapper,IUserService userService) : base(localization)
         {
             this.localize = localization;   
             this.userManager = _userManager;
@@ -50,7 +50,10 @@ namespace Tradify.Core.Features.User.Commands.Handlers
                     break;
                 case "UserNameIsExist": return BadRequest<string>(localize.Get("UserNameIsExist"));
                     break;
+                case "Add_Correct_info": return BadRequest<string>(localize.Get("Add_Correct_info"));
+                    break;
                 case "Failed": return BadRequest<string>(localize.Get("TryToRegisterAgain"));
+
                     break;  
                 case "Success": return Success<string>("");
                     break;

@@ -273,4 +273,7 @@
   <data name="UserNameIsNotExist" xml:space="preserve">
     <value>UserName Is Not Exist</value>
   </data>
+  <data name="Add_Correct_info" xml:space="preserve">
+    <value>Please Add Correct Information</value>
+  </data>
 </root>

@@ -7,6 +7,8 @@ using System.Text;
 using Tradify.Service.AbstractsServices;
 using Tradify.Service.Services;
 using Tradify.Infrastructure.AbstractsRepositories;
+using Tradify.Service.AbstractsServices.IdentityServices;
+using Tradify.Service.Services.IdentityServices;
 
 namespace Tradify.Service.Dependencies
 {
@@ -40,6 +42,7 @@ namespace Tradify.Service.Dependencies
             services.AddTransient<IStoreBookingService , StoreBookingService>();  
             services.AddTransient<IFileService , FileService>();
             services.AddTransient<IEmailService , EmailService>();
+            services.AddTransient<IUserService,UserService>();
             
 
        

@@ -1,10 +1,16 @@
 using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System.Globalization;
+using Tradify.Core.Dependencies;
 using Tradify.Core.MiddleWare;
 using Tradify.Core.Resources.Service;
 using Tradify.Infrastructure.Context;
+using Tradify.Infrastructure.Dependencies;
+using Tradify.Service.Dependencies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +22,16 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("First")));
 
 #region Dependencies
+builder.Services.AddInfrasturcureDepndencies().AddServicesDepencies().AddCoreDependencies()
+    .AdServiceRegisteration(builder.Configuration);
+
+builder.Services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+builder.Services.AddTransient<IUrlHelper>(x =>
+{
+    var actionContext = x.GetRequiredService<IActionContextAccessor>().ActionContext;
+    var factory = x.GetRequiredService<IUrlHelperFactory>();
+    return factory.GetUrlHelper(actionContext);
+});
 
 #endregion
 #region Localization
