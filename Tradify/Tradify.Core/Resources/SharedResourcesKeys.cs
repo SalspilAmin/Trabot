@@ -59,6 +59,7 @@ namespace Tradify.Core.Resources
         public const string InvaildCode = "InvaildCode";
         public const string NoImage = "NoImage";
         public const string FailedToUploadImage = "FailedToUploadImage";
+        public const string Add_Correct_info = "Add_Correct_info";
 
     }
 }
