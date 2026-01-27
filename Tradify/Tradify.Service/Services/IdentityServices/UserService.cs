@@ -46,6 +46,9 @@ namespace Tradify.Service.Services.IdentityServices
             {
                 try
                 {
+                    var checkemail = IsEmail(user.Email);
+                    var checkPhone = IsPhone(user.PhoneNumber);
+                    if (!checkemail || !checkPhone) return "Add_Correct_info";
                     //if Email or Phone is Exist
                     var ExistUserEmail = await UserManager.FindByEmailAsync(user.Email);
                     var ExistUserPhonenumber = applicationDbContext.users.FirstOrDefault(x => x.PhoneNumber == user.PhoneNumber);

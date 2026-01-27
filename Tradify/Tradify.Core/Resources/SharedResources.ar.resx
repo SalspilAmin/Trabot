@@ -273,4 +273,7 @@
   <data name="UserNameIsNotExist" xml:space="preserve">
     <value>اسم المستخدم هذا  غير موجود </value>
   </data>
+  <data name="Add_Correct_info" xml:space="preserve">
+    <value>من فضلك ادخل معلومات صحيحة</value>
+  </data>
 </root>

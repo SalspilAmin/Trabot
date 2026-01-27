@@ -1,4 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -40,6 +43,10 @@ namespace Tradify.Infrastructure.Dependencies
             }).AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
             var EmailSettings = new EmailSettings();
             configuration.GetSection(nameof(EmailSettings)).Bind(EmailSettings);
+            services.AddSingleton(EmailSettings);
+
+           
+
 
 
             return services; 

@@ -19,8 +19,13 @@ namespace Tradify.Core.Dependencies
 
             //  Validators  
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+
             services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidateBehavior<,>));
-            
+            //AutoMapper
+            services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
+            //Mediatr
+            services.AddMediatR(x=>x.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
 
 
             return services;

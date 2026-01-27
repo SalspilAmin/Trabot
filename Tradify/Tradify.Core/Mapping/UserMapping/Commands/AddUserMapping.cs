@@ -11,8 +11,8 @@ namespace Tradify.Core.Mapping.UserMapping
         public void AddUserMapping()
         {
             CreateMap<AddUserCommand,User>().ForMember(dest=> dest.UserName,opt=>opt.MapFrom(x=>x.UserName))
-                .ForMember(dest=>dest.Email,opt=>opt.Ignore())
-                .ForMember(dest=>dest.PhoneNumber,opt=>opt.Ignore());
+                .ForMember(dest=>dest.Email,opt=>opt.MapFrom(x=>x.EmailOrPhone))
+                .ForMember(dest=>dest.PhoneNumber,opt=>opt.MapFrom(x=>x.EmailOrPhone));
         }
     }
 }
