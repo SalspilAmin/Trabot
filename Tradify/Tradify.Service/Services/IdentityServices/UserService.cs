@@ -37,6 +37,7 @@ namespace Tradify.Service.Services.IdentityServices
 
         private bool IsPhone(string input)
         {
+            input = input.Replace(" ", "").Trim();
             return Regex.IsMatch(input, @"^(?:\+20|0)?1[0125][0-9]{8}$");
         }
 
@@ -48,7 +49,10 @@ namespace Tradify.Service.Services.IdentityServices
                 {
                     var checkemail = IsEmail(user.Email);
                     var checkPhone = IsPhone(user.PhoneNumber);
-                    if (!checkemail || !checkPhone) return "Add_Correct_info";
+                    if (!checkemail && !checkPhone)
+                    {
+                        return "Add_Correct_info";
+                    }
                     //if Email or Phone is Exist
                     var ExistUserEmail = await UserManager.FindByEmailAsync(user.Email);
                     var ExistUserPhonenumber = applicationDbContext.users.FirstOrDefault(x => x.PhoneNumber == user.PhoneNumber);
@@ -68,9 +72,19 @@ namespace Tradify.Service.Services.IdentityServices
                     {
                         return string.Join(",",createResult.Errors.Select(x=>x.Description).ToList());
                     }
-                    // attach role
-                    await UserManager.AddToRoleAsync(user, "User");
-                    if (user.Email != null ) {
+                    //  attach role
+
+
+                    var AddRoleResult = await UserManager.AddToRoleAsync(user, "User");
+                    if (!AddRoleResult.Succeeded)
+                    {
+                        return string.Join(",", AddRoleResult.Errors.Select(x => x.Description).ToList());
+                    }
+                    
+                   
+                    
+
+                    if (user.Email != null&& checkemail==true ) {
                         //Send Confirm Email
                         var code = await UserManager.GenerateEmailConfirmationTokenAsync(user);
                         var requestAccessories = httpContextAccessor.HttpContext.Request;

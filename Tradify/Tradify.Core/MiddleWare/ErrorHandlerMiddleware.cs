@@ -43,7 +43,7 @@ namespace Tradify.Core.MiddleWare
                         response.StatusCode = 400;
                         break;
 
-                    case ArgumentException:
+                   
                     case FormatException:
                         responseModel.Message = "Invalid request data";
                         responseModel.StatusCode = HttpStatusCode.BadRequest;
