@@ -16,7 +16,7 @@ namespace Tradify.Core.Resources.Service
 
         public string Get(string key)
         {
-            return _Localizer[key];
+            return _Localizer[key].Value;
         }
 
     }
