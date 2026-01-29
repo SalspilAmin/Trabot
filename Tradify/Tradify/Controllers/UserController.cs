@@ -20,5 +20,13 @@ namespace Tradify.Controllers
             return NewResult(response);
         }
 
+
+        [HttpPut(Router.UserRouter.ChangePassword)]
+        public async Task<IActionResult> ChangePasswrod([FromBody] ChangeUserPasswordCommand command)
+        {
+            var response = await Mediator.Send(command);    
+            return NewResult(response); 
+
+        }
     }
 }

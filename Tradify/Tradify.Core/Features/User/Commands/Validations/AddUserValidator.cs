@@ -18,7 +18,8 @@ namespace Tradify.Core.Features.User.Commands.Validations
         #region constructor
         public AddUserValidator(LocalizationService localization)
         {
-         this.localize = localization;          
+         this.localize = localization;
+            ApplyValidations();
         }
 
 

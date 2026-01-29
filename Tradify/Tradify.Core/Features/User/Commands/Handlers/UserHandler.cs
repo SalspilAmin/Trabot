@@ -13,6 +13,7 @@ using Tradify.Service.AbstractsServices.IdentityServices;
 namespace Tradify.Core.Features.User.Commands.Handlers
 {
     public class UserHandler : ResponseHandler,IRequestHandler<AddUserCommand,Response<string>>
+        ,IRequestHandler<ChangeUserPasswordCommand,Response<string>>
     {
         #region Fildes
         private readonly LocalizationService localize;
@@ -60,6 +61,22 @@ namespace Tradify.Core.Features.User.Commands.Handlers
                 default: return BadRequest<string>(result);
             }
 
+        }
+
+        public async Task<Response<string>> Handle(ChangeUserPasswordCommand request, CancellationToken cancellationToken)
+        {
+            //CheckUser 
+            var user = await userManager.FindByIdAsync(request.Id.ToString());
+            //not found
+            if (user == null) return BadRequest<string>(localize.Get("UserIsNotFound"));
+
+
+            // change password 
+            var result = await userManager.ChangePasswordAsync(user, request.CurrentPassword, request.NewPassword);
+
+            //Succe or Faild
+            if (!result.Succeeded) return BadRequest<string>(result.Errors.FirstOrDefault()!.Description);
+            return Success<string>(localize.Get("Success"));
         }
 
         #endregion
