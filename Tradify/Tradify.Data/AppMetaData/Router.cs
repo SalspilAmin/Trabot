@@ -14,6 +14,7 @@ namespace Tradify.Data.AppMetaData
         {
             public const string prefix = Rule+"User";
             public const string Create = prefix + "/Create";
+            public const string ChangePassword = prefix + "/ChangePassword";
 
         }
     }

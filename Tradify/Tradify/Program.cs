@@ -37,7 +37,7 @@ builder.Services.AddTransient<IUrlHelper>(x =>
 #region Localization
 builder.Services.AddControllersWithViews();
 builder.Services.AddLocalization(opt =>
-opt.ResourcesPath = ""
+opt.ResourcesPath = "Resources"
 );
 builder.Services.Configure<RequestLocalizationOptions>(options => {
     List<CultureInfo> supportCultures = new List<CultureInfo>{
