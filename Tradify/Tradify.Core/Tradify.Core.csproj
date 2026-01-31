@@ -7,6 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Features\Authenticaiton\Queries\Handler\" />
+    <Folder Include="Features\Authenticaiton\Queries\Models\" />
+    <Folder Include="Features\Authenticaiton\Queries\Validators\" />
     <Folder Include="Features\User\Queries\Handlers\" />
     <Folder Include="Features\User\Queries\Validations\" />
     <Folder Include="Filters\" />
