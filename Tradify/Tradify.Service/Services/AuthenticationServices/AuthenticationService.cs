@@ -37,9 +37,9 @@ namespace Tradify.Service.Services.AuthenticationServices
       
        
         #region Methods
-         public async Task<JwtAuthResult> GetJWTToken(User user)
+         public async Task<JwtAuthResult> GetJWTTokenAsync(User user)
         {
-            var (jwttoken,Stringtoken) = await GenerateJWTToken(user);
+            var (jwttoken,Stringtoken) = await GenerateJWTTokenAsync(user);
             var refreshtokenobject =  GetRefreshTokenObject(user.UserName);
 
             var UserRefreshToken = new UserRefreshToken()
@@ -60,9 +60,9 @@ namespace Tradify.Service.Services.AuthenticationServices
             return Response;
 
          }
-        private async Task<(JwtSecurityToken,string)>  GenerateJWTToken(User user) 
+        private async Task<(JwtSecurityToken,string)>  GenerateJWTTokenAsync(User user) 
         {
-            var claims = await GetClaims(user);
+            var claims = await GetClaimsAsync(user);
             var jwtToken = new JwtSecurityToken(
                 jwtSettings.Issuer,
                 jwtSettings.Audience,
@@ -97,7 +97,7 @@ namespace Tradify.Service.Services.AuthenticationServices
                randomNumberGenerator.GetBytes(randomnumber);
             return Convert.ToBase64String(randomnumber);
         }
-        public async Task<List<Claim>> GetClaims(User user)
+        public async Task<List<Claim>> GetClaimsAsync(User user)
         {
             var claims = new List<Claim>() 
               {

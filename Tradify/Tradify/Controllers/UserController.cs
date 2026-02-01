@@ -11,7 +11,7 @@ namespace Tradify.Controllers
     public class UserController : AppControllerBase
     {
 
-        public UserController(IMediator mediator) : base(mediator) { }
+        //public UserController(IMediator mediator) : base(mediator) { }
         [HttpPost(Router.UserRouter.Create)]
 
         public async Task<IActionResult> Create([FromBody] AddUserCommand command)
