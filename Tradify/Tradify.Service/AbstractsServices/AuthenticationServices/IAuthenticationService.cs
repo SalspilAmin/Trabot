@@ -8,6 +8,6 @@ namespace Tradify.Service.AbstractsServices.AuthenticationServices
 {
     public interface IAuthenticationService
     {
-        public Task<JwtAuthResult> GetJWTToken(User user);
+        public Task<JwtAuthResult> GetJWTTokenAsync(User user);
     }
 }

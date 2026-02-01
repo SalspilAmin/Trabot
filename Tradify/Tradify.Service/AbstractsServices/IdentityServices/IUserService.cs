@@ -11,5 +11,8 @@ namespace Tradify.Service.AbstractsServices.IdentityServices
        
 
         public Task<string>  AddUserAsync(User user,string Password);
+        public bool IsPhone(string input);
+        public bool IsEmail(string input);
+        public  Task<User?> FindUserByEmailOrPhoneAsync(string emailOrphone);
     }
 }
