@@ -17,5 +17,10 @@ namespace Tradify.Data.AppMetaData
             public const string ChangePassword = prefix + "/ChangePassword";
 
         }
+        public static class Authentication
+        {
+            public const string prefix = Rule + "Authentication";
+            public const string LogIN = prefix + "/LogIn";
+        }
     }
 }

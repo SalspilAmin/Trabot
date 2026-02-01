@@ -276,4 +276,7 @@
   <data name="Add_Correct_info" xml:space="preserve">
     <value>من فضلك ادخل معلومات صحيحة</value>
   </data>
+  <data name="PhoneNumberNotConfirmed" xml:space="preserve">
+    <value>رقم الهاتف غير مؤكد</value>
+  </data>
 </root>

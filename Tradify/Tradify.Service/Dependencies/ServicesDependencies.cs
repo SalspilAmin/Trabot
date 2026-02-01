@@ -9,6 +9,8 @@ using Tradify.Service.Services;
 using Tradify.Infrastructure.AbstractsRepositories;
 using Tradify.Service.AbstractsServices.IdentityServices;
 using Tradify.Service.Services.IdentityServices;
+using Tradify.Service.AbstractsServices.AuthenticationServices;
+using Tradify.Service.Services.AuthenticationServices;
 
 namespace Tradify.Service.Dependencies
 {
@@ -43,6 +45,7 @@ namespace Tradify.Service.Dependencies
             services.AddTransient<IFileService , FileService>();
             services.AddTransient<IEmailService , EmailService>();
             services.AddTransient<IUserService,UserService>();
+            services.AddTransient<IAuthenticationService, AuthenticationService>();
             
 
        
