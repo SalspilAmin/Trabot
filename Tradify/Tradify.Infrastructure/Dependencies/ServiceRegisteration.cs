@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -43,9 +45,33 @@ namespace Tradify.Infrastructure.Dependencies
             }).AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
             var EmailSettings = new EmailSettings();
             configuration.GetSection(nameof(EmailSettings)).Bind(EmailSettings);
+            var jwtSettings = new JwtSettings();
+            configuration.GetSection(nameof(JwtSettings)).Bind(jwtSettings);
             services.AddSingleton(EmailSettings);
+            services.AddSingleton(jwtSettings);
 
-           
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+          .AddJwtBearer(x =>
+          {
+              x.RequireHttpsMetadata = false;
+              x.SaveToken = true;
+              x.TokenValidationParameters = new TokenValidationParameters
+              {
+                  ValidateIssuer = jwtSettings.ValidateIssuer,
+                  ValidIssuers = new[] { jwtSettings.Issuer },
+                  ValidateIssuerSigningKey = jwtSettings.ValidateIssuerSigningKey,
+                  IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtSettings.Secret)),
+                  ValidAudience = jwtSettings.Audience,
+                  ValidateAudience = jwtSettings.ValidateAudience,
+                  ValidateLifetime = jwtSettings.ValidateLifeTime,
+              };
+          });
+
+
 
 
 
