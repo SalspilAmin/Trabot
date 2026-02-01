@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -30,12 +31,12 @@ namespace Tradify.Service.Services.IdentityServices
             this._emailService = emailService;
         }
 
-        private bool IsEmail(string input)
+        public bool IsEmail(string input)
         {
             return System.Net.Mail.MailAddress.TryCreate(input, out _);
         }
 
-        private bool IsPhone(string input)
+        public bool IsPhone(string input)
         {
             input = input.Replace(" ", "").Trim();
             return Regex.IsMatch(input, @"^(?:\+20|0)?1[0125][0-9]{8}$");
@@ -107,6 +108,20 @@ namespace Tradify.Service.Services.IdentityServices
 
                 }
             }
+        }
+
+
+        public async Task<User?> FindUserByEmailOrPhoneAsync(string emailOrphone)
+        {
+
+        emailOrphone = emailOrphone.Trim();
+
+            if (emailOrphone.Contains('@'))
+            {
+                return await UserManager.FindByEmailAsync(emailOrphone);
+            }
+
+            return await UserManager.Users.FirstOrDefaultAsync(x=>x.PhoneNumber == emailOrphone);
         }
     }
 }

@@ -25,7 +25,7 @@ namespace Tradify.Data.Entities.Identity
         public string? Country { get; set; }
         [EncryptColumn]
         public string? Code { get; set; }
-       // [InverseProperty(nameof(UserRefreshToken.user))]
+        [InverseProperty(nameof(UserRefreshToken.user))]
         public virtual ICollection<UserRefreshToken>? UserRefreshTokens { get; set; }
 
         public Sellers? Seller { get; set; }
