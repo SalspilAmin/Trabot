@@ -21,6 +21,7 @@ namespace Tradify.Data.AppMetaData
         {
             public const string prefix = Rule + "Authentication";
             public const string LogIN = prefix + "/LogIn";
+            public const string RefreshToken = prefix + "/RefreshToken";
         }
     }
 }

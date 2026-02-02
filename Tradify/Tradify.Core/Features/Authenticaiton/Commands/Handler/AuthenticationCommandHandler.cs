@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Text;
 using Tradify.Core.Bases;
 using Tradify.Core.Features.Authenticaiton.Commands.Models;
+using Tradify.Core.Resources;
 using Tradify.Core.Resources.Service;
 using Tradify.Data.Entities.Identity;
 using Tradify.Data.Helpers;
@@ -17,6 +18,7 @@ namespace Tradify.Core.Features.Authenticaiton.Commands.Handler
 {
     public class AuthenticationCommandHandler : ResponseHandler
      , IRequestHandler<SignInCommand, Response<JwtAuthResult>>
+      ,IRequestHandler<RefreshTokenCommand, Response<JwtAuthResult>>
     {
         #region Fields
         private readonly LocalizationService localization;
@@ -29,6 +31,7 @@ namespace Tradify.Core.Features.Authenticaiton.Commands.Handler
         #region Constructor
         public AuthenticationCommandHandler(LocalizationService localization, IAuthenticationService authenticationService, IUserService userService, UserManager<Tradify.Data.Entities.Identity.User> userManager
             , SignInManager<Tradify.Data.Entities.Identity.User> signInManager) : base(localization)
+            
         {
             this.localization = localization;
             this.authenticationService = authenticationService;
@@ -83,6 +86,29 @@ namespace Tradify.Core.Features.Authenticaiton.Commands.Handler
 
             return Success<JwtAuthResult>(JwtAuthToken);
         }
+
+        public async Task<Response<JwtAuthResult>> Handle(RefreshTokenCommand request, CancellationToken cancellationToken)
+        {
+            var jwttoken =  authenticationService.ReadJWTToken(request.Accesstoken);
+            var UserIdAndExpireDate =await authenticationService.ValidateDetails(jwttoken, request.Accesstoken, request.RefreshToken);
+            switch (UserIdAndExpireDate)
+            {
+                case ("AlgorithmIsWrong", null): return Unauthorized<JwtAuthResult>(localization.Get("AlgorithmIsWrong"));
+                case ("TokenIsNotExpired", null): return Unauthorized<JwtAuthResult>(localization.Get("TokenIsNotExpired"));
+                case ("RefreshTokenIsNotFound", null): return Unauthorized<JwtAuthResult>(localization.Get("RefreshTokenIsNotFound"));
+                case ("RefreshTokenIsExpired", null): return Unauthorized<JwtAuthResult>(localization.Get("RefreshTokenIsExpired"));
+            }
+            var (userId, expireDate) = UserIdAndExpireDate;
+            var user= await userManager.FindByIdAsync(userId);
+            if(user == null)
+            {
+                return NotFound<JwtAuthResult>();
+            }
+            var result = await authenticationService.RefreshToken(user, jwttoken, expireDate, request.RefreshToken);
+            return Success<JwtAuthResult>(result);
+        }
+
+
         #endregion
 
     }
