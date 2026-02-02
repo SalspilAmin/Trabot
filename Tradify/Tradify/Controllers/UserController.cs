@@ -14,7 +14,7 @@ namespace Tradify.Controllers
         //public UserController(IMediator mediator) : base(mediator) { }
         [HttpPost(Router.UserRouter.Create)]
 
-        public async Task<IActionResult> Create([FromBody] AddUserCommand command)
+        public async Task<IActionResult> Create([FromForm] AddUserCommand command)
         {
          var response= await  Mediator.Send(command);
             return NewResult(response);
@@ -22,7 +22,7 @@ namespace Tradify.Controllers
 
 
         [HttpPut(Router.UserRouter.ChangePassword)]
-        public async Task<IActionResult> ChangePasswrod([FromBody] ChangeUserPasswordCommand command)
+        public async Task<IActionResult> ChangePasswrod([FromForm] ChangeUserPasswordCommand command)
         {
             var response = await Mediator.Send(command);    
             return NewResult(response); 
