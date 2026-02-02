@@ -1,4 +1,5 @@
 ﻿
+
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Tradify.Bases;
@@ -12,12 +13,17 @@ namespace Tradify.Controllers
     public class AuthenticationController : AppControllerBase
     {
         [HttpPost(Router.Authentication.LogIN)]
-        public async Task<IActionResult> LogIn([FromBody] SignInCommand request)
+        public async Task<IActionResult> LogIn([FromForm] SignInCommand request)
         {
             var result =await Mediator.Send(request);
             return NewResult(result);
 
         }
-
+        [HttpPut(Router.Authentication.RefreshToken)]
+        public async Task<IActionResult> RefreshToken([FromForm] RefreshTokenCommand request)
+        {
+            var result = await Mediator.Send(request);
+            return NewResult(result);       
+        }
     }
 }
