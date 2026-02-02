@@ -12,7 +12,7 @@ using Tradify.Service.AbstractsServices.IdentityServices;
 
 namespace Tradify.Core.Features.User.Commands.Handlers
 {
-    public class UserHandler : ResponseHandler,IRequestHandler<AddUserCommand,Response<string>>
+    public class UserCommandHandler : ResponseHandler,IRequestHandler<AddUserCommand,Response<string>>
         ,IRequestHandler<ChangeUserPasswordCommand,Response<string>>
     {
         #region Fildes
@@ -25,7 +25,7 @@ namespace Tradify.Core.Features.User.Commands.Handlers
 
         #region constructor
 
-        public UserHandler(LocalizationService localization,UserManager<Data.Entities.Identity.User>  _userManager,
+        public UserCommandHandler(LocalizationService localization,UserManager<Data.Entities.Identity.User>  _userManager,
             IMapper mapper,IUserService userService) : base(localization)
         {
             this.localize = localization;   
