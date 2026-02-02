@@ -93,7 +93,7 @@ namespace Tradify.Core.Features.Authenticaiton.Commands.Handler
             var UserIdAndExpireDate =await authenticationService.ValidateDetails(jwttoken, request.Accesstoken, request.RefreshToken);
             switch (UserIdAndExpireDate)
             {
-                case ("AlgorithmIsWrong", null): return Unauthorized<JwtAuthResult>(localization.Get("AlgorithmIsWrong"));
+               case ("AlgorithmIsWrong", null): return Unauthorized<JwtAuthResult>(localization.Get("AlgorithmIsWrong"));
                 case ("TokenIsNotExpired", null): return Unauthorized<JwtAuthResult>(localization.Get("TokenIsNotExpired"));
                 case ("RefreshTokenIsNotFound", null): return Unauthorized<JwtAuthResult>(localization.Get("RefreshTokenIsNotFound"));
                 case ("RefreshTokenIsExpired", null): return Unauthorized<JwtAuthResult>(localization.Get("RefreshTokenIsExpired"));
