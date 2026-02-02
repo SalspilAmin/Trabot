@@ -1,0 +1,52 @@
+﻿using MediatR;
+using System;
+using System.Collections.Generic;
+using System.Text;
+using Tradify.Core.Bases;
+using Tradify.Core.Features.Authenticaiton.Queries.Models;
+using Tradify.Core.Resources.Service;
+using Tradify.Service.AbstractsServices.AuthenticationServices;
+
+namespace Tradify.Core.Features.Authenticaiton.Queries.Handler
+{
+    public class AuthenticationQueryHandler : ResponseHandler,IRequestHandler<ConfirmEmailQuery,Response<string>>
+    {
+
+        #region Fields
+        private readonly LocalizationService _localization;       
+        private readonly IAuthenticationService _authenticationService;
+
+        #endregion
+        #region constructor
+
+          public AuthenticationQueryHandler(LocalizationService localization,IAuthenticationService authenticationService) : base(localization)
+        {
+            _localization = localization;       
+            _authenticationService = authenticationService;
+        }
+
+        
+        
+        #endregion
+        #region Methods
+           public async Task<Response<string>> Handle(ConfirmEmailQuery request, CancellationToken cancellationToken)
+        {
+            var result = await _authenticationService.ConfirmEmailAsync(request.Id, request.Code);
+            switch (result)
+            {
+                case "ErrorWhenConfirmEmail": return BadRequest<string>(_localization.Get("ErrorWhenConfirmEmail"));
+                case "NotFound": return BadRequest<string>(_localization.Get("UserIsNotFound"));
+                    
+            }
+           return Success<string>(_localization.Get("ConfirmEmailDone"));
+
+
+        }
+
+
+
+        #endregion
+
+
+    }
+}

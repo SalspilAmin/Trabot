@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Tradify.Bases;
 using Tradify.Core.Features.Authenticaiton.Commands.Models;
+using Tradify.Core.Features.Authenticaiton.Queries.Models;
 using Tradify.Data.AppMetaData;
 
 namespace Tradify.Controllers
@@ -15,7 +16,7 @@ namespace Tradify.Controllers
         [HttpPost(Router.Authentication.LogIN)]
         public async Task<IActionResult> LogIn([FromForm] SignInCommand request)
         {
-            var result =await Mediator.Send(request);
+            var result = await Mediator.Send(request);
             return NewResult(result);
 
         }
@@ -23,7 +24,14 @@ namespace Tradify.Controllers
         public async Task<IActionResult> RefreshToken([FromForm] RefreshTokenCommand request)
         {
             var result = await Mediator.Send(request);
-            return NewResult(result);       
+            return NewResult(result);
         }
+        [HttpGet(Router.Authentication.ConfirmEmail)]
+        public async Task<IActionResult> ConfirmEmail([FromQuery] ConfirmEmailQuery request)
+        {
+            var result = await Mediator.Send(request);
+            return NewResult(result);
+        }
+
     }
 }
