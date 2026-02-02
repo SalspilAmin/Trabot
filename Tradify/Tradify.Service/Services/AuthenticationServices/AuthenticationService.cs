@@ -1,7 +1,9 @@
 ﻿
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Org.BouncyCastle.Tls;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -118,9 +120,98 @@ namespace Tradify.Service.Services.AuthenticationServices
             return claims;
 
         }
+
+        public async Task<JwtAuthResult> RefreshToken(User user, JwtSecurityToken jwtToken, DateTime? expiryDate, string refreshToken)
+        {
+            var (newjwtToken, newtoken) = await GenerateJWTTokenAsync(user);
+            var response = new JwtAuthResult();
+            response.AccessToken = newtoken;
+            var refreshTokenResponse = new RefreshToken();
+            refreshTokenResponse.UserName= jwtToken.Claims.FirstOrDefault(c=>c.Type==nameof(ClaimTypes.Name)).Value;
+            refreshTokenResponse.RefreshTokenString = refreshToken;
+            refreshTokenResponse.ExpireAt=(DateTime)expiryDate;
+            response.refreshToken = refreshTokenResponse;
+
+            return response;
+
+        }
+
+        public JwtSecurityToken ReadJWTToken(string accessToken)
+        {
+            if (string.IsNullOrEmpty(accessToken))
+            {
+                throw new ArgumentNullException(nameof(accessToken));
+  
+            }
+            var handler = new JwtSecurityTokenHandler();
+            var response = handler.ReadJwtToken(accessToken);
+
+            return response;    
+        }
+
+        public async Task<string> ValidateToken(string accessToken)
+        {
+            var handler = new JwtSecurityTokenHandler();
+            var parameter = new TokenValidationParameters()
+            {
+                ValidateIssuer = jwtSettings.ValidateIssuer,
+                ValidateAudience = jwtSettings.ValidateAudience,
+                ValidateLifetime = jwtSettings.ValidateLifeTime,
+                ValidateIssuerSigningKey = jwtSettings.ValidateIssuerSigningKey,
+                ValidIssuer = jwtSettings.Issuer,
+                ValidAudience = jwtSettings.Audience,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtSettings.Secret))
+
+
+
+            };
+            try
+            {
+                var validation = handler.ValidateToken(accessToken, parameter, out SecurityToken securityToken);
+
+                if (validation == null)
+                {
+                    return "InvalidToken";
+                }
+                return "NotExpired";
+            }
+            catch (Exception ex) { 
+            return ex.Message;  
+            }
+        }
+
+        public async Task<(string, DateTime?)> ValidateDetails(JwtSecurityToken jwtToken, string accessToken, string refreshToken)
+        {
+            if(jwtToken == null || !jwtToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256Signature))
+            {
+                return ("AlgorithmIsWrong", null);
+            }
+            if (jwtToken.ValidTo > DateTime.UtcNow) return ("TokenIsNotExpired", null);
+
+
+            var userId = jwtToken.Claims.FirstOrDefault(x => x.Type == (nameof(UserClaimModel.Id))).Value;
+            var userRerechtoken = await refreshTokenRepository.GetTableNoTracking().FirstOrDefaultAsync(x => x.Token == accessToken &&
+                                                                                         x.RefreshToken == refreshToken && x.UserId ==int.Parse(userId));
+            if (userRerechtoken == null)
+            {
+                return ("RefreshTokenIsNotFound", null);
+            }
+            if (userRerechtoken.ExpiredTime < DateTime.UtcNow)
+            {
+                userRerechtoken.IsRevoked= true;
+                userRerechtoken.IsActive = false;
+                await refreshTokenRepository.UpdateAsync(userRerechtoken);
+                return ("RefreshTokenIsExpired", null);
+            }
+            var expireDate = userRerechtoken.ExpiredTime;
+            return (userId, expireDate);    
+        }
+
+
+
         #endregion
 
-       
+
 
     }
 }
