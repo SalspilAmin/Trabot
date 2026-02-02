@@ -43,5 +43,11 @@ namespace Tradify.Controllers
             var result = await Mediator.Send(request);
             return Ok(result);
         }
+        [HttpDelete(Router.UserRouter.Delete)]
+        public async Task<IActionResult> Delete([FromRoute] int id)
+        {
+            var resutl = await Mediator.Send(new DeleteUserCommand(id));
+            return Ok(resutl);
+        }
     }
 }
