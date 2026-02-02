@@ -13,7 +13,7 @@ using Tradify.Service.AbstractsServices.IdentityServices;
 namespace Tradify.Core.Features.User.Commands.Handlers
 {
     public class UserCommandHandler : ResponseHandler,IRequestHandler<AddUserCommand,Response<string>>
-        ,IRequestHandler<ChangeUserPasswordCommand,Response<string>>
+        ,IRequestHandler<ChangeUserPasswordCommand,Response<string>>,IRequestHandler<DeleteUserCommand,Response<string>>    
     {
         #region Fildes
         private readonly LocalizationService localize;
@@ -77,6 +77,18 @@ namespace Tradify.Core.Features.User.Commands.Handlers
             //Succe or Faild
             if (!result.Succeeded) return BadRequest<string>(result.Errors.FirstOrDefault()!.Description);
             return Success<string>(localize.Get("Success"));
+        }
+
+        public async Task<Response<string>> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
+        {
+            // Check user
+            var user= await userManager.FindByIdAsync(request?.Id.ToString());
+
+            //if Not Exist notfound
+            if (user == null) return NotFound<string>();
+            var result = await userManager.DeleteAsync(user);
+            if (!result.Succeeded) return BadRequest<string>(localize.Get("DeletedFailed"));
+            return Success<string>(localize.Get("Deleted"));
         }
 
         #endregion
