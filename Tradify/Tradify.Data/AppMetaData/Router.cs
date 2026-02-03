@@ -28,5 +28,11 @@ namespace Tradify.Data.AppMetaData
             public const string RefreshToken = prefix + "/RefreshToken";
             public const string ConfirmEmail =prefix+"/ConfirmEmail";
         }
+        public static class Product
+        {
+            public const string prefix = Rule + "Product";
+            public const string Add = prefix + "/AddProduct";
+        }
+
     }
 }

@@ -75,7 +75,7 @@ namespace Tradify.Core.Features.User.Commands.Handlers
             var result = await userManager.ChangePasswordAsync(user, request.CurrentPassword, request.NewPassword);
 
             //Succe or Faild
-            if (!result.Succeeded) return BadRequest<string>(result.Errors.FirstOrDefault()!.Description);
+            if (result==null) return BadRequest<string>(result.Errors.FirstOrDefault()!.Description);
             return Success<string>(localize.Get("Success"));
         }
 
