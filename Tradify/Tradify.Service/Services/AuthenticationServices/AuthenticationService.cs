@@ -207,6 +207,18 @@ namespace Tradify.Service.Services.AuthenticationServices
             return (userId, expireDate);    
         }
 
+        public async Task<string> ConfirmEmailAsync(int? userId, string? code)
+        {
+            if (userId == null || code == null) return "ErrorWhenConfirmEmail";
+            var user = await userManager.FindByIdAsync(userId.ToString());
+            if (user == null) return "NotFound";
+            var result = await userManager.ConfirmEmailAsync(user, code);
+            if (!result.Succeeded)
+                return "ErrorWhenConfirmEmail";
+            return "Success";
+
+        }
+
 
 
         #endregion
