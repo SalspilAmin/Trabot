@@ -47,8 +47,11 @@ namespace Tradify.Infrastructure.Dependencies
             configuration.GetSection(nameof(EmailSettings)).Bind(EmailSettings);
             var jwtSettings = new JwtSettings();
             configuration.GetSection(nameof(JwtSettings)).Bind(jwtSettings);
+            var TwilioSettings = new TwilioSettings();
+            configuration.GetSection(nameof(TwilioSettings)).Bind(TwilioSettings);      
             services.AddSingleton(EmailSettings);
             services.AddSingleton(jwtSettings);
+            services.AddSingleton(TwilioSettings);  
 
             services.AddAuthentication(x =>
             {
