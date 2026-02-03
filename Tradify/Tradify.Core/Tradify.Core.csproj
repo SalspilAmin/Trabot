@@ -10,8 +10,12 @@
     <Folder Include="Features\Authenticaiton\Queries\Handler\" />
     <Folder Include="Features\Authenticaiton\Queries\Models\" />
     <Folder Include="Features\Authenticaiton\Queries\Validators\" />
+    <Folder Include="Features\Product\Queries\Models\" />
+    <Folder Include="Features\Product\Queries\Results\" />
+    <Folder Include="Features\Product\Queries\Validations\" />
     <Folder Include="Features\User\Queries\Validations\" />
     <Folder Include="Filters\" />
+    <Folder Include="Mapping\ProductMapping\Queries\" />
   </ItemGroup>
 
   <ItemGroup>
