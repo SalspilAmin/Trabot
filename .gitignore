@@ -421,3 +421,4 @@ obj/
 *.user
 .vs/
 *.env
+Secret.json
