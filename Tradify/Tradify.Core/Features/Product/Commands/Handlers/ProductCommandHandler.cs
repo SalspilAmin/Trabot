@@ -41,8 +41,8 @@ namespace Tradify.Core.Features.Product.Commands.Handlers
         {
             var product = mapper.Map<Products>(request);
 
-            await productService.AddAsync(product);
-
+              var result =  await productService.AddAsync(product);
+             if (!result.Succeeded) return  BadRequest<string>(result.Errors.FirstOrDefault()!.Description);
             return Success<int>(product.Id, localize.Get("ProductAddedSuccessfully"));
         }
 
