@@ -279,4 +279,10 @@
   <data name="PhoneNumberNotConfirmed" xml:space="preserve">
     <value>Phone Number Not Confirmed</value>
   </data>
+  <data name="ConfirmPhoneDone" xml:space="preserve">
+    <value>Confirm Phone Successed</value>
+  </data>
+  <data name="OTP_IsWrong" xml:space="preserve">
+    <value>Otp is Wrong</value>
+  </data>
 </root>

@@ -11,6 +11,8 @@ using Tradify.Service.AbstractsServices.IdentityServices;
 using Tradify.Service.Services.IdentityServices;
 using Tradify.Service.AbstractsServices.AuthenticationServices;
 using Tradify.Service.Services.AuthenticationServices;
+using Tradify.Service.AbstractsServices.WhatsappServices;
+using Tradify.Service.Services.WhatsappServices;
 
 namespace Tradify.Service.Dependencies
 {
@@ -46,6 +48,7 @@ namespace Tradify.Service.Dependencies
             services.AddTransient<IEmailService , EmailService>();
             services.AddTransient<IUserService,UserService>();
             services.AddTransient<IAuthenticationService, AuthenticationService>();
+            services.AddTransient<IWatsappService,WatsappService>();  
             
 
        
