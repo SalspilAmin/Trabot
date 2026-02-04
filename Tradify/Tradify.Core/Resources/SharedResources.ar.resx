@@ -279,4 +279,10 @@
   <data name="PhoneNumberNotConfirmed" xml:space="preserve">
     <value>رقم الهاتف غير مؤكد</value>
   </data>
+  <data name="ConfirmPhoneDone" xml:space="preserve">
+    <value>تم تاكيد رقم الهاتف</value>
+  </data>
+  <data name="OTP_IsWrong" xml:space="preserve">
+    <value>رمز  التاكيد خطء</value>
+  </data>
 </root>
