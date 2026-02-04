@@ -421,6 +421,6 @@ obj/
 *.user
 .vs/
 *.env
-
+*.Json
 Secret.json
 
