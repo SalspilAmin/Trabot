@@ -32,6 +32,7 @@ builder.Services.AddTransient<IUrlHelper>(x =>
     var factory = x.GetRequiredService<IUrlHelperFactory>();
     return factory.GetUrlHelper(actionContext);
 });
+builder.Configuration.AddJsonFile("Secret.json")
 
 #endregion
 #region Localization
