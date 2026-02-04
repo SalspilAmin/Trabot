@@ -421,4 +421,5 @@ obj/
 *.user
 .vs/
 *.env
+Secret.json
 Secret.jsonTradify/Tradify/Secret.json
