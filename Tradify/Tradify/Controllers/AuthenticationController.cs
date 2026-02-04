@@ -32,6 +32,13 @@ namespace Tradify.Controllers
             var result = await Mediator.Send(request);
             return NewResult(result);
         }
+        [HttpPost(Router.Authentication.ConfrimPhone)]
+        public async Task<IActionResult> ConfrimPhone([FromBody] ConfirmPhoneQuery request)
+        {
+            var result = await Mediator.Send(request);
+            return NewResult(result);
+
+        }
 
     }
 }

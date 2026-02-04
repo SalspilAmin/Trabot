@@ -27,6 +27,7 @@ namespace Tradify.Data.AppMetaData
             public const string LogIN = prefix + "/LogIn";
             public const string RefreshToken = prefix + "/RefreshToken";
             public const string ConfirmEmail =prefix+"/ConfirmEmail";
+            public const string ConfrimPhone = prefix + "/ConfrimPhone";
         }
         public static class Product
         {

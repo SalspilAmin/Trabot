@@ -10,6 +10,7 @@ using Tradify.Data.Entities.Identity;
 using Tradify.Infrastructure.Context;
 using Tradify.Service.AbstractsServices;
 using Tradify.Service.AbstractsServices.IdentityServices;
+using Tradify.Service.AbstractsServices.WatsappServices;
 
 namespace Tradify.Service.Services.IdentityServices
 {
@@ -20,15 +21,17 @@ namespace Tradify.Service.Services.IdentityServices
         private readonly UserManager<User> UserManager;
         private readonly IUrlHelper _urlHelper;
         private readonly IEmailService _emailService;
+        private readonly IWatsappService watsappService;
 
         public UserService(ApplicationDbContext applicationDbContext,IHttpContextAccessor httpContextAccessor,
-            UserManager<User> userManager,IUrlHelper urlHelper,IEmailService emailService)
+            UserManager<User> userManager,IUrlHelper urlHelper,IEmailService emailService,IWatsappService watsappService)
         {
             this.applicationDbContext = applicationDbContext;
             this.httpContextAccessor = httpContextAccessor;
             this.UserManager = userManager;
             this._urlHelper = urlHelper;
             this._emailService = emailService;
+            this.watsappService = watsappService;   
         }
 
         public bool IsEmail(string input)
@@ -41,6 +44,19 @@ namespace Tradify.Service.Services.IdentityServices
             input = input.Replace(" ", "").Trim();
             return Regex.IsMatch(input, @"^(?:\+20|0)?1[0125][0-9]{8}$");
         }
+        //public async Task SendConfirmEmail(IHttpContextAccessor httpContextAccessor,UserManager<User> userManager,User user)
+        //{
+        //    var code = await userManager.GenerateEmailConfirmationTokenAsync(user);
+        //    var requestAccessories = httpContextAccessor.HttpContext.Request;
+        //    var returnURL = requestAccessories.Scheme + "://" + requestAccessories.Host + _urlHelper.Action("ConfirmEmail", "Authentication", new { userId = user.Id, code = code });
+
+        //    var message = $"To Confirm Email Click Link: <a href='{returnURL}'>Link Of Confirmation</a>";
+        //    await _emailService.SendEmail(user.Email, message, "Confirm Email");
+
+
+
+        //}
+
 
         public async Task<string> AddUserAsync(User user, string Password)
         {
@@ -93,6 +109,18 @@ namespace Tradify.Service.Services.IdentityServices
 
                         var message = $"To Confirm Email Click Link: <a href='{returnURL}'>Link Of Confirmation</a>";
                         await _emailService.SendEmail(user.Email, message, "Confirm Email");
+
+                    }
+                    if(user.PhoneNumber!=null&& checkPhone == true)
+                    {
+
+
+                        string otp = new Random().Next(100000, 999999).ToString();
+                        user.OTP = otp;
+                        await UserManager.UpdateAsync(user);
+                        var result = await watsappService.SendVerificationCodeAsync(user.PhoneNumber, otp);
+
+                        if (result == false) return "Failed";
 
                     }
                     await trans.CommitAsync();

@@ -19,6 +19,7 @@ namespace Tradify.Core.Features.Authenticaiton.Queries.Validators
         public ConfirmEmailValidator(LocalizationService localizer)
         {
             _localizer = localizer;
+            ApplyValidationsRules();
         }
 
         #endregion

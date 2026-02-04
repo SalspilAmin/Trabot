@@ -61,6 +61,8 @@ namespace Tradify.Core.Resources
         public const string FailedToUploadImage = "FailedToUploadImage";
         public const string Add_Correct_info = "Add_Correct_info";
         public const string PhoneNumberNotConfirmed = "PhoneNumberNotConfirmed";
+        public const string ConfirmPhoneDone = "ConfirmPhoneDone";
+        public const string OTP_IsWrong = "OTP_IsWrong";
 
     }
 }
