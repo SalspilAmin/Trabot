@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 using Tradify.Data.Helpers;
 using Tradify.Service.AbstractsServices.IdentityServices;
 using Tradify.Service.AbstractsServices.WatsappServices;
@@ -12,19 +13,24 @@ namespace Tradify.Service.Services.WatsappServices
     public class WatsappService : IWatsappService
     {
         private readonly TwilioSettings twilioSettings;
-        private readonly IUserService userService;
-        public WatsappService( TwilioSettings twilioSettings , IUserService userService)
+      
+        public WatsappService( TwilioSettings twilioSettings )
         {
-            this.userService=userService;
+           
              this.twilioSettings = twilioSettings;
             Twilio.TwilioClient.Init(twilioSettings.AccountSID, twilioSettings.AuthToken);
+        }
+        public bool IsPhone(string input)
+        {
+            input = input.Replace(" ", "").Trim();
+            return Regex.IsMatch(input, @"^(?:\+20|0)?1[0125][0-9]{8}$");
         }
         public async Task<bool> SendVerificationCodeAsync(string phoneNumber, string code)
         {
 
             try
             {
-                var isnumber = userService.IsPhone(phoneNumber);
+                var isnumber = IsPhone(phoneNumber);
                 if (!isnumber) return false;
                 var message = await MessageResource.CreateAsync(
                    from: new PhoneNumber($"whatsapp:{twilioSettings.WhatsAppFrom}"),

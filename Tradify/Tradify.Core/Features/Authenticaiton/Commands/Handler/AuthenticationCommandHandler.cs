@@ -72,12 +72,17 @@ namespace Tradify.Core.Features.Authenticaiton.Commands.Handler
 
 
             // confrim Email or phone
-            if (checkuserEmail || chekuserPhone)
+            if (checkuserEmail  )
             {
                 if (!GetUserbyEmailorPhone.EmailConfirmed) return BadRequest<JwtAuthResult>(localization.Get("EmailNotConfirmed"));
-                if (!GetUserbyEmailorPhone.PhoneNumberConfirmed) return BadRequest<JwtAuthResult>(localization.Get("PhoneNumberNotConfirmed"));
+              
 
             }
+            if (chekuserPhone)
+            {
+              if (!GetUserbyEmailorPhone.PhoneNumberConfirmed) return BadRequest<JwtAuthResult>(localization.Get("PhoneNumberNotConfirmed"));
+            }
+
 
             //  return token
 
