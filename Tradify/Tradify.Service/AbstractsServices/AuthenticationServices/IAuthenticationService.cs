@@ -16,6 +16,7 @@ namespace Tradify.Service.AbstractsServices.AuthenticationServices
         public  Task<(string, DateTime?)> ValidateDetails(JwtSecurityToken jwtToken, string accessToken, string refreshToken);
 
         public Task<string> ConfirmEmailAsync(int? userId, string? code);
+        public Task<string> SendResetPasswordAsync(string EmailorPhone);
 
-        }
+    }
 }

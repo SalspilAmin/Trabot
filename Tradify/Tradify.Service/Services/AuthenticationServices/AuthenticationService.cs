@@ -13,7 +13,10 @@ using System.Text;
 using Tradify.Data.Entities.Identity;
 using Tradify.Data.Helpers;
 using Tradify.Infrastructure.AbstractsRepositories;
+using Tradify.Service.AbstractsServices;
 using Tradify.Service.AbstractsServices.AuthenticationServices;
+using Tradify.Service.AbstractsServices.IdentityServices;
+using Tradify.Service.AbstractsServices.WhatsappServices;
 
 
 namespace Tradify.Service.Services.AuthenticationServices
@@ -21,18 +24,25 @@ namespace Tradify.Service.Services.AuthenticationServices
     public class AuthenticationService : IAuthenticationService
     {
         #region Fields
-             private readonly UserManager<User> userManager;
-             private readonly JwtSettings jwtSettings;  
+        private readonly UserManager<User> userManager;
+        private readonly JwtSettings jwtSettings;  
         private readonly IRefreshTokenRepository refreshTokenRepository;
+        private readonly IUserService userService;
+        private readonly IEmailService emailService;
+        private readonly IWatsappService watsappService;
         #endregion
 
 
         #region Constructor
-        public AuthenticationService(UserManager<User> userManager,JwtSettings jwtSettings,IRefreshTokenRepository refresh)
+        public AuthenticationService(UserManager<User> userManager,JwtSettings jwtSettings,IRefreshTokenRepository refresh,IUserService userService,
+            IEmailService emailService,IWatsappService watsapp)
         {
             this.userManager = userManager; 
             this.jwtSettings = jwtSettings;
             this.refreshTokenRepository = refresh;  
+            this.userService = userService;
+            this.emailService = emailService;
+            this.watsappService = watsapp;
         }
         #endregion
         
@@ -217,6 +227,22 @@ namespace Tradify.Service.Services.AuthenticationServices
                 return "ErrorWhenConfirmEmail";
             return "Success";
 
+        }
+
+        public async Task<string> SendResetPasswordAsync(string EmailorPhone)
+        {
+            var user = await userService.FindUserByEmailOrPhoneAsync(EmailorPhone);
+            if (user == null) return "userNotFount";
+            var emailorphone= EmailorPhone.Trim();
+            var code = new Random().Next(100000,999999).ToString();
+            if (emailorphone.Contains('@'))
+            {
+               var result=await emailService.SendEmail(EmailorPhone, $"Your code To Reset Password;{code}","ResetPassword");
+                return result;
+            }
+            var watsappresult = await watsappService.SendVerificationCodeAsync(EmailorPhone, code)  ;
+            if (watsappresult) return "Success";
+            return "Failed";
         }
 
 
