@@ -232,17 +232,35 @@ namespace Tradify.Service.Services.AuthenticationServices
         public async Task<string> SendResetPasswordAsync(string EmailorPhone)
         {
             var user = await userService.FindUserByEmailOrPhoneAsync(EmailorPhone);
-            if (user == null) return "userNotFount";
+            if (user == null) return "UserNotFount";
             var emailorphone= EmailorPhone.Trim();
             var code = new Random().Next(100000,999999).ToString();
+               user.Code = code;
             if (emailorphone.Contains('@'))
             {
-               var result=await emailService.SendEmail(EmailorPhone, $"Your code To Reset Password;{code}","ResetPassword");
+               
+              var result=await emailService.SendEmail(EmailorPhone, $"Your code To Reset Password;{code}","ResetPassword");
+                
+               await userManager.UpdateAsync(user);  
                 return result;
             }
             var watsappresult = await watsappService.SendVerificationCodeAsync(EmailorPhone, code)  ;
+
+            await userManager.UpdateAsync(user);
             if (watsappresult) return "Success";
             return "Failed";
+        }
+
+        public async Task<string> ConfrimResetPasswordAsync(string EmailorPhone,string Code)
+        {
+            // get user
+            var user = await userService.FindUserByEmailOrPhoneAsync(EmailorPhone);
+            if (user == null) return "UserNotFound";
+
+            // check code
+            if(user.Code ==Code) return "Success";
+
+            return "CodeIsWrong";
         }
 
 

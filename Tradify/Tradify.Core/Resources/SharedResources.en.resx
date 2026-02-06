@@ -285,4 +285,7 @@
   <data name="OTP_IsWrong" xml:space="preserve">
     <value>Otp is Wrong</value>
   </data>
+  <data name="CodeIsWrong" xml:space="preserve">
+    <value>Code is Wrong</value>
+  </data>
 </root>

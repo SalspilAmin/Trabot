@@ -29,6 +29,7 @@ namespace Tradify.Data.AppMetaData
             public const string ConfirmEmail =prefix+"/ConfirmEmail";
             public const string ConfrimPhone = prefix + "/ConfrimPhone";
             public const string SendResetPassword = prefix + "/SendResetPasswordCode";
+            public const string ConfirmResetPassword = prefix + "/ConfrimResetPassword";
         }
         public static class Product
         {
