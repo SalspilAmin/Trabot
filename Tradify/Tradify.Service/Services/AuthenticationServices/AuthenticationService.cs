@@ -13,7 +13,11 @@ using System.Text;
 using Tradify.Data.Entities.Identity;
 using Tradify.Data.Helpers;
 using Tradify.Infrastructure.AbstractsRepositories;
+using Tradify.Infrastructure.Context;
+using Tradify.Service.AbstractsServices;
 using Tradify.Service.AbstractsServices.AuthenticationServices;
+using Tradify.Service.AbstractsServices.IdentityServices;
+using Tradify.Service.AbstractsServices.WhatsappServices;
 
 
 namespace Tradify.Service.Services.AuthenticationServices
@@ -21,18 +25,27 @@ namespace Tradify.Service.Services.AuthenticationServices
     public class AuthenticationService : IAuthenticationService
     {
         #region Fields
-             private readonly UserManager<User> userManager;
-             private readonly JwtSettings jwtSettings;  
+        private readonly UserManager<User> userManager;
+        private readonly JwtSettings jwtSettings;  
         private readonly IRefreshTokenRepository refreshTokenRepository;
+        private readonly IUserService userService;
+        private readonly IEmailService emailService;
+        private readonly IWatsappService watsappService;
+        private readonly ApplicationDbContext applicationDbContext;
         #endregion
 
 
         #region Constructor
-        public AuthenticationService(UserManager<User> userManager,JwtSettings jwtSettings,IRefreshTokenRepository refresh)
+        public AuthenticationService(UserManager<User> userManager, JwtSettings jwtSettings, IRefreshTokenRepository refresh, IUserService userService,
+            IEmailService emailService, IWatsappService watsapp, ApplicationDbContext applicationDbContext)
         {
             this.userManager = userManager; 
             this.jwtSettings = jwtSettings;
             this.refreshTokenRepository = refresh;  
+            this.userService = userService;
+            this.emailService = emailService;
+            this.watsappService = watsapp;
+            this.applicationDbContext = applicationDbContext;   
         }
         #endregion
         
@@ -217,6 +230,69 @@ namespace Tradify.Service.Services.AuthenticationServices
                 return "ErrorWhenConfirmEmail";
             return "Success";
 
+        }
+
+        public async Task<string> SendResetPasswordAsync(string EmailorPhone)
+        {
+            var user = await userService.FindUserByEmailOrPhoneAsync(EmailorPhone);
+            if (user == null) return "UserNotFount";
+            var emailorphone= EmailorPhone.Trim();
+            var code = new Random().Next(100000,999999).ToString();
+               user.Code = code;
+            if (emailorphone.Contains('@'))
+            {
+               
+              var result=await emailService.SendEmail(EmailorPhone, $"Your code To Reset Password;{code}","ResetPassword");
+                
+               await userManager.UpdateAsync(user);  
+                return result;
+            }
+            var watsappresult = await watsappService.SendVerificationCodeAsync(EmailorPhone, code)  ;
+
+            await userManager.UpdateAsync(user);
+            if (watsappresult) return "Success";
+            return "Failed";
+        }
+
+        public async Task<string> ConfrimResetPasswordAsync(string EmailorPhone,string Code)
+        {
+            // get user
+            var user = await userService.FindUserByEmailOrPhoneAsync(EmailorPhone);
+            if (user == null) return "UserNotFound";
+
+            // check code
+            if(user.Code ==Code) return "Success";
+
+            return "CodeIsWrong";
+        }
+
+        public async Task<string> ResetPasswordAsync(string EmailorPhone, string Password)
+        {
+            using (var trans = await applicationDbContext.Database.BeginTransactionAsync())
+            {
+                try
+                {
+                    //get user 
+                    var user = await userService.FindUserByEmailOrPhoneAsync(EmailorPhone);
+                    if (user == null)
+                        return "UserNotFound";
+                    await userManager.RemovePasswordAsync(user);
+                    if (!await userManager.HasPasswordAsync(user))
+                    {
+                        await userManager.AddPasswordAsync(user, Password);
+                    }
+                    await trans.CommitAsync();
+                    return "Success";
+
+
+                }
+                catch (Exception ex)
+                {
+                    await trans.RollbackAsync();
+                    return "Failed";
+                }
+            }
+            
         }
 
 
