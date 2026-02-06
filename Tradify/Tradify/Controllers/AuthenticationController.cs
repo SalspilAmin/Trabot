@@ -51,7 +51,12 @@ namespace Tradify.Controllers
             var result = await Mediator.Send(request);
             return NewResult(result);   
         }
-
+        [HttpPost(Router.Authentication.ResetPassword)]
+       public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordCommand request)
+        {
+            var result = await Mediator.Send(request);
+            return NewResult(result);
+        }
 
     }
 }

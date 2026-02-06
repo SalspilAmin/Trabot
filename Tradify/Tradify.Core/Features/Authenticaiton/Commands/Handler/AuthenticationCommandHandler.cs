@@ -21,6 +21,7 @@ namespace Tradify.Core.Features.Authenticaiton.Commands.Handler
       , IRequestHandler<RefreshTokenCommand, Response<JwtAuthResult>>
         , IRequestHandler<SendResetPasswordCommand, Response<string>>
         , IRequestHandler<ConfirmResetPasswordCommand, Response<string>>
+        ,IRequestHandler<ResetPasswordCommand, Response<string>>
     {
         #region Fields
         private readonly LocalizationService localization;
@@ -137,6 +138,18 @@ namespace Tradify.Core.Features.Authenticaiton.Commands.Handler
 
             #endregion
 
+        }
+
+        public async Task<Response<string>> Handle(ResetPasswordCommand request, CancellationToken cancellationToken)
+        {
+            var result = await authenticationService.ResetPasswordAsync(request.EmailOrPhone, request.Password);
+            switch (result)
+            {
+                case "UserNotFound": return BadRequest<string>(localization.Get("UserIsNotFound"));
+                case "Failed": return BadRequest<string>(localization.Get("TryAgainInAnotherTime"));
+                case "Success": return Success<string>("Success");
+                default: return BadRequest<string>(localization.Get("TryAgainInAnotherTime"));
+            }
         }
     }
 }
