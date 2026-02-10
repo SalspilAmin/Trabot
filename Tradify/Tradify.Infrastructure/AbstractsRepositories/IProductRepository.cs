@@ -8,5 +8,6 @@ namespace Tradify.Infrastructure.AbstractsRepositories
 {
     public interface IProductRepository : IGenericRepository<Products>
     {
+        Task<Products?> GetByIdWithIncludesAsync(int id);
     }
 }

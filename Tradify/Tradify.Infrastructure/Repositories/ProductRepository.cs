@@ -6,6 +6,7 @@ using Tradify.Data.Entities;
 using Tradify.Infrastructure.AbstractsRepositories;
 using Tradify.Infrastructure.Context;
 using Tradify.Infrastructure.InfrastrucureBases;
+using static Tradify.Data.AppMetaData.Router;
 
 namespace Tradify.Infrastructure.Repositories
 {
@@ -18,14 +19,22 @@ namespace Tradify.Infrastructure.Repositories
         #region Constructor
         public ProductRepository(ApplicationDbContext applicationDbContext) : base(applicationDbContext)
         {
-             products  = applicationDbContext.Set<Products>();
+            products = applicationDbContext.Set<Products>();
         }
 
         #endregion
 
         #region Methods
 
-        #endregion
+        public async Task<Products?> GetByIdWithIncludesAsync(int id)
+        {
+            return await products
+                .Include(p => p.Reviews)
+                .Include(p => p.ProductImages)
+                .FirstOrDefaultAsync(p => p.Id == id);
+        }
 
+        #endregion
     }
 }
+
