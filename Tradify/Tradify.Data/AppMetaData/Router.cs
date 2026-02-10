@@ -36,6 +36,14 @@ namespace Tradify.Data.AppMetaData
         {
             public const string prefix = Rule + "Product";
             public const string Add = prefix + "/AddProduct";
+            public const string Paginated = prefix + "/Paginated";
+            public const string GetByID = prefix + "/Get" + SignleRoute;
+            public const string UpdateProduct = prefix + "/Update" ;
+            public const string Delete = prefix + "/Delete" + SignleRoute;
+
+
+
+
         }
 
     }

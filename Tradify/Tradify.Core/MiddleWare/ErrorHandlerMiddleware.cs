@@ -17,10 +17,12 @@ namespace Tradify.Core.MiddleWare
     {
         private readonly RequestDelegate requestDelegate;
         private readonly ILogger<ErrorHandlerMiddleware> logger;
-        public ErrorHandlerMiddleware(RequestDelegate requestDelegate,ILogger<ErrorHandlerMiddleware> logger)
+
+        public ErrorHandlerMiddleware(RequestDelegate requestDelegate, ILogger<ErrorHandlerMiddleware> logger)
+
         {
             this.requestDelegate = requestDelegate;
-            this.logger = logger;   
+            this.logger = logger;
         }
 
         public async Task Invoke(HttpContext context)
@@ -28,7 +30,7 @@ namespace Tradify.Core.MiddleWare
 
             try
             {
-             await   requestDelegate(context);
+                await requestDelegate(context);
             }
 
             catch (Exception error)
@@ -36,7 +38,7 @@ namespace Tradify.Core.MiddleWare
                 var response = context.Response;
 
                 response.ContentType = "application/json";
-                var responseModel= new Response<string> { Succeeded=false,Message=error?.Message};
+                var responseModel = new Response<string> { Succeeded = false, Message = error?.Message };
 
                 switch (error)
                 {
@@ -46,7 +48,7 @@ namespace Tradify.Core.MiddleWare
                         response.StatusCode = 400;
                         break;
 
-                   
+
                     case FormatException:
                         responseModel.Message = "Invalid request data";
                         responseModel.StatusCode = HttpStatusCode.BadRequest;

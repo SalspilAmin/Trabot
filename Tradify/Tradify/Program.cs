@@ -44,12 +44,12 @@ opt.ResourcesPath = "Resources"
 builder.Services.Configure<RequestLocalizationOptions>(options => {
     List<CultureInfo> supportCultures = new List<CultureInfo>{
       new CultureInfo("en-US"),
-           
+
             new CultureInfo("ar-EG")
 };
     options.DefaultRequestCulture = new RequestCulture("en-US");
-    options.SupportedCultures= supportCultures;
-    options.SupportedUICultures= supportCultures;
+    options.SupportedCultures = supportCultures;
+    options.SupportedUICultures = supportCultures;
 
 }
     );
@@ -80,10 +80,10 @@ var options = app.Services.GetService<IOptions<RequestLocalizationOptions>>();
 app.UseRequestLocalization(options!.Value);
 #endregion
 app.UseMiddleware<ErrorHandlerMiddleware>();
-app.UseStaticFiles();   
+app.UseStaticFiles();
 app.UseHttpsRedirection();
 
-app.UseAuthentication();    
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

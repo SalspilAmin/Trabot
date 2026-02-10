@@ -65,5 +65,26 @@ namespace Tradify.Core.Resources
         public const string OTP_IsWrong = "OTP_IsWrong";
         public const string CodeIsWrong = "CodeIsWrong";
 
+        public const string MaxLengthis255 = "MaxLengthis255";
+        public const string PriceGreaterThanZero = "PriceGreaterThanZero";
+        public const string DiscountBetween0And100 = "DiscountBetween0And100";
+        public const string StockCannotBeNegative = "StockCannotBeNegative";
+
+        public const string FailedToAddProduct = "FailedToAddProduct";
+        public const string ProductAddedSuccessfully = "ProductAddedSuccessfully";
+        public const string ProductNotFound = "ProductNotFound";
+        public const string ProductUpdatedSuccessfully = "ProductUpdatedSuccessfully";
+
+        public const string ProductDeletedSuccessfully = "ProductDeletedSuccessfully";
+
+
+
+
+
+
+
+
+
+
     }
 }
