@@ -10,6 +10,8 @@ namespace Tradify.Core.Mapping.UserMapping
         public UserProfile()
         {
             AddUserMapping();
+            GetUserByIdMapping();
+            GetUserPaginationMapping();
         }
     }
 }

@@ -7,6 +7,7 @@ namespace Tradify.Data.Enums.Fawaterak
     public enum FawaterakPaymentFMethods
     {
         Card=1,
-        Fawary=2,
+        Fawry=2,
+        EWallet=3
     }
 }

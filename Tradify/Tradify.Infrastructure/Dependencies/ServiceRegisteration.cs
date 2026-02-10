@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Text;
 using Tradify.Data.Entities.Identity;
 using Tradify.Data.Helpers;
+using Tradify.Data.Helpers.Fawaterak;
 using Tradify.Infrastructure.Context;
 
 namespace Tradify.Infrastructure.Dependencies
@@ -52,6 +53,10 @@ namespace Tradify.Infrastructure.Dependencies
             var TwilioSettings = new TwilioSettings();
             configuration.GetSection(nameof(TwilioSettings)).Bind(TwilioSettings);
             services.AddSingleton(TwilioSettings);
+            var FawaterakOptions = new Tradify.Data.Helpers.Fawaterak.FawaterakOptions();
+            configuration.GetSection(nameof(FawaterakOptions)).Bind(FawaterakOptions);
+            services.AddSingleton(FawaterakOptions);
+            services.AddHttpClient();
 
             services.AddAuthentication(x =>
             {

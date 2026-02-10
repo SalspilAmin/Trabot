@@ -15,6 +15,7 @@ namespace Tradify.Core.Features.Authenticaiton.Commands.Validators
         public ResetPasswordValidator(LocalizationService localization) 
         {
         this.localization = localization;
+            ApplyValidationsRules();
 
         }
         public void ApplyValidationsRules()
