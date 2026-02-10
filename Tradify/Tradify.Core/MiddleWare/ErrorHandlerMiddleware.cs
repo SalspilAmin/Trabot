@@ -17,7 +17,9 @@ namespace Tradify.Core.MiddleWare
     {
         private readonly RequestDelegate requestDelegate;
         private readonly ILogger<ErrorHandlerMiddleware> logger;
+
         public ErrorHandlerMiddleware(RequestDelegate requestDelegate, ILogger<ErrorHandlerMiddleware> logger)
+
         {
             this.requestDelegate = requestDelegate;
             this.logger = logger;

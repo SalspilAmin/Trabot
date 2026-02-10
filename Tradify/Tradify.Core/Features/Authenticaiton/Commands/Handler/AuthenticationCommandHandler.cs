@@ -18,7 +18,10 @@ namespace Tradify.Core.Features.Authenticaiton.Commands.Handler
 {
     public class AuthenticationCommandHandler : ResponseHandler
      , IRequestHandler<SignInCommand, Response<JwtAuthResult>>
-      ,IRequestHandler<RefreshTokenCommand, Response<JwtAuthResult>>
+      , IRequestHandler<RefreshTokenCommand, Response<JwtAuthResult>>
+        , IRequestHandler<SendResetPasswordCommand, Response<string>>
+        , IRequestHandler<ConfirmResetPasswordCommand, Response<string>>
+        ,IRequestHandler<ResetPasswordCommand, Response<string>>
     {
         #region Fields
         private readonly LocalizationService localization;
@@ -31,7 +34,7 @@ namespace Tradify.Core.Features.Authenticaiton.Commands.Handler
         #region Constructor
         public AuthenticationCommandHandler(LocalizationService localization, IAuthenticationService authenticationService, IUserService userService, UserManager<Tradify.Data.Entities.Identity.User> userManager
             , SignInManager<Tradify.Data.Entities.Identity.User> signInManager) : base(localization)
-            
+
         {
             this.localization = localization;
             this.authenticationService = authenticationService;
@@ -47,8 +50,8 @@ namespace Tradify.Core.Features.Authenticaiton.Commands.Handler
 
         #region Methods
 
-  
-       public async Task<Response<JwtAuthResult>> Handle(SignInCommand request, CancellationToken cancellationToken)
+
+        public async Task<Response<JwtAuthResult>> Handle(SignInCommand request, CancellationToken cancellationToken)
         {
             //Check if user is Exist
             var chekuserPhone = userService.IsPhone(request.EmailOrPhone);
@@ -89,18 +92,18 @@ namespace Tradify.Core.Features.Authenticaiton.Commands.Handler
 
         public async Task<Response<JwtAuthResult>> Handle(RefreshTokenCommand request, CancellationToken cancellationToken)
         {
-            var jwttoken =  authenticationService.ReadJWTToken(request.Accesstoken);
-            var UserIdAndExpireDate =await authenticationService.ValidateDetails(jwttoken, request.Accesstoken, request.RefreshToken);
+            var jwttoken = authenticationService.ReadJWTToken(request.Accesstoken);
+            var UserIdAndExpireDate = await authenticationService.ValidateDetails(jwttoken, request.Accesstoken, request.RefreshToken);
             switch (UserIdAndExpireDate)
             {
-               case ("AlgorithmIsWrong", null): return Unauthorized<JwtAuthResult>(localization.Get("AlgorithmIsWrong"));
+                case ("AlgorithmIsWrong", null): return Unauthorized<JwtAuthResult>(localization.Get("AlgorithmIsWrong"));
                 case ("TokenIsNotExpired", null): return Unauthorized<JwtAuthResult>(localization.Get("TokenIsNotExpired"));
                 case ("RefreshTokenIsNotFound", null): return Unauthorized<JwtAuthResult>(localization.Get("RefreshTokenIsNotFound"));
                 case ("RefreshTokenIsExpired", null): return Unauthorized<JwtAuthResult>(localization.Get("RefreshTokenIsExpired"));
             }
             var (userId, expireDate) = UserIdAndExpireDate;
-            var user= await userManager.FindByIdAsync(userId);
-            if(user == null)
+            var user = await userManager.FindByIdAsync(userId);
+            if (user == null)
             {
                 return NotFound<JwtAuthResult>();
             }
@@ -108,8 +111,45 @@ namespace Tradify.Core.Features.Authenticaiton.Commands.Handler
             return Success<JwtAuthResult>(result);
         }
 
+        public async Task<Response<string>> Handle(SendResetPasswordCommand request, CancellationToken cancellationToken)
+        {
+            var result = await authenticationService.SendResetPasswordAsync(request.EmailOrPhone);
+            switch (result)
+            {
+                case "UserNotFount": return BadRequest<string>(localization.Get("UserIsNotFound"));
+                case "Failed": return BadRequest<string>(localization.Get("TryAgainInAnotherTime"));
 
-        #endregion
 
+            }
+            return Success<string>(localization.Get("Success"));
+        }
+
+        public async Task<Response<string>> Handle(ConfirmResetPasswordCommand request, CancellationToken cancellationToken)
+        {
+            var result = await authenticationService.ConfrimResetPasswordAsync(request.EmailOrPhone, request.Code);
+
+            switch (result)
+            {
+                case "UserNotFount": return BadRequest<string>(localization.Get("UserIsNotFound"));
+                case "CodeIsWrong" :return BadRequest<string>(localization.Get("CodeIsWrong"));
+
+            }
+            return Success<string>(localization.Get("Success"));
+
+            #endregion
+
+        }
+
+        public async Task<Response<string>> Handle(ResetPasswordCommand request, CancellationToken cancellationToken)
+        {
+            var result = await authenticationService.ResetPasswordAsync(request.EmailOrPhone, request.Password);
+            switch (result)
+            {
+                case "UserNotFound": return BadRequest<string>(localization.Get("UserIsNotFound"));
+                case "Failed": return BadRequest<string>(localization.Get("TryAgainInAnotherTime"));
+                case "Success": return Success<string>("Success");
+                default: return BadRequest<string>(localization.Get("TryAgainInAnotherTime"));
+            }
+        }
     }
 }

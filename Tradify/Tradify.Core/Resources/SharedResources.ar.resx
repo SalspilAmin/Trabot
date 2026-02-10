@@ -285,4 +285,7 @@
   <data name="OTP_IsWrong" xml:space="preserve">
     <value>رمز  التاكيد خطء</value>
   </data>
+  <data name="CodeIsWrong" xml:space="preserve">
+    <value>  الكود خطء</value>
+  </data>
 </root>
