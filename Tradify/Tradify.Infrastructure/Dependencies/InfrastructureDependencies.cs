@@ -38,7 +38,8 @@ namespace Tradify.Infrastructure.Dependencies
             services.AddTransient<IAppointmentsRepository , AppointmentsRepository>();  
             services.AddTransient<IStoreBookingRepository, StoreBookingRepository>();
             services.AddTransient<IRefreshTokenRepository , RefreshTokenRepository>();
-            
+            services.AddTransient<ICartRepository,CartRepository>();
+            services.AddTransient<ICartProductRepository, CartProductRepository>();
            
 
 

@@ -31,6 +31,7 @@ namespace Tradify.Service.Services.FawaterakServices
             var client = _httpClientFactory.CreateClient();
             var request = new HttpRequestMessage(HttpMethod.Post,$"{fawaterakOptions.BaseUrl}/createInvoiceLink");
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", fawaterakOptions.ApiKey);
+            request.Content= new StringContent(JsonConvert.SerializeObject(eInvoice));
 
             var response= client.SendAsync(request).Result;
             if (response.IsSuccessStatusCode)

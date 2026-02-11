@@ -9,7 +9,7 @@ namespace Tradify.Core.Mapping.FawaterakMapping
     {
         public FawaterakProfile() 
         {
-           
+            ProductMapping();
         }
 
     }

@@ -11,6 +11,6 @@ namespace Tradify.Core.Features.Fawaterak.Comands.Models
 {
     public class EInvoiceRequestLinkCommand :EInvoiceRequestModel ,IRequest<Response<EInvoiceResponseDataModel>>
     {
-       
+       public int orderId {  get; set; }    
     }
 }

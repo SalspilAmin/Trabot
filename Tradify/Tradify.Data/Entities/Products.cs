@@ -34,14 +34,14 @@ namespace Tradify.Data.Entities
 
 
 
-        public ProductImage? productImage { get; set; }
-        public ProductVideo? productVideo { get; set; }
+        public virtual ProductImage? productImage { get; set; }
+        public virtual ProductVideo? productVideo { get; set; }
         [ForeignKey(nameof(CategoryId))]
-        public Categories? Category { get; set; }
+        public virtual Categories? Category { get; set; }
         [ForeignKey(nameof(StoreId))]
-        public Stores? Store { get; set; }
+        public virtual Stores? Store { get; set; }
         [ForeignKey(nameof(SuborderId))]
-        public SubOrders? SubOrder { get; set; }
+        public virtual  SubOrders? SubOrder { get; set; }
         public virtual ICollection<Reviews>? Reviews { get; set; }
         
       

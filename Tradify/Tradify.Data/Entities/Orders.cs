@@ -15,18 +15,23 @@ namespace Tradify.Data.Entities
         public int CustomerId { get; set; }
         public string ShippingAddress { get; set; } 
 
-        public OrderStatus OrderStatus { get; set; }
+        public OrderStatus? OrderStatus { get; set; }
 
-        public PaymentStatus PaymentStatus { get; set; }
+        public PaymentStatus PaymentStatus { get; set; } = PaymentStatus.Pending;
 
-        public List<Products> Products { get; set; }
+        public virtual List<Products> Products { get; set; }
 
         public decimal? ShippingPrice { get; set; }
         public decimal? TotalAmount { get; set; }
 
         public DateTimeOffset CreatedAt{ get; set; }= DateTimeOffset.Now;
 
-        public DateTime EstimatedDelevery { get; set; }
+        public DateTimeOffset EstimatedDelevery { get; set; } = DateTimeOffset.Now.AddDays(1);
+        public string? invoice_id { get; set; }
+        public string? invoice_key { get; set; }
+        public int CartId { get; set; }
+        [ForeignKey(nameof(CartId))]
+        public virtual Cart cart { get; set; }
 
         [ForeignKey(nameof(CustomerId))]
         public User? User { get; set; }

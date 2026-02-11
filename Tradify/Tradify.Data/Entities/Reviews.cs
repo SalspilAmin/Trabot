@@ -21,10 +21,10 @@ namespace Tradify.Data.Entities
         public string? Comment { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         [ForeignKey(nameof(UserId))]
-        public User? User { get; set; }
+        public virtual User? User { get; set; }
 
         [ForeignKey(nameof(ProductId))]
-        public Products? Product { get; set; }
+        public virtual Products? Product { get; set; }
 
        
 

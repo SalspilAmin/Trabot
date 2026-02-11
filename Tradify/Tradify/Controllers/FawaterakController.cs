@@ -13,9 +13,9 @@ namespace Tradify.Controllers
     {
         [HttpGet(Router.Fawaterak.GetPaymentMehtods)]
 
-        public async Task<IActionResult> GetPaymentMethods(GetPaymentMehtodsQuery request)
+        public async Task<IActionResult> GetPaymentMethods()
         {
-            var result= await Mediator.Send(request);
+            var result= await Mediator.Send(new GetPaymentMehtodsQuery());
             return NewResult(result);
 
         }

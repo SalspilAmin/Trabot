@@ -288,4 +288,7 @@
   <data name="CodeIsWrong" xml:space="preserve">
     <value>  الكود خطء</value>
   </data>
+  <data name="AddCorrectValue" xml:space="preserve">
+    <value>ادخل قيمه مناسبه</value>
+  </data>
 </root>

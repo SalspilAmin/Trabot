@@ -52,7 +52,7 @@ namespace Tradify.Core.Features.Authenticaiton.Queries.Handler
             if (user.OTP == request.OTP)
             {
                 user.PhoneNumberConfirmed = true;
-                userManager.UpdateAsync(user);
+              await  userManager.UpdateAsync(user);
                 return Success<string>(_localization.Get("ConfirmPhoneDone"));
             }
             else

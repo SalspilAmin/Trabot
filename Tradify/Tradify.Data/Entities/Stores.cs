@@ -19,11 +19,11 @@ namespace Tradify.Data.Entities
 
         public bool CreatedAt { get; set; }
         [ForeignKey(nameof(SellerId))]
-        public Sellers? Seller { get; set; }
+        public virtual Sellers? Seller { get; set; }
 
         public  virtual ICollection<Products>? Products { get; set; }
         public virtual ICollection<Categories>? Categories { get; set; }
-        public StoreBooking? StoreBooking { get; set; }
+        public virtual StoreBooking? StoreBooking { get; set; }
 
     }
 }
