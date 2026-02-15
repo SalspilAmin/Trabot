@@ -36,7 +36,21 @@ namespace Tradify.Service.Services
                 throw;
             }
             }
-   
+
+
+        public  IQueryable<Products> GetProductsByCategoryAsync(int categoryId)
+        {
+            try
+            {
+                return  productRepository.GetProductsByCategoryAsync(categoryId);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+        
+
     }
 }
 
