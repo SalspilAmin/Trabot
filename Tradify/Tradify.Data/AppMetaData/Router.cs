@@ -40,6 +40,9 @@ namespace Tradify.Data.AppMetaData
             public const string GetByID = prefix + "/Get" + SignleRoute;
             public const string UpdateProduct = prefix + "/Update" ;
             public const string Delete = prefix + "/Delete" + SignleRoute;
+            public const string Category = prefix + "/Category";
+
+            
 
 
 
