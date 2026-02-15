@@ -18,6 +18,7 @@ namespace Tradify.Core.Features.Product.Queries.Handlers
 {
     public class ProductQueryHandler : ResponseHandler , IRequestHandler<GetProductPaginationQuery, PaginatedResult<GetProductPaginationReponse>>
                                                        , IRequestHandler<GetProductByIdQuery, Response<GetProductByIdResponse>>
+                                                       , IRequestHandler<GetProductsByCategoryQuery, PaginatedResult<GetProductByCategoryResponse>>
     {
         #region fields
         private readonly IMapper mapper;
@@ -59,6 +60,22 @@ namespace Tradify.Core.Features.Product.Queries.Handlers
             return Success<GetProductByIdResponse>(result);
 
         }
-        #endregion
+
+        public async Task<PaginatedResult<GetProductByCategoryResponse>> Handle(GetProductsByCategoryQuery request, CancellationToken cancellationToken)
+        {
+            var products = productService.GetProductsByCategoryAsync(request.CategoryId);
+            
+
+            var result = await mapper
+                .ProjectTo<GetProductByCategoryResponse>(products)
+                .ToPaginationlist(request.PageNumber, request.PageSize);
+
+            return result;
+        }
+        
+       
     }
+
+    #endregion
 }
+

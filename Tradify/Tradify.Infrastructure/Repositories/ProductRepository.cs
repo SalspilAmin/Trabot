@@ -34,6 +34,14 @@ namespace Tradify.Infrastructure.Repositories
                 .FirstOrDefaultAsync(p => p.Id == id);
         }
 
+        public  IQueryable<Products> GetProductsByCategoryAsync(int categoryId)
+        {
+            return  products
+                .Where(p => p.CategoryId == categoryId)//&& p.Store.IsActive
+                .Include(p => p.ProductImages)
+                 .Include(p => p.Reviews)
+                 .AsNoTracking();
+        }
         #endregion
     }
 }

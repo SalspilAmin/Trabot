@@ -9,18 +9,13 @@ using Tradify.Core.Features.User.Commands.Models;
 using Tradify.Core.Features.User.Queries.Models;
 using Tradify.Data.AppMetaData;
 
-namespace Tradify.Controllers
+namespace Tradify.Controllers.Product
 {
     [Route("api/[controller]")]
-   
+
     public class ProductController : AppControllerBase
     {
-        [HttpPost(Router.Product.Add)]
-        public async Task<IActionResult> Add([FromForm] AddProductCommand command)
-        {
-            var response = await Mediator.Send(command);
-            return NewResult(response);
-        }
+
 
         [HttpGet(Router.Product.Paginated)]
         public async Task<IActionResult> GetProductsPagination([FromQuery] GetProductPaginationQuery query)
@@ -36,20 +31,16 @@ namespace Tradify.Controllers
             return NewResult(result);
         }
 
-        [HttpPut(Router.Product.UpdateProduct)]
-        public async Task<IActionResult> UpdateProduct([FromForm] UpdateProductCommand command)
+        [HttpGet(Router.Product.Category)]
+        public async Task<IActionResult> GetProductByCategory([FromQuery] GetProductsByCategoryQuery query)
         {
-            var response = await Mediator.Send(command);
-            return NewResult(response);
+            if (query == null || query.CategoryId <= 0)
+                return BadRequest("CategoryId is required and must be greater than 0");
 
+            var result = await Mediator.Send(query);
+            return Ok(result);
         }
 
-        [HttpDelete(Router.Product.Delete)]
-        public async Task<IActionResult> DeleteProduct([FromRoute] int id)
-        {
-            var response = await Mediator.Send(new DeleteProductCommand(id));
-            return Ok(response);
-        }
 
     }
 }

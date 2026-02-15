@@ -12,6 +12,7 @@ namespace Tradify.Core.Mapping.ProductMapping
             AddProductMapping();
             GetProductPaginationMapping();
             GetProductByIdMapping();
+            GetProductByCategoryMapping();
         }
     }
 }
