@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Tradify.Core.Resources
 {
-    internal class SharedResources
+    public class SharedResources
     {
     }
 }

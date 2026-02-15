@@ -291,4 +291,7 @@
   <data name="AddCorrectValue" xml:space="preserve">
     <value>ادخل قيمه مناسبه</value>
   </data>
+  <data name="EmailandPhoneAreNotFound" xml:space="preserve">
+    <value>تاكد من الايميل  و رقم الهاتف </value>
+  </data>
 </root>

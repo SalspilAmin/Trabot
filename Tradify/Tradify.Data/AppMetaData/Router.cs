@@ -55,6 +55,7 @@ namespace Tradify.Data.AppMetaData
 
             public const string GetPaymentMehtods = prefix + "/GetPaymentMehtods";
             public const string EInvoiceLink = prefix + "/InvoiceLink";
+            public const string invoiceInitPay = prefix + "/invoiceInitPay";
         }
         public static class Order
         {

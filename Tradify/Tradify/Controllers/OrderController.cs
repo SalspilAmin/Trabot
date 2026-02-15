@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Tradify.Bases;
+using Tradify.Core.Features.Fawaterak.Comands.Models;
 using Tradify.Core.Features.Order.Commands.Models;
 using Tradify.Data.AppMetaData;
 

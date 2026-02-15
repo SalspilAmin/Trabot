@@ -27,6 +27,14 @@ namespace Tradify.Controllers
 
         }
 
+        [HttpPost(Router.Fawaterak.invoiceInitPay)]
+
+        public async Task<IActionResult> InvoiceInitPay([FromBody] EnvoicePayRequestCommand request)
+        {
+            var result = await Mediator.Send(request);
+            return NewResult(result);
+        }
+
 
     }
 }
