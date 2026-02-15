@@ -13,6 +13,7 @@ using Twilio.Rest.Trunking.V1.Trunk;
 namespace Tradify.Core.Features.Order.Commands.Handler
 {
     public class OrderCommandHandler : ResponseHandler, IRequestHandler<CreateOrderModel, Response<int>>
+        ,IRequestHandler<UpdateOrderCommandModel,Response<int>>
     {
         private readonly LocalizationService localization;
         private readonly IOrdersService ordersService;
@@ -67,6 +68,19 @@ namespace Tradify.Core.Features.Order.Commands.Handler
 
 
 
+        }
+
+        public async Task<Response<int>> Handle(UpdateOrderCommandModel request, CancellationToken cancellationToken)
+        {
+            var order = await ordersService.GetByIdAsync(request.Id);
+            if (order == null) return BadRequest<int>(localization.Get("NotFound"));
+
+            order.PaymentStatus=request.PaymentStatus;
+            order.invoice_id = request.invoice_id;
+            order.invoice_key = request.invoice_key;
+
+        await ordersService.UpdateAsync(order);
+            return Success(order.Id);
         }
     }
 }

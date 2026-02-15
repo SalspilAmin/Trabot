@@ -6,7 +6,7 @@ using Tradify.Data.AppMetaData;
 
 namespace Tradify.Controllers
 {
-    [Route("api/[controller]")]
+    
     [ApiController]
     public class OrderController : AppControllerBase
     {
@@ -16,5 +16,18 @@ namespace Tradify.Controllers
             var result = await Mediator.Send(request);
             return NewResult(result);
         }
+        [HttpPut(Router.Order.UpdateOrder)]
+
+        public async Task<IActionResult> UpdateOrder([FromBody] UpdateOrderCommandModel request)
+        {
+            var result = await Mediator.Send(request);
+            return NewResult(result);
+        }
+
     }
+
+  
+   
+
+
 }
