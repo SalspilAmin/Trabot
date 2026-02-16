@@ -19,9 +19,9 @@ namespace Tradify.Data.Entities
         public bool IsVerified { get; set; }
         public bool IsActive { get; set; }
         [ForeignKey(nameof(UserId))]
-        public User User { get; set; }
+        public virtual User User { get; set; }
         [ForeignKey(nameof(StoreId))]
-        public Stores? Store { get; set; }
+        public virtual Stores? Store { get; set; }
         public virtual ICollection<Products>? Products { get; set; }
 
         public virtual ICollection<Categories>? Categories { get; set; }

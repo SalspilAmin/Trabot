@@ -30,6 +30,8 @@ namespace Tradify.Data.Entities.Identity
         public virtual ICollection<UserRefreshToken>? UserRefreshTokens { get; set; }
 
         public Sellers? Seller { get; set; }
+     
+        public Cart Cart{ get; set; }
 
         public virtual ICollection<Orders> Orders { get; set; }
         public virtual ICollection<Reviews>? Reviews { get; set; }   

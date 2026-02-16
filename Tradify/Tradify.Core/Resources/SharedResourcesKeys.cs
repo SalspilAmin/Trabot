@@ -69,6 +69,7 @@ namespace Tradify.Core.Resources
         public const string PriceGreaterThanZero = "PriceGreaterThanZero";
         public const string DiscountBetween0And100 = "DiscountBetween0And100";
         public const string StockCannotBeNegative = "StockCannotBeNegative";
+        public const string AddCorrectValue = "AddCorrectValue";
 
         public const string FailedToAddProduct = "FailedToAddProduct";
         public const string ProductAddedSuccessfully = "ProductAddedSuccessfully";
@@ -76,7 +77,7 @@ namespace Tradify.Core.Resources
         public const string ProductUpdatedSuccessfully = "ProductUpdatedSuccessfully";
 
         public const string ProductDeletedSuccessfully = "ProductDeletedSuccessfully";
-
+        public const string EmailandPhoneAreNotFound = "EmailandPhoneAreNotFound"; 
 
 
 

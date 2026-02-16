@@ -11,12 +11,12 @@ namespace Tradify.Data.Entities
 
         public int ProductId { get; set; }
 
-        public List<string> Colors { get; set; }
+        public virtual List<string> Colors { get; set; }
 
         public string MetaData { get; set; }
 
-        [ForeignKey(nameof(ProductId))] 
-        public Products? Product {  get; set; }
+        [ForeignKey(nameof(ProductId))]  
+        public virtual Products? Product {  get; set; }
 
 
     }

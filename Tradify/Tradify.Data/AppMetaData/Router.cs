@@ -48,6 +48,21 @@ namespace Tradify.Data.AppMetaData
 
 
         }
+        
+        public static class Fawaterak
+        {
+            public const string prefix = Rule + "Fawaterak";
+
+            public const string GetPaymentMehtods = prefix + "/GetPaymentMehtods";
+            public const string EInvoiceLink = prefix + "/InvoiceLink";
+            public const string invoiceInitPay = prefix + "/invoiceInitPay";
+        }
+        public static class Order
+        {
+            public const string prefix = Rule + "Order";
+            public const string CreateOrder = prefix + "/Create";
+            public const string UpdateOrder = prefix + "/Update";
+        }
 
     }
 }

@@ -13,7 +13,7 @@ namespace Tradify.Data.Entities
         
         public int? StoreId { get; set; }
         [ForeignKey(nameof(StoreId))]
-        public Stores Store { get; set; }
+        public virtual Stores Store { get; set; }
 
         
         public int InstructorId { get; set; }

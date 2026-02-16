@@ -57,6 +57,8 @@ namespace Tradify.Infrastructure.Context
         public DbSet<ImageOrVideoPath> ImageOrVideoPaths { get; set; }
         public DbSet<InteractionWithPost> InteractionWithPosts { get; set; }
         public DbSet<Post> Posts { get; set; }
+        public DbSet<Cart> Carts { get; set; }
+        public DbSet<CartProduct> CartProducts { get; set; }            
 
 
 

@@ -16,13 +16,13 @@ namespace Tradify.Data.Entities
         public int? CustomerId { get; set; }
           
         [ForeignKey(nameof(CustomerId))]
-        public User? Customer { get; set; }
+        public virtual User? Customer { get; set; }
 
 
         
         public int? InstructorId { get; set; }
         [ForeignKey(nameof(InstructorId))]
-        public Sellers? Instructor { get; set; }
+        public virtual Sellers? Instructor { get; set; }
 
 
 
@@ -31,7 +31,7 @@ namespace Tradify.Data.Entities
         public int? StoreBookingId { get; set; }
         
         [ForeignKey(nameof(StoreBookingId))]
-        public StoreBooking? StoreBooking { get; set; }
+        public virtual StoreBooking? StoreBooking { get; set; }
 
     }
 }

@@ -288,4 +288,10 @@
   <data name="CodeIsWrong" xml:space="preserve">
     <value>Code is Wrong</value>
   </data>
+  <data name="AddCorrectValue" xml:space="preserve">
+    <value>Add Correct Value</value>
+  </data>
+  <data name="EmailandPhoneAreNotFound" xml:space="preserve">
+    <value>Check the Phone and Email</value>
+  </data>
 </root>

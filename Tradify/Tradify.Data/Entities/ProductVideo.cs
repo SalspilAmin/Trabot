@@ -10,6 +10,6 @@ namespace Tradify.Data.Entities
     {
 
         [ForeignKey(nameof(ProductId))]
-        public Products? Product {  get; set; }
+        public virtual Products? Product {  get; set; }
     }
 }

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Tradify.Data.Entities;
 using Tradify.Data.Entities.Identity;
 
 namespace Tradify.Infrastructure.Configurations
@@ -13,8 +14,8 @@ namespace Tradify.Infrastructure.Configurations
             builder.HasMany(x => x.Orders).WithOne(x => x.User).HasForeignKey(x => x.CustomerId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            builder.HasMany(x=>x.Appointments).WithOne(x=>x.Customer).HasForeignKey(x=>x.CustomerId).OnDelete(DeleteBehavior.Restrict); 
-
+            builder.HasMany(x=>x.Appointments).WithOne(x=>x.Customer).HasForeignKey(x=>x.CustomerId).OnDelete(DeleteBehavior.Restrict);
+            builder.HasOne(x => x.Cart).WithOne(x => x.User).HasForeignKey<Cart>(c => c.UserId).OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

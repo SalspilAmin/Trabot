@@ -17,7 +17,7 @@ namespace Tradify.Data.Entities
        
         public virtual ICollection<Products>? Products { get; set; }
         [ForeignKey(nameof(ParentCategoryId))]
-        public Categories? Parent { get; set; }
+        public virtual Categories? Parent { get; set; }
         public virtual ICollection<Categories>? Children { get; set; }
 
     }

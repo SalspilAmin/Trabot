@@ -24,4 +24,11 @@
     <ProjectReference Include="..\Tradify.Service\Tradify.Service.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\Fawaterak\Queries\Validations\" />
+    <Folder Include="Features\Order\Queries\Handler\" />
+    <Folder Include="Features\Order\Queries\Models\" />
+    <Folder Include="Features\Order\Queries\Validations\" />
+  </ItemGroup>
+
 </Project>
