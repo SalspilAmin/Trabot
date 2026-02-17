@@ -13,7 +13,7 @@ namespace Tradify.Core.Features.Order.Commands.Models
 
         public PaymentStatus PaymentStatus { get; set; }
       
-        public string? invoice_id { get; set; }
+        public long? invoice_id { get; set; }
         public string? invoice_key { get; set; }
 
     }

@@ -77,8 +77,8 @@ namespace Tradify.Core.Resources
         public const string ProductUpdatedSuccessfully = "ProductUpdatedSuccessfully";
 
         public const string ProductDeletedSuccessfully = "ProductDeletedSuccessfully";
-        public const string EmailandPhoneAreNotFound = "EmailandPhoneAreNotFound"; 
-
+        public const string EmailandPhoneAreNotFound = "EmailandPhoneAreNotFound";
+        public const string CancelPaymentOperation = "CancelPaymentOperation";
 
 
 

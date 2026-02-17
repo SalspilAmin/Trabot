@@ -294,4 +294,7 @@
   <data name="EmailandPhoneAreNotFound" xml:space="preserve">
     <value>Check the Phone and Email</value>
   </data>
+  <data name="CancelPaymentOperation" xml:space="preserve">
+    <value>Canceled Payment Operation</value>
+  </data>
 </root>

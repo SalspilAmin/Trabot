@@ -27,7 +27,7 @@ namespace Tradify.Data.Entities
         public DateTimeOffset CreatedAt{ get; set; }= DateTimeOffset.Now;
 
         public DateTimeOffset EstimatedDelevery { get; set; } = DateTimeOffset.Now.AddDays(1);
-        public string? invoice_id { get; set; }
+        public long? invoice_id { get; set; }
         public string? invoice_key { get; set; }
         public int CartId { get; set; }
         [ForeignKey(nameof(CartId))]

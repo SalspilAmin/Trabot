@@ -294,4 +294,7 @@
   <data name="EmailandPhoneAreNotFound" xml:space="preserve">
     <value>تاكد من الايميل  و رقم الهاتف </value>
   </data>
+  <data name="CancelPaymentOperation" xml:space="preserve">
+    <value>تم الغاء عملية الدفع</value>
+  </data>
 </root>
