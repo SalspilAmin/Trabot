@@ -25,6 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Features\Authorization\Queries\Validator\" />
     <Folder Include="Features\Fawaterak\Queries\Validations\" />
     <Folder Include="Features\Order\Queries\Handler\" />
     <Folder Include="Features\Order\Queries\Models\" />

@@ -15,6 +15,8 @@ using Tradify.Service.AbstractsServices.WhatsappServices;
 using Tradify.Service.Services.WhatsappServices;
 using Tradify.Service.AbstractsServices.FawaterakServices;
 using Tradify.Service.Services.FawaterakServices;
+using Tradify.Service.AbstractsServices.AuthorizationServices;
+using Tradify.Service.Services.AuthorizationServices;
 
 namespace Tradify.Service.Dependencies
 {
@@ -55,6 +57,7 @@ namespace Tradify.Service.Dependencies
             services.AddTransient<ICartService,CartService>();
             services.AddTransient<ICartService, CartService>();
             services.AddTransient<ICartProductService, CartProductService>();
+            services.AddTransient<IAuthorizationService, AuthorizationService>();
 
        
             return services;
