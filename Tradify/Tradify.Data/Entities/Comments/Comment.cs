@@ -24,7 +24,7 @@ namespace Tradify.Data.Entities.Comments
 
         // Properties  that help in RelationShips
         public virtual Post? Post { get; set; }
-        public  User? User { get; set; }
+        public virtual  User? User { get; set; }
        
 
         public virtual List<ReplyOFComment>? ReplyOFComments { get; set; }

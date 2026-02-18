@@ -6,6 +6,7 @@ using System.Security.Claims;
 using System.Text;
 using Tradify.Data.Entities.Identity;
 using Tradify.Data.Helpers.DTO;
+using Tradify.Data.Helpers.Results;
 using Tradify.Infrastructure.Context;
 using Tradify.Service.AbstractsServices.AuthorizationServices;
 //using IAuthorizationService = Tradify.Service.AbstractsServices.AuthorizationServices.IAuthorizationService;
@@ -89,6 +90,34 @@ namespace Tradify.Service.Services.AuthorizationServices
             var errors = string.Join("-", result.Errors);
             return errors;
         }
+
+        public async Task<ManageUserRolesResult> ManageUserRolesData(User user)
+        {
+            var response = new ManageUserRolesResult();
+            var rolesList = new List<UserRoles>();
+            //Roles
+            var roles = await _roleManager.Roles.ToListAsync();
+            response.UserId = user.Id;
+            foreach (var role in roles)
+            {
+                var userrole = new UserRoles();
+                userrole.Id = role.Id;
+                userrole.Name = role.Name;
+                if (await _userManager.IsInRoleAsync(user, role.Name))
+                {
+                    userrole.HasRole = true;
+                }
+                else
+                {
+                    userrole.HasRole = false;
+                }
+                rolesList.Add(userrole);
+            }
+            response.userRoles = rolesList;
+            return response;
+
+
         #endregion
+        }
     }
 }

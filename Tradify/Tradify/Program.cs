@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -9,8 +10,10 @@ using System.Globalization;
 using Tradify.Core.Dependencies;
 using Tradify.Core.MiddleWare;
 using Tradify.Core.Resources.Service;
+using Tradify.Data.Entities.Identity;
 using Tradify.Infrastructure.Context;
 using Tradify.Infrastructure.Dependencies;
+using Tradify.Infrastructure.Seeder;
 using Tradify.Service.Dependencies;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -66,6 +69,13 @@ builder.Services.AddLogging();
 
 
 var app = builder.Build();
+using (var scope = app.Services.CreateScope())
+{
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<Role>>();
+    await RoleSeeder.SeedAsync(roleManager);
+    await UserSeeder.SeedAsync(userManager);
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

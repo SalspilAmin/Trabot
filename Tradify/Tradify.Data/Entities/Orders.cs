@@ -34,7 +34,7 @@ namespace Tradify.Data.Entities
         public virtual Cart cart { get; set; }
 
         [ForeignKey(nameof(CustomerId))]
-        public User? User { get; set; }
+        public virtual User? User { get; set; }
 
       public virtual  ICollection<Products>? products { get; set; }
 

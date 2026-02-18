@@ -10,6 +10,7 @@ using Tradify.Core.Features.Authorization.Queries.Models;
 using Tradify.Core.Features.Authorization.Queries.Results;
 using Tradify.Core.Resources;
 using Tradify.Core.Resources.Service;
+using Tradify.Data.Helpers.Results;
 using Tradify.Service.AbstractsServices.AuthorizationServices;
 
 namespace Tradify.Core.Features.Authorization.Queries.Handler
@@ -17,6 +18,7 @@ namespace Tradify.Core.Features.Authorization.Queries.Handler
     public  class RoleQueryHandler : ResponseHandler,
        IRequestHandler<GetRolesListQuery, Response<List<GetRolesListResult>>>,
        IRequestHandler<GetRoleByIdQuery, Response<GetRoleByIdResult>>
+        ,IRequestHandler<ManageUserRolesQuery,Response<ManageUserRolesResult>>
     {
 
 
@@ -54,7 +56,15 @@ namespace Tradify.Core.Features.Authorization.Queries.Handler
             return Success(result);
         }
 
-       
+        public async Task<Response<ManageUserRolesResult>> Handle(ManageUserRolesQuery request, CancellationToken cancellationToken)
+        {
+            var user = await _userManager.FindByIdAsync(request.UserId.ToString());
+            if (user == null) return NotFound<ManageUserRolesResult>(_stringLocalizer.Get("UserIsNotFound"));
+            var result = await _authorizationService.ManageUserRolesData(user);
+            return Success(result);
+        }
+
+
         #endregion
     }
 }

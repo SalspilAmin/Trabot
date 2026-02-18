@@ -21,8 +21,8 @@ namespace Tradify.Data.Entities.Posts
         public PostType PostType { get; set; }
 
         // Properties  that help in RelationShips
-        public List<Comment>? Comments { get; set; }
-        public User? User { get; set; }
+        public virtual List<Comment>? Comments { get; set; }
+        public virtual User? User { get; set; }
       
         public virtual ICollection<ImageOrVideoPath>? ImageOrVideo_Paths { get; set; }
        public virtual ICollection<InteractionWithPost>  interactionWithPosts { get; set; }

@@ -29,9 +29,9 @@ namespace Tradify.Data.Entities.Identity
         [InverseProperty(nameof(UserRefreshToken.user))]
         public virtual ICollection<UserRefreshToken>? UserRefreshTokens { get; set; }
 
-        public Sellers? Seller { get; set; }
+        public virtual Sellers? Seller { get; set; }
      
-        public Cart Cart{ get; set; }
+        public virtual Cart Cart{ get; set; }
 
         public virtual ICollection<Orders> Orders { get; set; }
         public virtual ICollection<Reviews>? Reviews { get; set; }   
