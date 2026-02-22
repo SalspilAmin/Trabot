@@ -21,14 +21,14 @@ namespace Tradify.Data.Entities
 
         public PaymentMethod PaymentMethod { get; set; }
         [ForeignKey(nameof(CustomerId))]
-        public User? User { get; set; }
+        public virtual User? User { get; set; }
 
         [ForeignKey(nameof(StoreId))]
 
-        public Stores? Store { get; set; }  
+        public virtual Stores? Store { get; set; }  
 
         [ForeignKey(nameof(OrderId))]
-        public Orders? Order {  get; set; }
+        public virtual Orders? Order {  get; set; }
 
     }
 }

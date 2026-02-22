@@ -3,20 +3,26 @@ using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json;
 using Tradify.Core.Bases;
 using Tradify.Core.Features.Fawaterak.Comands.Models;
 using Tradify.Core.Features.Fawaterak.Comands.Validations;
 using Tradify.Core.Resources.Service;
 using Tradify.Data.Entities;
+using Tradify.Data.Enums;
 using Tradify.Data.Helpers.Fawaterak;
 using Tradify.Data.Helpers.Fawaterak.Einvoice;
 using Tradify.Service.AbstractsServices;
 using Tradify.Service.AbstractsServices.FawaterakServices;
+using static Tradify.Data.Helpers.Fawaterak.WebHook.CancelTransactionModel;
 
 namespace Tradify.Core.Features.Fawaterak.Comands.Handler
 {
     public class FawaterakCommandHandler : ResponseHandler,IRequestHandler<EInvoiceRequestLinkCommand,Response<EInvoiceResponseDataModel>>
    ,IRequestHandler<EnvoicePayRequestCommand,Response<BasePaymentDataResponse>>
+        ,IRequestHandler<WebhookPaidCommand, Response<string>>
+        , IRequestHandler<WebhookCancelCommand, Response<string>>
+        , IRequestHandler<WebhookFailedCommand, Response<string>>
     {
         private readonly LocalizationService localization;
         private readonly IFawaterakServices fawaterakServices;
@@ -85,6 +91,60 @@ namespace Tradify.Core.Features.Fawaterak.Comands.Handler
                 return Success<BasePaymentDataResponse>(result.Item1);
             }
             return BadRequest<BasePaymentDataResponse>(localization.Get("TryToRegisterAgain"));
+        }
+
+        public async Task<Response<string>> Handle(WebhookPaidCommand request, CancellationToken cancellationToken)
+        {
+           var valid = fawaterakServices.VerifyWebhook(request);
+            if (!valid) return BadRequest<string>(localization.Get("UnAuthorized"));
+            // we will handl it here
+            var order =  ordersService.GetTableNoTracking().FirstOrDefault(x => x.invoice_id == request.InvoiceId);
+            if (order == null) Success<string>("Ignore");
+            if (order.PaymentStatus != PaymentStatus.Pending)
+                return Success<string>("Already processed");
+
+            order.PaymentStatus = PaymentStatus.Paid;
+            await ordersService.UpdateAsync(order);
+            return Success<string>(localization.Get("Success"));
+        }
+
+        public async Task<Response<string>> Handle(WebhookCancelCommand request, CancellationToken cancellationToken)
+        {
+            var valid = fawaterakServices.VerifyCancelTransaction(request);
+            if (!valid) return BadRequest<string>(localization.Get("UnAuthorized"));
+
+            // Handle the cancellation logic here
+            // Handle the failed logic here
+            var payload = request.PayLoad;
+            var orderId = payload.Merchant_Reference;
+            var order = await ordersService.GetByIdAsync(int.Parse(orderId));
+            if (order == null) Success<string>("Ignore");
+            if (order.PaymentStatus != PaymentStatus.Pending)
+                return Success<string>("Already processed");
+
+            order.PaymentStatus = PaymentStatus.Cancelled;
+            await ordersService.UpdateAsync(order);
+
+            return Success<string>(localization.Get("CanceledPaymentOperation"));
+
+        }
+
+        public async Task<Response<string>> Handle(WebhookFailedCommand request, CancellationToken cancellationToken)
+        {
+            var valid = fawaterakServices.VerifyCancelTransaction(request);
+            if (!valid) return BadRequest<string>(localization.Get("UnAuthorized"));
+
+            // Handle the failed logic here
+            var payload = request.PayLoad;
+            var orderId = payload.Merchant_Reference;
+            var order = await ordersService.GetByIdAsync(int.Parse(orderId));
+            if (order == null) Success<string>("Ignore");
+            if(order.PaymentStatus!=PaymentStatus.Pending)
+                return Success<string>("Already processed");
+
+            order.PaymentStatus = PaymentStatus.Failed;
+            await ordersService.UpdateAsync(order); 
+            return  Success<string>("PaymentMarkedAsFailed");
         }
     }
 }

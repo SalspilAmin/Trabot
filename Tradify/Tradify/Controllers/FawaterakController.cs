@@ -7,7 +7,7 @@ using Tradify.Data.AppMetaData;
 
 namespace Tradify.Controllers
 {
-    [Route("api/[controller]")]
+    
     [ApiController]
     public class FawaterakController : AppControllerBase
     {
@@ -20,7 +20,7 @@ namespace Tradify.Controllers
 
         }
         [HttpPost(Router.Fawaterak.EInvoiceLink)]
-        public async Task<IActionResult> EInvoiceLink(EInvoiceRequestLinkCommand request)
+        public async Task<IActionResult> EInvoiceLink([FromBody] EInvoiceRequestLinkCommand request)
         {
             var result = await Mediator.Send(request);
             return NewResult(result);
@@ -34,7 +34,25 @@ namespace Tradify.Controllers
             var result = await Mediator.Send(request);
             return NewResult(result);
         }
+        [HttpPost(Router.Fawaterak.Webhookpaid_json)]
+        public async Task<IActionResult> WebhookPaid([FromBody] WebhookPaidCommand request)
+        {
+            var result = await Mediator.Send(request);
+            return NewResult(result);
+        }
+        [HttpPost(Router.Fawaterak.WebhookCancel)]
 
+        public async Task<IActionResult> WebhookCancel([FromBody] WebhookCancelCommand request)
+        {
+            var result = await Mediator.Send(request);
+            return NewResult(result);
+        }
+        [HttpPost(Router.Fawaterak.Webhookfailed)]
+        public async Task<IActionResult> WebhookFailed([FromBody] WebhookFailedCommand request)
+        {
+            var result = await Mediator.Send(request);
+            return NewResult(result);
+        }
 
     }
 }

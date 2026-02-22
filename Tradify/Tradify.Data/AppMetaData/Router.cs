@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Tradify.Data.Entities.Identity;
 
 namespace Tradify.Data.AppMetaData
 {
@@ -32,6 +33,22 @@ namespace Tradify.Data.AppMetaData
             public const string ConfirmResetPassword = prefix + "/ConfrimResetPassword";
             public const string ResetPassword = prefix + "/ResetPassword";
         }
+        public static class Authorization
+        {
+            public const string prefix = Rule + "Authorization";
+            public const string Role = prefix + "/Role";
+            public const string GitList = Role + "/GitList";
+            public const string GitByID = Role + "Get" + SignleRoute;
+            public const string ManageUserRolesList = Role + "/ManageUserRolesList"+ SignleRoute;
+            public const string Create = Role + "/create";
+            public const string Edit = Role + "/Edit";
+            public const string UpdateUserRoles = Role + "/UpdateUserRoles";
+            public const string Delete = Role + "/Delete"+SignleRoute;
+            public const string Claim = prefix + "/Claims";
+            public const string ManageUserClaims = Claim + "/ManageUserClaims";
+            public const string UpdateUserClaims = Claim + "/UpdateUserClaims";
+
+        }
         public static class Product
         {
             public const string prefix = Rule + "Product";
@@ -56,7 +73,12 @@ namespace Tradify.Data.AppMetaData
             public const string GetPaymentMehtods = prefix + "/GetPaymentMehtods";
             public const string EInvoiceLink = prefix + "/InvoiceLink";
             public const string invoiceInitPay = prefix + "/invoiceInitPay";
+            public const string WebHook = prefix + "/Webhook";
+            public const string Webhookpaid_json = WebHook + "/paid_json";
+            public const string WebhookCancel = WebHook + "/cancel";
+            public const string Webhookfailed = WebHook + "/failed";
         }
+        
         public static class Order
         {
             public const string prefix = Rule + "Order";

@@ -3,11 +3,13 @@ using System;
 using System.Buffers.Text;
 using System.Collections.Generic;
 using System.Net.Http.Headers;
+using System.Security.Cryptography;
 using System.Text;
 using Tradify.Data.Enums;
 using Tradify.Data.Enums.Fawaterak;
 using Tradify.Data.Helpers.Fawaterak;
 using Tradify.Data.Helpers.Fawaterak.Einvoice;
+using Tradify.Data.Helpers.Fawaterak.WebHook;
 using Tradify.Service.AbstractsServices.FawaterakServices;
 using Tradify.Service.AbstractsServices.IdentityServices;
 
@@ -123,5 +125,42 @@ namespace Tradify.Service.Services.FawaterakServices
 
         }
 
-    }
+        public bool VerifyWebhook(WebHookModel webHook)
+        {
+            var generatedHashKey =
+                GenerateHashKeyForWebhookVerification(webHook.InvoiceId, webHook.InvoiceKey, webHook.PaymentMethod);
+            return generatedHashKey == webHook.HashKey;
+        }
+
+        public bool VerifyCancelTransaction(CancelTransactionModel cancelTransaction)
+        {
+            var generatedHashKey = GenerateHashKeyForCancelTransaction(cancelTransaction.ReferenceId, cancelTransaction.PaymentMethod);
+            return generatedHashKey == cancelTransaction.HashKey;
+        }
+
+        public bool VerifyApiKeyTransaction(string apiKey)
+        {
+            return apiKey == fawaterakOptions.ApiKey;
+        }
+
+
+        #region Generate HashKey
+        private string GenerateHashKeyForWebhookVerification(long invoiceId, string invoiceKey, string paymentMethod)
+        {
+            var queryParam = $"InvoiceId={invoiceId}&InvoiceKey={invoiceKey}&PaymentMethod={paymentMethod}";
+            using var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(fawaterakOptions.ApiKey));
+            var hashBytes = hmac.ComputeHash(Encoding.UTF8.GetBytes(queryParam));
+            return BitConverter.ToString(hashBytes).Replace("-", "").ToLower();
+        }
+        private string GenerateHashKeyForCancelTransaction(string referenceId, string paymentMethod)
+        {
+            var queryParam = $"referenceId={referenceId}&PaymentMethod={paymentMethod}";
+            var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(fawaterakOptions.ApiKey));
+            var hashBytes = hmac.ComputeHash(Encoding.UTF8.GetBytes(queryParam));
+
+            return BitConverter.ToString(hashBytes).Replace("-","").ToString();
+
+        }
+        #endregion
+        }
 }
