@@ -44,6 +44,9 @@ namespace Tradify.Data.AppMetaData
             public const string Edit = Role + "/Edit";
             public const string UpdateUserRoles = Role + "/UpdateUserRoles";
             public const string Delete = Role + "/Delete"+SignleRoute;
+            public const string Claim = prefix + "/Claims";
+            public const string ManageUserClaims = Claim + "/ManageUserClaims";
+            public const string UpdateUserClaims = Claim + "/UpdateUserClaims";
 
         }
         public static class Product

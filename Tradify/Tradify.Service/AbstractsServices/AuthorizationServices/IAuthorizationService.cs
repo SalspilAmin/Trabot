@@ -18,6 +18,8 @@ namespace Tradify.Service.AbstractsServices.AuthorizationServices
         public  Task<string> DeleteRoleAsync(int roleId);
         public Task<ManageUserRolesResult> ManageUserRolesData(User user);
         public Task<string> UpdateUserRoles(UpdateUserRolesRequest request);
+        public Task<ManageUserClaimsResult> ManageUserClaimData(User user);
+        public Task<string> UpdateUserClaims(UpdateUserClaimsRequest request);
 
     }
 }

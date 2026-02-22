@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System.Text;
 using Tradify.Data.Entities.Identity;
+using Tradify.Data.Helpers;
 using Tradify.Data.Helpers.DTO;
 using Tradify.Data.Helpers.Results;
 using Tradify.Infrastructure.Context;
@@ -151,6 +152,63 @@ namespace Tradify.Service.Services.AuthorizationServices
             {
                 await transact.RollbackAsync();
                 return "FailedToUpdateUserRoles";
+            }
+        }
+        public async Task<ManageUserClaimsResult> ManageUserClaimData(User user)
+        {
+            var response = new ManageUserClaimsResult();
+            var usercliamsList = new List<UserClaims>();
+            response.UserId = user.Id;
+            //Get USer Claims
+            var userClaims = await _userManager.GetClaimsAsync(user); //edit
+                                                                      //create edit get print
+            foreach (var claim in ClaimsStore.claims)
+            {
+                var userclaim = new UserClaims();
+                userclaim.Type = claim.Type;
+                if (userClaims.Any(x => x.Type == claim.Type))
+                {
+                    userclaim.Value = true;
+                }
+                else
+                {
+                    userclaim.Value = false;
+                }
+                usercliamsList.Add(userclaim);
+            }
+            response.userClaims = usercliamsList;
+            //return Result
+            return response;
+        }
+
+        public async Task<string> UpdateUserClaims(UpdateUserClaimsRequest request)
+        {
+            var transact = await _dbContext.Database.BeginTransactionAsync();
+            try
+            {
+                var user = await _userManager.FindByIdAsync(request.UserId.ToString());
+                if (user == null)
+                {
+                    return "UserIsNull";
+                }
+                //remove old Claims
+                var userClaims = await _userManager.GetClaimsAsync(user);
+                var removeClaimsResult = await _userManager.RemoveClaimsAsync(user, userClaims);
+                if (!removeClaimsResult.Succeeded)
+                    return "FailedToRemoveOldClaims";
+                var claims = request.userClaims.Where(x => x.Value == true).Select(x => new Claim(x.Type, x.Value.ToString()));
+
+                var addUserClaimResult = await _userManager.AddClaimsAsync(user, claims);
+                if (!addUserClaimResult.Succeeded)
+                    return "FailedToAddNewClaims";
+
+                await transact.CommitAsync();
+                return "Success";
+            }
+            catch (Exception ex)
+            {
+                await transact.RollbackAsync();
+                return "FailedToUpdateClaims";
             }
         }
     }

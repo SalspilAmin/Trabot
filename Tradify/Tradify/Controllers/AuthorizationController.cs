@@ -57,13 +57,25 @@ namespace Tradify.Controllers
             return NewResult(result);
 
         }
-        [HttpGet(Router.Authorization.UpdateUserRoles)]
+        [HttpPut(Router.Authorization.UpdateUserRoles)]
         public async Task<IActionResult> UpdateUserRoles([FromBody] UpdateUserRolesCommand request)
         {
             var result = await Mediator.Send(request);
 
             return NewResult(result);
         }
+        [HttpGet(Router.Authorization.ManageUserClaims)]
+        public async Task<IActionResult> ManageUserClaims([FromRoute] int userId)
+        {
+            var result = await Mediator.Send(new ManageUserClaimsQuery() { UserId = userId });
+            return NewResult(result);
+        }
+        [HttpPut(Router.Authorization.UpdateUserClaims)]
+        public async Task<IActionResult> UpdateUserClaims([FromBody] UpdateUserClaimsCommand request)
+        {
+            var result = await Mediator.Send(request);
 
+            return NewResult(result);
+        }
     }
 }
