@@ -14,6 +14,7 @@ namespace Tradify.Core.Features.Authorization.Commands.Handler
     public class RoleCommandHandler : ResponseHandler, IRequestHandler<AddRoleCommand, Response<string>>
         ,IRequestHandler<DeleteRoleCommand, Response<string>>
         ,IRequestHandler<EditRoleCommand, Response<string>>
+        , IRequestHandler<UpdateUserRolesCommand, Response<string>>
     {
         private readonly LocalizationService localization;
         private readonly IAuthorizationService authorizationService;
@@ -51,6 +52,19 @@ namespace Tradify.Core.Features.Authorization.Commands.Handler
             else if (result == "Success") return Success(localization.Get("Deleted"));
             else
                 return BadRequest<string>(result);
+        }
+
+        public async Task<Response<string>> Handle(UpdateUserRolesCommand request, CancellationToken cancellationToken)
+        {
+            var result = await authorizationService.UpdateUserRoles(request);
+            switch (result)
+            {
+                case "UserIsNull": return NotFound<string>(localization.Get("UserIsNotFound"));
+                case "FailedToRemoveOldRoles": return BadRequest<string>(localization.Get("FailedToRemoveOldRoles"));
+                case "FailedToAddNewRoles": return BadRequest<string>(localization.Get("FailedToAddNewRoles"));
+                case "FailedToUpdateUserRoles": return BadRequest<string>(localization.Get("FailedToUpdateUserRoles"));
+            }
+            return Success<string>(localization.Get("Success"));
         }
     }
 }

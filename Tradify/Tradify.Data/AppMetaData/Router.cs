@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Tradify.Data.Entities.Identity;
 
 namespace Tradify.Data.AppMetaData
 {
@@ -31,6 +32,19 @@ namespace Tradify.Data.AppMetaData
             public const string SendResetPassword = prefix + "/SendResetPasswordCode";
             public const string ConfirmResetPassword = prefix + "/ConfrimResetPassword";
             public const string ResetPassword = prefix + "/ResetPassword";
+        }
+        public static class Authorization
+        {
+            public const string prefix = Rule + "Authorization";
+            public const string Role = prefix + "/Role";
+            public const string GitList = Role + "/GitList";
+            public const string GitByID = Role + "Get" + SignleRoute;
+            public const string ManageUserRolesList = Role + "/ManageUserRolesList"+ SignleRoute;
+            public const string Create = Role + "/create";
+            public const string Edit = Role + "/Edit";
+            public const string UpdateUserRoles = Role + "/UpdateUserRoles";
+            public const string Delete = Role + "/Delete"+SignleRoute;
+
         }
         public static class Product
         {

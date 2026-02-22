@@ -11,7 +11,7 @@ using Tradify.Data.AppMetaData;
 
 namespace Tradify.Controllers.Product
 {
-    [Route("api/[controller]")]
+    
     [ApiController]
     public class SellerProductController : AppControllerBase
     {

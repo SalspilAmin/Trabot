@@ -119,5 +119,39 @@ namespace Tradify.Service.Services.AuthorizationServices
 
         #endregion
         }
+
+        public async Task<string> UpdateUserRoles(UpdateUserRolesRequest request)
+        {
+            var transact = await _dbContext.Database.BeginTransactionAsync();
+            try
+            {
+                //Get User
+                var user = await _userManager.FindByIdAsync(request.UserId.ToString());
+                if (user == null)
+                {
+                    return "UserIsNull";
+                }
+                //get user Old Roles
+                var userRoles = await _userManager.GetRolesAsync(user);
+                //Delete OldRoles
+                var removeResult = await _userManager.RemoveFromRolesAsync(user, userRoles);
+                if (!removeResult.Succeeded)
+                    return "FailedToRemoveOldRoles";
+                var selectedRoles = request.userRoles.Where(x => x.HasRole == true).Select(x => x.Name);
+
+                //Add the Roles HasRole=True
+                var addRolesresult = await _userManager.AddToRolesAsync(user, selectedRoles);
+                if (!addRolesresult.Succeeded)
+                    return "FailedToAddNewRoles";
+                await transact.CommitAsync();
+                //return Result
+                return "Success";
+            }
+            catch (Exception ex)
+            {
+                await transact.RollbackAsync();
+                return "FailedToUpdateUserRoles";
+            }
+        }
     }
 }

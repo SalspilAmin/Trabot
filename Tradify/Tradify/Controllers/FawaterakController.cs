@@ -7,7 +7,7 @@ using Tradify.Data.AppMetaData;
 
 namespace Tradify.Controllers
 {
-    [Route("api/[controller]")]
+    
     [ApiController]
     public class FawaterakController : AppControllerBase
     {
@@ -20,7 +20,7 @@ namespace Tradify.Controllers
 
         }
         [HttpPost(Router.Fawaterak.EInvoiceLink)]
-        public async Task<IActionResult> EInvoiceLink(EInvoiceRequestLinkCommand request)
+        public async Task<IActionResult> EInvoiceLink([FromBody] EInvoiceRequestLinkCommand request)
         {
             var result = await Mediator.Send(request);
             return NewResult(result);

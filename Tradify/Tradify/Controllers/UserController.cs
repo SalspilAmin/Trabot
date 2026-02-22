@@ -10,7 +10,7 @@ using Tradify.Data.AppMetaData;
 
 namespace Tradify.Controllers
 {
-    [Route("api/[controller]")]
+   
     public class UserController : AppControllerBase
     {
 
