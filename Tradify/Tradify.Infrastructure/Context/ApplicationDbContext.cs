@@ -12,6 +12,7 @@ using Tradify.Data.Entities.Chat;
 using Tradify.Data.Entities.Comments;
 using Tradify.Data.Entities.Identity;
 using Tradify.Data.Entities.Posts;
+using Tradify.Data.Entities.UserConnection;
 using Tradify.Infrastructure.Configurations;
 
 namespace Tradify.Infrastructure.Context
@@ -58,7 +59,8 @@ namespace Tradify.Infrastructure.Context
         public DbSet<InteractionWithPost> InteractionWithPosts { get; set; }
         public DbSet<Post> Posts { get; set; }
         public DbSet<Cart> Carts { get; set; }
-        public DbSet<CartProduct> CartProducts { get; set; }            
+        public DbSet<CartProduct> CartProducts { get; set; }   
+        public  DbSet<UserConnection>  userConnections { get; set; }    
 
 
 
