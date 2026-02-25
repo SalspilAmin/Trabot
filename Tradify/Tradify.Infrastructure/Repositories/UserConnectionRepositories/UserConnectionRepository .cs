@@ -29,6 +29,7 @@ namespace Tradify.Infrastructure.Repositories.UserConnectionRepositories
                 if (UserConnectionThatWantToDelete is not null)
                 {
                     Context.userConnections.Remove(UserConnectionThatWantToDelete);
+                   Context.SaveChanges();
                 }
             }
             catch (Exception ex)
@@ -47,6 +48,7 @@ namespace Tradify.Infrastructure.Repositories.UserConnectionRepositories
                 if (AllUserConnectionOFUser is not null && AllUserConnectionOFUser.Count > 0)
                 {
                     Context.userConnections.RemoveRange(AllUserConnectionOFUser);
+                    Context.SaveChanges();
                 }
                 return;
             }
