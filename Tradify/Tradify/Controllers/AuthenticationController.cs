@@ -58,5 +58,19 @@ namespace Tradify.Controllers
             return NewResult(result);
         }
 
+        [HttpGet(Router.Authentication.LoginGoogle)]
+        public async Task<IActionResult> LoginGoogle()
+        {
+            var result = await Mediator.Send(new BeginCoonectionWithGoogleCommand());
+            return NewResult(result);   
+        }
+
+
+        [HttpGet(Router.Authentication.LoginGoogleCallBack)]
+        public  async Task<IActionResult> GoogleCallBack([FromRoute] LoginWithGoogleCommand request)
+        {
+            var result = await Mediator.Send(request);
+            return NewResult(result);
+        }
     }
 }

@@ -14,6 +14,6 @@ namespace Tradify.Data.Entities.UserConnection
 
         public string ConnectionId { get; set; }
         [ForeignKey(nameof(UserId))]
-        public User User { get; set; }  
+        public virtual User User { get; set; }  
     }
 }
