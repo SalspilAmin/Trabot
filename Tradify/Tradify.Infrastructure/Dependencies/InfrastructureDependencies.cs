@@ -4,8 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Tradify.Infrastructure.AbstractsRepositories;
+using Tradify.Infrastructure.AbstractsRepositories.UserConnectionRepositories;
 using Tradify.Infrastructure.InfrastrucureBases;
 using Tradify.Infrastructure.Repositories;
+using Tradify.Infrastructure.Repositories.UserConnectionRepositories;
 
 namespace Tradify.Infrastructure.Dependencies
 {
@@ -40,7 +42,7 @@ namespace Tradify.Infrastructure.Dependencies
             services.AddTransient<IRefreshTokenRepository , RefreshTokenRepository>();
             services.AddTransient<ICartRepository,CartRepository>();
             services.AddTransient<ICartProductRepository, CartProductRepository>();
-           
+           services.AddTransient<IUserConnectionRepository,UserConnectionRepository>(); 
 
 
 

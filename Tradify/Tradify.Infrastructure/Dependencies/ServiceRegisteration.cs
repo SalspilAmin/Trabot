@@ -78,7 +78,21 @@ namespace Tradify.Infrastructure.Dependencies
                   ValidateLifetime = jwtSettings.ValidateLifeTime,
               };
           });
-
+            services.AddAuthorization(option =>
+            {
+                option.AddPolicy("CreateProduct", policy =>
+                {
+                    policy.RequireClaim("Create Product", "True");
+                });
+                option.AddPolicy("DeleteProduct", policy =>
+                {
+                    policy.RequireClaim("Delete Product", "True");
+                });
+                option.AddPolicy("EditProduct", policy =>
+                {
+                    policy.RequireClaim("Edit Product", "True");
+                });
+            });
 
 
 
