@@ -13,10 +13,10 @@ namespace Tradify.Service.Services.WhatsappServices
     {
         private readonly TwilioSettings twilioSettings;
 
-    public WatsappService(TwilioSettings twilioSettings)
+    public WatsappService(TwilioSettings twilioSetting)
     {
 
-        this.twilioSettings = twilioSettings;
+        this.twilioSettings = twilioSetting;
         Twilio.TwilioClient.Init(twilioSettings.AccountSID, twilioSettings.AuthToken);
     }
     public bool IsPhone(string input)

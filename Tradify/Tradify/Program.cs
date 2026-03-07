@@ -24,6 +24,7 @@ builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("First")).UseLazyLoadingProxies());
+builder.Configuration.AddJsonFile("Secret.json");
 
 #region Dependencies
 builder.Services.AddInfrasturcureDepndencies().AddServicesDepencies().AddCoreDependencies()
@@ -36,7 +37,7 @@ builder.Services.AddTransient<IUrlHelper>(x =>
     var factory = x.GetRequiredService<IUrlHelperFactory>();
     return factory.GetUrlHelper(actionContext);
 });
-builder.Configuration.AddJsonFile("Secret.json");
+
 
 #endregion
 #region Localization
