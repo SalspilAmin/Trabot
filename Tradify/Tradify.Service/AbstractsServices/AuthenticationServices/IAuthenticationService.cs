@@ -19,6 +19,8 @@ namespace Tradify.Service.AbstractsServices.AuthenticationServices
         public Task<string> SendResetPasswordAsync(string EmailorPhone);
         public Task<string> ConfrimResetPasswordAsync(string EmailorPhone,string Code);
         public Task<string>  ResetPasswordAsync(string EmailorPhone,string Password);
+        public Task<string> GoogleLogin();
+        public Task<(LoginGoogleResult?, string?)> GoogleCallback(string code);
 
     }
 }

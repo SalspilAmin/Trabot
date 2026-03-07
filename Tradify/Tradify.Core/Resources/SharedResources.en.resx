@@ -297,4 +297,7 @@
   <data name="CancelPaymentOperation" xml:space="preserve">
     <value>Canceled Payment Operation</value>
   </data>
+  <data name="Google_email_not_verified" xml:space="preserve">
+    <value>Google_email_not_verified</value>
+  </data>
 </root>

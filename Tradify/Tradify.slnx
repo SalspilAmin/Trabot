@@ -2,6 +2,7 @@
   <Project Path="Tradify.Core/Tradify.Core.csproj" />
   <Project Path="Tradify.Data/Tradify.Data.csproj" />
   <Project Path="Tradify.Infrastructure/Tradify.Infrastructure.csproj" />
+  <Project Path="Tradify.RealTimeService/Tradify.RealTimeService.csproj" Id="27e1bf86-9d5f-40da-aca5-90128a85610f" />
   <Project Path="Tradify.Service/Tradify.Service.csproj" />
   <Project Path="Tradify/Tradify.csproj" />
 </Solution>

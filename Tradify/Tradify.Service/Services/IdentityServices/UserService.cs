@@ -70,6 +70,10 @@ namespace Tradify.Service.Services.IdentityServices
                     {
                         return "Add_Correct_info";
                     }
+                    if(!checkemail )
+                    {
+                         
+                    }
                     //if Email or Phone is Exist
                     var ExistUserEmail = await UserManager.FindByEmailAsync(user.Email);
                     var ExistUserPhonenumber = applicationDbContext.users.FirstOrDefault(x => x.PhoneNumber == user.PhoneNumber);

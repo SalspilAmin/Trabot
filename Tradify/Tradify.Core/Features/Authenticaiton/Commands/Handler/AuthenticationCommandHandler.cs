@@ -22,6 +22,8 @@ namespace Tradify.Core.Features.Authenticaiton.Commands.Handler
         , IRequestHandler<SendResetPasswordCommand, Response<string>>
         , IRequestHandler<ConfirmResetPasswordCommand, Response<string>>
         ,IRequestHandler<ResetPasswordCommand, Response<string>>
+        ,IRequestHandler<LoginWithGoogleCommand,Response<LoginGoogleResult>>,
+        IRequestHandler<BeginCoonectionWithGoogleCommand,Response<string>>          
     {
         #region Fields
         private readonly LocalizationService localization;
@@ -150,6 +152,27 @@ namespace Tradify.Core.Features.Authenticaiton.Commands.Handler
                 case "Success": return Success<string>("Success");
                 default: return BadRequest<string>(localization.Get("TryAgainInAnotherTime"));
             }
+        }
+
+        public async Task<Response<LoginGoogleResult>> Handle(LoginWithGoogleCommand request, CancellationToken cancellationToken)
+        {
+            var result   = await authenticationService.GoogleCallback(request.Code);
+
+            if (result.Item1 != null) return Success(result.Item1);
+            switch (result.Item2)
+            {
+                case "UserIsExit": return BadRequest<LoginGoogleResult>(localization.Get("IsExist"));
+                case "EmailINGoogleNotVerified": return BadRequest<LoginGoogleResult>(localization.Get("Google_email_not_verified"));
+                case "ErrorWhenTryCreateUserByGoogle": return BadRequest<LoginGoogleResult>(localization.Get(""));
+                default: return BadRequest<LoginGoogleResult>(localization.Get("TryAgainInAnotherTime"));
+            }
+
+        }
+
+        public async Task<Response<string>> Handle(BeginCoonectionWithGoogleCommand request, CancellationToken cancellationToken)
+        {
+            var result = await authenticationService.GoogleLogin();
+            return Success<string>(result);
         }
     }
 }

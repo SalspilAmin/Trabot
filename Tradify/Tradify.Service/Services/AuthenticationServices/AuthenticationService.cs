@@ -1,4 +1,5 @@
 ﻿
+using Google.Apis.Auth;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.Json;
 using Tradify.Data.Entities.Identity;
 using Tradify.Data.Helpers;
 using Tradify.Infrastructure.AbstractsRepositories;
@@ -18,6 +20,7 @@ using Tradify.Service.AbstractsServices;
 using Tradify.Service.AbstractsServices.AuthenticationServices;
 using Tradify.Service.AbstractsServices.IdentityServices;
 using Tradify.Service.AbstractsServices.WhatsappServices;
+using static Org.BouncyCastle.Crypto.Engines.SM2Engine;
 
 
 namespace Tradify.Service.Services.AuthenticationServices
@@ -32,12 +35,13 @@ namespace Tradify.Service.Services.AuthenticationServices
         private readonly IEmailService emailService;
         private readonly IWatsappService watsappService;
         private readonly ApplicationDbContext applicationDbContext;
+        private readonly OAuthSettings oauthSettings;
         #endregion
 
 
         #region Constructor
         public AuthenticationService(UserManager<User> userManager, JwtSettings jwtSettings, IRefreshTokenRepository refresh, IUserService userService,
-            IEmailService emailService, IWatsappService watsapp, ApplicationDbContext applicationDbContext)
+            IEmailService emailService, IWatsappService watsapp, ApplicationDbContext applicationDbContext,OAuthSettings oAuthSettings)
         {
             this.userManager = userManager; 
             this.jwtSettings = jwtSettings;
@@ -46,6 +50,7 @@ namespace Tradify.Service.Services.AuthenticationServices
             this.emailService = emailService;
             this.watsappService = watsapp;
             this.applicationDbContext = applicationDbContext;   
+            this.oauthSettings = oAuthSettings;
         }
         #endregion
         
@@ -295,11 +300,87 @@ namespace Tradify.Service.Services.AuthenticationServices
             
         }
 
+        #region Oauth mehtods
+        public  Task<string> GoogleLogin()
+        {
+            var url = "https://accounts.google.com/o/oauth2/v2/auth" +
+              $"?client_id={oauthSettings.ClientId}" +
+              $"&redirect_uri={oauthSettings.CallBackMethodUrl}" +
+              "&response_type=code" +
+              "&scope=openid email profile";
+            return Task.FromResult(oauthSettings.CallBackMethodUrl);
 
+        }
+
+        public async  Task<(LoginGoogleResult?,string?)> GoogleCallback(string code)
+        {
+
+            var clientId = oauthSettings.ClientId;
+            var clientSecret = oauthSettings.ClientSecret;
+        var redirectUri = oauthSettings.CallBackMethodUrl;
+
+        var values = new Dictionary<string, string>
+    {
+        { "code", code },
+        { "client_id", clientId },
+        { "client_secret", clientSecret },
+        { "redirect_uri", redirectUri },
+        { "grant_type", "authorization_code" }
+    };
+
+        var client = new HttpClient();
+        var response = await client.PostAsync(
+            "https://oauth2.googleapis.com/token",
+            new FormUrlEncodedContent(values));
+
+        var json = await response.Content.ReadAsStringAsync();
+            try
+            {
+                var tokenResponse = JsonSerializer.Deserialize<GoogleTokenResponse>(json);
+
+
+
+            // هنا بقى عندك id_token
+                var payload = await GoogleJsonWebSignature.ValidateAsync(tokenResponse.id_token);
+
+              // نفس منطق إنشاء المستخدم
+               var check = await userManager.FindByEmailAsync(payload.Email);
+                if (check != null)
+                {
+                    return (null, "UserIsExit");
+                }
+                 if (!payload.EmailVerified) return (null, "EmailINGoogleNotVerified");
+                var result = await userManager.CreateAsync(new User { Email = payload.Email, UserName = payload.Name, EmailConfirmed = true });
+               
+                    if(!result.Succeeded) return (null, "ErrorWhenTryCreateUserByGoogle");
+
+                var user = await userManager.FindByEmailAsync(payload.Email);
+                var AddRoleResult = await userManager.AddToRoleAsync(user, "User");
+                if (!AddRoleResult.Succeeded)
+                {
+                    return (null,string.Join(",", AddRoleResult.Errors.Select(x => x.Description).ToList()));
+                }
+
+
+
+                var Googleresult = new LoginGoogleResult { UserId = user.Id, UserEmail = user.Email, JwtAuthResult = await GetJWTTokenAsync(user) };
+
+                return (Googleresult, null);
+            }
+            catch (Exception )
+            {
+                throw ;
+            }
+
+
+
+        
+        }
+        #endregion
 
         #endregion
 
 
 
-    }
+}
 }
