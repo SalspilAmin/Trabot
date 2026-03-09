@@ -24,7 +24,7 @@ namespace Tradify.Infrastructure.Seeder
                     EmailConfirmed = true,
                     PhoneNumberConfirmed = true
                 };
-                await _userManager.CreateAsync(defaultuser, "M123_m");
+                await _userManager.CreateAsync(defaultuser, "M123_m@3%");
                 await _userManager.AddToRoleAsync(defaultuser, "Admin");
             }
         }
