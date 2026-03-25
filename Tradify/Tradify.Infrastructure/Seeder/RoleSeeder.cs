@@ -14,10 +14,10 @@ namespace Tradify.Infrastructure.Seeder
 
             var count = await roleManager.Roles.CountAsync();
 
-            if (count > 0)
+            if (count == 0)
             {
 
-                await roleManager.CreateAsync(new Role()
+              await roleManager.CreateAsync(new Role()
                 {
                     Name = "Admin"
                 });
@@ -25,7 +25,7 @@ namespace Tradify.Infrastructure.Seeder
                 {
                     Name = "User"
                 });
-                await roleManager.CreateAsync(new Role()
+                 await roleManager.CreateAsync(new Role()
                 {
                     Name = "Seller"
                 });

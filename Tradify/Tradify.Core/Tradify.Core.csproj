@@ -21,6 +21,7 @@
 	</ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Tradify.RealTimeService\Tradify.RealTimeService.csproj" />
     <ProjectReference Include="..\Tradify.Service\Tradify.Service.csproj" />
   </ItemGroup>
 

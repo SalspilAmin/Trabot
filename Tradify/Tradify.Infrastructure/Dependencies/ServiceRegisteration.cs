@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Azure.Core;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -57,6 +58,9 @@ namespace Tradify.Infrastructure.Dependencies
             configuration.GetSection(nameof(FawaterakOptions)).Bind(FawaterakOptions);
             services.AddSingleton(FawaterakOptions);
             services.AddHttpClient();
+            var OAuthSettings = new OAuthSettings();    
+            configuration.GetSection(nameof(OAuthSettings)).Bind(OAuthSettings);
+            services.AddSingleton(OAuthSettings);
 
             services.AddAuthentication(x =>
             {
@@ -77,9 +81,36 @@ namespace Tradify.Infrastructure.Dependencies
                   ValidateAudience = jwtSettings.ValidateAudience,
                   ValidateLifetime = jwtSettings.ValidateLifeTime,
               };
+              x.Events = new JwtBearerEvents
+              {
+                  OnMessageReceived = context =>
+                  {
+                      var accesstoken = context.Request.Query["access_token"];
+                      if (!string.IsNullOrEmpty(accesstoken))
+                      {
+                          context.Token = accesstoken;
+                      }
+
+                      return Task.CompletedTask;
+                  }
+              };
           });
-
-
+            services.AddAuthorization(option =>
+            {
+                option.AddPolicy("CreateProduct", policy =>
+                {
+                    policy.RequireClaim("Create Product", "True");
+                });
+                option.AddPolicy("DeleteProduct", policy =>
+                {
+                    policy.RequireClaim("Delete Product", "True");
+                });
+                option.AddPolicy("EditProduct", policy =>
+                {
+                    policy.RequireClaim("Edit Product", "True");
+                });
+            });
+            services.AddSignalR();
 
 
 

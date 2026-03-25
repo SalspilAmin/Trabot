@@ -17,7 +17,10 @@ namespace Tradify.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.0")
+                .HasAnnotation("ProductVersion", "10.0.3")
+                .HasAnnotation("Proxies:ChangeTracking", false)
+                .HasAnnotation("Proxies:CheckEquality", false)
+                .HasAnnotation("Proxies:LazyLoading", true)
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -159,6 +162,51 @@ namespace Tradify.Infrastructure.Migrations
                     b.HasIndex("StoreBookingId1");
 
                     b.ToTable("Appointments");
+                });
+
+            modelBuilder.Entity("Tradify.Data.Entities.Cart", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("Carts");
+                });
+
+            modelBuilder.Entity("Tradify.Data.Entities.CartProduct", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CartId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CartId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("CartProducts");
                 });
 
             modelBuilder.Entity("Tradify.Data.Entities.Categories", b =>
@@ -409,6 +457,9 @@ namespace Tradify.Infrastructure.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
+                    b.Property<string>("OTP")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
 
@@ -458,6 +509,9 @@ namespace Tradify.Infrastructure.Migrations
                     b.Property<DateTime?>("ExpiredTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
                     b.Property<bool?>("IsRevoked")
                         .HasColumnType("bit");
 
@@ -488,16 +542,19 @@ namespace Tradify.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("CartId")
+                        .HasColumnType("int");
+
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("datetimeoffset");
 
                     b.Property<int>("CustomerId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("EstimatedDelevery")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset>("EstimatedDelevery")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<byte>("OrderStatus")
+                    b.Property<byte?>("OrderStatus")
                         .HasColumnType("tinyint");
 
                     b.Property<byte>("PaymentStatus")
@@ -513,7 +570,15 @@ namespace Tradify.Infrastructure.Migrations
                     b.Property<decimal?>("TotalAmount")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<long?>("invoice_id")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("invoice_key")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("CartId");
 
                     b.HasIndex("CustomerId");
 
@@ -1038,6 +1103,28 @@ namespace Tradify.Infrastructure.Migrations
                     b.ToTable("SubOrders");
                 });
 
+            modelBuilder.Entity("Tradify.Data.Entities.UserConnection.UserConnection", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ConnectionId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("userConnections");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
                     b.HasOne("Tradify.Data.Entities.Identity.Role", null)
@@ -1115,6 +1202,36 @@ namespace Tradify.Infrastructure.Migrations
                     b.Navigation("Instructor");
 
                     b.Navigation("StoreBooking");
+                });
+
+            modelBuilder.Entity("Tradify.Data.Entities.Cart", b =>
+                {
+                    b.HasOne("Tradify.Data.Entities.Identity.User", "User")
+                        .WithOne("Cart")
+                        .HasForeignKey("Tradify.Data.Entities.Cart", "UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Tradify.Data.Entities.CartProduct", b =>
+                {
+                    b.HasOne("Tradify.Data.Entities.Cart", "Cart")
+                        .WithMany("CartProducts")
+                        .HasForeignKey("CartId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Tradify.Data.Entities.Products", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Cart");
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("Tradify.Data.Entities.Categories", b =>
@@ -1224,6 +1341,12 @@ namespace Tradify.Infrastructure.Migrations
 
             modelBuilder.Entity("Tradify.Data.Entities.Orders", b =>
                 {
+                    b.HasOne("Tradify.Data.Entities.Cart", "cart")
+                        .WithMany("Orders")
+                        .HasForeignKey("CartId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Tradify.Data.Entities.Identity.User", "User")
                         .WithMany("Orders")
                         .HasForeignKey("CustomerId")
@@ -1231,6 +1354,8 @@ namespace Tradify.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+
+                    b.Navigation("cart");
                 });
 
             modelBuilder.Entity("Tradify.Data.Entities.Payments", b =>
@@ -1470,6 +1595,24 @@ namespace Tradify.Infrastructure.Migrations
                     b.Navigation("ShipmentTracking");
                 });
 
+            modelBuilder.Entity("Tradify.Data.Entities.UserConnection.UserConnection", b =>
+                {
+                    b.HasOne("Tradify.Data.Entities.Identity.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Tradify.Data.Entities.Cart", b =>
+                {
+                    b.Navigation("CartProducts");
+
+                    b.Navigation("Orders");
+                });
+
             modelBuilder.Entity("Tradify.Data.Entities.Categories", b =>
                 {
                     b.Navigation("Children");
@@ -1490,6 +1633,9 @@ namespace Tradify.Infrastructure.Migrations
             modelBuilder.Entity("Tradify.Data.Entities.Identity.User", b =>
                 {
                     b.Navigation("Appointments");
+
+                    b.Navigation("Cart")
+                        .IsRequired();
 
                     b.Navigation("Orders");
 

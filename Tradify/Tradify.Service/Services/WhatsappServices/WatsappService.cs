@@ -13,11 +13,11 @@ namespace Tradify.Service.Services.WhatsappServices
     {
         private readonly TwilioSettings twilioSettings;
 
-    public WatsappService(TwilioSettings twilioSettings)
+    public WatsappService(TwilioSettings twilioSetting)
     {
 
-        this.twilioSettings = twilioSettings;
-        Twilio.TwilioClient.Init(twilioSettings.AccountSID, twilioSettings.AuthToken);
+        this.twilioSettings = twilioSetting;
+        Twilio.TwilioClient.Init(twilioSettings.AccountSID,twilioSettings.AuthToken);
     }
     public bool IsPhone(string input)
     {
@@ -32,8 +32,8 @@ namespace Tradify.Service.Services.WhatsappServices
             var isnumber = IsPhone(phoneNumber);
             if (!isnumber) return false;
             var message = await MessageResource.CreateAsync(
-               from: new PhoneNumber($"whatsapp:{twilioSettings.WhatsAppFrom}"),
-            to: new PhoneNumber($"whatsapp:{phoneNumber}"),
+               from: new PhoneNumber("whatsapp:+14155238886"),
+            to: new PhoneNumber($"whatsapp:+2{phoneNumber}"),
             body: $"Your verification code is: {code}"
                 );
 
