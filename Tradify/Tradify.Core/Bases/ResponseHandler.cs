@@ -20,6 +20,7 @@ namespace Tradify.Core.Bases
                 Succeeded = true,
                 Meta = meta,
                 Message = _localize.Get("Success")
+                ,Data = entity
 
             };
 
