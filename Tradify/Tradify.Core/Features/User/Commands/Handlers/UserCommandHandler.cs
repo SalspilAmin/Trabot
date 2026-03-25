@@ -43,7 +43,7 @@ namespace Tradify.Core.Features.User.Commands.Handlers
         {
             var user = mapper.Map<Data.Entities.Identity.User>(request);
 
-            var result = await userService.AddUserAsync(user, request.Password);
+                var result = await userService.AddUserAsync(user, request.Password);
             switch(result)
             {
 
