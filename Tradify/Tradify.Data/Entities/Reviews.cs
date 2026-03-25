@@ -14,14 +14,15 @@ namespace Tradify.Data.Entities
         public int ProductId { get; set; }
         public int CustomerId { get; set; }
 
-        public int UserId { get; set; }
+       // public int UserId { get; set; }
 
         public RatingValue Rating { get; set; }
 
         public string? Comment { get; set; }
+        public bool IsPurchased { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        [ForeignKey(nameof(UserId))]
-        public virtual User? User { get; set; }
+        [ForeignKey(nameof(CustomerId))]
+        public virtual User? Customer { get; set; }
 
         [ForeignKey(nameof(ProductId))]
         public virtual Products? Product { get; set; }

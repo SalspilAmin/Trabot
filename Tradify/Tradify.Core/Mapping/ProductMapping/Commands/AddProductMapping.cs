@@ -7,11 +7,12 @@ using Tradify.Data.Entities;
 
 namespace Tradify.Core.Mapping.ProductMapping
 {
-    public partial class ProductProfile
+    public partial class ProductVariantProfile
     {
         public void AddProductMapping() 
         {
             CreateMap<AddProductCommand, Products>();
+          
 
         }
     }

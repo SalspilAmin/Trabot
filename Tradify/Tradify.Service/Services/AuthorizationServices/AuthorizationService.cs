@@ -211,5 +211,17 @@ namespace Tradify.Service.Services.AuthorizationServices
                 return "FailedToUpdateClaims";
             }
         }
+
+
+        public async Task<bool> IsUserInRoleAsync(int userId, string roleName)
+        {
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+
+            if (user == null)
+                return false;
+
+            return await _userManager.IsInRoleAsync(user, roleName);
+        }
+
     }
 }

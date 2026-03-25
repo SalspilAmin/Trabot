@@ -11,7 +11,20 @@ namespace Tradify.Infrastructure.Configurations
     {
         public void Configure(EntityTypeBuilder<ProductVariants> builder)
         {
-          
+            builder.HasMany(x => x.ProductVariantImages)
+                           .WithOne(x => x.ProductVariant)
+                           .HasForeignKey(x => x.ProductVariantId)
+                           .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasMany(x => x.OrderItems)
+                          .WithOne(x => x.ProductVariant)
+                          .HasForeignKey(x => x.ProductVariantId)
+                          .OnDelete(DeleteBehavior.Restrict);
+           
+            // Computed Column
+            builder.Property(v => v.FinalPrice)
+                   .HasColumnType("decimal(18,2)")
+                   .HasComputedColumnSql("[Price] - ([Price] * [Discount] / 100)");
         }
     }
 }

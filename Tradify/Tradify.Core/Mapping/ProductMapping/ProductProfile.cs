@@ -5,14 +5,15 @@ using System.Text;
 
 namespace Tradify.Core.Mapping.ProductMapping
 {
-    public partial class ProductProfile : Profile
+    public partial class ProductVariantProfile : Profile
     {
-        public ProductProfile() 
+        public ProductVariantProfile() 
         {
             AddProductMapping();
+            UpdateProductMapping();
             GetProductPaginationMapping();
             GetProductByIdMapping();
-            GetProductByCategoryMapping();
+            GetSellerProductMapping();
         }
     }
 }

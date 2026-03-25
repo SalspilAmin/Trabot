@@ -6,6 +6,7 @@ using Tradify.Data.Entities;
 using Tradify.Infrastructure.AbstractsRepositories;
 using Tradify.Infrastructure.Context;
 using Tradify.Infrastructure.InfrastrucureBases;
+using static Tradify.Data.AppMetaData.Router;
 
 namespace Tradify.Infrastructure.Repositories
 {
@@ -24,7 +25,25 @@ namespace Tradify.Infrastructure.Repositories
         #endregion
 
         #region Methods
+        public async Task<Stores?> GetByIdWithIncludesAsync(int id)
+        {
+            return await stores
+                 .Include(s => s.Seller)
+                 .ThenInclude(x => x.User)
+                 .FirstOrDefaultAsync(p => p.Id == id);
+        }
 
+        public IQueryable<Stores?> GetTableIgnoreQueryFilters()
+        {
+            return stores.IgnoreQueryFilters();
+        }
+
+        public async Task<Stores?> GetBySellerIdAsync(int sellerId)
+        {
+            return await stores
+                
+                .FirstOrDefaultAsync(s => s.SellerId == sellerId);
+        }
         #endregion
 
     }

@@ -19,7 +19,7 @@ namespace Tradify.Infrastructure.Repositories
 
         public Cart? GetCartByIdWithInclude(int id)
         {
-            var  cart = applicationDb.Carts.Include(c=>c.CartProducts).ThenInclude(x=>x.Product).FirstOrDefault(x=>x.Id==id);
+            var  cart = applicationDb.Carts.Include(c=>c.CartProducts).ThenInclude(x=>x.ProductVariant).FirstOrDefault(x=>x.Id==id);
             return cart;
         }
     }

@@ -31,6 +31,8 @@ namespace Tradify.Infrastructure.Repositories
             return await products
                 .Include(p => p.Reviews)
                 .Include(p => p.ProductImages)
+                .Include(p => p.Store)
+                .Include(p => p.ProductVariants)
                 .FirstOrDefaultAsync(p => p.Id == id);
         }
 

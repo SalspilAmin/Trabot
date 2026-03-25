@@ -55,11 +55,17 @@ namespace Tradify.Service.Dependencies
             services.AddTransient<IWatsappService,WatsappService>();
             services.AddScoped<IFawaterakServices, FawaterakServices>();
             services.AddTransient<ICartService,CartService>();
-            services.AddTransient<ICartService, CartService>();
             services.AddTransient<ICartProductService, CartProductService>();
             services.AddTransient<IAuthorizationService, AuthorizationService>();
+            services.AddTransient<IFavoriteService, FavoriteService>();
+            services.AddTransient<IProductVariantImageService, ProductVariantImageService>();
 
-       
+            services.AddTransient<IOrderItemsService, OrderItemsService>();
+
+            services.AddHttpContextAccessor();
+            services.AddScoped<ICurrentUserService, CurrentUserService>();
+
+            
             return services;
 
         }

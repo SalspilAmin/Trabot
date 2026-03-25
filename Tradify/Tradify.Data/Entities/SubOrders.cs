@@ -25,9 +25,11 @@ namespace Tradify.Data.Entities
 
         public DateTime CreatedAt { get; set; }
 
+
         [ForeignKey(nameof(OrderId))]
         public virtual Orders? Order {  get; set; }
-        public virtual ICollection<Products>? Products { get; set; }
+        public virtual ICollection<OrderItems>? OrderItems { get; set; }
+
         [ForeignKey(nameof(ShipmentId))]
         public virtual Shipments? Shipment { get; set; }
         [ForeignKey(nameof(ShipmentTrackingId))]

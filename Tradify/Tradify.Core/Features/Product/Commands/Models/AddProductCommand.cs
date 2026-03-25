@@ -6,15 +6,17 @@ using Tradify.Core.Bases;
 
 namespace Tradify.Core.Features.Product.Commands.Models
 {
-    public class AddProductCommand : IRequest<Response<int>>
+    public class AddProductCommand : IRequest<Response<string>>
     {
         public string Name { get; set; }
+
         public string Description { get; set; }
-        public double Price { get; set; }
-        public double Discount { get; set; } = 0;
+
         public int CategoryId { get; set; }
-        public int StoreId { get; set; }
-        public int NumberOfProductInStock { get; set; }
-     
+
+        public decimal Price { get; set; }
+
+        public int Stock { get; set; }
+        
     }
 }

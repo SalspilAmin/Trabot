@@ -6,9 +6,10 @@ using Tradify.Core.Bases;
 
 namespace Tradify.Core.Features.Product.Commands.Models
 {
-    public class DeleteProductCommand : IRequest<Response<int>>
+    public class DeleteProductCommand : IRequest<Response<string>>
     {
         public int Id { get; set; }
+       
 
         public DeleteProductCommand(int id)
         {
