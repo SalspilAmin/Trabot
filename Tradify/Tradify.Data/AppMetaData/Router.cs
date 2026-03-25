@@ -67,7 +67,7 @@ namespace Tradify.Data.AppMetaData
         }
         public static class Review
         {
-            public const string prefix = Rule + "Product";
+            public const string prefix = Rule + "Review";
             public const string Add = prefix + "/AddProduct";
             public const string Update = prefix + "/Update" ;
             public const string Delete = prefix + "/Delete" + SignleRoute;
@@ -78,7 +78,7 @@ namespace Tradify.Data.AppMetaData
         }
         public static class Favorite
         {
-            public const string prefix = Rule + "Product";
+            public const string prefix = Rule + "Favorite";
             public const string Add = prefix + "/AddProduct";
             public const string Delete = prefix + "/Delete" + SignleRoute;
             public const string Paginated = prefix + "/Paginated";
@@ -91,7 +91,7 @@ namespace Tradify.Data.AppMetaData
 
         public static class ProductImage
         {
-            public const string prefix = Rule + "Product";
+            public const string prefix = Rule + "ProductImage";
             public const string Add = prefix + "/AddProduct";
             public const string Update = prefix + "/Update" ;
             public const string Delete = prefix + "/Delete" + SignleRoute;
@@ -102,7 +102,7 @@ namespace Tradify.Data.AppMetaData
         }
         public static class ProductVariantImage
         {
-            public const string prefix = Rule + "Product";
+            public const string prefix = Rule + "ProductVariantImage";
             public const string Add = prefix + "/AddProduct";
             public const string Update = prefix + "/Update";
             public const string Delete = prefix + "/Delete" + SignleRoute;
