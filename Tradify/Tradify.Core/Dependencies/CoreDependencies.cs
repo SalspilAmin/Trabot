@@ -22,8 +22,10 @@ namespace Tradify.Core.Dependencies
 
             services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidateBehavior<,>));
             //AutoMapper
-            services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
+            //services.AddAutoMapper(Assembly.GetExecutingAssembly());
+            //AutoMapper
+            services.AddAutoMapper(_ => { }, AppDomain.CurrentDomain.GetAssemblies());
             //Mediatr
             services.AddMediatR(x=>x.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
 

@@ -42,10 +42,13 @@ namespace Tradify.Infrastructure.Dependencies
             services.AddTransient<IRefreshTokenRepository , RefreshTokenRepository>();
             services.AddTransient<ICartRepository,CartRepository>();
             services.AddTransient<ICartProductRepository, CartProductRepository>();
-           services.AddTransient<IUserConnectionRepository,UserConnectionRepository>(); 
+           services.AddTransient<IUserConnectionRepository,UserConnectionRepository>();
+            services.AddTransient<IFavoriteRepository, FavoriteRepository>();
+            services.AddTransient<IProductVariantImageRepository, ProductVariantImageRepository>();
+            services.AddTransient<IOrderItemsRepository, OrderItemsRepository>();
 
 
-
+            
             return services;
         }
     }

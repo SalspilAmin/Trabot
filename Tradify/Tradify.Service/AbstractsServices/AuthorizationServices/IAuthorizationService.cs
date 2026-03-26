@@ -21,5 +21,7 @@ namespace Tradify.Service.AbstractsServices.AuthorizationServices
         public Task<ManageUserClaimsResult> ManageUserClaimData(User user);
         public Task<string> UpdateUserClaims(UpdateUserClaimsRequest request);
 
+        Task<bool> IsUserInRoleAsync(int userId, string roleName);
+
     }
 }

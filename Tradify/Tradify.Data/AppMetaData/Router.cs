@@ -60,14 +60,95 @@ namespace Tradify.Data.AppMetaData
             public const string UpdateProduct = prefix + "/Update" ;
             public const string Delete = prefix + "/Delete" + SignleRoute;
             public const string Category = prefix + "/Category";
+            public const string MyProducts = prefix + "/MyProducts" ;
+            public const string restore = prefix + "/restore" + SignleRoute;
+
+
+        }
+        public static class Review
+        {
+            public const string prefix = Rule + "Review";
+            public const string Add = prefix + "/AddProduct";
+            public const string Update = prefix + "/Update" ;
+            public const string Delete = prefix + "/Delete" + SignleRoute;
+            public const string Paginated = prefix + "/Paginated";
+
+
+
+        }
+        public static class Favorite
+        {
+            public const string prefix = Rule + "Favorite";
+            public const string Add = prefix + "/AddProduct";
+            public const string Delete = prefix + "/Delete" + SignleRoute;
+            public const string Paginated = prefix + "/Paginated";
+            public const string Toggle = prefix + "/toggle";
 
             
+        }
+
+        
+
+        public static class ProductImage
+        {
+            public const string prefix = Rule + "ProductImage";
+            public const string Add = prefix + "/AddProduct";
+            public const string Update = prefix + "/Update" ;
+            public const string Delete = prefix + "/Delete" + SignleRoute;
+
+
+
+
+        }
+        public static class ProductVariantImage
+        {
+            public const string prefix = Rule + "ProductVariantImage";
+            public const string Add = prefix + "/AddProduct";
+            public const string Update = prefix + "/Update";
+            public const string Delete = prefix + "/Delete" + SignleRoute;
 
 
 
 
         }
         
+        public static class ProductVariant
+        {
+            public const string prefix = Rule + "ProductVariant";
+
+            public const string Add = prefix + "/AddProductVariant";
+            public const string UpdateProductVariant = prefix + "/Update";
+            public const string AddDiscount = prefix + "/AddDiscount";
+            public const string DeleteDiscount = prefix + "/DeleteDiscount";
+            public const string restore = prefix + "/restore" + SignleRoute;
+            public const string Delete = prefix + "/Delete" + SignleRoute;
+            public const string GetByProduct = prefix + "/ByProduct";
+            public const string GetById = prefix + "/Get" + SignleRoute;
+
+            
+
+
+        }
+
+        public static class Store
+        {
+            public const string prefix = Rule + "Store";
+            public const string Add = prefix + "/AddStore";
+            public const string UpdateStore = prefix + "/Update";
+            public const string GetByID = prefix + "/Get" + SignleRoute;
+            public const string GetMyStore = prefix + "/my-store" + SignleRoute;
+            public const string ActivateStore = prefix + "/my-store/activate";
+            public const string Paginated = prefix + "/Paginated";
+            public const string DeactivateStore = prefix + "/my-store/Deactivate";
+            public const string Delete = prefix + "/Delete" + SignleRoute;
+            public const string restore = prefix + "/restore" + SignleRoute;
+            public const string GetDeletedStores = prefix + "/DeletedStores";
+
+            
+
+
+
+        }
         public static class Fawaterak
         {
             public const string prefix = Rule + "Fawaterak";

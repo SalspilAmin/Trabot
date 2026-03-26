@@ -17,6 +17,8 @@ namespace Tradify.Core.Resources
         public const string BadRequest = "BadRequest";
         public const string UnprocessableEntity = "UnprocessableEntity";
         public const string MaxLengthis100 = "MaxLengthis100";
+        public const string MaxLengthis2000 = "MaxLengthis2000";
+
         public const string IsExist = "IsExist";
         public const string IsNotExist = "IsNotExist";
         public const string DepartmementId = "DepartmementId";
@@ -67,19 +69,51 @@ namespace Tradify.Core.Resources
 
         public const string MaxLengthis255 = "MaxLengthis255";
         public const string PriceGreaterThanZero = "PriceGreaterThanZero";
+        public const string StockGreaterThanZero = "StockGreaterThanZero";
+
         public const string DiscountBetween0And100 = "DiscountBetween0And100";
-        public const string StockCannotBeNegative = "StockCannotBeNegative";
         public const string AddCorrectValue = "AddCorrectValue";
 
+        public const string VariantMetaDataRequired = "VariantMetaDataRequired";
+        public const string VariantColorsRequired = "VariantColorsRequired";
+        public const string ImageUrlCannotBeEmpty = "ImageUrlCannotBeEmpty";
+
+        public const string YouMustCreateStoreFirst = "YouMustCreateStoreFirst";
+        public const string CategoryNotFound = "CategoryNotFound"; 
         public const string FailedToAddProduct = "FailedToAddProduct";
         public const string ProductAddedSuccessfully = "ProductAddedSuccessfully";
         public const string ProductNotFound = "ProductNotFound";
         public const string ProductUpdatedSuccessfully = "ProductUpdatedSuccessfully";
 
+
+
         public const string ProductDeletedSuccessfully = "ProductDeletedSuccessfully";
         public const string EmailandPhoneAreNotFound = "EmailandPhoneAreNotFound";
         public const string CancelPaymentOperation = "CancelPaymentOperation";
         public const string Google_email_not_verified = "Google_email_not_verified";
+
+        public const string FailedToAddStore = "FailedToAddStore";
+        public const string StoreAddedSuccessfully = "StoreAddedSuccessfully";
+        public const string SellerHasStore = "SellerHasStore";
+        public const string NotOwner = "NotOwner";
+        public const string StoreNotFound = "StoreNotFound";
+        public const string StoreUpdatedSuccessfully = "StoreUpdatedSuccessfully";
+        public const string StoreAlreadyActivated = "StoreAlreadyActivated";
+        public const string StoreActivatedSuccessfully = "StoreActivatedSuccessfully";
+        public const string InvalidStoreId = "InvalidStoreId";
+        public const string StoreIsDeleted = "StoreIsDeleted";
+        public const string StoreAlreadyNotActive = "StoreAlreadyNotActive";
+        public const string StoreDeactivateSuccessfully = "StoreDeactivateSuccessfully";
+        public const string StoreAlreadyDeleted = "StoreAlreadyDeleted";
+        public const string StoreRestoredSuccessfully = "StoreRestoredSuccessfully";
+        public const string StoreIsNotDeleted = "StoreIsNotDeleted";
+
+        public const string ProductVariantNotFound = "ProductVariantNotFound";
+        public const string DiscountDeletedSuccessfully = "DiscountDeletedSuccessfully";
+        public const string DiscountAddedSuccessfully = "DiscountAddedSuccessfully";
+
+
+
 
 
 

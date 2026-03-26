@@ -8,6 +8,11 @@ using Tradify.Service.AbstractsServices;
 
 namespace Tradify.Service.Services
 {
+    public enum UploadFolder
+    {
+        Products,
+        Variants
+    }
     public class FileService : IFileService
 
     {
@@ -75,7 +80,58 @@ namespace Tradify.Service.Services
             }
             
         }
+
+        public async Task<string> UploadGenericAsync (UploadFolder folder, int id , IFormFile file)
+        {
+            // 1️⃣ Check file
+            if (file == null || file.Length == 0)
+                return "NoFile";
+
+            // 2️⃣ Validate extension
+            var extension = Path.GetExtension(file.FileName).ToLower();
+            var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".webp" };
+
+            if (!allowedExtensions.Contains(extension))
+                return "InvalidImageType";
+
+            // 3️⃣ Create folder
+            var foldrName = folder.ToString().ToLower();
+            var folderPath = Path.Combine("uploads" , foldrName, id.ToString());
+            var fullFolderPath = Path.Combine(webHostEnvironment.WebRootPath, folderPath);
+
+            if (!Directory.Exists(fullFolderPath))
+                Directory.CreateDirectory(fullFolderPath);
+
+            // 4️⃣ Generate unique name
+            var fileName = $"{Guid.NewGuid():N}{extension}";
+
+            // 5️⃣ Save file
+            var fullPath = Path.Combine(fullFolderPath, fileName);
+
+            using var stream = new FileStream(fullPath, FileMode.Create);
+            await file.CopyToAsync(stream);
+
+            // 6️⃣ Return path (DB)
+            return $"/{folderPath}/{fileName}";
+        }
+
+        public Task DeleteFile(string filePath)
+        {
+            var fullPath = Path.Combine(webHostEnvironment.WebRootPath, filePath.TrimStart('/'));
+
+            if (File.Exists(fullPath))
+            {
+                File.Delete(fullPath);
+            }
+
+            return Task.CompletedTask;
+        }
+
+
+
+
+
         #endregion
-        
+
     }
 }

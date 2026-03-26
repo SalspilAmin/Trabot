@@ -11,7 +11,7 @@ namespace Tradify.Infrastructure.Configurations
     {
         public void Configure(EntityTypeBuilder<SubOrders> builder)
         {
-            builder.HasMany(x => x.Products)
+            builder.HasMany(x => x.OrderItems)
                            .WithOne(x => x.SubOrder)
                            .HasForeignKey(x => x.SuborderId).OnDelete(DeleteBehavior.Restrict);
         }

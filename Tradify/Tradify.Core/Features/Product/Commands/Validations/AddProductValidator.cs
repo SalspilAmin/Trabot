@@ -31,27 +31,23 @@ namespace Tradify.Core.Features.Product.Commands.Validations
 
             RuleFor(x => x.Name)
                 .NotEmpty().WithMessage(localize.Get("NotEmpty"))
-                .NotNull().WithMessage(localize.Get("Required"))
+                
                 .MaximumLength(255).WithMessage(localize.Get("MaxLengthis255")); 
 
             RuleFor(x => x.Description)
-                .NotEmpty().WithMessage(localize.Get("NotEmpty"))
-                .NotNull().WithMessage(localize.Get("Required"));
+                 .MaximumLength(2000).WithMessage(localize.Get("MaxLengthis2000"));
 
-            RuleFor(x => x.Price)
-                .GreaterThan(0).WithMessage(localize.Get("PriceGreaterThanZero"));
-
-            RuleFor(x => x.Discount)
-                .InclusiveBetween(0, 100).WithMessage(localize.Get("DiscountBetween0And100"));
 
             RuleFor(x => x.CategoryId)
                 .GreaterThan(0).WithMessage(localize.Get("Required"));
 
-            RuleFor(x => x.StoreId)
-                .GreaterThan(0).WithMessage(localize.Get("Required"));
 
-            RuleFor(x => x.NumberOfProductInStock)
-                .GreaterThanOrEqualTo(0).WithMessage(localize.Get("StockCannotBeNegative"));
+            RuleFor(x => x.Price)
+                .GreaterThan(0).WithMessage(localize.Get("PriceGreaterThanZero"));
+
+            RuleFor(x => x.Stock)
+                .GreaterThanOrEqualTo(0).WithMessage(localize.Get("StockGreaterThanZero"));
+
         }
         #endregion
     }
