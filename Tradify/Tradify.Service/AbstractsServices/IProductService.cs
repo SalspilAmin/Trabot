@@ -10,6 +10,7 @@ namespace Tradify.Service.AbstractsServices
     public interface IProductService : IProductRepository
     {
         Task<Products?> GetByIdWithIncludesAsync(int id);
+        IQueryable<Products> GetProductsByCategoryAsync(int categoryId);
 
     }
 }

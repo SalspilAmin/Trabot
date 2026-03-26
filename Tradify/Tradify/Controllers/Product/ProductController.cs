@@ -11,7 +11,8 @@ using Tradify.Data.AppMetaData;
 
 namespace Tradify.Controllers.Product
 {
-    
+
+    [ApiController]
 
     public class ProductController : AppControllerBase
     {
@@ -31,15 +32,15 @@ namespace Tradify.Controllers.Product
             return NewResult(result);
         }
 
-        [HttpGet(Router.Product.Category)]
-        public async Task<IActionResult> GetProductByCategory([FromQuery] GetProductsByCategoryQuery query)
-        {
-            if (query == null || query.CategoryId <= 0)
-                return BadRequest("CategoryId is required and must be greater than 0");
+        //[HttpGet(Router.Product.Category)]
+        //public async Task<IActionResult> GetProductByCategory([FromQuery] GetProductsByCategoryQuery query)
+        //{
+        //    if (query == null || query.CategoryId <= 0)
+        //        return BadRequest("CategoryId is required and must be greater than 0");
 
-            var result = await Mediator.Send(query);
-            return Ok(result);
-        }
+        //    var result = await Mediator.Send(query);
+        //    return Ok(result);
+        //}
 
 
     }

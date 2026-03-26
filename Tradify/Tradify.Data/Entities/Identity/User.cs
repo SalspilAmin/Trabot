@@ -34,7 +34,8 @@ namespace Tradify.Data.Entities.Identity
         public virtual Cart Cart{ get; set; }
 
         public virtual ICollection<Orders> Orders { get; set; }
-        public virtual ICollection<Reviews>? Reviews { get; set; }   
+        public virtual ICollection<Reviews>? Reviews { get; set; }
+        public virtual ICollection<Favorite>? Favorites { get; set; }
         public virtual ICollection<Payouts>? Payouts { get; set; }
         public virtual ICollection<Appointment>? Appointments { get; set; }
 

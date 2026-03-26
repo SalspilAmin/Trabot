@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
+using Tradify.Data;
 using Tradify.Data.Entities;
 using Tradify.Data.Entities.Chat;
 using Tradify.Data.Entities.Comments;
@@ -29,17 +30,22 @@ namespace Tradify.Infrastructure.Context
         public DbSet<UserRefreshToken> UserRefreshToken { get; set; }
         public DbSet<Categories> Categories { get;  set; }
         public DbSet<Orders> Orders { get; set; }
+        public DbSet<OrderItems> OrderItems { get; set; }
         public DbSet<Payments> Payments { get; set; }
         public DbSet<Payouts>  Payouts { get; set; }
         public DbSet<ProductVariants> ProductVariants { get; set; }
 
         public DbSet<ProductVideo> ProductVideo { get; set; }
 
-        public DbSet<ProductImage> ProductImage { get; set; }  
+        public DbSet<ProductImage> ProductImage { get; set; }
+
+        public DbSet<ProductVariantImage> ProductVariantImages { get; set; }
+
 
         public DbSet<Products> Products { get; set; }
 
-        public DbSet<Reviews> Reviews { get; set; } 
+        public DbSet<Reviews> Reviews { get; set; }
+        public DbSet<Favorite> Favorites { get; set; }
 
         public DbSet<Shipments> Shipments { get; set; }
         public DbSet<ShipmentTracking > ShipmentTracking { get; set; }
@@ -91,13 +97,17 @@ namespace Tradify.Infrastructure.Context
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
             modelBuilder.UseEncryption(encryptionProvider);
-                
+            modelBuilder.Entity<Stores>().HasQueryFilter(s => !s.IsDeleted);
+            modelBuilder.Entity<ProductVariants>().HasQueryFilter(s => !s.IsDeleted);
+            modelBuilder.Entity<Products>().HasQueryFilter(s => !s.IsDeleted);
+
+
         }
 
 
         #endregion
 
-               
+
 
 
     }

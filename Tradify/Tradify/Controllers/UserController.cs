@@ -10,7 +10,7 @@ using Tradify.Data.AppMetaData;
 
 namespace Tradify.Controllers
 {
-   
+
     public class UserController : AppControllerBase
     {
 
@@ -19,7 +19,7 @@ namespace Tradify.Controllers
 
         public async Task<IActionResult> Create([FromForm] AddUserCommand command)
         {
-         var response= await  Mediator.Send(command);
+            var response = await Mediator.Send(command);
             return NewResult(response);
         }
 
@@ -27,8 +27,8 @@ namespace Tradify.Controllers
         [HttpPut(Router.UserRouter.ChangePassword)]
         public async Task<IActionResult> ChangePasswrod([FromForm] ChangeUserPasswordCommand command)
         {
-            var response = await Mediator.Send(command);    
-            return NewResult(response); 
+            var response = await Mediator.Send(command);
+            return NewResult(response);
 
         }
         [HttpGet(Router.UserRouter.GetByID)]
@@ -49,5 +49,6 @@ namespace Tradify.Controllers
             var resutl = await Mediator.Send(new DeleteUserCommand(id));
             return Ok(resutl);
         }
+
     }
 }

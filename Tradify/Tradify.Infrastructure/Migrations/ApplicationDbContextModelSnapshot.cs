@@ -194,7 +194,7 @@ namespace Tradify.Infrastructure.Migrations
                     b.Property<int>("CartId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ProductId")
+                    b.Property<int>("ProductVariantId")
                         .HasColumnType("int");
 
                     b.Property<int>("Quantity")
@@ -204,7 +204,7 @@ namespace Tradify.Infrastructure.Migrations
 
                     b.HasIndex("CartId");
 
-                    b.HasIndex("ProductId");
+                    b.HasIndex("ProductVariantId");
 
                     b.ToTable("CartProducts");
                 });
@@ -382,6 +382,29 @@ namespace Tradify.Infrastructure.Migrations
                     b.ToTable("ReplyOFComments");
                 });
 
+            modelBuilder.Entity("Tradify.Data.Entities.Favorite", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Favorites");
+                });
+
             modelBuilder.Entity("Tradify.Data.Entities.Identity.Role", b =>
                 {
                     b.Property<int>("Id")
@@ -532,6 +555,40 @@ namespace Tradify.Infrastructure.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("UserRefreshToken");
+                });
+
+            modelBuilder.Entity("Tradify.Data.Entities.OrderItems", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("OrdersId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("ProductVariantId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SuborderId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrdersId");
+
+                    b.HasIndex("ProductVariantId");
+
+                    b.HasIndex("SuborderId");
+
+                    b.ToTable("OrderItems");
                 });
 
             modelBuilder.Entity("Tradify.Data.Entities.Orders", b =>
@@ -764,6 +821,9 @@ namespace Tradify.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<bool>("IsMain")
+                        .HasColumnType("bit");
+
                     b.Property<string>("MediaPath")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -771,11 +831,42 @@ namespace Tradify.Infrastructure.Migrations
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ProductId");
 
                     b.ToTable("ProductImage");
+                });
+
+            modelBuilder.Entity("Tradify.Data.Entities.ProductVariantImage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("IsMain")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("MediaPath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ProductVariantId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductVariantId");
+
+                    b.ToTable("ProductVariantImages");
                 });
 
             modelBuilder.Entity("Tradify.Data.Entities.ProductVariants", b =>
@@ -786,16 +877,34 @@ namespace Tradify.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.PrimitiveCollection<string>("Colors")
-                        .IsRequired()
+                    b.Property<string>("Color")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<decimal>("Discount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("FinalPrice")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("decimal(18,2)")
+                        .HasComputedColumnSql("[Price] - ([Price] * [Discount] / 100)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("MetaData")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("NumberOfProductInStock")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Size")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -837,28 +946,19 @@ namespace Tradify.Infrastructure.Migrations
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("Discount")
-                        .HasColumnType("float");
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("NumberOfProductInStock")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("OrdersId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("OrdersId1")
-                        .HasColumnType("int");
-
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
 
                     b.Property<int?>("SellersId")
                         .HasColumnType("int");
@@ -866,32 +966,16 @@ namespace Tradify.Infrastructure.Migrations
                     b.Property<int>("StoreId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("SuborderId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("productImageId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("productVideoId")
-                        .HasColumnType("int");
+                    b.Property<DateTime>("UpdateAt")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
 
-                    b.HasIndex("OrdersId");
-
-                    b.HasIndex("OrdersId1");
-
                     b.HasIndex("SellersId");
 
                     b.HasIndex("StoreId");
-
-                    b.HasIndex("SuborderId");
-
-                    b.HasIndex("productImageId");
-
-                    b.HasIndex("productVideoId");
 
                     b.ToTable("Products");
                 });
@@ -913,20 +997,20 @@ namespace Tradify.Infrastructure.Migrations
                     b.Property<int>("CustomerId")
                         .HasColumnType("int");
 
+                    b.Property<bool>("IsPurchased")
+                        .HasColumnType("bit");
+
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
                     b.Property<byte>("Rating")
                         .HasColumnType("tinyint");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductId");
+                    b.HasIndex("CustomerId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("ProductId");
 
                     b.ToTable("Reviews");
                 });
@@ -1045,10 +1129,20 @@ namespace Tradify.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<bool>("CreatedAt")
-                        .HasColumnType("bit");
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
@@ -1223,15 +1317,15 @@ namespace Tradify.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Tradify.Data.Entities.Products", "Product")
+                    b.HasOne("Tradify.Data.Entities.ProductVariants", "ProductVariant")
                         .WithMany()
-                        .HasForeignKey("ProductId")
+                        .HasForeignKey("ProductVariantId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Cart");
 
-                    b.Navigation("Product");
+                    b.Navigation("ProductVariant");
                 });
 
             modelBuilder.Entity("Tradify.Data.Entities.Categories", b =>
@@ -1328,6 +1422,25 @@ namespace Tradify.Infrastructure.Migrations
                     b.Navigation("UserThatWriteAReplyOFComment");
                 });
 
+            modelBuilder.Entity("Tradify.Data.Entities.Favorite", b =>
+                {
+                    b.HasOne("Tradify.Data.Entities.Products", "Product")
+                        .WithMany("Favorites")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Tradify.Data.Entities.Identity.User", "User")
+                        .WithMany("Favorites")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Tradify.Data.Entities.Identity.UserRefreshToken", b =>
                 {
                     b.HasOne("Tradify.Data.Entities.Identity.User", "user")
@@ -1337,6 +1450,29 @@ namespace Tradify.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("user");
+                });
+
+            modelBuilder.Entity("Tradify.Data.Entities.OrderItems", b =>
+                {
+                    b.HasOne("Tradify.Data.Entities.Orders", null)
+                        .WithMany("OrderItems")
+                        .HasForeignKey("OrdersId");
+
+                    b.HasOne("Tradify.Data.Entities.ProductVariants", "ProductVariant")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("ProductVariantId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Tradify.Data.Entities.SubOrders", "SubOrder")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("SuborderId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("ProductVariant");
+
+                    b.Navigation("SubOrder");
                 });
 
             modelBuilder.Entity("Tradify.Data.Entities.Orders", b =>
@@ -1446,6 +1582,17 @@ namespace Tradify.Infrastructure.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("Tradify.Data.Entities.ProductVariantImage", b =>
+                {
+                    b.HasOne("Tradify.Data.Entities.ProductVariants", "ProductVariant")
+                        .WithMany("ProductVariantImages")
+                        .HasForeignKey("ProductVariantId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("ProductVariant");
+                });
+
             modelBuilder.Entity("Tradify.Data.Entities.ProductVariants", b =>
                 {
                     b.HasOne("Tradify.Data.Entities.Products", "Product")
@@ -1476,14 +1623,6 @@ namespace Tradify.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Tradify.Data.Entities.Orders", null)
-                        .WithMany("Products")
-                        .HasForeignKey("OrdersId");
-
-                    b.HasOne("Tradify.Data.Entities.Orders", null)
-                        .WithMany("products")
-                        .HasForeignKey("OrdersId1");
-
                     b.HasOne("Tradify.Data.Entities.Sellers", null)
                         .WithMany("Products")
                         .HasForeignKey("SellersId");
@@ -1494,47 +1633,28 @@ namespace Tradify.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Tradify.Data.Entities.SubOrders", "SubOrder")
-                        .WithMany("Products")
-                        .HasForeignKey("SuborderId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("Tradify.Data.Entities.ProductImage", "productImage")
-                        .WithMany()
-                        .HasForeignKey("productImageId");
-
-                    b.HasOne("Tradify.Data.Entities.ProductVideo", "productVideo")
-                        .WithMany()
-                        .HasForeignKey("productVideoId");
-
                     b.Navigation("Category");
 
                     b.Navigation("Store");
-
-                    b.Navigation("SubOrder");
-
-                    b.Navigation("productImage");
-
-                    b.Navigation("productVideo");
                 });
 
             modelBuilder.Entity("Tradify.Data.Entities.Reviews", b =>
                 {
+                    b.HasOne("Tradify.Data.Entities.Identity.User", "Customer")
+                        .WithMany("Reviews")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Tradify.Data.Entities.Products", "Product")
                         .WithMany("Reviews")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Tradify.Data.Entities.Identity.User", "User")
-                        .WithMany("Reviews")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Customer");
 
                     b.Navigation("Product");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Tradify.Data.Entities.Sellers", b =>
@@ -1637,6 +1757,8 @@ namespace Tradify.Infrastructure.Migrations
                     b.Navigation("Cart")
                         .IsRequired();
 
+                    b.Navigation("Favorites");
+
                     b.Navigation("Orders");
 
                     b.Navigation("Payouts");
@@ -1654,9 +1776,7 @@ namespace Tradify.Infrastructure.Migrations
 
             modelBuilder.Entity("Tradify.Data.Entities.Orders", b =>
                 {
-                    b.Navigation("Products");
-
-                    b.Navigation("products");
+                    b.Navigation("OrderItems");
 
                     b.Navigation("subOrders");
                 });
@@ -1670,8 +1790,17 @@ namespace Tradify.Infrastructure.Migrations
                     b.Navigation("interactionWithPosts");
                 });
 
+            modelBuilder.Entity("Tradify.Data.Entities.ProductVariants", b =>
+                {
+                    b.Navigation("OrderItems");
+
+                    b.Navigation("ProductVariantImages");
+                });
+
             modelBuilder.Entity("Tradify.Data.Entities.Products", b =>
                 {
+                    b.Navigation("Favorites");
+
                     b.Navigation("ProductImages");
 
                     b.Navigation("ProductVariants");
@@ -1708,7 +1837,7 @@ namespace Tradify.Infrastructure.Migrations
 
             modelBuilder.Entity("Tradify.Data.Entities.SubOrders", b =>
                 {
-                    b.Navigation("Products");
+                    b.Navigation("OrderItems");
                 });
 #pragma warning restore 612, 618
         }

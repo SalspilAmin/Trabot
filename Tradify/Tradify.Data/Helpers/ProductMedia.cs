@@ -5,8 +5,8 @@ using System.Text;
 
 namespace Tradify.Data.Helpers
 {
-    [NotMapped]
-    public class ProductMedia
+    
+    public abstract class ProductMedia
     {
         public int Id { get; set; }
 

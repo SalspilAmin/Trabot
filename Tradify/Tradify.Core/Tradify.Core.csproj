@@ -9,7 +9,7 @@
 	
 	
 	<ItemGroup>
-		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+		<PackageReference Include="AutoMapper" Version="16.1.1" />
 		<PackageReference Include="FluentValidation" Version="12.1.0" />
 		<PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.0" />
 		<PackageReference Include="MediatR" Version="13.1.0" />
@@ -27,10 +27,17 @@
 
   <ItemGroup>
     <Folder Include="Features\Authorization\Queries\Validator\" />
+    <Folder Include="Features\Categorie\Commands\Handlers\" />
+    <Folder Include="Features\Categorie\Commands\Models\" />
+    <Folder Include="Features\Categorie\Commands\Validations\" />
+    <Folder Include="Features\Categorie\Queries\Handlers\" />
+    <Folder Include="Features\Categorie\Queries\Models\" />
+    <Folder Include="Features\Categorie\Queries\Results\" />
     <Folder Include="Features\Fawaterak\Queries\Validations\" />
     <Folder Include="Features\Order\Queries\Handler\" />
     <Folder Include="Features\Order\Queries\Models\" />
     <Folder Include="Features\Order\Queries\Validations\" />
+    <Folder Include="Mapping\FavoriteMapping\Queries\" />
   </ItemGroup>
 
 </Project>

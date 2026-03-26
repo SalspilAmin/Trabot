@@ -60,7 +60,7 @@ builder.Services.Configure<RequestLocalizationOptions>(options => {
 
 #endregion
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+//builder.Services.AddOpenApi();
 
 //Serilog
 Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(builder.Configuration).CreateLogger();
@@ -81,7 +81,7 @@ using (var scope = app.Services.CreateScope())
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    //app.MapOpenApi();
     app.UseSwagger();
     app.UseSwaggerUI();
 }

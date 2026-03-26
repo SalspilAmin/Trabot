@@ -15,11 +15,15 @@ namespace Tradify.Data.Entities
 
         public int SellerId { get; set; }
         public string Name { get; set; }
+        public string Description { get; set; }
         public bool IsActive { get; set; }
 
-        public bool CreatedAt { get; set; }
+        //public bool CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         [ForeignKey(nameof(SellerId))]
         public virtual Sellers? Seller { get; set; }
+        public bool IsDeleted { get; set; } = false;
+        public DateTime? DeletedAt { get; set; } 
 
         public  virtual ICollection<Products>? Products { get; set; }
         public virtual ICollection<Categories>? Categories { get; set; }

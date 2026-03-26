@@ -13,9 +13,9 @@ namespace Tradify.Data.Entities
         [ForeignKey(nameof(CartId))]
         public virtual Cart Cart { get; set; }
 
-        public int ProductId { get; set; }
-        [ForeignKey(nameof(ProductId))]
-        public virtual Products Product { get; set; }
+        public int ProductVariantId { get; set; }
+        [ForeignKey(nameof(ProductVariantId))]
+        public virtual ProductVariants ProductVariant { get; set; }
         public int Quantity { get; set; }
 
 

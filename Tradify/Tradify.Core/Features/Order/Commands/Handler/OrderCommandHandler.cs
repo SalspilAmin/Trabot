@@ -12,8 +12,8 @@ using Twilio.Rest.Trunking.V1.Trunk;
 
 namespace Tradify.Core.Features.Order.Commands.Handler
 {
-    public class OrderCommandHandler : ResponseHandler, IRequestHandler<CreateOrderModel, Response<int>>
-        ,IRequestHandler<UpdateOrderCommandModel,Response<int>>
+    public class OrderCommandHandler : ResponseHandler//, IRequestHandler<CreateOrderModel, Response<int>>
+        //,IRequestHandler<UpdateOrderCommandModel,Response<int>>
     {
         private readonly LocalizationService localization;
         private readonly IOrdersService ordersService;
@@ -32,55 +32,55 @@ namespace Tradify.Core.Features.Order.Commands.Handler
             this.mapper = mapper;
         }
 
-        public async Task<Response<int>> Handle(CreateOrderModel request, CancellationToken cancellationToken)
-        {
-            // Check on Cart  
-            var Cart =  cartService.GetCartByIdWithInclude(request.CartId);
-            if (Cart == null) return BadRequest<int>(localization.Get("NotFound"));
+        //    public async Task<Response<int>> Handle(CreateOrderModel request, CancellationToken cancellationToken)
+        //    {
+        //        // Check on Cart  
+        //        var Cart =  cartService.GetCartByIdWithInclude(request.CartId);
+        //        if (Cart == null) return BadRequest<int>(localization.Get("NotFound"));
 
 
 
-            // list of product  that is in Cart
-            var ProductList = Cart.CartProducts.Select(x => x.Product).ToList();
+        //        // list of product  that is in Cart
+        //        var ProductList = Cart.CartProducts.Select(x => x.Product).ToList();
 
-            var order = mapper.Map<Tradify.Data.Entities.Orders>(request);
-            if (order != null)
-            {
-                foreach(var item in ProductList)
-                {
-                    if(item.InStock == true)
-                    {
-                      order.products.Add(item);
-                    }
-                     
-                }
+        //        var order = mapper.Map<Tradify.Data.Entities.Orders>(request);
+        //        if (order != null)
+        //        {
+        //            foreach(var item in ProductList)
+        //            {
+        //                if(item.InStock == true)
+        //                {
+        //                  order.products.Add(item);
+        //                }
 
-            }
-             var result = await ordersService.AddAsync(order);
-            if (result != null)
-            {
-                await ordersService.SaveChangesAsync();
-                return Success(result.Id);
-            }
-            return BadRequest<int>(localization.Get("TryAgainInAnotherTime"));
+        //            }
 
-
+        //        }
+        //         var result = await ordersService.AddAsync(order);
+        //        if (result != null)
+        //        {
+        //            await ordersService.SaveChangesAsync();
+        //            return Success(result.Id);
+        //        }
+        //        return BadRequest<int>(localization.Get("TryAgainInAnotherTime"));
 
 
 
-        }
 
-        public async Task<Response<int>> Handle(UpdateOrderCommandModel request, CancellationToken cancellationToken)
-        {
-            var order = await ordersService.GetByIdAsync(request.Id);
-            if (order == null) return BadRequest<int>(localization.Get("NotFound"));
 
-            order.PaymentStatus=request.PaymentStatus;
-            order.invoice_id = request.invoice_id;
-            order.invoice_key = request.invoice_key;
+        //    }
 
-        await ordersService.UpdateAsync(order);
-            return Success(order.Id);
-        }
+        //    public async Task<Response<int>> Handle(UpdateOrderCommandModel request, CancellationToken cancellationToken)
+        //    {
+        //        var order = await ordersService.GetByIdAsync(request.Id);
+        //        if (order == null) return BadRequest<int>(localization.Get("NotFound"));
+
+        //        order.PaymentStatus=request.PaymentStatus;
+        //        order.invoice_id = request.invoice_id;
+        //        order.invoice_key = request.invoice_key;
+
+        //    await ordersService.UpdateAsync(order);
+        //        return Success(order.Id);
+        //    }
     }
 }

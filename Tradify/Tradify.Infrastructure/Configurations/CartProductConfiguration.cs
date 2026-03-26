@@ -13,7 +13,7 @@ namespace Tradify.Infrastructure.Configurations
         {
             builder.HasOne(x => x.Cart).WithMany(x => x.CartProducts).HasForeignKey(x => x.CartId).OnDelete(DeleteBehavior.Restrict);
 
-            builder.HasOne(x => x.Product).WithMany().HasForeignKey(x => x.ProductId).OnDelete(DeleteBehavior.Restrict);
+            builder.HasOne(x => x.ProductVariant).WithMany().HasForeignKey(x => x.ProductVariantId).OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
