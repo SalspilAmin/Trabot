@@ -300,4 +300,7 @@
   <data name="Google_email_not_verified" xml:space="preserve">
     <value>Google_email_not_verified</value>
   </data>
+  <data name="ErrorWhenTryCreateUserByGoogle" xml:space="preserve">
+    <value>ErrorWhenTryCreateUserByGoogle</value>
+  </data>
 </root>

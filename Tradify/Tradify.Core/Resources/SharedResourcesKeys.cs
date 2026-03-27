@@ -111,7 +111,7 @@ namespace Tradify.Core.Resources
         public const string ProductVariantNotFound = "ProductVariantNotFound";
         public const string DiscountDeletedSuccessfully = "DiscountDeletedSuccessfully";
         public const string DiscountAddedSuccessfully = "DiscountAddedSuccessfully";
-
+        public const string ErrorWhenTryCreateUserByGoogle = "ErrorWhenTryCreateUserByGoogle";
 
 
 

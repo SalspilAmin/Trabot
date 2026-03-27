@@ -163,7 +163,7 @@ namespace Tradify.Core.Features.Authenticaiton.Commands.Handler
             {
                 case "UserIsExit": return BadRequest<LoginGoogleResult>(localization.Get("IsExist"));
                 case "EmailINGoogleNotVerified": return BadRequest<LoginGoogleResult>(localization.Get("Google_email_not_verified"));
-                case "ErrorWhenTryCreateUserByGoogle": return BadRequest<LoginGoogleResult>(localization.Get(""));
+                case "ErrorWhenTryCreateUserByGoogle": return BadRequest<LoginGoogleResult>(localization.Get("ErrorWhenTryCreateUserByGoogle"));
                 default: return BadRequest<LoginGoogleResult>(localization.Get("TryAgainInAnotherTime"));
             }
 

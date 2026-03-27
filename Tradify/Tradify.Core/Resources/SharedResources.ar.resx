@@ -300,4 +300,7 @@
   <data name="Google_email_not_verified" xml:space="preserve">
     <value>ايميل جوجل غير مؤكد</value>
   </data>
+  <data name="ErrorWhenTryCreateUserByGoogle" xml:space="preserve">
+    <value>خطء عند انشاء المستخدم</value>
+  </data>
 </root>

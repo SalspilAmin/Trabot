@@ -27,9 +27,9 @@ namespace Tradify.Controllers
             return NewResult(result);
         }
         [HttpGet(Router.Authentication.ConfirmEmail)]
-        public async Task<IActionResult> ConfirmEmail([FromQuery] ConfirmEmailQuery request)
+        public async Task<IActionResult> ConfirmEmail([FromQuery] int userId, [FromQuery] string code )
         {
-            var result = await Mediator.Send(request);
+            var result = await Mediator.Send(new ConfirmEmailQuery() {Id=userId,Code=code });
             return NewResult(result);
         }
         [HttpPost(Router.Authentication.ConfrimPhone)]
@@ -62,15 +62,15 @@ namespace Tradify.Controllers
         public async Task<IActionResult> LoginGoogle()
         {
             var result = await Mediator.Send(new BeginCoonectionWithGoogleCommand());
-            return NewResult(result);   
+            return NewResult(result);
         }
 
 
         [HttpGet(Router.Authentication.LoginGoogleCallBack)]
-        public  async Task<IActionResult> GoogleCallBack([FromRoute] LoginWithGoogleCommand request)
+        public  async Task<IActionResult> GoogleCallBack([FromQuery] string code)
         {
-            var result = await Mediator.Send(request);
-            return NewResult(result);
+            var result = await Mediator.Send(new LoginWithGoogleCommand() { Code= code});
+            return  NewResult(result);
         }
     }
 }

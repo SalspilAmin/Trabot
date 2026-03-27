@@ -121,10 +121,11 @@ namespace Tradify.Service.Services.AuthenticationServices
         {
             var claims = new List<Claim>() 
               {
-                new Claim(ClaimTypes.Name,user.UserName),
-                 new Claim(ClaimTypes.Email,user.Email),
-                new Claim(nameof(UserClaimModel.PhoneNumber), user.PhoneNumber),
-                new Claim(nameof(UserClaimModel.Id), user.Id.ToString())
+                new Claim(ClaimTypes.Name, user.UserName ?? ""),
+                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Email, user.Email ?? ""),
+               new Claim(nameof(UserClaimModel.PhoneNumber), user.PhoneNumber ?? ""),
+                        new Claim(nameof(UserClaimModel.Id), user.Id.ToString())
 
              };
             var roles = await userManager.GetRolesAsync(user);
@@ -307,8 +308,8 @@ namespace Tradify.Service.Services.AuthenticationServices
               $"?client_id={oauthSettings.ClientId}" +
               $"&redirect_uri={oauthSettings.CallBackMethodUrl}" +
               "&response_type=code" +
-              "&scope=openid email profile";
-            return Task.FromResult(oauthSettings.CallBackMethodUrl);
+              "&scope=openid%20email%20profile";
+            return Task.FromResult(url);
 
         }
 
@@ -334,6 +335,10 @@ namespace Tradify.Service.Services.AuthenticationServices
             new FormUrlEncodedContent(values));
 
         var json = await response.Content.ReadAsStringAsync();
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception(json);
+            }
             try
             {
                 var tokenResponse = JsonSerializer.Deserialize<GoogleTokenResponse>(json);
@@ -347,10 +352,16 @@ namespace Tradify.Service.Services.AuthenticationServices
                var check = await userManager.FindByEmailAsync(payload.Email);
                 if (check != null)
                 {
-                    return (null, "UserIsExit");
+                    var existingResult = new LoginGoogleResult
+                    {
+                        UserId = check.Id,
+                        UserEmail = check.Email,
+                        JwtAuthResult = await GetJWTTokenAsync(check)
+                    };
+                    return (existingResult, null);
                 }
                  if (!payload.EmailVerified) return (null, "EmailINGoogleNotVerified");
-                var result = await userManager.CreateAsync(new User { Email = payload.Email, UserName = payload.Name, EmailConfirmed = true });
+                var result = await userManager.CreateAsync(new User { Email = payload.Email, UserName = payload.Email.Split('@')[0], EmailConfirmed = true });
                
                     if(!result.Succeeded) return (null, "ErrorWhenTryCreateUserByGoogle");
 
