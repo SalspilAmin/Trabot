@@ -81,7 +81,7 @@ namespace Tradify.Infrastructure.Context
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
-            encryptionProvider = new GenerateEncryptionProvider("HS12@#$");
+            encryptionProvider = new GenerateEncryptionProvider("ysupersecretkey123456789012345@#");
         }
 
         

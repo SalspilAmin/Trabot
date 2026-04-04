@@ -65,8 +65,17 @@ namespace Tradify.Core.Features.Authenticaiton.Commands.Handler
 
             if (GetUserbyEmailorPhone == null) return BadRequest<JwtAuthResult>(localization.Get("Add_Correct_info"));
 
+              // confrim Email or phone
+            if (checkuserEmail || chekuserPhone)
+            {
+                if (!GetUserbyEmailorPhone.EmailConfirmed && !GetUserbyEmailorPhone.PhoneNumberConfirmed) return BadRequest<JwtAuthResult>(localization.Get("EmailOrPhoneNotConfirmed"));
+               
 
+            }
             // try to sign in
+
+
+
             var signinResult = await signInManager.CheckPasswordSignInAsync(GetUserbyEmailorPhone, request.Password, false);
 
             // if Faild return password is worng
@@ -76,13 +85,7 @@ namespace Tradify.Core.Features.Authenticaiton.Commands.Handler
 
 
 
-            // confrim Email or phone
-            if (checkuserEmail || chekuserPhone)
-            {
-                if (!GetUserbyEmailorPhone.EmailConfirmed) return BadRequest<JwtAuthResult>(localization.Get("EmailNotConfirmed"));
-                if (!GetUserbyEmailorPhone.PhoneNumberConfirmed) return BadRequest<JwtAuthResult>(localization.Get("PhoneNumberNotConfirmed"));
-
-            }
+          
 
             //  return token
 
@@ -132,7 +135,7 @@ namespace Tradify.Core.Features.Authenticaiton.Commands.Handler
 
             switch (result)
             {
-                case "UserNotFount": return BadRequest<string>(localization.Get("UserIsNotFound"));
+                case "UserNotFound": return BadRequest<string>(localization.Get("UserIsNotFound"));
                 case "CodeIsWrong" :return BadRequest<string>(localization.Get("CodeIsWrong"));
 
             }
