@@ -150,9 +150,6 @@
   <data name="EmailOrPhoneIsExist" xml:space="preserve">
     <value>Email or Phone is Already Exist</value>
   </data>
-  <data name="EmailNotConfirmed" xml:space="preserve">
-    <value>Please Confirm Your Email</value>
-  </data>
   <data name="ErrorWhenConfirmEmail" xml:space="preserve">
     <value>Error Occur When Confirm Email</value>
   </data>
@@ -302,5 +299,11 @@
   </data>
   <data name="ErrorWhenTryCreateUserByGoogle" xml:space="preserve">
     <value>ErrorWhenTryCreateUserByGoogle</value>
+  </data>
+  <data name="EmailNotConfirmed" xml:space="preserve">
+    <value>Please Confirm Your Email</value>
+  </data>
+  <data name="OrderItemsNotFound" xml:space="preserve">
+    <value>Order Items Not Found</value>
   </data>
 </root>

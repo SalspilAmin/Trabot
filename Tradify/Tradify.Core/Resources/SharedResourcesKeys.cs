@@ -112,6 +112,7 @@ namespace Tradify.Core.Resources
         public const string DiscountDeletedSuccessfully = "DiscountDeletedSuccessfully";
         public const string DiscountAddedSuccessfully = "DiscountAddedSuccessfully";
         public const string ErrorWhenTryCreateUserByGoogle = "ErrorWhenTryCreateUserByGoogle";
+        public const string OrderItemsNotFound = "OrderItemsNotFound";
 
 
 

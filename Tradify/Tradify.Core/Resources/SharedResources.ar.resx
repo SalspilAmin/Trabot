@@ -303,4 +303,7 @@
   <data name="EmailNotConfirmed" xml:space="preserve">
     <value>  من فضلك قم بتأكيد الايميل او الهاتف</value>
   </data>
+  <data name="OrderItemsNotFound" xml:space="preserve">
+    <value>واحدات الاوردر غير موجودة</value>
+  </data>
 </root>

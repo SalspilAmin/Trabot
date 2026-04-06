@@ -167,6 +167,7 @@ namespace Tradify.Data.AppMetaData
             public const string prefix = Rule + "Order";
             public const string CreateOrder = prefix + "/Create";
             public const string UpdateOrder = prefix + "/Update";
+            public const string GetOrderById = prefix + SignleRoute;
         }
 
     }

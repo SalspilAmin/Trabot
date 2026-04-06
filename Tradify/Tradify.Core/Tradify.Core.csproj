@@ -35,8 +35,6 @@
     <Folder Include="Features\Categorie\Queries\Models\" />
     <Folder Include="Features\Categorie\Queries\Results\" />
     <Folder Include="Features\Fawaterak\Queries\Validations\" />
-    <Folder Include="Features\Order\Queries\Handler\" />
-    <Folder Include="Features\Order\Queries\Models\" />
     <Folder Include="Features\Order\Queries\Validations\" />
     <Folder Include="Mapping\FavoriteMapping\Queries\" />
   </ItemGroup>
