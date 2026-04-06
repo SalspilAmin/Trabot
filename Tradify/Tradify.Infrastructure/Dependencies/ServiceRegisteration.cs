@@ -59,7 +59,7 @@ namespace Tradify.Infrastructure.Dependencies
             services.AddSingleton(FawaterakOptions);
             services.AddHttpClient();
             var OAuthSettings = new OAuthSettings();    
-            configuration.GetSection(nameof(OAuthSettings)).Bind(OAuthSettings);
+            configuration.GetSection("OAuth").Bind(OAuthSettings);
             services.AddSingleton(OAuthSettings);
 
             services.AddAuthentication(x =>

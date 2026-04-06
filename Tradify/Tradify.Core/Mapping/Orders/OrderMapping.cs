@@ -10,6 +10,8 @@ namespace Tradify.Core.Mapping.Orders
         public OrderMapping() 
         {
             CreateOrderMapping();
+            GetOrderByIdMapping();
+            OrderItemResultMapping();
         }
     }
 }

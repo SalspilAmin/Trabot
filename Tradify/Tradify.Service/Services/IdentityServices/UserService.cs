@@ -58,7 +58,7 @@ namespace Tradify.Service.Services.IdentityServices
 
 
         //}
-        public async Task<string> AddUserAsync(User user, string Password)
+        public async Task<(string,int ?)> AddUserAsync(User user, string Password)
         {
             using (var trans = applicationDbContext.Database.BeginTransaction())
             {
@@ -68,7 +68,7 @@ namespace Tradify.Service.Services.IdentityServices
                     var checkPhone = IsPhone(user.PhoneNumber);
                     if (!checkemail && !checkPhone)
                     {
-                        return "Add_Correct_info";
+                        return ("Add_Correct_info",null);
                     }
                    else if(!checkemail&& checkPhone)
                     {
@@ -76,7 +76,7 @@ namespace Tradify.Service.Services.IdentityServices
                         var ExistUserPhonenumber = applicationDbContext.users.FirstOrDefault(x => x.PhoneNumber == user.PhoneNumber);
                         if (ExistUserPhonenumber != null)
                         {
-                            return "EmailOrPhoneIsExist";
+                            return ("EmailOrPhoneIsExist", null);
                         }
                     }
                     else if(checkemail && !checkPhone)
@@ -85,7 +85,7 @@ namespace Tradify.Service.Services.IdentityServices
                         user.PhoneNumber=null;
                       var ExistUserEmail = await UserManager.FindByEmailAsync(user.Email);
                         if (ExistUserEmail != null) { 
-                               return "EmailOrPhoneIsExist";
+                               return ("EmailOrPhoneIsExist", null);
                         }
                     }
                   
@@ -95,13 +95,13 @@ namespace Tradify.Service.Services.IdentityServices
                     var ExistUserName = await UserManager.FindByNameAsync(user.UserName);
                     if (ExistUserName != null)
                     {
-                            return "UserNameIsExist";
+                            return ("UserNameIsExist", null);
                      
                     }
                     var createResult= await UserManager.CreateAsync(user,Password);
                     if (!createResult.Succeeded)
                     {
-                        return string.Join(",",createResult.Errors.Select(x=>x.Description).ToList());
+                        return (string.Join(",",createResult.Errors.Select(x=>x.Description).ToList()),null);
                     }
                     //  attach role
 
@@ -109,7 +109,7 @@ namespace Tradify.Service.Services.IdentityServices
                     var AddRoleResult = await UserManager.AddToRoleAsync(user, "User");
                     if (!AddRoleResult.Succeeded)
                     {
-                        return string.Join(",", AddRoleResult.Errors.Select(x => x.Description).ToList());
+                        return (string.Join(",", AddRoleResult.Errors.Select(x => x.Description).ToList()), null);
                     }
                     
                    
@@ -134,11 +134,11 @@ namespace Tradify.Service.Services.IdentityServices
                         await UserManager.UpdateAsync(user);
                         var result = await watsappService.SendVerificationCodeAsync(user.PhoneNumber, otp);
 
-                        if (result == false) return "Failed";
+                        if (result == false) return ("Failed", null);
 
                     }
                     await trans.CommitAsync();
-                    return "Success";
+                    return ("Success",user.Id);
                 }
 
                 catch (Exception ex) 
@@ -146,7 +146,7 @@ namespace Tradify.Service.Services.IdentityServices
                 {
 
                     await trans.RollbackAsync();
-                    return "Failed";
+                    return ("Failed", null);
 
                 }
             }

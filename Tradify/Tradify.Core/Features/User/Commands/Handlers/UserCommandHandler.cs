@@ -44,7 +44,8 @@ namespace Tradify.Core.Features.User.Commands.Handlers
             var user = mapper.Map<Data.Entities.Identity.User>(request);
 
                 var result = await userService.AddUserAsync(user, request.Password);
-            switch(result)
+           
+            switch(result.Item1)
             {
 
                 case "EmailOrPhoneIsExist": return BadRequest<string>(localize.Get("EmailOrPhoneIsExist"));
@@ -56,9 +57,9 @@ namespace Tradify.Core.Features.User.Commands.Handlers
                 case "Failed": return BadRequest<string>(localize.Get("TryToRegisterAgain"));
 
                     break;  
-                case "Success": return Success<string>("");
+                case "Success": return Success<string>(result.Item1,meta:result.Item2);
                     break;
-                default: return BadRequest<string>(result);
+                default: return BadRequest<string>(result.Item1);
             }
 
         }

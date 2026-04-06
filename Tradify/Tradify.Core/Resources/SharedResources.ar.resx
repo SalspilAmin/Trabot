@@ -150,9 +150,6 @@
   <data name="EmailOrPhoneIsExist" xml:space="preserve">
     <value>الايميل او رقم الهاتف الذي ادخلته موجود بالفعل</value>
   </data>
-  <data name="EmailNotConfirmed" xml:space="preserve">
-    <value>من فضلك قم بتأكيد الايميل</value>
-  </data>
   <data name="ErrorWhenConfirmEmail" xml:space="preserve">
     <value>حدث خطأ اثناء تأكيد الايميل</value>
   </data>
@@ -299,5 +296,14 @@
   </data>
   <data name="Google_email_not_verified" xml:space="preserve">
     <value>ايميل جوجل غير مؤكد</value>
+  </data>
+  <data name="ErrorWhenTryCreateUserByGoogle" xml:space="preserve">
+    <value>خطء عند انشاء المستخدم</value>
+  </data>
+  <data name="EmailNotConfirmed" xml:space="preserve">
+    <value>  من فضلك قم بتأكيد الايميل او الهاتف</value>
+  </data>
+  <data name="OrderItemsNotFound" xml:space="preserve">
+    <value>واحدات الاوردر غير موجودة</value>
   </data>
 </root>

@@ -18,6 +18,7 @@
 		<PackageReference Include="Serilog.AspNetCore" Version="10.0.0" />
 		<PackageReference Include="Serilog.Sinks.Console" Version="6.1.1" />
 		<PackageReference Include="Serilog.Sinks.MSSqlServer" Version="9.0.2" />
+		<PackageReference Include="System.Security.Permissions" Version="10.0.5" />
 	</ItemGroup>
 
   <ItemGroup>
@@ -34,8 +35,6 @@
     <Folder Include="Features\Categorie\Queries\Models\" />
     <Folder Include="Features\Categorie\Queries\Results\" />
     <Folder Include="Features\Fawaterak\Queries\Validations\" />
-    <Folder Include="Features\Order\Queries\Handler\" />
-    <Folder Include="Features\Order\Queries\Models\" />
     <Folder Include="Features\Order\Queries\Validations\" />
     <Folder Include="Mapping\FavoriteMapping\Queries\" />
   </ItemGroup>

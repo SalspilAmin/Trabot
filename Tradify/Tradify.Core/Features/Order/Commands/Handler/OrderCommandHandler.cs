@@ -6,14 +6,16 @@ using System.Text;
 using Tradify.Core.Bases;
 using Tradify.Core.Features.Order.Commands.Models;
 using Tradify.Core.Resources.Service;
+using Tradify.Data.Entities;
 using Tradify.Service.AbstractsServices;
 using Tradify.Service.Services;
 using Twilio.Rest.Trunking.V1.Trunk;
+using static Tradify.Data.AppMetaData.Router;
 
 namespace Tradify.Core.Features.Order.Commands.Handler
 {
-    public class OrderCommandHandler : ResponseHandler//, IRequestHandler<CreateOrderModel, Response<int>>
-        //,IRequestHandler<UpdateOrderCommandModel,Response<int>>
+    public class OrderCommandHandler : ResponseHandler, IRequestHandler<CreateOrderModel, Response<int>>
+                                                      ,IRequestHandler<UpdateOrderCommandModel,Response<int>>
     {
         private readonly LocalizationService localization;
         private readonly IOrdersService ordersService;
@@ -32,55 +34,63 @@ namespace Tradify.Core.Features.Order.Commands.Handler
             this.mapper = mapper;
         }
 
-        //    public async Task<Response<int>> Handle(CreateOrderModel request, CancellationToken cancellationToken)
-        //    {
-        //        // Check on Cart  
-        //        var Cart =  cartService.GetCartByIdWithInclude(request.CartId);
-        //        if (Cart == null) return BadRequest<int>(localization.Get("NotFound"));
+        public async Task<Response<int>> Handle(CreateOrderModel request, CancellationToken cancellationToken)
+        {
+            // Check on Cart  
+            var Cart = cartService.GetCartByIdWithInclude(request.CartId);
+            if (Cart == null) return BadRequest<int>(localization.Get("NotFound"));
 
 
 
-        //        // list of product  that is in Cart
-        //        var ProductList = Cart.CartProducts.Select(x => x.Product).ToList();
+            // list of product  that is in Cart
+            var ProductsVariantsList = Cart.CartProducts.Select(x => x.ProductVariant).ToList();
 
-        //        var order = mapper.Map<Tradify.Data.Entities.Orders>(request);
-        //        if (order != null)
-        //        {
-        //            foreach(var item in ProductList)
-        //            {
-        //                if(item.InStock == true)
-        //                {
-        //                  order.products.Add(item);
-        //                }
+            var order = mapper.Map<Tradify.Data.Entities.Orders>(request);
+            if (order != null)
+            {
+                foreach (var item in ProductsVariantsList)
+                {
+                    if (item.InStock == true)
+                    {
+                        var cartproduct = Cart.CartProducts.FirstOrDefault(x => x.ProductVariantId == item.Id);
+                        var subOrders = new SubOrders { Order = order, OrderId = order.Id, Product = item.Product, StoreId = item.Product.StoreId, Quantity = cartproduct.Quantity, ProductVAriantsId = item.Id, ProductVariants = item, Status = Data.Enums.OrderStatus.processing };
+                        order.subOrders.Add(subOrders);
+                        var orderitem = new Tradify.Data.Entities.OrderItems { ProductVariantId = item.Id, SuborderId = subOrders.Id, Quantity = cartproduct.Quantity, Price = item.Price, SubOrder = subOrders };
+                        order.OrderItems.Add(orderitem);
+                        item.NumberOfProductInStock-=subOrders.Quantity;
 
-        //            }
+                    }
 
-        //        }
-        //         var result = await ordersService.AddAsync(order);
-        //        if (result != null)
-        //        {
-        //            await ordersService.SaveChangesAsync();
-        //            return Success(result.Id);
-        //        }
-        //        return BadRequest<int>(localization.Get("TryAgainInAnotherTime"));
+                }
+
+            }
+            var result = await ordersService.AddAsync(order);
+            if (result != null)
+            {
+
+                await ordersService.SaveChangesAsync();
+
+                return Success(result.Id);
+            }
+            return BadRequest<int>(localization.Get("TryAgainInAnotherTime"));
 
 
 
 
 
-        //    }
+        }
 
-        //    public async Task<Response<int>> Handle(UpdateOrderCommandModel request, CancellationToken cancellationToken)
-        //    {
-        //        var order = await ordersService.GetByIdAsync(request.Id);
-        //        if (order == null) return BadRequest<int>(localization.Get("NotFound"));
+        public async Task<Response<int>> Handle(UpdateOrderCommandModel request, CancellationToken cancellationToken)
+        {
+            var order = await ordersService.GetByIdAsync(request.Id);
+            if (order == null) return BadRequest<int>(localization.Get("NotFound"));
 
-        //        order.PaymentStatus=request.PaymentStatus;
-        //        order.invoice_id = request.invoice_id;
-        //        order.invoice_key = request.invoice_key;
+            order.PaymentStatus = request.PaymentStatus;
+            order.invoice_id = request.invoice_id;
+            order.invoice_key = request.invoice_key;
 
-        //    await ordersService.UpdateAsync(order);
-        //        return Success(order.Id);
-        //    }
+            await ordersService.UpdateAsync(order);
+            return Success(order.Id);
+        }
     }
 }

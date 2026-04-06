@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Tradify.Bases;
 using Tradify.Core.Features.Fawaterak.Comands.Models;
 using Tradify.Core.Features.Order.Commands.Models;
+using Tradify.Core.Features.Order.Queries.Models;
 using Tradify.Data.AppMetaData;
 
 namespace Tradify.Controllers
@@ -24,7 +25,13 @@ namespace Tradify.Controllers
             var result = await Mediator.Send(request);
             return NewResult(result);
         }
+        [HttpGet(Router.Order.GetOrderById)]
 
+        public async Task<IActionResult> GetById([FromRoute] int id) { 
+        
+            var result = await Mediator.Send(new GetOrderByIdQueiry(id));   
+            return NewResult(result);       
+        }
     }
 
   
