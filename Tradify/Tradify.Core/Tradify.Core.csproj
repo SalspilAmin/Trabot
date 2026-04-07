@@ -28,15 +28,13 @@
 
   <ItemGroup>
     <Folder Include="Features\Authorization\Queries\Validator\" />
-    <Folder Include="Features\Categorie\Commands\Handlers\" />
-    <Folder Include="Features\Categorie\Commands\Models\" />
-    <Folder Include="Features\Categorie\Commands\Validations\" />
     <Folder Include="Features\Categorie\Queries\Handlers\" />
     <Folder Include="Features\Categorie\Queries\Models\" />
     <Folder Include="Features\Categorie\Queries\Results\" />
     <Folder Include="Features\Fawaterak\Queries\Validations\" />
     <Folder Include="Features\Order\Queries\Validations\" />
     <Folder Include="Mapping\FavoriteMapping\Queries\" />
+    <Folder Include="Mapping\ShipmentTrackingMapping\Command\" />
   </ItemGroup>
 
 </Project>

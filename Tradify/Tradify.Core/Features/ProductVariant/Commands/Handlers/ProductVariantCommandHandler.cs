@@ -167,8 +167,12 @@ namespace Tradify.Core.Features.ProductVariant.Commands.Handlers
 
             if (variant == null)
                 return NotFound<string>(localize.Get("VariantNotFound"));
+
             if (variant.Product == null || variant.Product.IsDeleted)
-                return BadRequest<string>(localize.Get("ProductVariantAlreadyDeleted"));
+                return BadRequest<string>(localize.Get("CannotRestoreVariantProductDeleted"));
+
+            if (variant.IsDeleted)
+                return BadRequest<string>(localize.Get("VariantAlreadyDeleted"));
             // Soft Delete
             variant.IsDeleted = true;
             await productVariantService.UpdateAsync(variant);
@@ -186,7 +190,7 @@ namespace Tradify.Core.Features.ProductVariant.Commands.Handlers
                 return NotFound<string>(localize.Get("StoreNotFound"));
 
             var variant = await productVariantService
-                .GetTableAsTracking()
+                .GetTableAsTracking().IgnoreQueryFilters()
                 .Include(v => v.Product)
                 .FirstOrDefaultAsync(v =>
                     v.Id == request.Id &&

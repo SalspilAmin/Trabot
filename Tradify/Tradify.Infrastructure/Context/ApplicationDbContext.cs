@@ -98,8 +98,10 @@ namespace Tradify.Infrastructure.Context
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
             modelBuilder.UseEncryption(encryptionProvider);
             modelBuilder.Entity<Stores>().HasQueryFilter(s => !s.IsDeleted);
-            modelBuilder.Entity<ProductVariants>().HasQueryFilter(s => !s.IsDeleted);
-            modelBuilder.Entity<Products>().HasQueryFilter(s => !s.IsDeleted);
+            modelBuilder.Entity<ProductVariants>().HasQueryFilter(v => !v.IsDeleted &&!v.Product.IsDeleted);
+            modelBuilder.Entity<Products>().HasQueryFilter(p => !p.IsDeleted && !p.Store.IsDeleted);
+            modelBuilder.Entity<Categories>().HasQueryFilter(s => !s.IsDeleted);
+
 
 
         }

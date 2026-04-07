@@ -14,7 +14,8 @@ namespace Tradify.Data.Entities
 
         public int? ParentCategoryId { get; set; }
 
-       
+        public bool IsDeleted { get; set; } = false;
+
         public virtual ICollection<Products>? Products { get; set; }
         [ForeignKey(nameof(ParentCategoryId))]
         public virtual Categories? Parent { get; set; }
