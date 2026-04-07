@@ -13,5 +13,6 @@ namespace Tradify.Core.Mapping.AuthorizationMapping
             CreateMap<Role, GetRolesListResult>();
 
         }
+        public void GetRoleMapping() { CreateMap<Role, GetRoleByIdResult>(); }
     }
 }

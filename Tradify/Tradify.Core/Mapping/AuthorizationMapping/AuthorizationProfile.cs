@@ -10,6 +10,7 @@ namespace Tradify.Core.Mapping.AuthorizationMapping
         public AuthorizationProfile() 
         {
              GetAllRolesMapping();
+            GetRoleMapping();
         }
     }
 }

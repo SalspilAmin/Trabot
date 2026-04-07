@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,18 +10,21 @@ namespace Tradify.Infrastructure.Seeder
 {
      public static class UserSeeder
     {
-        public static async Task SeedAsync(UserManager<User> _userManager)
+        
+        
+        public static async Task SeedAsync(UserManager<User> _userManager, IConfiguration configuration)
         {
             var usersCount = await _userManager.Users.CountAsync();
             if (usersCount <= 0)
             {
+                var adminSettings = configuration.GetSection("AdminSettings");
                 var defaultuser = new User()
                 {
-                    UserName = "admin",
-                    Email = "admin@project.com",
-                    Country = "Egypt",
-                    PhoneNumber = "123456",
-                    Address = "Egypt",
+                    UserName = "Trabotadmin",
+                    Email = adminSettings["Gmail"],
+                    Country = adminSettings["Country"],
+                    PhoneNumber = adminSettings["PhoneNumber"],
+                    Address = adminSettings["Address"],
                     EmailConfirmed = true,
                     PhoneNumberConfirmed = true
                 };
