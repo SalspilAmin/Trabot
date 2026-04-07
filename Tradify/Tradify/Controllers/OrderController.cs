@@ -4,6 +4,8 @@ using Tradify.Bases;
 using Tradify.Core.Features.Fawaterak.Comands.Models;
 using Tradify.Core.Features.Order.Commands.Models;
 using Tradify.Core.Features.Order.Queries.Models;
+using Tradify.Core.Features.User.Commands.Models;
+using Tradify.Core.Features.User.Queries.Models;
 using Tradify.Data.AppMetaData;
 
 namespace Tradify.Controllers
@@ -31,6 +33,20 @@ namespace Tradify.Controllers
         
             var result = await Mediator.Send(new GetOrderByIdQueiry(id));   
             return NewResult(result);       
+        }
+
+        [HttpGet(Router.Order.Paginated)]
+        public async Task<IActionResult> GetCustomerOrderPagination([FromQuery] GetCustomerOrdersQuery request)
+        {
+            var result = await Mediator.Send(request);
+            return Ok(result);
+        }
+
+        [HttpDelete(Router.Order.Delete)]
+        public async Task<IActionResult> Delete([FromRoute] int id)
+        {
+            var resutl = await Mediator.Send(new DeleteOrderCommand(id));
+            return Ok(resutl);
         }
     }
 

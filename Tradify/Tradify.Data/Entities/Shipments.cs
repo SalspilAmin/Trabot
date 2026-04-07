@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading;
@@ -14,9 +15,15 @@ namespace Tradify.Data.Entities
         public int Id { get; set; }
 
         public int OrderId { get; set; }
-        public int ShpmentTrackingId {  get; set; }
+        public int ShipmentTrackingId {  get; set; }
+        [ForeignKey(nameof(OrderId))]
+        public virtual Orders Order { get; set; }
 
+        [ForeignKey(nameof(ShipmentTrackingId))]    
+        public virtual ShipmentTracking ShipmentTracking { get; set; }  
         public DateTime UpdatedAT { get; set; }
+
+        
         
     }
 }

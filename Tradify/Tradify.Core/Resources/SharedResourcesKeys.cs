@@ -85,7 +85,13 @@ namespace Tradify.Core.Resources
         public const string ProductNotFound = "ProductNotFound";
         public const string ProductUpdatedSuccessfully = "ProductUpdatedSuccessfully";
 
+        public const string ProductDeleteFailed = "ProductDeleteFailed";
+        public const string ProductRestoredSuccessfully = "ProductRestoredSuccessfully";
+        public const string ProductIsAlreadyActive = "ProductIsAlreadyActive";
 
+        public const string ErrorWhileAddingProduct = "ErrorWhileAddingProduct";
+        public const string YouCannotUpdateThisProduct = "YouCannotUpdateThisProduct";
+        public const string YouCannotDeleteThisProduct = "YouCannotDeleteThisProduct";
 
         public const string ProductDeletedSuccessfully = "ProductDeletedSuccessfully";
         public const string EmailandPhoneAreNotFound = "EmailandPhoneAreNotFound";
@@ -108,6 +114,7 @@ namespace Tradify.Core.Resources
         public const string StoreRestoredSuccessfully = "StoreRestoredSuccessfully";
         public const string StoreIsNotDeleted = "StoreIsNotDeleted";
 
+
         public const string ProductVariantNotFound = "ProductVariantNotFound";
         public const string DiscountDeletedSuccessfully = "DiscountDeletedSuccessfully";
         public const string DiscountAddedSuccessfully = "DiscountAddedSuccessfully";
@@ -116,6 +123,76 @@ namespace Tradify.Core.Resources
 
 
 
+        public const string InvalidRatingValue = "InvalidRatingValue";
+        public const string CommentTooLong = "CommentTooLong";
+        public const string YouCannotReviewYourOwnProduct = "YouCannotReviewYourOwnProduct";
+        public const string YouAlreadyReviewedThisProduct = "YouAlreadyReviewedThisProduct";
+        public const string ReviewAddedSuccessfully = "ReviewAddedSuccessfully";
+        public const string ReviewNotFound = "ReviewNotFound";
+        public const string YouCanOnlyEditYourReview = "YouCanOnlyEditYourReview";
+        public const string ReviewUpdatedSuccessfully = "ReviewUpdatedSuccessfully";
+        public const string ReviewDeletedSuccessfully = "ReviewDeletedSuccessfully";
+
+
+        public const string MaxSizeIs5MB = "MaxSizeIs5MB";
+        public const string OnlyImagesAllowed = "OnlyImagesAllowed";
+        public const string MustBeGreaterThanZero = "MustBeGreaterThanZero";
+        public const string ImageAddedSuccessfully = "ImageAddedSuccessfully";
+        public const string ImageUpdatedSuccessfully = "ImageUpdatedSuccessfully";
+        public const string ImageDeletedSuccessfully = "ImageDeletedSuccessfully";
+        public const string ImageNotFound = "ImageNotFound";
+
+
+    
+        public const string ProductIdGreaterThanZero = "ProductIdGreaterThanZero";
+        public const string VariantAlreadyExists = "VariantAlreadyExists";
+        public const string VariantupdatedSuccessfully = "VariantupdatedSuccessfully";
+        public const string VariantNotFound = "VariantNotFound";
+        public const string ProductVariantAlreadyDeleted = "ProductVariantAlreadyDeleted";
+        public const string VariantDeletedSuccessfully = "VariantDeletedSuccessfully";
+        public const string CannotRestoreVariantProductDeleted = "CannotRestoreVariantProductDeleted";
+        public const string VariantIsNotDeleted = "VariantIsNotDeleted";
+        public const string VariantRestoredSuccessfully = "VariantRestoredSuccessfully";
+
+        
+        public const string AlreadyAddedToFavorites = "AlreadyAddedToFavorites";
+        public const string AddedToFavoritesSuccessfully = "AddedToFavoritesSuccessfully";
+        public const string FavoriteNotFound = "FavoriteNotFound";
+        public const string RemovedFromFavoritesSuccessfully = "RemovedFromFavoritesSuccessfully";
+
+
+
+        public const string InvalidShipmentStatus = "InvalidShipmentStatus";
+        public const string OrderNotFound = "OrderNotFound";
+        public const string OrderNotPaid = "OrderNotPaid";
+        public const string AlreadyShipped = "AlreadyShipped";
+        public const string ShipmentCreatedSuccessfully = "ShipmentCreatedSuccessfully";
+        public const string ShipmenttrackingNotFound = "ShipmenttrackingNotFound";
+
+
+        public const string ShipmentNotFound = "ShipmentNotFound";
+        public const string StatusAlreadySet = "StatusAlreadySet";
+        public const string CannotUpdateFinalStatus = "CannotUpdateFinalStatus";
+        public const string ShipmentStatusUpdatedSuccessfully = "ShipmentStatusUpdatedSuccessfully";
+
+
+
+        public const string CategoryRestoredSuccessfully = "CategoryRestoredSuccessfully";
+        public const string CategoryIsNotDeleted = "CategoryIsNotDeleted";
+        public const string CategoryDeletedSuccessfully = "CategoryDeletedSuccessfully";
+        public const string CategoryHasProducts = "CategoryHasProducts";
+        public const string CategoryHasChildren = "CategoryHasChildren";
+        public const string CategoryAlreadyDeleted = "CategoryAlreadyDeleted";
+        public const string CategoryUpdatedSuccessfully = "CategoryUpdatedSuccessfully";
+        public const string CategoryNameAlreadyExists = "CategoryNameAlreadyExists";
+        public const string InvalidParentCircularReference = "InvalidParentCircularReference";
+        public const string ParentCategoryNotFound = "ParentCategoryNotFound";
+        public const string CategoryAddSuccessfully = "CategoryAddSuccessfully";
+        public const string ParentCategoryIdMustGreaterThan0 = "ParentCategoryIdMustGreaterThan0";
+        public const string CategoryCannotBeParentOfItself = "CategoryCannotBeParentOfItself";
+        public const string OrderDeletedSuccessfully = "OrderDeletedSuccessfully";
+        public const string OrderAlreadyShipped = "OrderAlreadyShipped";
+        public const string CannotDeletePaidOrder = "CannotDeletePaidOrder";
 
 
 

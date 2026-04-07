@@ -45,7 +45,11 @@ namespace Tradify.Core.Features.Store.Queries.Handlers
         public async Task<PaginatedResult<GetStoresPaginationResponse>> Handle(GetStoresPaginationQuery request, CancellationToken cancellationToken)
         {
             var stores = storeService.GetTableNoTracking() ;
-
+            if (request.IsDeleted.HasValue)
+            {
+                stores = stores.IgnoreQueryFilters()
+                                   .Where(v => v.IsDeleted == request.IsDeleted);
+            }
             var result = await mapper
                 .ProjectTo<GetStoresPaginationResponse>(stores )
                 .ToPaginationlist(request.PageNumber, request.PageSize);

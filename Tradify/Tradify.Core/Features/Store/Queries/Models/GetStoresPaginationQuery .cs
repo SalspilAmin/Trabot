@@ -12,7 +12,8 @@ namespace Tradify.Core.Features.Store.Queries.Models
     
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
-       
+        public bool? IsDeleted { get; set; }
+
         public bool? IsActive { get; set; }
     }
 }
