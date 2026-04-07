@@ -108,7 +108,11 @@ namespace Tradify.Core.MiddleWare
                         break;
                 }
 
-                logger.LogError(error, "An unhandled exception occurred while processing {Method} {Path}", context.Request.Method, context.Request.Path);
+                logger.LogError(error,
+      "Exception at {Method} {Path} | Query: {QueryString}",
+      context.Request.Method,
+      context.Request.Path,
+      context.Request.QueryString);
 
                 var json = JsonSerializer.Serialize(responseModel);
                 await response.WriteAsync(json);

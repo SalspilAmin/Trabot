@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Tradify.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class New_Update : Migration
+    public partial class FianlMig : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -356,7 +356,9 @@ namespace Tradify.Infrastructure.Migrations
                     EstimatedDelevery = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     invoice_id = table.Column<long>(type: "bigint", nullable: true),
                     invoice_key = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CartId = table.Column<int>(type: "int", nullable: false)
+                    CartId = table.Column<int>(type: "int", nullable: false),
+                    ShipmentId = table.Column<int>(type: "int", nullable: true),
+                    ShipmentTrackingId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -373,6 +375,16 @@ namespace Tradify.Infrastructure.Migrations
                         principalTable: "Carts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Orders_ShipmentTracking_ShipmentTrackingId",
+                        column: x => x.ShipmentTrackingId,
+                        principalTable: "ShipmentTracking",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Orders_Shipments_ShipmentId",
+                        column: x => x.ShipmentId,
+                        principalTable: "Shipments",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -528,41 +540,6 @@ namespace Tradify.Infrastructure.Migrations
                         principalTable: "Sellers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "SubOrders",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    OrderId = table.Column<int>(type: "int", nullable: false),
-                    StoreId = table.Column<int>(type: "int", nullable: false),
-                    ShipmentId = table.Column<int>(type: "int", nullable: true),
-                    ShipmentTrackingId = table.Column<int>(type: "int", nullable: false),
-                    Status = table.Column<byte>(type: "tinyint", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SubOrders", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_SubOrders_Orders_OrderId",
-                        column: x => x.OrderId,
-                        principalTable: "Orders",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_SubOrders_ShipmentTracking_ShipmentTrackingId",
-                        column: x => x.ShipmentTrackingId,
-                        principalTable: "ShipmentTracking",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_SubOrders_Shipments_ShipmentId",
-                        column: x => x.ShipmentId,
-                        principalTable: "Shipments",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -919,6 +896,77 @@ namespace Tradify.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ProductVariantImages",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    MediaPath = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsMain = table.Column<bool>(type: "bit", nullable: false),
+                    SortOrder = table.Column<int>(type: "int", nullable: false),
+                    ProductVariantId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductVariantImages", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ProductVariantImages_ProductVariants_ProductVariantId",
+                        column: x => x.ProductVariantId,
+                        principalTable: "ProductVariants",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SubOrders",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    OrderId = table.Column<int>(type: "int", nullable: false),
+                    StoreId = table.Column<int>(type: "int", nullable: false),
+                    ProductId = table.Column<int>(type: "int", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    ProductVAriantsId = table.Column<int>(type: "int", nullable: false),
+                    ShipmentId = table.Column<int>(type: "int", nullable: true),
+                    ShipmentTrackingId = table.Column<int>(type: "int", nullable: true),
+                    Status = table.Column<byte>(type: "tinyint", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SubOrders", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SubOrders_Orders_OrderId",
+                        column: x => x.OrderId,
+                        principalTable: "Orders",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_SubOrders_ProductVariants_ProductVAriantsId",
+                        column: x => x.ProductVAriantsId,
+                        principalTable: "ProductVariants",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_SubOrders_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_SubOrders_ShipmentTracking_ShipmentTrackingId",
+                        column: x => x.ShipmentTrackingId,
+                        principalTable: "ShipmentTracking",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_SubOrders_Shipments_ShipmentId",
+                        column: x => x.ShipmentId,
+                        principalTable: "Shipments",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "OrderItems",
                 columns: table => new
                 {
@@ -948,28 +996,6 @@ namespace Tradify.Infrastructure.Migrations
                         name: "FK_OrderItems_SubOrders_SuborderId",
                         column: x => x.SuborderId,
                         principalTable: "SubOrders",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ProductVariantImages",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    MediaPath = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IsMain = table.Column<bool>(type: "bit", nullable: false),
-                    SortOrder = table.Column<int>(type: "int", nullable: false),
-                    ProductVariantId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ProductVariantImages", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ProductVariantImages_ProductVariants_ProductVariantId",
-                        column: x => x.ProductVariantId,
-                        principalTable: "ProductVariants",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -1140,6 +1166,16 @@ namespace Tradify.Infrastructure.Migrations
                 column: "CustomerId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Orders_ShipmentId",
+                table: "Orders",
+                column: "ShipmentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Orders_ShipmentTrackingId",
+                table: "Orders",
+                column: "ShipmentTrackingId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Payments_CustomerId",
                 table: "Payments",
                 column: "CustomerId");
@@ -1253,6 +1289,16 @@ namespace Tradify.Infrastructure.Migrations
                 column: "OrderId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_SubOrders_ProductId",
+                table: "SubOrders",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SubOrders_ProductVAriantsId",
+                table: "SubOrders",
+                column: "ProductVAriantsId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_SubOrders_ShipmentId",
                 table: "SubOrders",
                 column: "ShipmentId");
@@ -1352,13 +1398,19 @@ namespace Tradify.Infrastructure.Migrations
                 name: "SubOrders");
 
             migrationBuilder.DropTable(
-                name: "ProductVariants");
-
-            migrationBuilder.DropTable(
                 name: "Comments");
 
             migrationBuilder.DropTable(
                 name: "Orders");
+
+            migrationBuilder.DropTable(
+                name: "ProductVariants");
+
+            migrationBuilder.DropTable(
+                name: "Posts");
+
+            migrationBuilder.DropTable(
+                name: "Carts");
 
             migrationBuilder.DropTable(
                 name: "ShipmentTracking");
@@ -1368,12 +1420,6 @@ namespace Tradify.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "Products");
-
-            migrationBuilder.DropTable(
-                name: "Posts");
-
-            migrationBuilder.DropTable(
-                name: "Carts");
 
             migrationBuilder.DropTable(
                 name: "Categories");
