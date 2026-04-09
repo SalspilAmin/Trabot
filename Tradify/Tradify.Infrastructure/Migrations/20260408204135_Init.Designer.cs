@@ -12,8 +12,13 @@ using Tradify.Infrastructure.Context;
 namespace Tradify.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
+<<<<<<<< HEAD:Tradify/Tradify.Infrastructure/Migrations/20260406173153_FianlMig.Designer.cs
     [Migration("20260406173153_FianlMig")]
     partial class FianlMig
+========
+    [Migration("20260408204135_Init")]
+    partial class Init
+>>>>>>>> 0a53e52c7e25f4ff1de86591c95462197e12e421:Tradify/Tradify.Infrastructure/Migrations/20260408204135_Init.Designer.cs
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -219,6 +224,9 @@ namespace Tradify.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -1072,9 +1080,6 @@ namespace Tradify.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("OrderId")
-                        .HasColumnType("int");
-
                     b.Property<byte>("ShipmentStatus")
                         .HasColumnType("tinyint");
 
@@ -1101,13 +1106,17 @@ namespace Tradify.Infrastructure.Migrations
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ShpmentTrackingId")
+                    b.Property<int>("ShipmentTrackingId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("UpdatedAT")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("ShipmentTrackingId");
 
                     b.ToTable("Shipments");
                 });
@@ -1704,6 +1713,25 @@ namespace Tradify.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Tradify.Data.Entities.Shipments", b =>
+                {
+                    b.HasOne("Tradify.Data.Entities.Orders", "Order")
+                        .WithMany()
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Tradify.Data.Entities.ShipmentTracking", "ShipmentTracking")
+                        .WithMany()
+                        .HasForeignKey("ShipmentTrackingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+
+                    b.Navigation("ShipmentTracking");
                 });
 
             modelBuilder.Entity("Tradify.Data.Entities.StoreBooking", b =>

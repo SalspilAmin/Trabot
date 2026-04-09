@@ -217,6 +217,9 @@ namespace Tradify.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -1069,9 +1072,6 @@ namespace Tradify.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("OrderId")
-                        .HasColumnType("int");
-
                     b.Property<byte>("ShipmentStatus")
                         .HasColumnType("tinyint");
 
@@ -1098,13 +1098,17 @@ namespace Tradify.Infrastructure.Migrations
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ShpmentTrackingId")
+                    b.Property<int>("ShipmentTrackingId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("UpdatedAT")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("ShipmentTrackingId");
 
                     b.ToTable("Shipments");
                 });
@@ -1701,6 +1705,25 @@ namespace Tradify.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Tradify.Data.Entities.Shipments", b =>
+                {
+                    b.HasOne("Tradify.Data.Entities.Orders", "Order")
+                        .WithMany()
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Tradify.Data.Entities.ShipmentTracking", "ShipmentTracking")
+                        .WithMany()
+                        .HasForeignKey("ShipmentTrackingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+
+                    b.Navigation("ShipmentTracking");
                 });
 
             modelBuilder.Entity("Tradify.Data.Entities.StoreBooking", b =>
