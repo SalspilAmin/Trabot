@@ -12,20 +12,15 @@ using Tradify.Infrastructure.Context;
 namespace Tradify.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-<<<<<<<< HEAD:Tradify/Tradify.Infrastructure/Migrations/20260406173153_FianlMig.Designer.cs
-    [Migration("20260406173153_FianlMig")]
-    partial class FianlMig
-========
-    [Migration("20260408204135_Init")]
-    partial class Init
->>>>>>>> 0a53e52c7e25f4ff1de86591c95462197e12e421:Tradify/Tradify.Infrastructure/Migrations/20260408204135_Init.Designer.cs
+    [Migration("20260410092650_addSoftDeleteForuser")]
+    partial class addSoftDeleteForuser
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.3")
+                .HasAnnotation("ProductVersion", "10.0.5")
                 .HasAnnotation("Proxies:ChangeTracking", false)
                 .HasAnnotation("Proxies:CheckEquality", false)
                 .HasAnnotation("Proxies:LazyLoading", true)
@@ -475,6 +470,9 @@ namespace Tradify.Infrastructure.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<bool>("LockoutEnabled")

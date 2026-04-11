@@ -95,9 +95,10 @@ namespace Tradify.Core.MiddleWare
                         response.StatusCode = 400;
                         break;
 
-                    case CustomValidationExeption:
-                        responseModel.Message = error.Message;
+                    case CustomValidationExeption ex:
+                        responseModel.Message = ex.Message;
                         responseModel.StatusCode = HttpStatusCode.UnprocessableEntity;
+                        responseModel.Errors = ex.Errors;
                         response.StatusCode = 422;
                         break;
 

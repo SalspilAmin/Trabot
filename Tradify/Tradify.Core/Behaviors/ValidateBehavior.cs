@@ -31,10 +31,8 @@ namespace Tradify.Core.Behaviors
                 if (failures.Count != 0)
                 {
                     var errorsmessages = failures
-                            .Select(x =>
-                        $"{Localize.Get(x.PropertyName)} : {Localize.Get(x.ErrorCode ?? x.ErrorMessage)}"
-                                     )
-                                     .ToList();
+                                                .Select(x => x.ErrorMessage)
+                                                        .ToList();
 
                     throw new CustomValidationExeption(errorsmessages);
                 }

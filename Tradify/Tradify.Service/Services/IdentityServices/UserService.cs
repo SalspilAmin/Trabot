@@ -157,13 +157,14 @@ namespace Tradify.Service.Services.IdentityServices
         {
 
         emailOrphone = emailOrphone.Trim();
+            var users= await UserManager.Users.Where(x=>x.IsDeleted == false).ToListAsync();
 
             if (emailOrphone.Contains('@'))
             {
-                return await UserManager.FindByEmailAsync(emailOrphone);
+                return users.FirstOrDefault(x=>x.Email==emailOrphone);
             }
 
-            return await UserManager.Users.FirstOrDefaultAsync(x=>x.PhoneNumber == emailOrphone);
+            return  users.FirstOrDefault(x=>x.PhoneNumber == emailOrphone);
         }
     }
 }

@@ -127,7 +127,7 @@ namespace Tradify.Service.Services.AuthorizationServices
             try
             {
                 //Get User
-                var user = await _userManager.FindByIdAsync(request.UserId.ToString());
+                var user = _userManager.Users.Where(x => x.IsDeleted == false).FirstOrDefault(x => x.Id == request.UserId);
                 if (user == null)
                 {
                     return "UserIsNull";
@@ -186,7 +186,7 @@ namespace Tradify.Service.Services.AuthorizationServices
             var transact = await _dbContext.Database.BeginTransactionAsync();
             try
             {
-                var user = await _userManager.FindByIdAsync(request.UserId.ToString());
+                var user = _userManager.Users.Where(x => x.IsDeleted == false).FirstOrDefault(x => x.Id == request.UserId);
                 if (user == null)
                 {
                     return "UserIsNull";
@@ -215,7 +215,7 @@ namespace Tradify.Service.Services.AuthorizationServices
 
         public async Task<bool> IsUserInRoleAsync(int userId, string roleName)
         {
-            var user = await _userManager.FindByIdAsync(userId.ToString());
+            var user = _userManager.Users.Where(x => x.IsDeleted == false).FirstOrDefault(x => x.Id == userId);
 
             if (user == null)
                 return false;

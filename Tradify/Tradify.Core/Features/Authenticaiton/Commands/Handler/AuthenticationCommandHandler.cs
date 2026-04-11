@@ -107,7 +107,7 @@ namespace Tradify.Core.Features.Authenticaiton.Commands.Handler
                 case ("RefreshTokenIsExpired", null): return Unauthorized<JwtAuthResult>(localization.Get("RefreshTokenIsExpired"));
             }
             var (userId, expireDate) = UserIdAndExpireDate;
-            var user = await userManager.FindByIdAsync(userId);
+            var user = userManager.Users.Where(x => x.IsDeleted == false).FirstOrDefault(x => x.Id == int.Parse(userId)); ;
             if (user == null)
             {
                 return NotFound<JwtAuthResult>();

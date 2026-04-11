@@ -229,7 +229,7 @@ namespace Tradify.Service.Services.AuthenticationServices
         public async Task<string> ConfirmEmailAsync(int? userId, string? code)
         {
             if (userId == null || code == null) return "ErrorWhenConfirmEmail";
-            var user = await userManager.FindByIdAsync(userId.ToString());
+            var user = userManager.Users.Where(x => x.IsDeleted == false).FirstOrDefault(x => x.Id == userId); ;
             if (user == null) return "NotFound";
             var result = await userManager.ConfirmEmailAsync(user, code);
             if (!result.Succeeded)
@@ -349,7 +349,7 @@ namespace Tradify.Service.Services.AuthenticationServices
                 var payload = await GoogleJsonWebSignature.ValidateAsync(tokenResponse.id_token);
 
               // نفس منطق إنشاء المستخدم
-               var check = await userManager.FindByEmailAsync(payload.Email);
+               var check = userManager.Users.Where(x => x.IsDeleted == false).FirstOrDefault(x => x.Email==payload.Email); 
                 if (check != null)
                 {
                     var existingResult = new LoginGoogleResult

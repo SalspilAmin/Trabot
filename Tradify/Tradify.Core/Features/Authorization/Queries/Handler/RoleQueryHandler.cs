@@ -71,7 +71,7 @@ namespace Tradify.Core.Features.Authorization.Queries.Handler
 
         public async Task<Response<ManageUserRolesResult>> Handle(ManageUserRolesQuery request, CancellationToken cancellationToken)
         {
-            var user = await _userManager.FindByIdAsync(request.UserId.ToString());
+            var user = _userManager.Users.Where(x => x.IsDeleted == false).FirstOrDefault(x => x.Id == request.UserId);
             if (user == null) return NotFound<ManageUserRolesResult>(_stringLocalizer.Get("UserIsNotFound"));
             var result = await _authorizationService.ManageUserRolesData(user);
             return Success(result);
