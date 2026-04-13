@@ -32,9 +32,18 @@
     <Folder Include="Features\Categorie\Queries\Models\" />
     <Folder Include="Features\Categorie\Queries\Results\" />
     <Folder Include="Features\Fawaterak\Queries\Validations\" />
+    <Folder Include="Features\ProductDicount\" />
     <Folder Include="Features\Order\Queries\Validations\" />
+    <Folder Include="Features\Seller\Queries\Handlers\" />
+    <Folder Include="Features\Seller\Queries\Models\" />
+    <Folder Include="Features\Seller\Queries\Results\" />
     <Folder Include="Mapping\FavoriteMapping\Queries\" />
+    <Folder Include="Mapping\SellerMapping\Querry\" />
     <Folder Include="Mapping\ShipmentTrackingMapping\Command\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Features\StoreImage\Commands\Handlers\StoreImageCommandHandler.cs" />
   </ItemGroup>
 
 </Project>

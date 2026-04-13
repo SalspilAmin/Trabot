@@ -24,10 +24,10 @@ namespace Tradify.Core.Behaviors
         {
             if (validators.Any())
             {
-                var context = new  ValidationContext<TRequest>(request);
+                var context = new ValidationContext<TRequest>(request);
                 var validationResult = await Task.WhenAll(validators.Select(x => x.ValidateAsync(context, cancellationToken)));
                 var failures = validationResult.SelectMany(x => x.Errors).Where(x => x != null).ToList();
-                  
+
                 if (failures.Count != 0)
                 {
                     var errorsmessages = failures
@@ -36,10 +36,10 @@ namespace Tradify.Core.Behaviors
 
                     throw new CustomValidationExeption(errorsmessages);
                 }
-                
-            
+
+
             }
-            return  await next();
+            return await next();
 
         }
     }

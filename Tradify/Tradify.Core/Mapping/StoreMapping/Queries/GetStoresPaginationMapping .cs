@@ -14,15 +14,22 @@ namespace Tradify.Core.Mapping.StoreMapping
         public void GetStoresPaginationMapping()
         {
 
-            CreateMap<Stores, GetStoresPaginationResponse>()
+            CreateMap<Stores, GetAllStoresResponse>()
+                    .ForMember(dest => dest.Id, src => src.MapFrom(x => x.Id))
 
                     .ForMember(dest => dest.Name, src => src.MapFrom(x => x.Name))
 
-                    .ForMember(dest => dest.Description, src => src.MapFrom(x => x.Description))
 
-                    .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive));
+                    .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive))
 
-                    
+                    .ForMember(dest => dest.Image, opt => opt.MapFrom(x => x.StoreImage));
+
+
+            CreateMap<StoreImage, StoreImageResponse>()
+              .ForMember(dest => dest.MediaPath,
+                  opt => opt.MapFrom(src => src.MediaPath));
+
+
         }
 
     }

@@ -8,7 +8,7 @@ using Tradify.Core.Wrappers;
 
 namespace Tradify.Core.Features.Store.Queries.Models
 {
-    public class GetDeletedStoresQuery : IRequest<PaginatedResult<GetStoresPaginationResponse>>
+    public class GetDeletedStoresQuery : IRequest<PaginatedResult<GetAllStoresResponse>>
     {
         public int PageNumber { get; set; }
         public int PageSize { get; set; }

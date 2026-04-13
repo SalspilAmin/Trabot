@@ -14,13 +14,14 @@ using Tradify.Core.Features.User.Queries.Results;
 using Tradify.Core.Resources.Service;
 using Tradify.Core.Wrappers;
 using Tradify.Service.AbstractsServices;
+using Tradify.Service.Services;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Tradify.Core.Features.Product.Queries.Handlers
 {
     public class ProductQueryHandler : ResponseHandler , IRequestHandler<GetProductPaginationQuery, PaginatedResult<GetProductPaginationReponse>>
                                                        , IRequestHandler<GetProductByIdQuery, Response<GetProductByIdResponse>>
-                                                       //, IRequestHandler<GetProductsByCategoryQuery, PaginatedResult<GetProductByCategoryResponse>>
+                                                      // , IRequestHandler<GetProductBySearchListQuery, List<GetProductPaginationReponse>>
                                                        , IRequestHandler<GetSellerProductsQuery, Response<PaginatedResult<GetSellerProductPaginationReponse>>>
 
     {
@@ -30,26 +31,31 @@ namespace Tradify.Core.Features.Product.Queries.Handlers
         private readonly IProductService productService;
         private readonly IStoreService storeService;
         private readonly ICurrentUserService currentUserService;
+        private readonly ISellerService sellerService;
+        private readonly IFileService fileService;
 
 
         #endregion
 
         #region Constructor
                                     
-        public ProductQueryHandler(LocalizationService localization,IMapper mapper, ICurrentUserService currentUserService, IProductService productService , IStoreService storeService) : base(localization)
+        public ProductQueryHandler(LocalizationService localization,IMapper mapper,IFileService fileService , ISellerService sellerService, ICurrentUserService currentUserService, IProductService productService , IStoreService storeService) : base(localization)
         {
             this.mapper = mapper;
             this.localization = localization;
             this.productService= productService;
             this.storeService= storeService;   
             this.currentUserService = currentUserService;
+            this.sellerService  = sellerService;    
+            this.fileService = fileService;
+
 
         }
 
         #endregion
 
         #region Mehtods
-
+        // Get All Product Pagition With Filter
 
         public async Task<PaginatedResult<GetProductPaginationReponse>> Handle(GetProductPaginationQuery request,CancellationToken cancellationToken)
         {
@@ -125,7 +131,56 @@ namespace Tradify.Core.Features.Product.Queries.Handlers
           
         }
 
-        
+
+        //Get all Product List By Search 
+
+
+        //public async Task<List<GetProductPaginationReponse>> Handle(GetProductBySearchListQuery request, CancellationToken cancellationToken)
+        //{
+
+        //    var currentUserId = currentUserService.GetUserId();
+
+
+        //    var products = productService.GetTableNoTracking();
+
+        //    // Search
+        //    if (!string.IsNullOrWhiteSpace(request.Search))
+        //    {
+        //        var search = request.Search.Trim();
+        //        products = products.Where(p =>
+        //                      EF.Functions.Like(p.Name, $"%{search}%") ||
+        //                      EF.Functions.Like(p.Description, $"%{search}%"));
+
+        //    }
+
+          
+
+        //    products = products.OrderByDescending(p => p.Id);
+
+        //    var result = products.ProjectTo<GetProductPaginationReponse>(mapper.ConfigurationProvider,
+        //                      new Dictionary<string, object>
+        //                 {
+        //         { "CurrentUserId", currentUserId }  });
+
+
+
+        //    var baseUrl = fileService.GetBaseUrl();
+        //     foreach (var product in result)
+        //    {
+        //        if (product.MainImage != null)
+        //        {
+        //            product.MainImage =
+        //                baseUrl + product.MainImage.MediaPath.Replace("\\", "/");
+        //        }
+        //    }
+
+        //    return result;
+
+        //}
+
+
+
+
         public async Task<Response<GetProductByIdResponse>> Handle(GetProductByIdQuery request, CancellationToken cancellationToken)
         {
             var currentUserId = currentUserService.GetUserId();
@@ -164,15 +219,19 @@ namespace Tradify.Core.Features.Product.Queries.Handlers
         public async Task<Response<PaginatedResult<GetSellerProductPaginationReponse>>> Handle(GetSellerProductsQuery request,CancellationToken cancellationToken)
         {
             var currentUserId = currentUserService.GetUserId();
+            var seller = await sellerService.GetTableNoTracking().FirstOrDefaultAsync(s=>s.UserId== currentUserId);
+
+            if (seller == null)
+                return NotFound<PaginatedResult<GetSellerProductPaginationReponse>>(localization.Get("SellerNotFound"));
 
             // 1️⃣ هات الاستور بتاع السيلر
-            var store = await storeService.GetBySellerIdAsync(currentUserId);
+            var store = await storeService.GetBySellerIdAsync(seller.Id);
 
             if (store == null)
             return NotFound<PaginatedResult<GetSellerProductPaginationReponse>>(localization.Get("StoreNotFound"));
             // 2️⃣ هات المنتجات
             var products =  productService.GetTableNoTracking()   
-                                               .Where(p => p.Store.SellerId == currentUserId);
+                                               .Where(p => p.Store.SellerId == seller.Id);
 
             // Search
             if (!string.IsNullOrWhiteSpace(request.Search))

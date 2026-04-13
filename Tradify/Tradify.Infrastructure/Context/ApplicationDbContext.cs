@@ -7,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
-using Tradify.Data;
 using Tradify.Data.Entities;
 using Tradify.Data.Entities.Chat;
 using Tradify.Data.Entities.Comments;
@@ -68,9 +67,9 @@ namespace Tradify.Infrastructure.Context
         public DbSet<CartProduct> CartProducts { get; set; }   
         public  DbSet<UserConnection>  userConnections { get; set; }    
 
+        public DbSet<Sellers> Sellers { get; set; } 
 
-
-
+        public DbSet<StoreImage> StoreImages { get; set; }  
 
         #endregion
 

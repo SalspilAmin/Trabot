@@ -4,12 +4,14 @@ using System.Text;
 
 namespace Tradify.Core.Features.Store.Queries.Results
 {
-    public class GetStoresPaginationResponse
+    public class GetAllStoresResponse
     {
-   
+        public int Id { get; set; }
+
         public string Name { get; set; }
-        public string Description { get; set; }
         public bool IsActive { get; set; }
-       
+        public StoreImageResponse Image { get; set; }
+
+
     }
 }

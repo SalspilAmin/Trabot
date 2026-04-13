@@ -5,7 +5,7 @@ using Tradify.Core.Features.Product.Queries.Results;
 using Tradify.Data.Entities;
 namespace Tradify.Core.Mapping.ProductMapping
 {
-    public partial class ProductVariantProfile
+    public partial class ProductProfile
     {
         public void GetSellerProductMapping()
         {

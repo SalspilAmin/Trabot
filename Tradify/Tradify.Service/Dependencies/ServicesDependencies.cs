@@ -61,6 +61,7 @@ namespace Tradify.Service.Dependencies
             services.AddTransient<IProductVariantImageService, ProductVariantImageService>();
 
             services.AddTransient<IOrderItemsService, OrderItemsService>();
+            services.AddTransient<IStoreImageService, StoreImageService>();
 
             services.AddHttpContextAccessor();
             services.AddScoped<ICurrentUserService, CurrentUserService>();
