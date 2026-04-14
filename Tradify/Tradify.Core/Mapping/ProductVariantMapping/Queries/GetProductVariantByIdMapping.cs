@@ -14,7 +14,8 @@ namespace Tradify.Core.Mapping.ProductVariantMapping
             CreateMap<ProductVariants, GetProductVariantByIdResponse>()
                     .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product != null ? src.Product.Name : string.Empty))
                    .ForMember(dest => dest.Images,
-    opt =>           opt.MapFrom(src => src.ProductVariantImages.OrderByDescending(i => i.IsMain)))
+                              opt => opt.MapFrom(src => src.ProductVariantImages.OrderByDescending(i => i.IsMain)
+                                                                                 .ThenBy(i => i.Id)))
 
                     .ForMember(dest => dest.MetaData, opt => opt.MapFrom(src =>
                         !string.IsNullOrEmpty(src.MetaData)
@@ -23,7 +24,9 @@ namespace Tradify.Core.Mapping.ProductVariantMapping
                     ));
 
             CreateMap<ProductVariantImage, ProductVariantImageResponse>().ForMember(dest => dest.MediaPath,
-                    opt => opt.MapFrom(src => src.MediaPath)); 
+                    opt => opt.MapFrom(src => src.MediaPath));
+
+            
         }
     
     }

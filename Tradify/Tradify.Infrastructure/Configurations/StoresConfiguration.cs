@@ -11,6 +11,10 @@ namespace Tradify.Infrastructure.Configurations
     {
         public void Configure(EntityTypeBuilder<Stores> builder)
         {
+            builder.HasOne(x => x.StoreImage)
+                       .WithOne(x => x.Stores)
+                       .HasForeignKey<StoreImage>(x => x.StoreId)
+                       .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasMany(x => x.Products)
                            .WithOne(x => x.Store)

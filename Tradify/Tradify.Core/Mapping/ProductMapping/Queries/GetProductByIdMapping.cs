@@ -8,7 +8,7 @@ using Tradify.Data.Entities;
 
 namespace Tradify.Core.Mapping.ProductMapping
 {
-    public partial class ProductVariantProfile
+    public partial class ProductProfile
     {
         public void GetProductByIdMapping()
         {
@@ -36,7 +36,7 @@ namespace Tradify.Core.Mapping.ProductMapping
 
 
        .ForMember(dest => dest.Images,
-    opt => opt.MapFrom(src => src.ProductImages.OrderByDescending(i => i.IsMain)))
+    opt => opt.MapFrom(src => src.ProductImages.OrderByDescending(i => i.IsMain).ThenBy(i => i.Id)))
 
         .ForMember(dest => dest.Videos,
             opt => opt.MapFrom(src => src.ProductVideos))

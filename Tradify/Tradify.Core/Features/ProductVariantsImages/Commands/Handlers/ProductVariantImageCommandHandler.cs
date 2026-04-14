@@ -6,7 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Tradify.Core.Bases;
-using Tradify.Core.Features.ProductsImages.Commands.Models;
+using Tradify.Core.Features.ProductVariantsImages.Commands.Models;
+using Tradify.Core.Features.ProductVariantsImages.Commands.Models;
 using Tradify.Core.Features.User.Commands.Models;
 using Tradify.Core.Resources.Service;
 using Tradify.Data.Entities;
@@ -14,7 +15,7 @@ using Tradify.Service.AbstractsServices;
 using Tradify.Service.Services;
 
 
-namespace Tradify.Core.Features.ProductsImages.Commands.Handlers
+namespace Tradify.Core.Features.ProductVariantsImages.Commands.Handlers
 {
     public  class ProductVariantImageCommandHandler : ResponseHandler
         ,IRequestHandler<AddProductVariantImageCommand, Response<string>>

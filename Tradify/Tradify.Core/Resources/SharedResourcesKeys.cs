@@ -17,6 +17,7 @@ namespace Tradify.Core.Resources
         public const string BadRequest = "BadRequest";
         public const string UnprocessableEntity = "UnprocessableEntity";
         public const string MaxLengthis100 = "MaxLengthis100";
+        public const string MaxLengthis1000 = "MaxLengthis1000";
         public const string MaxLengthis2000 = "MaxLengthis2000";
 
         public const string IsExist = "IsExist";
@@ -98,6 +99,7 @@ namespace Tradify.Core.Resources
         public const string CancelPaymentOperation = "CancelPaymentOperation";
         public const string Google_email_not_verified = "Google_email_not_verified";
 
+        public const string SellerNotFound = "SellerNotFound";
         public const string FailedToAddStore = "FailedToAddStore";
         public const string StoreAddedSuccessfully = "StoreAddedSuccessfully";
         public const string SellerHasStore = "SellerHasStore";
@@ -195,7 +197,10 @@ namespace Tradify.Core.Resources
         public const string CannotDeletePaidOrder = "CannotDeletePaidOrder";
 
 
+        public const string IdMustBeGreaterThanZero = "IdMustBeGreaterThanZero";
 
+
+        
 
 
 

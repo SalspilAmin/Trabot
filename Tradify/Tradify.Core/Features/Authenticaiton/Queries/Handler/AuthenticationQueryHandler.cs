@@ -47,7 +47,7 @@ namespace Tradify.Core.Features.Authenticaiton.Queries.Handler
 
         public async Task<Response<string>> Handle(ConfirmPhoneQuery request, CancellationToken cancellationToken)
         {
-            var user = await userManager.FindByIdAsync(request.Id.ToString());
+            var user = userManager.Users.Where(x => x.IsDeleted == false).FirstOrDefault(x => x.Id == request.Id); ;
             if (user == null) return BadRequest<string>(_localization.Get("UserIsNotFound"));
             if (user.OTP == request.OTP)
             {

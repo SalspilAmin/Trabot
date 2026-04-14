@@ -13,6 +13,8 @@ namespace Tradify.Core.Mapping.StoreMapping
         public void AddStoreMapping()
         {
             CreateMap<AddStoreCommand, Stores>();
+            CreateMap<AddStoreWithImageCommand, Stores>().ForMember(dest => dest.StoreImage, opt => opt.Ignore()); 
+
 
         }
     }

@@ -110,6 +110,23 @@ namespace Tradify.Infrastructure.Dependencies
                     policy.RequireClaim("Edit Product", "True");
                 });
             });
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowSpecificOrigin", policy =>
+                {
+                    policy.WithOrigins("https://frontend.com") // دومين الموقع المسموح
+                          .AllowAnyHeader()                   // السماح بأي هيدر
+                          .AllowAnyMethod();                  // السماح بأي طريقة (GET, POST...)
+                });
+
+                // أو السماح لأي دومين (تجريبي فقط)
+                options.AddPolicy("AllowAll", policy =>
+                {
+                    policy.AllowAnyOrigin()
+                          .AllowAnyHeader()
+                          .AllowAnyMethod();
+                });
+            });
             services.AddSignalR();
 
 

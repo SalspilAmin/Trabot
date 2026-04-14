@@ -39,7 +39,7 @@ namespace Tradify.Core.Features.User.Queries.Handlers
         #region Mehtods
         public async Task<Response<GetUserByIdResponse>> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
         {
-            var User = await _userManager.FindByIdAsync(request.Id.ToString());
+            var User =  _userManager.Users.Where(x=>x.IsDeleted==false).FirstOrDefault(x=>x.Id==request.Id);
             if (User == null) return NotFound<GetUserByIdResponse>(localization.Get("NotFound"));
 
             var result =  mapper.Map<GetUserByIdResponse>(User);
@@ -50,7 +50,7 @@ namespace Tradify.Core.Features.User.Queries.Handlers
 
         public async Task<PaginatedResult<GetUserPaginationReponse>> Handle(GetUserPaginationQuery request, CancellationToken cancellationToken)
         {
-            var users = _userManager.Users.AsQueryable();
+            var users = _userManager.Users.Where(x => x.IsDeleted == false);
             var result = await mapper.ProjectTo<GetUserPaginationReponse>(users).ToPaginationlist(request.PageNumber, request.PageSize);
 
             return result;

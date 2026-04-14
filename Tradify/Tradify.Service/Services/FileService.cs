@@ -11,20 +11,23 @@ namespace Tradify.Service.Services
     public enum UploadFolder
     {
         Products,
-        Variants
+        Variants,
+        Store
     }
     public class FileService : IFileService
 
     {
         #region Fildes
         private readonly IWebHostEnvironment webHostEnvironment;
+        private readonly IHttpContextAccessor httpContextAccessor;
         #endregion
 
         #region Constructor
-        public FileService(IWebHostEnvironment webHostEnvironment)
+        public FileService(IWebHostEnvironment webHostEnvironment , IHttpContextAccessor httpContextAccessor)
         {
 
-            this.webHostEnvironment = webHostEnvironment;   
+            this.webHostEnvironment = webHostEnvironment;  
+            this.httpContextAccessor = httpContextAccessor; 
         }
 
         #endregion
@@ -81,38 +84,53 @@ namespace Tradify.Service.Services
             
         }
 
-        public async Task<string> UploadGenericAsync (UploadFolder folder, int id , IFormFile file)
+        public async Task<string> UploadGenericAsync(UploadFolder folder, int id, IFormFile file)
         {
-            // 1️⃣ Check file
-            if (file == null || file.Length == 0)
-                return "NoFile";
+            try
+            {
+                // 1. Check file
+                if (file == null || file.Length == 0)
+                    return "NoFile";
 
-            // 2️⃣ Validate extension
-            var extension = Path.GetExtension(file.FileName).ToLower();
-            var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".webp" };
+                // 2. Validate extension
+                var extension = Path.GetExtension(file.FileName).ToLower();
+                var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".webp" };
 
-            if (!allowedExtensions.Contains(extension))
-                return "InvalidImageType";
+                if (!allowedExtensions.Contains(extension))
+                    return "InvalidImageType";
 
-            // 3️⃣ Create folder
-            var foldrName = folder.ToString().ToLower();
-            var folderPath = Path.Combine("uploads" , foldrName, id.ToString());
-            var fullFolderPath = Path.Combine(webHostEnvironment.WebRootPath, folderPath);
+                // 3. Validate size
+                var maxSize = 5 * 1024 * 1024; // 5MB
+                if (file.Length > maxSize)
+                    return "FileTooLarge";
 
-            if (!Directory.Exists(fullFolderPath))
+                // 4. Validate content type
+                if (string.IsNullOrEmpty(file.ContentType) || !file.ContentType.StartsWith("image/"))
+                    return "InvalidFileType";
+
+                // 5. Create folder
+                var folderName = folder.ToString().ToLower();
+                var folderPath = Path.Combine("uploads", folderName, id.ToString());
+                var fullFolderPath = Path.Combine(webHostEnvironment.WebRootPath, folderPath);
+
                 Directory.CreateDirectory(fullFolderPath);
 
-            // 4️⃣ Generate unique name
-            var fileName = $"{Guid.NewGuid():N}{extension}";
+                // 6. Generate unique name
+                var fileName = $"{Guid.NewGuid():N}{extension}";
 
-            // 5️⃣ Save file
-            var fullPath = Path.Combine(fullFolderPath, fileName);
+                // 7. Save file
+                var fullPath = Path.Combine(fullFolderPath, fileName);
 
-            using var stream = new FileStream(fullPath, FileMode.Create);
-            await file.CopyToAsync(stream);
+                using var stream = new FileStream(fullPath, FileMode.Create);
+                await file.CopyToAsync(stream);
 
-            // 6️⃣ Return path (DB)
-            return $"/{folderPath}/{fileName}";
+                // 8. Return clean path
+                return $"/{folderPath.Replace("\\", "/")}/{fileName}";
+            }
+            catch
+            {
+                return "FailedToUploadImage";
+            }
         }
 
         public Task DeleteFile(string filePath)
@@ -127,7 +145,13 @@ namespace Tradify.Service.Services
             return Task.CompletedTask;
         }
 
-
+        public string GetBaseUrl()
+        {
+            var request = httpContextAccessor.HttpContext.Request;
+            if (request == null)
+                return ""; // أو return default URL
+            return $"{request.Scheme}://{request.Host}";
+        }
 
 
 

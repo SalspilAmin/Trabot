@@ -12,6 +12,8 @@ namespace Tradify.Service.AbstractsServices
         IQueryable<Stores?> GetTableIgnoreQueryFilters();
         Task<Stores?> GetBySellerIdAsync(int sellerId);
 
+        Task<(string, int?)> AddStoreAsync(Stores stores);
+
 
     }
 }

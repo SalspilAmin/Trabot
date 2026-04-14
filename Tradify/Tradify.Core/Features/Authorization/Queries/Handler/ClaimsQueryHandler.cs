@@ -35,7 +35,7 @@ namespace Tradify.Core.Features.Authorization.Queries.Handler
         #region Handle Functions
         public async Task<Response<ManageUserClaimsResult>> Handle(ManageUserClaimsQuery request, CancellationToken cancellationToken)
         {
-            var user = await _userManager.FindByIdAsync(request.UserId.ToString());
+            var user = _userManager.Users.Where(x => x.IsDeleted == false).FirstOrDefault(x => x.Id == request.UserId);
             if (user == null) return NotFound<ManageUserClaimsResult>(_stringLocalizer.Get("UserIsNotFound"));
             var result = await _authorizationService.ManageUserClaimData(user);
             return Success(result);

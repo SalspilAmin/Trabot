@@ -22,6 +22,7 @@ namespace Tradify.Data.Entities.Identity
         public string? Address { get; set; }
         public  int? SellerId { get; set; }
 
+        public bool IsDeleted { get; set; }= false;
         public string? Country { get; set; }
         [EncryptColumn]
         public string? Code { get; set; }

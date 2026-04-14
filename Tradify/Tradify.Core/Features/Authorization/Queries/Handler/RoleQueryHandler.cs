@@ -44,21 +44,34 @@ namespace Tradify.Core.Features.Authorization.Queries.Handler
         public async Task<Response<List<GetRolesListResult>>> Handle(GetRolesListQuery request, CancellationToken cancellationToken)
         {
             var roles = await _authorizationService.GetRolesList();
-            var result = _mapper.Map<List<GetRolesListResult>>(roles);
-            return Success(result);
+            if (roles != null)
+            {
+                var result = new List<GetRolesListResult>();
+                foreach (var role in roles)
+                {
+                    result.Add(_mapper.Map<GetRolesListResult>(role));
+                }
+
+
+                return Success(result);
+            }
+            return Success<List<GetRolesListResult>>(new List<GetRolesListResult>());
         }
 
         public async Task<Response<GetRoleByIdResult>> Handle(GetRoleByIdQuery request, CancellationToken cancellationToken)
         {
-            var role = await _authorizationService.GetRoleById(request.Id);
-            if (role == null) return NotFound<GetRoleByIdResult>(_stringLocalizer.Get("RoleNotExist"));
-            var result = _mapper.Map<GetRoleByIdResult>(role);
-            return Success(result);
+            
+                var role = await _authorizationService.GetRoleById(request.Id);
+                if (role == null) return NotFound<GetRoleByIdResult>(_stringLocalizer.Get("RoleNotExist"));
+                var result = _mapper.Map<GetRoleByIdResult>(role);
+                return Success(result);
+           
+            
         }
 
         public async Task<Response<ManageUserRolesResult>> Handle(ManageUserRolesQuery request, CancellationToken cancellationToken)
         {
-            var user = await _userManager.FindByIdAsync(request.UserId.ToString());
+            var user = _userManager.Users.Where(x => x.IsDeleted == false).FirstOrDefault(x => x.Id == request.UserId);
             if (user == null) return NotFound<ManageUserRolesResult>(_stringLocalizer.Get("UserIsNotFound"));
             var result = await _authorizationService.ManageUserRolesData(user);
             return Success(result);

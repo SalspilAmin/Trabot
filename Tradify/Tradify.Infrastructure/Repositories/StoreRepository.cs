@@ -28,6 +28,7 @@ namespace Tradify.Infrastructure.Repositories
         public async Task<Stores?> GetByIdWithIncludesAsync(int id)
         {
             return await stores
+                .Include(x => x.StoreImage)
                  .Include(s => s.Seller)
                  .ThenInclude(x => x.User)
                  .FirstOrDefaultAsync(p => p.Id == id);

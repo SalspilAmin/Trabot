@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using Tradify.Core.Bases;
 
-namespace Tradify.Core.Features.ProductsImages.Commands.Models
+namespace Tradify.Core.Features.ProductVariantsImages.Commands.Models
 {
      public class DeleteProductVariantImageCommand : IRequest<Response<string>>
     {

@@ -95,9 +95,10 @@ namespace Tradify.Core.MiddleWare
                         response.StatusCode = 400;
                         break;
 
-                    case CustomValidationExeption:
-                        responseModel.Message = error.Message;
+                    case CustomValidationExeption ex:
+                        responseModel.Message = ex.Message;
                         responseModel.StatusCode = HttpStatusCode.UnprocessableEntity;
+                        responseModel.Errors = ex.Errors;
                         response.StatusCode = 422;
                         break;
 
@@ -108,7 +109,11 @@ namespace Tradify.Core.MiddleWare
                         break;
                 }
 
-                logger.LogError(error, "An unhandled exception occurred while processing {Method} {Path}", context.Request.Method, context.Request.Path);
+                logger.LogError(error,
+      "Exception at {Method} {Path} | Query: {QueryString}",
+      context.Request.Method,
+      context.Request.Path,
+      context.Request.QueryString);
 
                 var json = JsonSerializer.Serialize(responseModel);
                 await response.WriteAsync(json);

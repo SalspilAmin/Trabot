@@ -67,7 +67,7 @@ namespace Tradify.Core.Features.User.Commands.Handlers
         public async Task<Response<string>> Handle(ChangeUserPasswordCommand request, CancellationToken cancellationToken)
         {
             //CheckUser 
-            var user = await userManager.FindByIdAsync(request.Id.ToString());
+            var user =  userManager.Users.Where(x => x.IsDeleted == false).FirstOrDefault(x => x.Id == request.Id); 
             //not found
             if (user == null) return BadRequest<string>(localize.Get("UserIsNotFound"));
 
@@ -83,7 +83,7 @@ namespace Tradify.Core.Features.User.Commands.Handlers
         public async Task<Response<string>> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
         {
             // Check user
-            var user= await userManager.FindByIdAsync(request?.Id.ToString());
+            var user = userManager.Users.Where(x => x.IsDeleted == false).FirstOrDefault(x => x.Id == request.Id);
 
             //if Not Exist notfound
             if (user == null) return NotFound<string>();

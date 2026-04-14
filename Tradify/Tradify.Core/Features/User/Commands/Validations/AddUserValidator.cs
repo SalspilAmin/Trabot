@@ -42,6 +42,8 @@ namespace Tradify.Core.Features.User.Commands.Validations
             RuleFor(x => x.Password)
                  .NotEmpty().WithMessage(localize.Get("NotEmpty"))
                  .NotNull().WithMessage(localize.Get("Required"));
+            RuleFor(x => x.ConfirmPassword).NotEmpty().WithMessage(localize.Get("NotEmpty"))
+                 .NotNull().WithMessage(localize.Get("Required")).Equal(x => x.Password).WithMessage(localize.Get("PasswordNotEqualConfirmPass"));
 
 
         }
