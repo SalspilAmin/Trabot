@@ -37,8 +37,7 @@ builder.Services.AddTransient<IUrlHelper>(x =>
     var factory = x.GetRequiredService<IUrlHelperFactory>();
     return factory.GetUrlHelper(actionContext);
 });
-
-
+builder.Services.AddMemoryCache();
 #endregion
 #region Localization
 builder.Services.AddControllersWithViews();
