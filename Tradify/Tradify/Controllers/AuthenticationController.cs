@@ -72,5 +72,11 @@ namespace Tradify.Controllers
             var result = await Mediator.Send(new LoginWithGoogleCommand() { Code= code});
             return  NewResult(result);
         }
+        [HttpGet(Router.Authentication.GoogleResult)]
+        public async Task<IActionResult> GoogleResult([FromQuery] string RequestID)
+        {
+            var result = await Mediator.Send(new GetSignByGoogleResult { requestId= RequestID });
+            return NewResult(result);
+        }
     }
 }
