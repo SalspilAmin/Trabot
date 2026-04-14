@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Text;
 using Tradify.Core.Bases;
 using Tradify.Core.Features.Product.Commands.Models;
+using Tradify.Core.Features.ProductVariant.Commands.Models;
 using Tradify.Core.Features.User.Commands.Models;
 using Tradify.Core.Resources.Service;
 using Tradify.Data.Entities;
@@ -285,6 +286,35 @@ namespace Tradify.Core.Features.Product.Commands.Handlers
 
             return Success(localize.Get("ProductRestoredSuccessfully"));
         }
+
+
+
+
+        //public async Task<Response<string>> Handle(AddDiscountCommand request, CancellationToken cancellationToken)
+        //{
+        //    var product = await productService.GetTableAsTracking().Include(p=>p.ProductVariants)
+        //        .FirstOrDefaultAsync(p=>p.Id==request.Id);
+
+        //    if (product == null)
+        //        return NotFound<string>(localize.Get("ProducttNotFound"));
+
+        //    if (product.ProductVariants == null || !product.ProductVariants.Any())
+        //        return NotFound<string>(localize.Get("NoVariantsFound"));
+
+        //    foreach (var variant in product.ProductVariants)
+        //    {
+        //        variant.Discount = request.Discount;
+
+        //    }
+
+
+
+        //    await productService.SaveChangesAsync();
+
+        //    return Success<string>(localize.Get("DiscountAddedSuccessfully"));
+
+
+        //}
         #endregion
     }
 }

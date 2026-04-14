@@ -7,7 +7,6 @@ using Tradify.Data.AppMetaData;
 
 namespace Tradify.Controllers.Images
 {
-    [ApiController]
     public class ProductImageController : AppControllerBase
     {
      

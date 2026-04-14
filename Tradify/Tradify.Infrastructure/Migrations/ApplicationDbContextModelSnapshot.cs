@@ -1050,12 +1050,6 @@ namespace Tradify.Infrastructure.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsVerified")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("StoreId")
-                        .HasColumnType("int");
-
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
@@ -1136,6 +1130,29 @@ namespace Tradify.Infrastructure.Migrations
                         .IsUnique();
 
                     b.ToTable("StoreBookings");
+                });
+
+            modelBuilder.Entity("Tradify.Data.Entities.StoreImage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("MediaPath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StoreId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StoreId")
+                        .IsUnique();
+
+                    b.ToTable("StoreImages");
                 });
 
             modelBuilder.Entity("Tradify.Data.Entities.Stores", b =>
@@ -1740,6 +1757,17 @@ namespace Tradify.Infrastructure.Migrations
                     b.Navigation("Store");
                 });
 
+            modelBuilder.Entity("Tradify.Data.Entities.StoreImage", b =>
+                {
+                    b.HasOne("Tradify.Data.Entities.Stores", "Stores")
+                        .WithOne("StoreImage")
+                        .HasForeignKey("Tradify.Data.Entities.StoreImage", "StoreId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Stores");
+                });
+
             modelBuilder.Entity("Tradify.Data.Entities.Stores", b =>
                 {
                     b.HasOne("Tradify.Data.Entities.Sellers", "Seller")
@@ -1908,6 +1936,8 @@ namespace Tradify.Infrastructure.Migrations
                     b.Navigation("Products");
 
                     b.Navigation("StoreBooking");
+
+                    b.Navigation("StoreImage");
                 });
 
             modelBuilder.Entity("Tradify.Data.Entities.SubOrders", b =>

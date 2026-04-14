@@ -9,7 +9,7 @@ using Tradify.Data.Entities.Identity;
 
 namespace Tradify.Core.Mapping.ProductMapping
 {
-    public partial class ProductVariantProfile
+    public partial class ProductProfile
     {
         public void GetProductPaginationMapping() 
         {

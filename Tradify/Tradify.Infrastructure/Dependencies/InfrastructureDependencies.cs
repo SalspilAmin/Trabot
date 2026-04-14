@@ -46,9 +46,10 @@ namespace Tradify.Infrastructure.Dependencies
             services.AddTransient<IFavoriteRepository, FavoriteRepository>();
             services.AddTransient<IProductVariantImageRepository, ProductVariantImageRepository>();
             services.AddTransient<IOrderItemsRepository, OrderItemsRepository>();
+            services.AddTransient<IStoreRepository, StoreRepository>();
 
 
-            
+
             return services;
         }
     }

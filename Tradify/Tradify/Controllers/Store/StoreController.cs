@@ -27,6 +27,13 @@ namespace Tradify.Controllers.Store
             var result = await Mediator.Send(query);
             return Ok(result);
         }
+
+        [HttpGet(Router.Store.List)]
+        public async Task<IActionResult> GetAllStoreList([FromQuery] GetAllStoreListQuery query)
+        {
+            var result = await Mediator.Send(query);
+            return Ok(result);
+        }
     }
 
 

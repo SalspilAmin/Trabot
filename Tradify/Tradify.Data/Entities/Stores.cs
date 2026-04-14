@@ -17,6 +17,7 @@ namespace Tradify.Data.Entities
         public string Name { get; set; }
         public string Description { get; set; }
         public bool IsActive { get; set; }
+        
 
         //public bool CreatedAt { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
@@ -28,6 +29,7 @@ namespace Tradify.Data.Entities
         public  virtual ICollection<Products>? Products { get; set; }
         public virtual ICollection<Categories>? Categories { get; set; }
         public virtual StoreBooking? StoreBooking { get; set; }
+        public virtual StoreImage? StoreImage { get; set; }
 
     }
 }
