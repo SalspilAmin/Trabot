@@ -25,9 +25,9 @@ namespace Tradify.Core.Mapping.StoreMapping
                     .ForMember(dest => dest.Image, opt => opt.MapFrom(x => x.StoreImage));
 
 
-            CreateMap<StoreImage, StoreImageResponse>()
-              .ForMember(dest => dest.MediaPath,
-                  opt => opt.MapFrom(src => src.MediaPath));
+            //CreateMap<StoreImage, StoreImageResponse>()
+            //  .ForMember(dest => dest.MediaPath,
+            //      opt => opt.MapFrom(src => src.MediaPath));
 
 
         }

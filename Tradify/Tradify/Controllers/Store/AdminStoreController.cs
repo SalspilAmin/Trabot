@@ -20,6 +20,18 @@ namespace Tradify.Controllers.Store
             return NewResult(response);
         }
 
+
+
+        [HttpPost(Router.Store.AddWithImage)]
+        public async Task<IActionResult> AddStoreWithImage([FromForm] AddStoreWithImageCommand command)
+        {
+            var response = await Mediator.Send(command);
+            return NewResult(response);
+        }
+
+
+
+
         [HttpDelete(Router.Store.Delete)]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {

@@ -175,6 +175,8 @@ namespace Tradify.Data.AppMetaData
         {
             public const string prefix = Rule + "Store";
             public const string Add = prefix + "/AddStore";
+            public const string AddWithImage = prefix + "/AddStoreWithImage";
+
             public const string UpdateStore = prefix + "/Update";
             public const string GetByID = prefix + "/Get" + SignleRoute;
             public const string GetMyStore = prefix + "/my-store" + SignleRoute;
