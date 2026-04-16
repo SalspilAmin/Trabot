@@ -7,7 +7,7 @@ using Tradify.Core.Resources.Service;
 
 namespace Tradify.Core.Features.Product.Commands.Validations
 {
-    public class AddProductValidator : AbstractValidator<AddProductCommand>
+    public class AddProductWithImageValidator : AbstractValidator<AddProductWithImageCommand>
     {
 
         #region Fields 
@@ -16,7 +16,7 @@ namespace Tradify.Core.Features.Product.Commands.Validations
         #endregion
 
         #region constructor
-        public AddProductValidator(LocalizationService localization)
+        public AddProductWithImageValidator(LocalizationService localization)
         {
             this.localize = localization;
             ApplyProductValidations();
@@ -28,11 +28,16 @@ namespace Tradify.Core.Features.Product.Commands.Validations
         #region Validations
         public void ApplyProductValidations()
         {
+            //RuleFor(x => x.StoreId)
+            //   .GreaterThan(0).WithMessage(localize.Get("IdMustBeGreaterThanZero"))
+            //   .NotEmpty().WithMessage(localize.Get("NotEmpty"))
+            //   .NotNull().WithMessage(localize.Get("Required"));
+
 
             RuleFor(x => x.Name)
                 .NotNull().WithMessage(localize.Get("Required"))
                 .NotEmpty().WithMessage(localize.Get("NotEmpty"))
-                .MaximumLength(255).WithMessage(localize.Get("MaxLengthis255")); 
+                .MaximumLength(255).WithMessage(localize.Get("MaxLengthis255"));
 
             RuleFor(x => x.Description)
                  .NotNull().WithMessage(localize.Get("Required"))
@@ -44,10 +49,7 @@ namespace Tradify.Core.Features.Product.Commands.Validations
                  .NotEmpty().WithMessage(localize.Get("NotEmpty"))
                  .NotNull().WithMessage(localize.Get("Required"));
 
-            //RuleFor(x => x.StoreId)
-            //    .GreaterThan(0).WithMessage(localize.Get("IdMustBeGreaterThanZero"))
-            //    .NotEmpty().WithMessage(localize.Get("NotEmpty"))
-            //    .NotNull().WithMessage(localize.Get("Required"));
+           
 
             RuleFor(x => x.Price)
                 .GreaterThan(0).WithMessage(localize.Get("PriceGreaterThanZero"))
@@ -57,8 +59,22 @@ namespace Tradify.Core.Features.Product.Commands.Validations
                 .GreaterThanOrEqualTo(0).WithMessage(localize.Get("StockGreaterThanZero"))
                 .NotNull().WithMessage(localize.Get("Required"))
                 .NotEmpty().WithMessage(localize.Get("NotEmpty"));
+
+            RuleFor(x => x.Image)
+ .NotNull().WithMessage(localize.Get("Required"))
+ .Must(file => file != null && file.Length > 0)
+ .WithMessage(localize.Get("NoFile"))
+ .Must(file => file.ContentType.StartsWith("image/"))
+ .WithMessage(localize.Get("OnlyImagesAllowed"))
+ .Must(file =>
+ {
+     var ext = Path.GetExtension(file.FileName).ToLower();
+     return ext == ".jpg" || ext == ".jpeg" || ext == ".png" || ext == ".webp";
+ })
+ .WithMessage(localize.Get("OnlyImagesAllowed"))
+ .Must(file => file.Length <= 5 * 1024 * 1024)
+ .WithMessage(localize.Get("MaxSizeIs5MB"));
         }
         #endregion
     }
 }
-

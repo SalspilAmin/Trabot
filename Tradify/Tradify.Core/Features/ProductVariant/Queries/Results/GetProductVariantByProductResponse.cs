@@ -9,12 +9,15 @@ namespace Tradify.Core.Features.ProductVariant.Queries.Results
     public class GetProductVariantByProductResponse 
     {
         public int Id { get; set; }
+
+        public string Name { get; set; }
+
         public decimal Price { get; set; }
         public decimal Discount { get; set; }
         public decimal FinalPrice { get; set; }
-        public string? ProductVarintName { get; set; }
         public bool InStock { get; set; }
-        public string? MainImage { get; set; }
+        public ProductVariantImageResponse? Image { get; set; }
        
     }
+    
 }

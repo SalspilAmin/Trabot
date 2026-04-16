@@ -8,6 +8,7 @@ using System.Text;
 using Tradify.Core.Bases;
 using Tradify.Core.Features.Product.Commands.Models;
 using Tradify.Core.Features.ProductVariant.Commands.Models;
+using Tradify.Core.Features.Store.Commands.Models;
 using Tradify.Core.Features.User.Commands.Models;
 using Tradify.Core.Resources.Service;
 using Tradify.Data.Entities;
@@ -16,11 +17,14 @@ using Tradify.Service.AbstractsServices;
 using Tradify.Service.AbstractsServices.AuthorizationServices;
 using Tradify.Service.Services;
 using Tradify.Service.Services.AuthorizationServices;
+using static Tradify.Data.AppMetaData.Router;
 
 namespace Tradify.Core.Features.Product.Commands.Handlers
 {
     public class ProductCommandHandler : ResponseHandler,
                                          IRequestHandler<AddProductCommand, Response<string>> ,
+                                         IRequestHandler<AddProductWithImageCommand, Response<string>>,
+
                                          IRequestHandler<UpdateProductCommand, Response<string>>,
                                          IRequestHandler<DeleteProductCommand, Response<string>>,
                                          IRequestHandler<RestoreProductCommand, Response<string>>
@@ -37,8 +41,11 @@ namespace Tradify.Core.Features.Product.Commands.Handlers
         private readonly IMapper mapper;
         private readonly ICurrentUserService currentUserService;
         private readonly ICateroriesService cateroriesService;
-        
+        private readonly ISellerService sellerService;
+        private readonly IFileService fileService;
         private readonly IAuthorizationService  authorizationService;
+        private readonly IProductImageService productImageService;
+        private readonly IProductVariantImageService productVariantImageService;
 
         #endregion
 
@@ -49,7 +56,9 @@ namespace Tradify.Core.Features.Product.Commands.Handlers
                                      ICateroriesService cateroriesService,
                                      ICurrentUserService currentUserService,
                                      IAuthorizationService authorizationService,
-                                     LocalizationService localize) : base(localize)
+                                     LocalizationService localize, ISellerService sellerService
+            ,IFileService fileService, IProductImageService productImageService
+            , IProductVariantImageService productVariantImageService) : base(localize)
         {
             this.productService = productService;
             this.mapper = mapper;
@@ -58,92 +67,115 @@ namespace Tradify.Core.Features.Product.Commands.Handlers
             this.cateroriesService = cateroriesService;
             this.currentUserService = currentUserService;
             this.authorizationService = authorizationService;   
+            this.sellerService = sellerService;
+            this.fileService = fileService;
+            this.productImageService = productImageService;
+            this.productVariantImageService = productVariantImageService;
         }
         #endregion
 
         #region Methods
 
         // Add Product
-
         public async Task<Response<string>> Handle(AddProductCommand request, CancellationToken cancellationToken)
         {
-            var userId = currentUserService.GetUserId();
-            // Check Store
-            var store = await storeService.GetBySellerIdAsync(userId);
-
-            if (store == null)
-                return NotFound<string>(localize.Get("YouMustCreateStoreFirst"));
-            
-            // Check Category
-            var category = await cateroriesService.GetByIdAsync(request.CategoryId);
-
-            if (category == null)
-                return BadRequest<string>(localize.Get("CategoryNotFound"));
-            // Mapping
             var product = mapper.Map<Products>(request);
-            // Assign Store
-            product.StoreId = store.Id;
-            product.UpdateAt = DateTime.UtcNow;
-            product.CreatedAt = DateTime.UtcNow;
 
-            using var transaction = await productService.BeginTransactionAsync();
-
-            try
+            var variant = new ProductVariants
             {
-                await productService.AddAsync(product);
-                await productService.SaveChangesAsync();
+                Price = request.Price,
+                NumberOfProductInStock = request.Stock
+            };
+            var result = await productService.AddProductWithDefultVarintAsync(product, variant);
 
-                var variant = new ProductVariants
-                {
-                    ProductId = product.Id,
-                    Price = request.Price,
-                    NumberOfProductInStock = request.Stock,
-                    Color = null,
-                    Size = null,
-                    Discount = 0,
-                    MetaData = null
-                };
-
-                await productVariantService.AddAsync(variant);
-                await productVariantService.SaveChangesAsync();
-
-                await transaction.CommitAsync();
-
-                return Success(localize.Get("ProductAddedSuccessfully"));
+            if (result.Item1 != "Success")
+            { 
+                return BadRequest<string>(localize.Get(result.Item1)); 
             }
-            catch
+            else 
             {
-                await transaction.RollbackAsync();
-                return BadRequest<string>(localize.Get("ErrorWhileAddingProduct"));
+                return Success<string>("Success", meta: result.Item2);
             }
-            //// Save Product
-            //await productService.AddAsync(product);
-            //await productService.SaveChangesAsync();
-            //// Assign Productvariant
+               
+            }
 
-            //var variant = new ProductVariants
-            //{
-            //    ProductId = product.Id,
-            //    Price = request.Price,
-            //    NumberOfProductInStock = request.Stock,
-            //    Color = null,
-            //    Size = null,
-            //    Discount = 0,
-            //    MetaData = null
-            //};
-            //// Save Productvariant
 
-            //await productVariantService.AddAsync(variant);
-            //await productVariantService.SaveChangesAsync();
+        // Add Product With Image
+        public async Task<Response<string>> Handle(AddProductWithImageCommand request, CancellationToken cancellationToken)
+        {
+            var product = mapper.Map<Products>(request);
 
-            //return Success<string>(localize.Get("ProductAddedSuccessfully"));
+            var variant = new ProductVariants
+            {
+                Price = request.Price,
+                NumberOfProductInStock = request.Stock
+            };
+            var result = await productService.AddProductWithDefultVarintAsync(product, variant);
+
+            if (result.Item1 != "Success")
+            {
+                return BadRequest<string>(localize.Get(result.Item1));
+            }
+
+
+            var productid = result.Item2.Value;
+            var varintid = result.Item3.Value;
+
+            // ✅ رفع الصورة
+            var imagePathProduct = await fileService.UploadGenericAsync(
+                UploadFolder.Products,
+                productid,
+                request.Image);
+
+
+            if (!imagePathProduct.StartsWith("/"))
+            {
+
+                return BadRequest<string>(localize.Get(imagePathProduct));
+            }
+
+            // ✅ رفع الصورة
+            var imagePathVarint = await fileService.UploadGenericAsync(
+                UploadFolder.Variants,
+                productid,
+                request.Image);
+
+
+            if (!imagePathVarint.StartsWith("/"))
+            {
+
+                return BadRequest<string>(localize.Get(imagePathVarint));
+            }
+
+            // ✅ حفظ الصورة
+            var productImage = new Data.Entities.ProductImage
+            {
+                ProductId = productid,
+                MediaPath = imagePathProduct,
+                IsMain = true,
+                SortOrder=1
+            };
+
+            var productVarintImage = new Data.Entities.ProductVariantImage
+            {
+                ProductVariantId = varintid,
+                MediaPath = imagePathVarint
+            };
+            
+            await productVariantImageService.AddAsync(productVarintImage);
+
+            await productImageService.AddAsync(productImage);
+            await productImageService.SaveChangesAsync();
+
+            return Success<string>("Success", meta: productid);
+
+
 
         }
-        
 
 
         //// Update Product
-       
+
         public async Task<Response<string>> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
         {
             var currentUserId = currentUserService.GetUserId();
