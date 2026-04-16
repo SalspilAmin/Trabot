@@ -34,6 +34,7 @@ namespace Tradify.Data.AppMetaData
             public const string ResetPassword = prefix + "/ResetPassword";
             public const string LoginGoogle = prefix + "/LogInGoogle";
             public const string LoginGoogleCallBack = prefix + "/GoogleCallBack";
+            public const string GoogleResult = prefix + "/GoogleResult";
         }
         public static class Authorization
         {

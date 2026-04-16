@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -22,7 +23,7 @@ namespace Tradify.Core.Features.Authenticaiton.Commands.Handler
         , IRequestHandler<SendResetPasswordCommand, Response<string>>
         , IRequestHandler<ConfirmResetPasswordCommand, Response<string>>
         ,IRequestHandler<ResetPasswordCommand, Response<string>>
-        ,IRequestHandler<LoginWithGoogleCommand,Response<LoginGoogleResult>>,
+        ,IRequestHandler<LoginWithGoogleCommand,Response<string>>,
         IRequestHandler<BeginCoonectionWithGoogleCommand,Response<string>>          
     {
         #region Fields
@@ -31,11 +32,12 @@ namespace Tradify.Core.Features.Authenticaiton.Commands.Handler
         private readonly IUserService userService;
         private readonly UserManager<Tradify.Data.Entities.Identity.User> userManager;
         private readonly SignInManager<Tradify.Data.Entities.Identity.User> signInManager;
+        private readonly IMemoryCache _cache;
 
         #endregion
         #region Constructor
         public AuthenticationCommandHandler(LocalizationService localization, IAuthenticationService authenticationService, IUserService userService, UserManager<Tradify.Data.Entities.Identity.User> userManager
-            , SignInManager<Tradify.Data.Entities.Identity.User> signInManager) : base(localization)
+            , SignInManager<Tradify.Data.Entities.Identity.User> signInManager,IMemoryCache cache) : base(localization)
 
         {
             this.localization = localization;
@@ -43,6 +45,7 @@ namespace Tradify.Core.Features.Authenticaiton.Commands.Handler
             this.userService = userService;
             this.userManager = userManager;
             this.signInManager = signInManager;
+            this._cache = cache;    
         }
 
 
@@ -157,18 +160,35 @@ namespace Tradify.Core.Features.Authenticaiton.Commands.Handler
             }
         }
 
-        public async Task<Response<LoginGoogleResult>> Handle(LoginWithGoogleCommand request, CancellationToken cancellationToken)
+        public async Task<Response<string>> Handle(LoginWithGoogleCommand request, CancellationToken cancellationToken)
         {
             var result   = await authenticationService.GoogleCallback(request.Code);
-
-            if (result.Item1 != null) return Success(result.Item1);
-            switch (result.Item2)
+            var requestId = Guid.NewGuid().ToString();
+            var chacheOptions = new MemoryCacheEntryOptions()
             {
-                case "UserIsExit": return BadRequest<LoginGoogleResult>(localization.Get("IsExist"));
-                case "EmailINGoogleNotVerified": return BadRequest<LoginGoogleResult>(localization.Get("Google_email_not_verified"));
-                case "ErrorWhenTryCreateUserByGoogle": return BadRequest<LoginGoogleResult>(localization.Get("ErrorWhenTryCreateUserByGoogle"));
-                default: return BadRequest<LoginGoogleResult>(localization.Get("TryAgainInAnotherTime"));
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(3)
+            };
+
+            Response<LoginGoogleResult> response;
+            if (result.Item1 != null)
+            { 
+            response= Success(result.Item1);
+            } 
+
+            else
+            {
+                response = result.Item2 switch
+                {
+                    "UserIsExit" => BadRequest<LoginGoogleResult>(localization.Get("IsExist")),
+                    "EmailINGoogleNotVerified" => BadRequest<LoginGoogleResult>(localization.Get("Google_email_not_verified")),
+                    "ErrorWhenTryCreateUserByGoogle" => BadRequest<LoginGoogleResult>(localization.Get("ErrorWhenTryCreateUserByGoogle")),
+                    _ => BadRequest<LoginGoogleResult>(localization.Get("TryAgainInAnotherTime"))
+
+                };
             }
+            _cache.Set(requestId, response);
+
+            return Success<string>(requestId);
 
         }
 
