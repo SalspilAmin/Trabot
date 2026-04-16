@@ -11,6 +11,8 @@ namespace Tradify.Service.AbstractsServices
     {
         Task<Products?> GetByIdWithIncludesAsync(int id);
         IQueryable<Products> GetProductsByCategoryAsync(int categoryId);
+        Task<(string, int?, int?)> AddProductWithDefultVarintAsync(Products product, ProductVariants variant);
+
 
     }
 }

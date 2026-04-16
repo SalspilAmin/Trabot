@@ -11,11 +11,9 @@ namespace Tradify.Core.Mapping.ProductVariantMapping
     {
         public void UpdateProductVariantCommand()
         {
-            CreateMap<AddProductVariantCommand, ProductVariants>()
-                             .ForMember(
-                                dest => dest.MetaData,
-                                opt => opt.MapFrom(src =>
-                                    src.MetaData == null ? null : JsonSerializer.Serialize(src.MetaData, new JsonSerializerOptions { WriteIndented = false })));
+            CreateMap<UpdateProductVariantCommand, ProductVariants>();
+
+
         }
     }
 }

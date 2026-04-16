@@ -20,16 +20,10 @@ namespace Tradify.Core.Features.Product.Queries.Results
 
         public bool IsFavorite { get; set; }
 
-       
-        
+        public ICollection<ProductImageResponse>? Images { get; set; }
 
-        public ICollection<ProductVariantResponse> Variants { get; set; }
 
-        public ICollection<ProductImageResponse> Images { get; set; }
-
-        public ICollection<ProductVideoResponse>? Videos { get; set; }
-
-        public ICollection<ProductReviewResponse> Reviews { get; set; }
+        public ICollection<ProductReviewResponse>? Reviews { get; set; }
         
     }
     public class ProductImageResponse
@@ -53,33 +47,5 @@ namespace Tradify.Core.Features.Product.Queries.Results
         public DateTime CreatedAt { get; set; }
     }
   
-    public class ProductVideoResponse
-    {
-        public int Id { get; set; }
-
-        public string MediaPath { get; set; }
-    }
-    public class ProductVariantResponse
-    {
-
-        public int Id { get; set; }
-
-        public double Price { get; set; }
-
-        public double Discount { get; set; }
-
-        public double FinalPrice { get; set; }
-
-        public string Color { get; set; }
-
-        public string Size { get; set; }
-
-        public int NumberOfProductInStock { get; set; }
-
-        public bool InStock { get; set; }
-    }
-
   
-
-
 }

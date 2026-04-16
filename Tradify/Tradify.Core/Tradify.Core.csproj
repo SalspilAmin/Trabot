@@ -10,15 +10,15 @@
 	
 	<ItemGroup>
 		<PackageReference Include="AutoMapper" Version="16.1.1" />
-		<PackageReference Include="FluentValidation" Version="12.1.0" />
-		<PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.0" />
-		<PackageReference Include="MediatR" Version="13.1.0" />
-		<PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="10.0.0" />
-		<PackageReference Include="Serilog" Version="4.3.0" />
+		<PackageReference Include="FluentValidation" Version="12.1.1" />
+		<PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
+		<PackageReference Include="MediatR" Version="14.1.0" />
+		<PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="10.0.6" />
+		<PackageReference Include="Serilog" Version="4.3.1" />
 		<PackageReference Include="Serilog.AspNetCore" Version="10.0.0" />
 		<PackageReference Include="Serilog.Sinks.Console" Version="6.1.1" />
-		<PackageReference Include="Serilog.Sinks.MSSqlServer" Version="9.0.2" />
-		<PackageReference Include="System.Security.Permissions" Version="10.0.5" />
+		<PackageReference Include="Serilog.Sinks.MSSqlServer" Version="9.0.3" />
+		<PackageReference Include="System.Security.Permissions" Version="10.0.6" />
 	</ItemGroup>
 
   <ItemGroup>
@@ -32,7 +32,6 @@
     <Folder Include="Features\Categorie\Queries\Models\" />
     <Folder Include="Features\Categorie\Queries\Results\" />
     <Folder Include="Features\Fawaterak\Queries\Validations\" />
-    <Folder Include="Features\ProductDicount\" />
     <Folder Include="Features\Order\Queries\Validations\" />
     <Folder Include="Features\Seller\Queries\Handlers\" />
     <Folder Include="Features\Seller\Queries\Models\" />

@@ -11,9 +11,11 @@ namespace Tradify.Core.Features.Product.Queries.Models
     {
 
         public int Id { get; set; }
-        public GetProductByIdQuery(int id)
+        //public int UserId { get; set; }
+        public GetProductByIdQuery(int id) //, int userId)
         {
             Id = id;
+            //UserId = userId;
         }
 
     }

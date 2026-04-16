@@ -20,7 +20,9 @@ using System.Text.Json;
 namespace Tradify.Core.Features.ProductVariant.Commands.Handlers
 {
     public class ProductVariantCommandHandler : ResponseHandler,
-                                         IRequestHandler<AddProductVariantCommand, Response<string>>
+                                        IRequestHandler<AddProductVariantCommand, Response<string>>,
+                                        IRequestHandler<AddProductVarintWithImageCommand, Response<string>>
+       
                                         ,IRequestHandler<UpdateProductVariantCommand, Response<string>>,
                                          IRequestHandler<DeleteProductVariantCommand, Response<string>>
                                         , IRequestHandler<AddDiscountCommand, Response<string>>
@@ -36,6 +38,8 @@ namespace Tradify.Core.Features.ProductVariant.Commands.Handlers
         private readonly IMapper mapper;
         private readonly IProductService productService;
         private readonly ICurrentUserService currentUserService;
+        private readonly IFileService fileService; 
+        private readonly IProductVariantImageService productVariantImageService;
 
 
         #endregion
@@ -46,60 +50,101 @@ namespace Tradify.Core.Features.ProductVariant.Commands.Handlers
                                      IProductService productService,
                                      IStoreService storeService,
                                      ICurrentUserService currentUserService,
-                                     LocalizationService localize) : base(localize)
+                                     LocalizationService localize,
+                                     IFileService fileService,
+                                     IProductVariantImageService productVariantImageService) : base(localize)
         {
             this.productVariantService = productVariantService;
             this.mapper = mapper;
             this.localize = localize;
             this.storeService = storeService;
             this.productService = productService;
-          
+            this.productVariantImageService = productVariantImageService; 
             this.currentUserService = currentUserService;
+            this.fileService = fileService; 
         }
         #endregion
 
         #region Methods
+        // Add Product Variant 
+
 
         public async Task<Response<string>> Handle(AddProductVariantCommand request, CancellationToken cancellationToken)
         {
-            var currentUserId = currentUserService.GetUserId();
-
-            var store = await storeService.GetBySellerIdAsync(currentUserId);
-
-            if (store == null)
-                return NotFound<string>(localize.Get("StoreNotFound"));
-            
-            var product = await productService
-                .GetTableNoTracking()
-                .FirstOrDefaultAsync(p =>
-                    p.Id == request.ProductId &&
-                    p.StoreId == store.Id,
-                    cancellationToken);
-        
-            if (product == null )
-                return NotFound<string>(localize.Get("ProductNotFound"));
+            var variants = mapper.Map<ProductVariants>(request);
 
 
-            // 4️⃣ Check Duplicate Variant (ProductId + Color + Size)
-            var exists = await productVariantService
-                .GetTableNoTracking()
-                .AnyAsync(v =>
-                    v.ProductId == request.ProductId &&
-                    v.Color == request.Color &&
-                    v.Size == request.Size ,
-                    cancellationToken);
+            var result = await productVariantService.AddProductVariantAsync(variants);//,request.StoreId);
 
-            if (exists)
-            return BadRequest<string>(localize.Get("VariantAlreadyExists"));
+            if (result.Item1 != "Success")
+            {
+                return BadRequest<string>(localize.Get(result.Item1));
+            }
+            else
+            {
+                return Success<string>("Success", meta: result.Item2);
+            }
 
-            var variant = mapper.Map<ProductVariants>(request);
-            variant.ProductId = request.ProductId;
-          
-            await productVariantService.AddAsync(variant);
-            await productVariantService.SaveChangesAsync();
-            
-            return Success<string>( localize.Get("VariantAddedSuccessfully"));
         }
+
+
+
+        //Add ProductVarint With Image
+
+
+        public async Task<Response<string>> Handle(AddProductVarintWithImageCommand request, CancellationToken cancellationToken)
+        {
+            var variants = mapper.Map<ProductVariants>(request);
+
+
+            var result = await productVariantService.AddProductVariantAsync(variants);//,request.StoreId);
+
+            if (result.Item1 != "Success")
+            {
+                return BadRequest<string>(localize.Get(result.Item1));
+            }
+
+
+            var varintId = result.Item2.Value;
+
+            // ✅ رفع الصورة
+            var imagePath = await fileService.UploadGenericAsync(
+                UploadFolder.Variants,
+                varintId,
+                request.Image);
+
+            if (!imagePath.StartsWith("/"))
+            {
+
+                return BadRequest<string>(localize.Get(imagePath));
+            }
+
+            // ✅ حفظ الصورة
+            var varintImage = new Data.Entities.ProductVariantImage
+            {
+                ProductVariantId = varintId,
+                MediaPath = imagePath
+            };
+
+            await productVariantImageService.AddAsync(varintImage);
+            await productVariantImageService.SaveChangesAsync();
+
+            return Success<string>("Success", meta: varintId);
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

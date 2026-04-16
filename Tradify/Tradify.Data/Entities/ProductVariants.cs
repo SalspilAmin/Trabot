@@ -10,7 +10,7 @@ namespace Tradify.Data.Entities
     {
        
         public int Id { get; set; }
-
+        public string Name { get; set; }    
         public int ProductId { get; set; }
         public decimal Price { get; set; }
 
@@ -27,12 +27,14 @@ namespace Tradify.Data.Entities
         // public decimal FinalPrice => Price - (Price * (Discount / 100));
 
         // JSON string to store additional attributes for the variant
-        public string? MetaData { get; set; }
+       // public string? MetaData { get; set; }
         public int NumberOfProductInStock { get; set; }
         public bool InStock => NumberOfProductInStock > 0;
         
         //public int? SuborderId { get; set; }
-        public virtual ICollection<ProductVariantImage>? ProductVariantImages { get; set; } = new List<ProductVariantImage>();
+       // public virtual ICollection<ProductVariantImage>? ProductVariantImages { get; set; } = new List<ProductVariantImage>();
+        public virtual ProductVariantImage? ProductVariantImage { get; set; }
+
         //[ForeignKey(nameof(SuborderId))]
         //public virtual SubOrders? SubOrder { get; set; }
         public virtual ICollection<OrderItems> OrderItems { get; set; }

@@ -11,18 +11,24 @@ using Tradify.Core.Features.Product.Queries.Models;
 using Tradify.Core.Features.Product.Queries.Results;
 using Tradify.Core.Features.ProductVariant.Queries.Models;
 using Tradify.Core.Features.ProductVariant.Queries.Results;
+using Tradify.Core.Features.Store.Queries.Models;
+using Tradify.Core.Features.Store.Queries.Results;
 using Tradify.Core.Features.User.Queries.Models;
 using Tradify.Core.Features.User.Queries.Results;
 using Tradify.Core.Resources.Service;
 using Tradify.Core.Wrappers;
 using Tradify.Data.Entities;
 using Tradify.Service.AbstractsServices;
+using Tradify.Service.Services;
 using static Tradify.Data.AppMetaData.Router;
 
 namespace Tradify.Core.Features.ProductVariant.Queries.Handlers
 {
     public class ProductVariantQueryHandler : ResponseHandler, IRequestHandler<GetProductVariantsByProductQuery, Response<PaginatedResult<GetProductVariantByProductResponse>>>
-                                                             , IRequestHandler<GetProductVariantByIdQuery , Response<GetProductVariantByIdResponse>>
+                                                             , IRequestHandler<GetProductVariantByIdQuery, Response<GetProductVariantByIdResponse>>
+                                                             , IRequestHandler<GetAllVarintByProductListQuery, List<GetProductVariantByProductResponse>>
+        
+
     {
         #region Fields
         private readonly LocalizationService localize;
@@ -31,6 +37,7 @@ namespace Tradify.Core.Features.ProductVariant.Queries.Handlers
         private readonly IMapper mapper;
         private readonly IProductService productService;
         private readonly ICurrentUserService currentUserService;
+        private readonly IFileService fileService;
 
 
         #endregion
@@ -41,30 +48,31 @@ namespace Tradify.Core.Features.ProductVariant.Queries.Handlers
                                      IProductService productService,
                                      IStoreService storeService,
                                      ICurrentUserService currentUserService,
-                                     LocalizationService localize) : base(localize)
+                                     LocalizationService localize,
+                                     IFileService fileService) : base(localize)
         {
             this.productVariantService = productVariantService;
             this.mapper = mapper;
             this.localize = localize;
             this.storeService = storeService;
             this.productService = productService;
-
+            this.fileService   = fileService;
             this.currentUserService = currentUserService;
         }
         #endregion
 
         #region Mehtods
 
+        // Get Product Varint With Pagination With Filter
         public async Task<Response<PaginatedResult<GetProductVariantByProductResponse>>> Handle(
         GetProductVariantsByProductQuery request,
         CancellationToken cancellationToken)
         {
-            var currentUserId = currentUserService.GetUserId();
 
 
             //  Query
-            var variants = productVariantService.GetTableNoTracking()
-                .Where(v => v.ProductId == request.ProductId );
+            var variants = productVariantService.GetTableNoTracking().Include(v=>v.ProductVariantImage)
+                .Where(v => v.ProductId == request.ProductId);
 
             //  Search
             if (!string.IsNullOrWhiteSpace(request.Search))
@@ -74,17 +82,9 @@ namespace Tradify.Core.Features.ProductVariant.Queries.Handlers
                            (v.Color != null && EF.Functions.Like(v.Color, $"%{search}%")) ||
                            (v.Size != null && EF.Functions.Like(v.Size, $"%{search}%"))
                 );
-                
+
             }
 
-           
-            //  Deleted Filter
-            //if (request.IsDeleted == true)
-            //{
-            //    variants = variants
-            //        .IgnoreQueryFilters()
-            //        .Where(v => v.IsDeleted);
-            //}
             if (request.IsDeleted.HasValue)
             {
                 variants = variants.IgnoreQueryFilters()
@@ -103,8 +103,6 @@ namespace Tradify.Core.Features.ProductVariant.Queries.Handlers
             if (request.Discount == true)
                 variants = variants.Where(v => v.Discount > 0);
 
-           
-
 
             // Out Of Stock
             if (request.OutOfStock == true)
@@ -113,34 +111,80 @@ namespace Tradify.Core.Features.ProductVariant.Queries.Handlers
             //  Order
             variants = variants.OrderByDescending(v => v.Id);
 
+
             //  Pagination
             var result = await mapper
                 .ProjectTo<GetProductVariantByProductResponse>(variants)
                 .ToPaginationlist(request.PageNumber, request.PageSize);
 
+
+            var baseUrl = fileService.GetBaseUrl();
+
+            foreach (var varint in result.Data)
+            {
+                if (varint.Image != null)
+                {
+                    varint.Image.MediaPath =
+                        baseUrl + varint.Image.MediaPath.Replace("\\", "/");
+                }
+            }
+
             return Success(result);
 
         }
-       
+
+        // Get All Varint By Product List
+
+        public async Task<List<GetProductVariantByProductResponse>> Handle(GetAllVarintByProductListQuery request, CancellationToken cancellationToken)
+        {
+            //  Query
+            var variants =await productVariantService.GetTableNoTracking().Include(v => v.ProductVariantImage)
+                .Where(v => v.ProductId == request.ProductId).ToListAsync(cancellationToken);
 
 
 
+
+            var result = mapper.Map<List<GetProductVariantByProductResponse>>(variants);
+            var baseUrl = fileService.GetBaseUrl();
+            foreach (var varint in result)
+            {
+                if (varint.Image != null)
+                {
+                    varint.Image.MediaPath =
+                        baseUrl + varint.Image.MediaPath.Replace("\\", "/");
+                }
+            }
+
+
+            return result;
+        }
+
+
+        // Get Varint By Id 
         public async Task<Response<GetProductVariantByIdResponse>> Handle(GetProductVariantByIdQuery request, CancellationToken cancellationToken)
         {
             var variant = await productVariantService.GetTableNoTracking()
                                 .Include(v => v.Product)
-                                .Include(v => v.ProductVariantImages)
+                                .Include(v => v.ProductVariantImage)
                                 .FirstOrDefaultAsync(v => v.Id == request.Id);
             if (variant == null)
                 return NotFound<GetProductVariantByIdResponse>(localize.Get("VariantNotFound"));
 
             var result = mapper.Map<GetProductVariantByIdResponse>(variant);
+            var baseUrl = fileService.GetBaseUrl();
 
+           
+                if (result.Image != null)
+                {
+                result.Image.MediaPath =
+                        baseUrl + result.Image.MediaPath.Replace("\\", "/");
+                }
+           
             return Success<GetProductVariantByIdResponse>(result);
 
-    }
+        }
 
-
+      
         #endregion
 
     }

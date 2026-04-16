@@ -11,8 +11,9 @@ namespace Tradify.Infrastructure.Configurations
     {
         public void Configure(EntityTypeBuilder<ProductVariantImage> builder)
         {
+            builder.HasIndex(x => x.ProductVariantId).IsUnique();
 
         }
-    
+
     }
 }

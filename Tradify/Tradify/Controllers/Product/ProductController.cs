@@ -24,11 +24,19 @@ namespace Tradify.Controllers.Product
             var result = await Mediator.Send(query);
             return Ok(result);
         }
+        [HttpGet(Router.Product.List)]
+        public async Task<IActionResult> GetProductsList([FromQuery] GetAllProductListQuery query)
+        {
+            var result = await Mediator.Send(query);
+            return Ok(result);
+        }
+
+        
 
         [HttpGet(Router.Product.GetByID)]
-        public async Task<IActionResult> GetById([FromRoute] int id)
+        public async Task<IActionResult> GetById([FromRoute] int id )//,int userId)
         {
-            var result = await Mediator.Send(new GetProductByIdQuery(id));
+            var result = await Mediator.Send(new GetProductByIdQuery(id));  //, userId));
             return NewResult(result);
         }
 

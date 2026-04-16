@@ -11,21 +11,14 @@ namespace Tradify.Core.Mapping.ProductVariantMapping
         public void GetProductVariantPaginationMapping()
         {
             CreateMap<ProductVariants, GetProductVariantByProductResponse>()
-           .ForMember(dest => dest.FinalPrice, op => op.MapFrom(src=>src.FinalPrice))
 
-           
-           .ForMember(dest => dest.MainImage,
-               opt => opt.MapFrom(src =>
-                    src.ProductVariantImages
-                       .Where(i => i.IsMain)
-                       .Select(i => i.MediaPath)
-                       .FirstOrDefault()
-                       ?? src.ProductVariantImages
-                       .Select(i => i.MediaPath)
-                       .FirstOrDefault()
-               ));
-          
-            
+
+          .ForMember(dest => dest.Image, opt => opt.MapFrom(x => x.ProductVariantImage));
+
+            CreateMap<ProductVariantImage, ProductVariantImageResponse>().ForMember(dest => dest.MediaPath,
+                    opt => opt.MapFrom(src => src.MediaPath));
+
+
 
         }
     }

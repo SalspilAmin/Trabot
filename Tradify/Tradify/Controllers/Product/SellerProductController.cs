@@ -19,12 +19,20 @@ namespace Tradify.Controllers.Product
     {
         
         [HttpPost(Router.Product.Add)]
-        public async Task<IActionResult> Add([FromForm] AddProductCommand command)
+        public async Task<IActionResult> Add([FromBody] AddProductCommand command)
         {
             var response = await Mediator.Send(command);
             return NewResult(response);
         }
-        
+
+
+        [HttpPost(Router.Product.AddWithImage)]
+        public async Task<IActionResult> AddWithImage([FromForm] AddProductWithImageCommand command)
+        {
+            var response = await Mediator.Send(command);
+            return NewResult(response);
+        }
+
         [HttpPut(Router.Product.UpdateProduct)]
         public async Task<IActionResult> UpdateProduct([FromRoute] int productId, [FromForm] UpdateProductCommand command)
         {
@@ -34,13 +42,7 @@ namespace Tradify.Controllers.Product
             return NewResult(response);
 
         }
-        //[HttpDelete(Router.Product.Delete)]
-        //public async Task<IActionResult> DeleteProduct([FromQuery] DeleteProductCommand command)
-        //{
-
-        //    var response = await Mediator.Send(command);
-        //    return Ok(response);
-        //}
+        
         [HttpDelete(Router.Product.Delete)]
         public async Task<IActionResult> DeleteProduct([FromRoute] int productId)
         {
