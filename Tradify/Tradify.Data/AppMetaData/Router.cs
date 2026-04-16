@@ -55,6 +55,10 @@ namespace Tradify.Data.AppMetaData
         {
             public const string prefix = Rule + "Product";
             public const string Add = prefix + "/AddProduct";
+            public const string AddWithImage = prefix + "/AddWithImage";
+            public const string List = prefix + "/List";
+
+
             public const string Paginated = prefix + "/Paginated";
             public const string GetByID = prefix + "/Get" + SignleRoute;
             public const string UpdateProduct = prefix + "/Update" ;
@@ -158,6 +162,9 @@ namespace Tradify.Data.AppMetaData
             public const string prefix = Rule + "ProductVariant";
 
             public const string Add = prefix + "/AddProductVariant";
+            public const string AddWithImage = prefix + "/AddProductVariantWithImage";
+
+            
             public const string UpdateProductVariant = prefix + "/Update";
             public const string AddDiscount = prefix + "/AddDiscount";
             public const string DeleteDiscount = prefix + "/DeleteDiscount";
@@ -165,8 +172,8 @@ namespace Tradify.Data.AppMetaData
             public const string Delete = prefix + "/Delete" + SignleRoute;
             public const string GetByProduct = prefix + "/ByProduct";
             public const string GetById = prefix + "/Get" + SignleRoute;
+            public const string List = prefix + "/List";
 
-            
 
 
         }

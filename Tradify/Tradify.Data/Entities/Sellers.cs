@@ -22,9 +22,10 @@ namespace Tradify.Data.Entities
         public virtual User User { get; set; }
        
         public virtual Stores? Store { get; set; }
-        public virtual ICollection<Products>? Products { get; set; }
+
+       // public virtual ICollection<Products>? Products { get; set; }
          
-        public virtual ICollection<Categories>? Categories { get; set; }
+      //  public virtual ICollection<Categories>? Categories { get; set; }
         public virtual ICollection<Payouts> Payouts { get; set; }                   
     }
 }

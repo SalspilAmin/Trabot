@@ -10,12 +10,15 @@ namespace Tradify.Data.Entities
         
         public int Id { get; set; } 
 
-        public string Name { get; set; }    
+        public string Name { get; set; }
 
         public int? ParentCategoryId { get; set; }
 
         public bool IsDeleted { get; set; } = false;
+        public int StoreId { get; set; }
 
+        [ForeignKey(nameof(StoreId))]
+        public virtual Stores? Stores { get; set; }
         public virtual ICollection<Products>? Products { get; set; }
         [ForeignKey(nameof(ParentCategoryId))]
         public virtual Categories? Parent { get; set; }

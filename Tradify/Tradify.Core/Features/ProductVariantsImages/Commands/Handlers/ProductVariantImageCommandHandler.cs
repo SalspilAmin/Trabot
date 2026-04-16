@@ -17,10 +17,10 @@ using Tradify.Service.Services;
 
 namespace Tradify.Core.Features.ProductVariantsImages.Commands.Handlers
 {
-    public  class ProductVariantImageCommandHandler : ResponseHandler
-        ,IRequestHandler<AddProductVariantImageCommand, Response<string>>
-        , IRequestHandler<UpdateProductVariantImageCommand, Response<string>>
-        , IRequestHandler<DeleteProductVariantImageCommand, Response<string>>
+    public class ProductVariantImageCommandHandler : ResponseHandler
+        , IRequestHandler<AddProductVariantImageCommand, Response<string>>
+        //, IRequestHandler<UpdateProductVariantImageCommand, Response<string>>
+        //, IRequestHandler<DeleteProductVariantImageCommand, Response<string>>
 
 
     {
@@ -32,6 +32,7 @@ namespace Tradify.Core.Features.ProductVariantsImages.Commands.Handlers
         private readonly IProductVariantImageService productVariantImageService;
         private readonly IMapper mapper;
         private readonly ICurrentUserService currentUserService;
+        private readonly ISellerService sellerService;  
 
 
         #endregion
@@ -42,7 +43,7 @@ namespace Tradify.Core.Features.ProductVariantsImages.Commands.Handlers
                                      IProductVariantImageService productVariantImageService,
                                      IFileService fileService,
                                      ICurrentUserService currentUserService,
-                                     LocalizationService localize) : base(localize)
+                                     LocalizationService localize , ISellerService sellerService) : base(localize)
         {
             this.productVariantService = productVariantService;
             this.mapper = mapper;
@@ -50,149 +51,141 @@ namespace Tradify.Core.Features.ProductVariantsImages.Commands.Handlers
             this.productVariantImageService = productVariantImageService;
             this.localize = localize;
             this.currentUserService = currentUserService;
+            this.sellerService = sellerService;
         }
         #endregion
-       
+
 
 
 
         #region Methods
         public async Task<Response<string>> Handle(AddProductVariantImageCommand request, CancellationToken cancellationToken)
         {
-            
-
-         
-
-         
             // 1️⃣ Get current user
             var currentUserId = currentUserService.GetUserId();
+            var seller = await sellerService.GetTableNoTracking().FirstOrDefaultAsync(s => s.UserId == currentUserId);
 
+            // var seller = await sellerService.GetTableNoTracking().FirstOrDefaultAsync(s=>s.Id== request.SellerId);
+            if (seller==null)
+                return NotFound<string>(localize.Get("SellerNotFound"));
             // 2️⃣ Get productVariant
             var productVariant = await productVariantService.GetTableAsTracking()
                      .Include(p => p.Product)
                      .ThenInclude(p => p.Store)
-                     .FirstOrDefaultAsync(p =>p.Id == request.ProductVariantId &&
-                                          p.Product.Store.SellerId == currentUserId); 
+                     .FirstOrDefaultAsync(p => p.Id == request.ProductVariantId &&
+                                          p.Product.Store.SellerId == seller.Id);
             if (productVariant == null)
                 return NotFound<string>(localize.Get("ProductNotFound"));
 
 
 
+
             // 3️⃣ Upload image
             var imagePath = await fileService.UploadGenericAsync(
-            UploadFolder.Variants,
+            UploadFolder.Store,
             request.ProductVariantId,
-            request.Image
-        );
-            if (imagePath == "NoFile"||imagePath=="InvalidImageType")
+            request.Image);
+
+            if (!imagePath.StartsWith("/"))
             {
-                return BadRequest<string>(imagePath);
+                return BadRequest<string>(localize.Get(imagePath));
             }
 
-            // 4️⃣ لو IsMain = true → نشيل القديم
-            if (request.IsMain)
-            {
-                var oldMain = await productVariantImageService.GetTableAsTracking()
-                                    .Where(i =>i.ProductVariantId == request.ProductVariantId && i.IsMain)
-                                    .ExecuteUpdateAsync(setters => setters.SetProperty(i => i.IsMain, false));
+           
 
-            }
-              
+
             // 5️⃣ Save in DB
             var productVariantImage = new ProductVariantImage
             {
                 ProductVariantId = request.ProductVariantId,
                 MediaPath = imagePath,
-                IsMain = request.IsMain,
-                SortOrder = request.SortOrder
+
             };
-            
-
-
 
             await productVariantImageService.AddAsync(productVariantImage);
             await productVariantImageService.SaveChangesAsync();
 
             return Success(localize.Get("ImageAddedSuccessfully"));
 
+
         }
 
 
-     
-
-        public async Task<Response<string>> Handle(UpdateProductVariantImageCommand request, CancellationToken cancellationToken)
-        {
-            var currentUserId = currentUserService.GetUserId();
-
-            // 1️⃣ Get image
-            var image = await productVariantImageService.GetTableAsTracking()
-                        .Include(i => i.ProductVariant)
-                        .ThenInclude(v => v.Product)
-                        .ThenInclude(p => p.Store)
-                        .FirstOrDefaultAsync(i => i.Id == request.ImageId &&
-                         i.ProductVariant.Product.Store.SellerId == currentUserId); 
-                   
-
-            if (image == null)
-                return NotFound<string>(localize.Get("ImageNotFound"));
 
 
+        //public async Task<Response<string>> Handle(UpdateProductVariantImageCommand request, CancellationToken cancellationToken)
+        //{
+        //    var currentUserId = currentUserService.GetUserId();
 
-           
-            if (request.IsMain && !image.IsMain)
-            {
-                var oldMainImages = await productVariantImageService.GetTableAsTracking()
-                    .Where(i => i.ProductVariantId == image.ProductVariantId && i.IsMain)
-                   .ExecuteUpdateAsync(setters =>
-                        setters.SetProperty(i => i.IsMain, false));
-            }
+        //    // 1️⃣ Get image
+        //    var image = await productVariantImageService.GetTableAsTracking()
+        //                .Include(i => i.ProductVariant)
+        //                .ThenInclude(v => v.Product)
+        //                .ThenInclude(p => p.Store)
+        //                .FirstOrDefaultAsync(i => i.Id == request.ImageId &&
+        //                 i.ProductVariant.Product.Store.SellerId == currentUserId);
 
-            // 4️⃣ Update fields
-            image.IsMain = request.IsMain;
-            image.SortOrder = request.SortOrder;
 
-            await productVariantImageService.UpdateAsync(image);
-            await productVariantImageService.SaveChangesAsync();
+        //    if (image == null)
+        //        return NotFound<string>(localize.Get("ImageNotFound"));
 
-            return Success<string>(localize.Get("ImageUpdatedSuccessfully"));
-        }
 
-        public async Task<Response<string>> Handle(DeleteProductVariantImageCommand request, CancellationToken cancellationToken)
-        {
-            // 1️⃣ Get image with related product
-            var currentUserId = currentUserService.GetUserId();
-           
-            var image = await productVariantImageService.GetTableAsTracking()
-                        .Include(i => i.ProductVariant)
-                        .ThenInclude(v => v.Product)
-                        .ThenInclude(p => p.Store)
-                        .FirstOrDefaultAsync(i => i.Id == request.ImageId &&
-                         i.ProductVariant.Product.Store.SellerId == currentUserId);
-            if (image == null)
-                return NotFound<string>(localize.Get("ImageNotFound"));
 
-            if (image.IsMain)
-            {
-                var anotherImage = await productVariantImageService.GetTableAsTracking()
-                    .FirstOrDefaultAsync(i => i.ProductVariantId == image.ProductVariantId && i.Id != image.Id);
 
-                if (anotherImage != null)
-                    anotherImage.IsMain = true;
-            }
-          
-            // 3️⃣ Delete image
-            if (!string.IsNullOrWhiteSpace(image.MediaPath))
-            {
-                await fileService.DeleteFile(image.MediaPath);
-            }
-             await productVariantImageService.DeleteAsync(image);
-            await productVariantImageService.SaveChangesAsync();
+        //    if (request.IsMain && !image.IsMain)
+        //    {
+        //        var oldMainImages = await productVariantImageService.GetTableAsTracking()
+        //            .Where(i => i.ProductVariantId == image.ProductVariantId && i.IsMain)
+        //           .ExecuteUpdateAsync(setters =>
+        //                setters.SetProperty(i => i.IsMain, false));
+        //    }
 
-            return Success<string>(localize.Get("ImageDeletedSuccessfully"));
-        }
-   
-        
-        
+        //    // 4️⃣ Update fields
+        //    image.IsMain = request.IsMain;
+        //    image.SortOrder = request.SortOrder;
+
+        //    await productVariantImageService.UpdateAsync(image);
+        //    await productVariantImageService.SaveChangesAsync();
+
+        //    return Success<string>(localize.Get("ImageUpdatedSuccessfully"));
+        //}
+
+        //public async Task<Response<string>> Handle(DeleteProductVariantImageCommand request, CancellationToken cancellationToken)
+        //{
+        //    // 1️⃣ Get image with related product
+        //    var currentUserId = currentUserService.GetUserId();
+
+        //    var image = await productVariantImageService.GetTableAsTracking()
+        //                .Include(i => i.ProductVariant)
+        //                .ThenInclude(v => v.Product)
+        //                .ThenInclude(p => p.Store)
+        //                .FirstOrDefaultAsync(i => i.Id == request.ImageId &&
+        //                 i.ProductVariant.Product.Store.SellerId == currentUserId);
+        //    if (image == null)
+        //        return NotFound<string>(localize.Get("ImageNotFound"));
+
+        //    if (image.IsMain)
+        //    {
+        //        var anotherImage = await productVariantImageService.GetTableAsTracking()
+        //            .FirstOrDefaultAsync(i => i.ProductVariantId == image.ProductVariantId && i.Id != image.Id);
+
+        //        if (anotherImage != null)
+        //            anotherImage.IsMain = true;
+        //    }
+
+        //    // 3️⃣ Delete image
+        //    if (!string.IsNullOrWhiteSpace(image.MediaPath))
+        //    {
+        //        await fileService.DeleteFile(image.MediaPath);
+        //    }
+        //    await productVariantImageService.DeleteAsync(image);
+        //    await productVariantImageService.SaveChangesAsync();
+
+        //    return Success<string>(localize.Get("ImageDeletedSuccessfully"));
+        //}
+
+
+
 
 
         #endregion

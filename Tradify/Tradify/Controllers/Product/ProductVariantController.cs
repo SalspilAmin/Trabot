@@ -5,6 +5,7 @@ using Tradify.Bases;
 using Tradify.Core.Features.Product.Commands.Models;
 using Tradify.Core.Features.ProductVariant.Commands.Models;
 using Tradify.Core.Features.ProductVariant.Queries.Models;
+using Tradify.Core.Features.Store.Queries.Models;
 using Tradify.Data.AppMetaData;
 
 namespace Tradify.Controllers.Product
@@ -14,17 +15,24 @@ namespace Tradify.Controllers.Product
     {
 
         [HttpPost(Router.ProductVariant.Add)]
-        public async Task<IActionResult> AddVariant([FromRoute] int productId, [FromBody] AddProductVariantCommand command)
+        public async Task<IActionResult> AddVariant( [FromForm] AddProductVariantCommand command)
         {
-            command.ProductId = productId;
+            
+            var result = await Mediator.Send(command);
+            return NewResult(result);
+        }
+
+        [HttpPost(Router.ProductVariant.AddWithImage)]
+        public async Task<IActionResult> AddVariantWithImage([FromForm] AddProductVarintWithImageCommand command)
+        {
+
             var result = await Mediator.Send(command);
             return NewResult(result);
         }
 
         [HttpPut(Router.ProductVariant.UpdateProductVariant)]
-        public async Task<IActionResult> UpdateProductVariant([FromRoute] int variantId, [FromBody] UpdateProductVariantCommand command)
+        public async Task<IActionResult> UpdateProductVariant( [FromForm] UpdateProductVariantCommand command)
         {
-            command.Id = variantId;
             var result = await Mediator.Send(command);
             return NewResult(result);
         }
@@ -47,7 +55,7 @@ namespace Tradify.Controllers.Product
         }
 
         [HttpPut(Router.ProductVariant.AddDiscount)]
-        public async Task<IActionResult> AddDiscount([FromBody] AddDiscountCommand command)
+        public async Task<IActionResult> AddDiscount([FromForm] AddDiscountCommand command)
         {
  
             var response = await Mediator.Send(command);
@@ -69,12 +77,23 @@ namespace Tradify.Controllers.Product
         }
 
         [HttpGet(Router.ProductVariant.GetById)]
-        public async Task<IActionResult> GetVariantById([FromRoute] int variantId)
+        public async Task<IActionResult> GetVariantById([FromRoute] int id)
         {
-            var result = await Mediator.Send(new GetProductVariantByIdQuery(variantId));
+            var result = await Mediator.Send(new GetProductVariantByIdQuery(id));
             return NewResult(result);
         }
 
-    }
+
+        [HttpGet(Router.ProductVariant.List)]
+        public async Task<IActionResult> GetAllVarintList([FromQuery] GetAllVarintByProductListQuery query)
+        {
+            var result = await Mediator.Send(query);
+            return Ok(result);
         }
+
+
+
+
+    }
+ }
     

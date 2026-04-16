@@ -12,7 +12,8 @@ namespace Tradify.Core.Mapping.ProductMapping
         public void AddProductMapping() 
         {
             CreateMap<AddProductCommand, Products>();
-          
+            CreateMap<AddProductWithImageCommand, Products>();
+
 
         }
     }

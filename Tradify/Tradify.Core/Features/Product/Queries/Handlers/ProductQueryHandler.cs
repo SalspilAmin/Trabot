@@ -9,13 +9,17 @@ using System.Text;
 using Tradify.Core.Bases;
 using Tradify.Core.Features.Product.Queries.Models;
 using Tradify.Core.Features.Product.Queries.Results;
+using Tradify.Core.Features.Store.Queries.Models;
+using Tradify.Core.Features.Store.Queries.Results;
 using Tradify.Core.Features.User.Queries.Models;
 using Tradify.Core.Features.User.Queries.Results;
 using Tradify.Core.Resources.Service;
 using Tradify.Core.Wrappers;
+using Tradify.Data.Entities;
 using Tradify.Service.AbstractsServices;
 using Tradify.Service.Services;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using static Tradify.Data.AppMetaData.Router;
 
 namespace Tradify.Core.Features.Product.Queries.Handlers
 {
@@ -23,6 +27,7 @@ namespace Tradify.Core.Features.Product.Queries.Handlers
                                                        , IRequestHandler<GetProductByIdQuery, Response<GetProductByIdResponse>>
                                                       // , IRequestHandler<GetProductBySearchListQuery, List<GetProductPaginationReponse>>
                                                        , IRequestHandler<GetSellerProductsQuery, Response<PaginatedResult<GetSellerProductPaginationReponse>>>
+                                                       , IRequestHandler<GetAllProductListQuery, List<GetProductPaginationReponse>>
 
     {
         #region fields
@@ -33,13 +38,19 @@ namespace Tradify.Core.Features.Product.Queries.Handlers
         private readonly ICurrentUserService currentUserService;
         private readonly ISellerService sellerService;
         private readonly IFileService fileService;
+        private readonly UserManager<Tradify.Data.Entities.Identity.User> userManager;
+        private readonly IFavoriteService favoriteService;
 
 
         #endregion
 
         #region Constructor
-                                    
-        public ProductQueryHandler(LocalizationService localization,IMapper mapper,IFileService fileService , ISellerService sellerService, ICurrentUserService currentUserService, IProductService productService , IStoreService storeService) : base(localization)
+
+        public ProductQueryHandler(LocalizationService localization,IMapper mapper,IFileService fileService 
+            , ISellerService sellerService, ICurrentUserService currentUserService,
+            IProductService productService , IStoreService storeService
+            , UserManager<Tradify.Data.Entities.Identity.User> userManager,
+            IFavoriteService favoriteService) : base(localization)
         {
             this.mapper = mapper;
             this.localization = localization;
@@ -48,7 +59,8 @@ namespace Tradify.Core.Features.Product.Queries.Handlers
             this.currentUserService = currentUserService;
             this.sellerService  = sellerService;    
             this.fileService = fileService;
-
+            this.userManager = userManager;
+            this.favoriteService = favoriteService;
 
         }
 
@@ -57,16 +69,17 @@ namespace Tradify.Core.Features.Product.Queries.Handlers
         #region Mehtods
         // Get All Product Pagition With Filter
 
-        public async Task<PaginatedResult<GetProductPaginationReponse>> Handle(GetProductPaginationQuery request,CancellationToken cancellationToken)
+        public async Task<PaginatedResult<GetProductPaginationReponse>> Handle(GetProductPaginationQuery request, CancellationToken cancellationToken)
         {
-           
 
-            
-            var currentUserId = currentUserService.GetUserId();
 
+
+              var currentUserId = currentUserService.GetUserId();
+           // var currentUserId = request.UserId;
 
             var products = productService
-                .GetTableNoTracking();
+                .GetTableNoTracking().Include(p => p.ProductImages).Include(p => p.Reviews)
+                .Include(p => p.Category).Include(p => p.Favorites).AsQueryable();
 
             // Search
             if (!string.IsNullOrWhiteSpace(request.Search))
@@ -103,7 +116,7 @@ namespace Tradify.Core.Features.Product.Queries.Handlers
                 products = products.Where(p =>
                     p.ProductVariants.Any(v => v.FinalPrice <= request.MaxPrice));
             }
-            
+
             // rating
             if (request.MinRating.HasValue)
             {
@@ -116,20 +129,97 @@ namespace Tradify.Core.Features.Product.Queries.Handlers
 
             products = products.OrderByDescending(p => p.Id);
 
-            var mappedQuery = products.ProjectTo<GetProductPaginationReponse>( mapper.ConfigurationProvider,
-                              new Dictionary<string, object>
-                         {
-                 { "CurrentUserId", currentUserId }  });
 
-            var result = await mappedQuery.ToPaginationlist(
-                request.PageNumber,
-                request.PageSize);
+
+            var result = await mapper
+   .ProjectTo<GetProductPaginationReponse>(products)
+   .ToPaginationlist(request.PageNumber, request.PageSize);
+
+            var productIds = result.Data.Select(p => p.Id).ToList();
+
+            var favorites = await favoriteService
+                .GetTableNoTracking()
+                .Where(f => f.UserId == currentUserId && productIds.Contains(f.ProductId))
+                .Select(f => f.ProductId)
+                .ToListAsync();
+
+            foreach (var product in result.Data)
+            {
+                product.IsFavorite = favorites.Contains(product.Id);
+            }
+
+
+
+
+
+            var baseUrl = fileService.GetBaseUrl();
+
+            foreach (var product in result.Data)
+            {
+                if (product.MainImage != null)
+                {
+                    product.MainImage.MediaPath =
+                        baseUrl + product.MainImage.MediaPath.Replace("\\", "/");
+                }
+            }
+
+
+
             return result;
 
-         
-
-          
         }
+
+        // Get All Product List
+
+
+        public async Task<List<GetProductPaginationReponse>> Handle(GetAllProductListQuery request, CancellationToken cancellationToken)
+        {
+            // var currentUserId = request.UserId;
+            var currentUserId = currentUserService.GetUserId();
+
+            var products = await productService.GetTableNoTracking().Include(x => x.ProductImages).Include(p => p.Reviews).Include(p => p.Favorites).ToListAsync(cancellationToken);
+
+
+
+            var result = mapper.Map<List<GetProductPaginationReponse>>(products);
+
+            var productIds = result.Select(p => p.Id).ToList();
+
+            var favorites = await favoriteService
+                .GetTableNoTracking()
+                .Where(f => f.UserId == currentUserId && productIds.Contains(f.ProductId))
+                .Select(f => f.ProductId)
+                .ToListAsync();
+
+            foreach (var product in result)
+            {
+                product.IsFavorite = favorites.Contains(product.Id);
+            }
+
+            var baseUrl = fileService.GetBaseUrl();
+
+            foreach (var product in result)
+            {
+                if (product.MainImage != null)
+                {
+                    product.MainImage.MediaPath =
+                        baseUrl + product.MainImage.MediaPath.Replace("\\", "/");
+                }
+            }
+
+            return result;
+
+
+        }
+
+
+
+
+
+
+
+
+
 
 
         //Get all Product List By Search 
@@ -153,7 +243,7 @@ namespace Tradify.Core.Features.Product.Queries.Handlers
 
         //    }
 
-          
+
 
         //    products = products.OrderByDescending(p => p.Id);
 
@@ -180,29 +270,38 @@ namespace Tradify.Core.Features.Product.Queries.Handlers
 
 
 
-
+        // Get Product By Id 
         public async Task<Response<GetProductByIdResponse>> Handle(GetProductByIdQuery request, CancellationToken cancellationToken)
         {
-            var currentUserId = currentUserService.GetUserId();
-            var productQuery = productService
-                .GetTableNoTracking()
-                .Where(p => p.Id == request.Id)
-               
-                .AsQueryable();
+             var currentUserId = currentUserService.GetUserId();
+           //var currentUserId = request.UserId;
 
-            var product = await productQuery
-                .ProjectTo<GetProductByIdResponse>(
-                    mapper.ConfigurationProvider,
-                    new Dictionary<string, object>
-                    {
-                    { "CurrentUserId", currentUserId }
-                    })
-                .FirstOrDefaultAsync(cancellationToken);
-            if (product == null) return NotFound<GetProductByIdResponse>(localization.Get("NotFound"));
+            var userExist = await userManager.FindByIdAsync(currentUserId.ToString());
+            if (userExist==null)
+                return NotFound<GetProductByIdResponse>(localization.Get("UserNotFound"));
+            var product = await productService
+                .GetTableNoTracking().Include(p=>p.ProductImages).Include(p=>p.Reviews)
+                .Include(p => p.Category).Include(p => p.Favorites)
+    
+                .FirstOrDefaultAsync(p => p.Id == request.Id) ;
 
-           // var result = mapper.Map<GetProductByIdResponse>(product);
+            
+            if (product == null) return NotFound<GetProductByIdResponse>(localization.Get("ProductNotFound"));
 
-            return Success(product);
+            var result = mapper.Map<GetProductByIdResponse>(product);
+
+            var baseUrl = fileService.GetBaseUrl();
+            if (result.Images != null)
+            {
+                foreach (var image in result.Images ?? [])
+                {
+                    image.MediaPath =
+                        baseUrl + image.MediaPath.Replace("\\", "/");
+                }
+            }
+            result.IsFavorite = product.Favorites
+                  .Any(f => f.UserId == currentUserId);
+            return Success<GetProductByIdResponse>(result);
 
         }
 

@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -6,9 +7,9 @@ using Tradify.Core.Bases;
 
 namespace Tradify.Core.Features.Product.Commands.Models
 {
-    public class AddProductCommand : IRequest<Response<string>>
+    public class AddProductWithImageCommand : IRequest<Response<string>>
     {
-     //   public int StoreId { get; set; }
+        //public int StoreId { get; set; }
         public string Name { get; set; }
 
         public string Description { get; set; }
@@ -18,7 +19,7 @@ namespace Tradify.Core.Features.Product.Commands.Models
         public decimal Price { get; set; }
 
         public int Stock { get; set; }
-
+        public IFormFile Image { get; set; }
 
     }
 }

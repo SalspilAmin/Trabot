@@ -22,24 +22,16 @@ namespace Tradify.Core.Mapping.ProductMapping
                  .ForMember(dest => dest.Rating, src => src.MapFrom(x => x.Reviews != null && x.Reviews.Any() ? x.Reviews.Average(r => (double)r.Rating) : 0))
 
                  .ForMember(dest => dest.ReviewsCount, src => src.MapFrom(x => x.Reviews != null ? x.Reviews.Count : 0))
+                .ForMember(dest => dest.IsFavorite, opt => opt.MapFrom(src => false))
+              
+
+               .ForMember(dest => dest.MainImage, opt => opt.MapFrom(src => src.ProductImages.FirstOrDefault(i => i.IsMain)));
+
+
+
+
 
                 
-
-                 .ForMember(dest => dest.IsFavorite,
-                                 opt => opt.MapFrom((src, dest, _, context) =>
-                                   context.Items.ContainsKey("CurrentUserId") &&
-                                    src.Favorites.Any(f =>
-                                     f.UserId == (int)context.Items["CurrentUserId"])))
-
-
-                
-
-                .ForMember(dest => dest.MainImage,
-                    opt => opt.MapFrom(src =>
-                        src.ProductImages
-                            .OrderByDescending(i => i.IsMain)
-                            .Select(i => i.MediaPath)
-                            .FirstOrDefault()));
            
 
 

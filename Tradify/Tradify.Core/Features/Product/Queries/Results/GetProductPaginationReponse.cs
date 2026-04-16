@@ -9,7 +9,6 @@ namespace Tradify.Core.Features.Product.Queries.Results
 
         public int Id { get; set; }
         public string Name { get; set; }
-        public string MainImage { get; set; }
 
         public decimal FinalPrice { get; set; }
 
@@ -17,7 +16,11 @@ namespace Tradify.Core.Features.Product.Queries.Results
 
         public int ReviewsCount { get; set; }
  
-        public bool IsFavorite { get; set; } 
+        public bool IsFavorite { get; set; }
+
+        public ProductImageResponse MainImage { get; set; }
+
 
     }
+
 }

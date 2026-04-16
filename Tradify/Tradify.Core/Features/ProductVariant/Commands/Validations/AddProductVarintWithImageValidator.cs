@@ -7,7 +7,7 @@ using Tradify.Core.Resources.Service;
 
 namespace Tradify.Core.Features.ProductVariant.Commands.Validations
 {
-    public class AddProductVariantValidator : AbstractValidator<AddProductVariantCommand>
+    public class AddProductVarintWithImageValidator : AbstractValidator<AddProductVarintWithImageCommand>
     {
         #region Fields 
 
@@ -15,7 +15,7 @@ namespace Tradify.Core.Features.ProductVariant.Commands.Validations
         #endregion
 
         #region constructor
-        public AddProductVariantValidator(LocalizationService localization)
+        public AddProductVarintWithImageValidator(LocalizationService localization)
         {
             this.localize = localization;
             ApplyProductVariantValidator();
@@ -40,6 +40,21 @@ namespace Tradify.Core.Features.ProductVariant.Commands.Validations
             RuleFor(x => x.Discount)
                       .GreaterThanOrEqualTo(0)
                       .LessThanOrEqualTo(100);
+
+            RuleFor(x => x.Image)
+.NotNull().WithMessage(localize.Get("Required"))
+.Must(file => file != null && file.Length > 0)
+.WithMessage(localize.Get("NoFile"))
+.Must(file => file.ContentType.StartsWith("image/"))
+.WithMessage(localize.Get("OnlyImagesAllowed"))
+.Must(file =>
+{
+    var ext = Path.GetExtension(file.FileName).ToLower();
+    return ext == ".jpg" || ext == ".jpeg" || ext == ".png" || ext == ".webp";
+})
+.WithMessage(localize.Get("OnlyImagesAllowed"))
+.Must(file => file.Length <= 5 * 1024 * 1024)
+.WithMessage(localize.Get("MaxSizeIs5MB"));
 
         }
     }
