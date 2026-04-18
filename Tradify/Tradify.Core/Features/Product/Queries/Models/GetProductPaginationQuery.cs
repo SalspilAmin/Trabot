@@ -13,7 +13,7 @@ namespace Tradify.Core.Features.Product.Queries.Models
        // public int UserId { get; set; } 
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
-
+        public int? StoreId { get; set; }   
         public decimal? MinPrice { get; set; }
         public decimal? MaxPrice { get; set; }
 

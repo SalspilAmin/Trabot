@@ -14,6 +14,8 @@ namespace Tradify.Core.Features.Categorie.Commands.Models
 
         public int? ParentCategoryId { get; set; }
 
+        //public int SellerId { get; set; }
+
 
     }
 }

@@ -19,7 +19,7 @@ namespace Tradify.Controllers.Product
     {
         
         [HttpPost(Router.Product.Add)]
-        public async Task<IActionResult> Add([FromBody] AddProductCommand command)
+        public async Task<IActionResult> Add([FromForm] AddProductCommand command)
         {
             var response = await Mediator.Send(command);
             return NewResult(response);
