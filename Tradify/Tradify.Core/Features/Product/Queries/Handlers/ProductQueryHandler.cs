@@ -25,9 +25,11 @@ namespace Tradify.Core.Features.Product.Queries.Handlers
 {
     public class ProductQueryHandler : ResponseHandler , IRequestHandler<GetProductPaginationQuery, PaginatedResult<GetProductPaginationReponse>>
                                                        , IRequestHandler<GetProductByIdQuery, Response<GetProductByIdResponse>>
-                                                      // , IRequestHandler<GetProductBySearchListQuery, List<GetProductPaginationReponse>>
+                                                       , IRequestHandler<GetProductBySearchListQuery, List<GetProductPaginationReponse>>
                                                        , IRequestHandler<GetSellerProductsQuery, Response<PaginatedResult<GetSellerProductPaginationReponse>>>
                                                        , IRequestHandler<GetAllProductListQuery, List<GetProductPaginationReponse>>
+                                                       , IRequestHandler<GetProductByStoreQuery, List<GetProductPaginationReponse>>
+
 
     {
         #region fields
@@ -103,6 +105,13 @@ namespace Tradify.Core.Features.Product.Queries.Handlers
                 products = products.Where(p =>
                     p.CategoryId == request.CategoryId);
             }
+
+            // Store
+            if (request.StoreId.HasValue)
+            {
+                products = products.Where(p =>
+                    p.StoreId == request.StoreId);
+            }
             //  Min Price
             if (request.MinPrice.HasValue)
             {
@@ -174,11 +183,70 @@ namespace Tradify.Core.Features.Product.Queries.Handlers
 
         public async Task<List<GetProductPaginationReponse>> Handle(GetAllProductListQuery request, CancellationToken cancellationToken)
         {
-            // var currentUserId = request.UserId;
+             //var currentUserId = request.UserId;
             var currentUserId = currentUserService.GetUserId();
 
-            var products = await productService.GetTableNoTracking().Include(x => x.ProductImages).Include(p => p.Reviews).Include(p => p.Favorites).ToListAsync(cancellationToken);
+            var query = productService.GetTableNoTracking().Include(x => x.ProductImages)
+               .Include(p => p.Reviews).Include(p => p.Favorites).AsQueryable();
 
+          
+
+            // Search
+            if (!string.IsNullOrWhiteSpace(request.Search))
+            {
+                var search = request.Search.Trim();
+                query = query.Where(p =>
+                              EF.Functions.Like(p.Name, $"%{search}%") ||
+                              EF.Functions.Like(p.Description, $"%{search}%"));
+
+            }
+
+            // Store
+            if (request.StoreId.HasValue)
+            {
+                query = query.Where(p =>
+                    p.StoreId == request.StoreId);
+            }
+
+            // Discount
+            if (request.Discount == true)
+            {
+                query = query.Where(p =>
+                    p.ProductVariants.Any(v => v.Discount > 0));
+            }
+            // Category
+            if (request.CategoryId.HasValue)
+            {
+                query = query.Where(p =>
+                    p.CategoryId == request.CategoryId);
+            }
+            //  Min Price
+            if (request.MinPrice.HasValue)
+            {
+                query = query.Where(p =>
+                    p.ProductVariants.Any(v => v.FinalPrice >= request.MinPrice));
+            }
+
+            //  Max Price
+            if (request.MaxPrice.HasValue)
+            {
+                query = query.Where(p =>
+                    p.ProductVariants.Any(v => v.FinalPrice <= request.MaxPrice));
+            }
+
+            // rating
+            if (request.MinRating.HasValue)
+            {
+                var minRating = request.MinRating.Value;
+
+                query = query.Where(p =>
+                    p.Reviews.Any() &&
+                    p.Reviews.Average(r => (double)r.Rating) >= minRating);
+            }
+
+            query = query.OrderByDescending(p => p.Id);
+
+            var products = await query.ToListAsync(cancellationToken);
 
 
             var result = mapper.Map<List<GetProductPaginationReponse>>(products);
@@ -214,59 +282,113 @@ namespace Tradify.Core.Features.Product.Queries.Handlers
 
 
 
-
-
-
-
-
-
-
-
         //Get all Product List By Search 
 
 
-        //public async Task<List<GetProductPaginationReponse>> Handle(GetProductBySearchListQuery request, CancellationToken cancellationToken)
-        //{
+        public async Task<List<GetProductPaginationReponse>> Handle(GetProductBySearchListQuery request, CancellationToken cancellationToken)
+        {
 
-        //    var currentUserId = currentUserService.GetUserId();
+           //  var currentUserId = request.UserId;
+            var currentUserId = currentUserService.GetUserId();
+
+            var query = productService.GetTableNoTracking().Include(x => x.ProductImages)
+                .Include(p => p.Reviews).Include(p => p.Favorites).AsQueryable();
+
+            // Search
+            if (!string.IsNullOrWhiteSpace(request.Search))
+            {
+                var search = request.Search.Trim();
+                query = query.Where(p =>
+                              EF.Functions.Like(p.Name, $"%{search}%") ||
+                              EF.Functions.Like(p.Description, $"%{search}%"));
+
+            }
+            var products = await query.ToListAsync(cancellationToken);
+
+            var result = mapper.Map<List<GetProductPaginationReponse>>(products);
+
+            var productIds = result.Select(p => p.Id).ToList();
+
+            var favorites = await favoriteService
+                .GetTableNoTracking()
+                .Where(f => f.UserId == currentUserId && productIds.Contains(f.ProductId))
+                .Select(f => f.ProductId)
+                .ToListAsync();
+
+            foreach (var product in result)
+            {
+                product.IsFavorite = favorites.Contains(product.Id);
+            }
+
+            var baseUrl = fileService.GetBaseUrl();
+
+            foreach (var product in result)
+            {
+                if (product.MainImage != null)
+                {
+                    product.MainImage.MediaPath =
+                        baseUrl + product.MainImage.MediaPath.Replace("\\", "/");
+                }
+            }
+
+            return result;
+
+        }
 
 
-        //    var products = productService.GetTableNoTracking();
 
-        //    // Search
-        //    if (!string.IsNullOrWhiteSpace(request.Search))
-        //    {
-        //        var search = request.Search.Trim();
-        //        products = products.Where(p =>
-        //                      EF.Functions.Like(p.Name, $"%{search}%") ||
-        //                      EF.Functions.Like(p.Description, $"%{search}%"));
-
-        //    }
+        //Get all Product List By Store 
 
 
+        public async Task<List<GetProductPaginationReponse>> Handle(GetProductByStoreQuery request, CancellationToken cancellationToken)
+        {
 
-        //    products = products.OrderByDescending(p => p.Id);
+            // var currentUserId = request.UserId;
+            var currentUserId = currentUserService.GetUserId();
 
-        //    var result = products.ProjectTo<GetProductPaginationReponse>(mapper.ConfigurationProvider,
-        //                      new Dictionary<string, object>
-        //                 {
-        //         { "CurrentUserId", currentUserId }  });
+            var query = productService.GetTableNoTracking().Include(x => x.ProductImages)
+                .Include(p => p.Reviews).Include(p => p.Favorites).AsQueryable();
+
+            // Store
+            if (request.StoreId > 0)
+            {
+                query = query.Where(p =>
+                    p.StoreId == request.StoreId);
+            }
+
+            var products = await query.ToListAsync(cancellationToken);
+
+            var result = mapper.Map<List<GetProductPaginationReponse>>(products);
+
+            var productIds = result.Select(p => p.Id).ToList();
+
+            var favorites = await favoriteService
+                .GetTableNoTracking()
+                .Where(f => f.UserId == currentUserId && productIds.Contains(f.ProductId))
+                .Select(f => f.ProductId)
+                .ToListAsync();
+
+            foreach (var product in result)
+            {
+                product.IsFavorite = favorites.Contains(product.Id);
+            }
+
+            var baseUrl = fileService.GetBaseUrl();
+
+            foreach (var product in result)
+            {
+                if (product.MainImage != null)
+                {
+                    product.MainImage.MediaPath =
+                        baseUrl + product.MainImage.MediaPath.Replace("\\", "/");
+                }
+            }
+
+            return result;
+
+        }
 
 
-
-        //    var baseUrl = fileService.GetBaseUrl();
-        //     foreach (var product in result)
-        //    {
-        //        if (product.MainImage != null)
-        //        {
-        //            product.MainImage =
-        //                baseUrl + product.MainImage.MediaPath.Replace("\\", "/");
-        //        }
-        //    }
-
-        //    return result;
-
-        //}
 
 
 
@@ -305,15 +427,10 @@ namespace Tradify.Core.Features.Product.Queries.Handlers
 
         }
 
-        //public async Task<PaginatedResult<GetProductByCategoryResponse>> Handle(GetProductsByCategoryQuery request, CancellationToken cancellationToken)
-        //{
-        //    var products = productService.GetProductsByCategoryAsync(request.CategoryId).OrderByDescending(p => p.Id);
-        //    var result = await mapper
-        //        .ProjectTo<GetProductByCategoryResponse>(products)
-        //        .ToPaginationlist(request.PageNumber, request.PageSize);
+   
 
-        //    return result;
-        //}
+
+
 
         public async Task<Response<PaginatedResult<GetSellerProductPaginationReponse>>> Handle(GetSellerProductsQuery request,CancellationToken cancellationToken)
         {

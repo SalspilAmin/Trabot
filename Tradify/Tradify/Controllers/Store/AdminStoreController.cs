@@ -42,9 +42,9 @@ namespace Tradify.Controllers.Store
         
 
         [HttpPut(Router.Store.restore)] 
-        public async Task<IActionResult> RestoreStore([FromBody] RestoreStoreCommand command)
+        public async Task<IActionResult> RestoreStore([FromRoute] int id )
         {
-            var response = await Mediator.Send(command);
+            var response = await Mediator.Send(new RestoreStoreCommand(id));
             return NewResult(response);
         }
 

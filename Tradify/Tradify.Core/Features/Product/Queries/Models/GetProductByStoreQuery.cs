@@ -3,14 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Tradify.Core.Features.Product.Queries.Results;
-using Tradify.Core.Wrappers;
 
 namespace Tradify.Core.Features.Product.Queries.Models
 {
-    public class GetProductBySearchListQuery : IRequest<List<GetProductPaginationReponse>>
+    public class GetProductByStoreQuery : IRequest<List<GetProductPaginationReponse>>
     {
-      //  public int UserId { get; set; } 
-        public string Search { get; set; }
-
+          public int UserId { get; set; } 
+        public int StoreId { get; set; }
     }
 }

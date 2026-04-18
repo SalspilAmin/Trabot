@@ -19,9 +19,9 @@ namespace Tradify.Controllers.Category
         }
 
         [HttpPut(Router.Category.Update)]
-        public async Task<IActionResult> Update([FromRoute] int CategoryId, [FromForm] UpdateCategoryCommand command)
+        public async Task<IActionResult> Update( [FromForm] UpdateCategoryCommand command)
         {
-            command.Id = CategoryId;
+            
 
             var response = await Mediator.Send(command);
             return NewResult(response);

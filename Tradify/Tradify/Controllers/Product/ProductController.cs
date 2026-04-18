@@ -31,7 +31,21 @@ namespace Tradify.Controllers.Product
             return Ok(result);
         }
 
-        
+
+        [HttpGet(Router.Product.Search)]
+        public async Task<IActionResult> GetProductsListBySearch([FromQuery] GetProductBySearchListQuery query)
+        {
+            var result = await Mediator.Send(query);
+            return Ok(result);
+        }
+
+        [HttpGet(Router.Product.Store)]
+        public async Task<IActionResult> GetProductByCategory([FromQuery] GetProductByStoreQuery query)
+        {
+            var result = await Mediator.Send(query);
+            return Ok(result);
+        }
+
 
         [HttpGet(Router.Product.GetByID)]
         public async Task<IActionResult> GetById([FromRoute] int id )//,int userId)
@@ -40,15 +54,7 @@ namespace Tradify.Controllers.Product
             return NewResult(result);
         }
 
-        //[HttpGet(Router.Product.Category)]
-        //public async Task<IActionResult> GetProductByCategory([FromQuery] GetProductsByCategoryQuery query)
-        //{
-        //    if (query == null || query.CategoryId <= 0)
-        //        return BadRequest("CategoryId is required and must be greater than 0");
-
-        //    var result = await Mediator.Send(query);
-        //    return Ok(result);
-        //}
+        
 
 
     }

@@ -8,11 +8,13 @@ using Tradify.Core.Bases;
 using Tradify.Core.Features.Categorie.Commands.Models;
 using Tradify.Core.Features.Categorie.Queries.Models;
 using Tradify.Core.Features.Categorie.Queries.Results;
+using Tradify.Core.Features.Product.Commands.Models;
 using Tradify.Core.Features.ProductVariant.Commands.Models;
 using Tradify.Core.Resources.Service;
 using Tradify.Data.Entities;
 using Tradify.Service.AbstractsServices;
 using Tradify.Service.Services;
+using static Tradify.Data.AppMetaData.Router;
 
 namespace Tradify.Core.Features.Categorie.Commands.Handlers
 {
@@ -57,105 +59,55 @@ namespace Tradify.Core.Features.Categorie.Commands.Handlers
         #endregion
 
         #region Mehtods
+
         public async Task<Response<string>> Handle(AddCategoryCommand request, CancellationToken cancellationToken)
         {
-            if (request.ParentCategoryId.HasValue)
+            var category = mapper.Map<Categories>(request);
+
+
+
+            var result = await cateroriesService.AddCategoriesAsync(category);//, request.SellerId);
+
+            if (result.Item1 != "Success")
             {
-                var parent = await cateroriesService.GetTableAsTracking()
-                    .FirstOrDefaultAsync(c=>c.Id == request.ParentCategoryId.Value);
-                if (parent == null)
-                    return BadRequest<string>(localization.Get("ParentCategoryNotFound"));
+                return BadRequest<string>(localization.Get(result.Item1));
+            }
+            else
+            {
+                return Success<string>("Success", meta: result.Item2);
             }
 
-             
-
-            // Check duplicate name (optional but professional)
-            var exists = await cateroriesService
-                .GetTableNoTracking()
-                .AnyAsync(c => c.Name == request.Name 
-                && c.ParentCategoryId == request.ParentCategoryId);
-
-            if (exists)
-                return BadRequest<string>(localization.Get("CategoryNameAlreadyExists"));
-
-            var category = mapper.Map<Categories>(request);
-            
-            await cateroriesService.AddAsync(category);
-            await cateroriesService.SaveChangesAsync();
-            return Success(localization.Get("CategoryAddSuccessfully"));
         }
+
+
+
+
 
 
         public async Task<Response<string>> Handle(UpdateCategoryCommand request, CancellationToken cancellationToken)
         {
-            var category = await cateroriesService
-                .GetTableAsTracking()
-                .FirstOrDefaultAsync(c => c.Id == request.Id);
-
-            if (category == null)
-                return NotFound<string>(localization.Get("CategoryNotFound"));
-
-            // Check Parent exists
-            if (request.ParentCategoryId.HasValue)
+            var categories = new Categories
             {
-                var parent = await cateroriesService
-                    .GetTableNoTracking()
-                    .FirstOrDefaultAsync(c => c.Id == request.ParentCategoryId.Value);
+                Id = request.Id,    
+                Name = request.Name,
+                ParentCategoryId = request.ParentCategoryId
+            };
 
-                if (parent == null)
-                    return BadRequest<string>(localization.Get("ParentCategoryNotFound"));
+            var result = await cateroriesService.UpdateCategory(categories);//, request.SellerId);
 
-                
-
-
-                // ❗ منع Circular
-                if (await IsCircular(request.Id, request.ParentCategoryId.Value))
-                    return BadRequest<string>(localization.Get("InvalidParentCircularReference"));
+            if (result != "Success")
+            {
+                ;
+                return BadRequest<string>(localization.Get(result));
+            }
+            else
+            {
+                return Success<string>(localization.Get("CategoryUpdatedSuccessfully"));
             }
 
-            // Check duplicate
-            var exists = await cateroriesService
-                .GetTableNoTracking()
-                .AnyAsync(c =>
-                    c.Id != request.Id &&
-                    EF.Functions.Like(c.Name, request.Name) &&
-                    c.ParentCategoryId == request.ParentCategoryId);
-
-            if (exists)
-                return BadRequest<string>(localization.Get("CategoryNameAlreadyExists"));
-
-            // Update
-            
-            category.Name = request.Name;
-            category.ParentCategoryId = request.ParentCategoryId;
-
-            await cateroriesService.SaveChangesAsync();
-
-            return Success(localization.Get("CategoryUpdatedSuccessfully"));
         }
 
-        // 🔥 recursion check
-        private async Task<bool> IsCircular(int categoryId, int newParentId)
-        {
-            var current = newParentId;
 
-            while (true)
-            {
-                var parent = await cateroriesService
-                    .GetTableNoTracking()
-                    .Where(c => c.Id == current)
-                    .Select(c => c.ParentCategoryId)
-                    .FirstOrDefaultAsync();
-
-                if (parent == null)
-                    return false;
-
-                if (parent == categoryId)
-                    return true;
-
-                current = parent.Value;
-            }
-        }
 
 
         public async Task<Response<string>> Handle(DeleteCategoryCommand request, CancellationToken cancellationToken)
