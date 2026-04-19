@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Tradify.Data.Entities.Identity;
+using Tradify.Data.Helpers.Results;
 
 namespace Tradify.Service.AbstractsServices.IdentityServices
 {
@@ -14,5 +15,6 @@ namespace Tradify.Service.AbstractsServices.IdentityServices
         public bool IsPhone(string input);
         public bool IsEmail(string input);
         public  Task<User?> FindUserByEmailOrPhoneAsync(string emailOrphone);
+        public Task<UserInfoFromToken?> GetUserInformationByToken(string token);
     }
 }

@@ -9,25 +9,33 @@ using Tradify.Core.Features.User.Queries.Models;
 using Tradify.Core.Features.User.Queries.Results;
 using Tradify.Core.Resources.Service;
 using Tradify.Core.Wrappers;
+using Tradify.Data.Helpers.Results;
+using Tradify.Service.AbstractsServices.AuthenticationServices;
+using Tradify.Service.AbstractsServices.IdentityServices;
 
 namespace Tradify.Core.Features.User.Queries.Handlers
 {
     public class UserQueryHandler : ResponseHandler,IRequestHandler<GetUserByIdQuery, Response<GetUserByIdResponse>>
-        ,IRequestHandler<GetUserPaginationQuery, PaginatedResult<GetUserPaginationReponse>>
+        ,IRequestHandler<GetUserPaginationQuery, PaginatedResult<GetUserPaginationReponse>>,
+        IRequestHandler<GetUserByTokenQuery, Response<UserInfoFromToken>>
     {
         #region fields
         private readonly IMapper mapper;
         private readonly UserManager<Tradify.Data.Entities.Identity.User> _userManager;
         private readonly LocalizationService localization;
+        private readonly IUserService userService;
+        
         #endregion
 
         #region Constructor
         public UserQueryHandler(LocalizationService localization, UserManager<Tradify.Data.Entities.Identity.User> userManager
-            ,IMapper mapper) : base(localization)
+            ,IMapper mapper,IUserService userService) : base(localization)
         {
             this._userManager = userManager;
             this.mapper = mapper;
             this.localization = localization;
+            this.userService = userService; 
+            
         }
 
        
@@ -54,6 +62,13 @@ namespace Tradify.Core.Features.User.Queries.Handlers
             var result = await mapper.ProjectTo<GetUserPaginationReponse>(users).ToPaginationlist(request.PageNumber, request.PageSize);
 
             return result;
+        }
+
+        public async Task<Response<UserInfoFromToken>> Handle(GetUserByTokenQuery request, CancellationToken cancellationToken)
+        {
+            var result = await userService.GetUserInformationByToken(request.AccessToken);
+            if (result == null) return NotFound<UserInfoFromToken>(localization.Get("NotFound"));
+            return Success<UserInfoFromToken>(result);      
         }
         #endregion
 

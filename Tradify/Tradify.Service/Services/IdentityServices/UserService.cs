@@ -1,14 +1,21 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Azure.Core;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Text;
 using System.Text.RegularExpressions;
 using Tradify.Data.Entities.Identity;
+using Tradify.Data.Helpers;
+using Tradify.Data.Helpers.Results;
 using Tradify.Infrastructure.Context;
 using Tradify.Service.AbstractsServices;
+using Tradify.Service.AbstractsServices.AuthenticationServices;
 using Tradify.Service.AbstractsServices.IdentityServices;
 using Tradify.Service.AbstractsServices.WhatsappServices;
 using Tradify.Service.Services.WhatsappServices;
@@ -23,9 +30,11 @@ namespace Tradify.Service.Services.IdentityServices
         private readonly IUrlHelper _urlHelper;
         private readonly IEmailService _emailService;
         private readonly IWatsappService watsappService;
+        private readonly JwtSettings jwtSettings;
 
         public UserService(ApplicationDbContext applicationDbContext,IHttpContextAccessor httpContextAccessor,
-            UserManager<User> userManager,IUrlHelper urlHelper,IEmailService emailService,IWatsappService watsappService)
+            UserManager<User> userManager,IUrlHelper urlHelper,IEmailService emailService,IWatsappService watsappService
+            , JwtSettings jwtSettings)
         {
             this.applicationDbContext = applicationDbContext;
             this.httpContextAccessor = httpContextAccessor;
@@ -33,6 +42,7 @@ namespace Tradify.Service.Services.IdentityServices
             this._urlHelper = urlHelper;
             this._emailService = emailService;
             this.watsappService = watsappService;
+            this.jwtSettings = jwtSettings;
         }
 
         public bool IsEmail(string input)
@@ -166,5 +176,83 @@ namespace Tradify.Service.Services.IdentityServices
 
             return  users.FirstOrDefault(x=>x.PhoneNumber == emailOrphone);
         }
+
+        public async Task<UserInfoFromToken?> GetUserInformationByToken(string token)
+        {
+            var result = await ValidateToken(token);
+            if (result != "NotExpired") return null;
+            var Token = ReadJWTToken(token);
+
+            var claims = Token.Claims;
+
+            var userInfo = new UserInfoFromToken
+            {
+                UserId = claims
+              .FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value,
+
+                Email = claims
+              .FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+
+                UserName = claims
+              .FirstOrDefault(x => x.Type == ClaimTypes.Name)?.Value,
+
+                Roles = claims
+              .Where(x => x.Type == ClaimTypes.Role)
+              .Select(x => x.Value)
+              .ToList()
+            };
+
+            return userInfo;
+
+        }
+
+
+
+
+        private async Task<string> ValidateToken(string accessToken)
+        {
+            var handler = new JwtSecurityTokenHandler();
+            var parameter = new TokenValidationParameters()
+            {
+                ValidateIssuer = jwtSettings.ValidateIssuer,
+                ValidateAudience = jwtSettings.ValidateAudience,
+                ValidateLifetime = jwtSettings.ValidateLifeTime,
+                ValidateIssuerSigningKey = jwtSettings.ValidateIssuerSigningKey,
+                ValidIssuer = jwtSettings.Issuer,
+                ValidAudience = jwtSettings.Audience,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtSettings.Secret))
+
+
+
+            };
+            try
+            {
+                var validation = handler.ValidateToken(accessToken, parameter, out SecurityToken securityToken);
+
+                if (validation == null)
+                {
+                    return "InvalidToken";
+                }
+                return "NotExpired";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
+
+        private JwtSecurityToken ReadJWTToken(string accessToken)
+        {
+            if (string.IsNullOrEmpty(accessToken))
+            {
+                throw new ArgumentNullException(nameof(accessToken));
+
+            }
+            var handler = new JwtSecurityTokenHandler();
+            var response = handler.ReadJwtToken(accessToken);
+
+            return response;
+        }
+
     }
 }
