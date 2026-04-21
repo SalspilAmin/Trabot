@@ -14,10 +14,11 @@ using Tradify.Core.Wrappers;
 using Tradify.Data.Entities;
 using Tradify.Service.AbstractsServices;
 using Tradify.Service.Services;
+using static Tradify.Data.AppMetaData.Router;
 
 namespace Tradify.Core.Features.Categorie.Queries.Handlers
 {
-    public class CategoriesQueryHandler : ResponseHandler, IRequestHandler<GetAllCategoriesQuery, Response<List<GetAllCategoriesResponse>>>
+    public class CategoriesQueryHandler : ResponseHandler, IRequestHandler<GetAllCategoriesQuery, PaginatedResult<GetAllCategoriesResponse>>
                                                           , IRequestHandler<GetCategoryTreeQuery, Response<List<GetCategoryTreeResponse>>>
                                                           , IRequestHandler<GetCategoryByIdQuery, Response<GetCategoryByIdResponse>>
 
@@ -51,10 +52,17 @@ namespace Tradify.Core.Features.Categorie.Queries.Handlers
         #endregion
 
         #region Mehtods
-        public async Task<Response<List<GetAllCategoriesResponse>>> Handle(GetAllCategoriesQuery request, CancellationToken cancellationToken)
+        public async Task<PaginatedResult<GetAllCategoriesResponse>> Handle(GetAllCategoriesQuery request, CancellationToken cancellationToken)
         {
             var query = cateroriesService
                         .GetTableNoTracking();
+            // Store
+            if (request.StoreId.HasValue)
+            {
+                query = query.Where(s =>
+                    s.StoreId == request.StoreId);
+            }
+
             // Search
             if (!string.IsNullOrWhiteSpace(request.Search))
             {
@@ -77,11 +85,12 @@ namespace Tradify.Core.Features.Categorie.Queries.Handlers
             {
                 query = query.Where(c => c.ParentCategoryId == request.ParentCategoryId);
             }
+            var categories = query.OrderByDescending(p => p.Id);
 
-            var categories = await query.ToListAsync();
 
-            var result = mapper.Map<List<GetAllCategoriesResponse>>(categories);
-            return Success(result);
+            var result = await mapper.ProjectTo<GetAllCategoriesResponse>(categories)
+                                     .ToPaginationlist(request.PageNumber, request.PageSize);
+            return result;
         }
 
 
@@ -92,14 +101,14 @@ namespace Tradify.Core.Features.Categorie.Queries.Handlers
                 .ToListAsync(cancellationToken);
             var lookup = categories.ToLookup(c => c.ParentCategoryId);
 
+            foreach (var item in categories)
+            {
+                Console.WriteLine($"Id: {item.Id}, Parent: {item.ParentCategoryId}");
+            }
 
-
-            // Build tree: select root categories
             var rootCategories = lookup[null];
 
-            //var rootCategories = categories
-            //    .Where(c => c.ParentCategoryId == null)
-            //    .ToList();
+            
 
             var result = rootCategories.Select(c => BuildTree(c, lookup)).ToList();
 

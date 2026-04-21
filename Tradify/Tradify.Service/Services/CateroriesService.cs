@@ -54,7 +54,7 @@ namespace Tradify.Service.Services
                     if (seller.IsActive == false)
                         return ("SellerNotActive", null);
 
-                   // 3.cheack if seller conected with user deleated
+                    //// 3.cheack if seller conected with user deleated
                     var user = await context.Users.FirstOrDefaultAsync(u => u.Id == userId);
                     if (user == null)
                         return ("UserNotFound", null);

@@ -10,11 +10,13 @@ namespace Tradify.Controllers.Category
     [ApiController]
     public class CategoryController :  AppControllerBase
     {
+       
+
         [HttpGet(Router.Category.GetAll)]
         public async Task<IActionResult> GetAllCategory([FromQuery] GetAllCategoriesQuery query)
         {
             var result = await Mediator.Send(query);
-            return NewResult(result);
+            return Ok(result);
         }
 
 

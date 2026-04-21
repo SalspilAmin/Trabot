@@ -21,7 +21,7 @@ namespace Tradify.Core.Features.StoreImage.Commands.Handlers
     public class StoreImageCommandHandler : ResponseHandler
         , IRequestHandler<AddStoreImageCommand, Response<string>>
         //, IRequestHandler<UpdateStoreImageCommand, Response<string>>
-        //, IRequestHandler<DeleteStoreImageCommand, Response<string>>
+        , IRequestHandler<DeleteStoreImageCommand, Response<string>>
 
 
     {
@@ -76,53 +76,45 @@ namespace Tradify.Core.Features.StoreImage.Commands.Handlers
             if (store.IsDeleted)
                 return NotFound<string>(localize.Get("StoreIsDleated"));
 
-            // 3️⃣ لو فيه صورة قديمة → امسحيها
+           
             if (store.StoreImage != null)
                 return BadRequest<string>(localize.Get("StoreHasImageAlrady"));
 
 
 
 
-            // 3️⃣ Upload image
-            var imagePath = await fileService.UploadGenericAsync(
-            UploadFolder.Store,
-            request.StoreId,
-            request.Image);
+            //// 3️⃣ Upload image
+            //var imagePath = await fileService.UploadGenericAsync(
+            //UploadFolder.Store,
+            //request.StoreId,
+            //request.Image);
 
-            if (!imagePath.StartsWith("/"))
-            {
-                return BadRequest<string>(localize.Get(imagePath));
-            }
-
-            //switch (imagePath)
+            //if (!imagePath.StartsWith("/"))
             //{
-
-            //    case "NoFile":
-            //        return BadRequest<string>(localize.Get("NoFile"));
-            //        break;
-            //    case "InvalidImageType":
-            //        return BadRequest<string>(localize.Get("InvalidImageType"));
-            //        break;
-            //    case "FileTooLarge":
-            //        return BadRequest<string>(localize.Get("FileTooLarge"));
-            //        break;
-            //    case "InvalidFileType":
-            //        return BadRequest<string>(localize.Get("InvalidFileType"));
-
-            //        break;
-            //    case "FailedToUploadImage":
-            //        return BadRequest<string>(localize.Get("FailedToUploadImage"));
-            //        break;
+            //    return BadRequest<string>(localize.Get(imagePath));
             //}
 
+           
+
+
+            var folderName = $"{UploadFolder.Store}/{request.StoreId}";
+
+            var uploadResult = await fileService.UploadImageAsync(
+                         request.Image,
+                         folderName);
+
+            if (uploadResult.Error != "Success")
+            {
+                return BadRequest<string>(localize.Get(uploadResult.Error));
+            }
 
 
             // 5️⃣ Save in DB
             var storeImage = new Data.Entities.StoreImage
             {
                 StoreId = request.StoreId,
-                MediaPath = imagePath,
-
+                MediaPath = uploadResult.Url,
+                PublicId = uploadResult.PublicId
             };
 
             await storeImageService.AddAsync(storeImage);
@@ -171,40 +163,52 @@ namespace Tradify.Core.Features.StoreImage.Commands.Handlers
         //    return Success<string>(localize.Get("ImageUpdatedSuccessfully"));
         //}
 
-        //public async Task<Response<string>> Handle(DeleteStoreImageCommand request, CancellationToken cancellationToken)
-        //{
-        //    var currentUserId = currentUserService.GetUserId();
-        //    var seller = await sellerService.GetTableNoTracking()
-        //        .FirstOrDefaultAsync(s => s.UserId == currentUserId);
-        //    // 1️⃣ Get image
-        //    var image = await storeImageService.GetTableAsTracking()
-        //                .Include(s => s.Stores)
-        //                .FirstOrDefaultAsync(i => i.Id == request.ImageId &&
-        //                 i.Stores.SellerId == seller.Id);
 
 
-        //    if (image == null)
-        //        return NotFound<string>(localize.Get("ImageNotFound"));
+        //Delete Store Image 
 
-        //    if (image.IsMain)
-        //    {
-        //        var anotherImage = await storeImageService.GetTableAsTracking()
-        //            .FirstOrDefaultAsync(i => i.StoreId == image.StoreId && i.Id != image.Id);
+        public async Task<Response<string>> Handle(DeleteStoreImageCommand request, CancellationToken cancellationToken)
+        {
+            var currentUserId = currentUserService.GetUserId();
+           // var currentUserId = request.SellerId;
 
-        //        if (anotherImage != null)
-        //            anotherImage.IsMain = true;
-        //    }
 
-        //    // 3️⃣ Delete image
-        //    if (!string.IsNullOrWhiteSpace(image.MediaPath))
-        //    {
-        //        await fileService.DeleteFile(image.MediaPath);
-        //    }
-        //    await storeImageService.DeleteAsync(image);
-        //    await storeImageService.SaveChangesAsync();
+           var seller = await sellerService.GetTableNoTracking()
+                .FirstOrDefaultAsync(s => s.UserId == currentUserId);
 
-        //    return Success<string>(localize.Get("ImageDeletedSuccessfully"));
-        //}
+            if (seller == null)
+                return Unauthorized<string>("SellerNotFound");
+
+            // 1️⃣ Get image
+            var image = await storeImageService.GetTableAsTracking()
+                        .Include(s => s.Stores)
+                        .FirstOrDefaultAsync(i => i.Id == request.Id &&
+                         i.Stores.SellerId == seller.Id);
+
+
+            if (image == null)
+                return NotFound<string>(localize.Get("ImageNotFound"));
+
+
+
+            // 3️⃣ Delete image
+
+            if (!string.IsNullOrWhiteSpace(image.PublicId))
+            {
+                await fileService.DeleteImageAsync(image.PublicId);
+            }
+
+
+            //if (!string.IsNullOrWhiteSpace(image.MediaPath))
+            //{
+            //    await fileService.DeleteFile(image.MediaPath);
+            //}
+
+            await storeImageService.DeleteAsync(image);
+            await storeImageService.SaveChangesAsync();
+
+            return Success<string>(localize.Get("ImageDeletedSuccessfully"));
+        }
 
 
 
