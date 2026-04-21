@@ -37,6 +37,12 @@ namespace Tradify.Controllers
             var result = await Mediator.Send(new GetUserByIdQuery(id));
             return NewResult(result);
         }
+        [HttpGet(Router.UserRouter.GetUserByToken)]
+        public async Task<IActionResult> GetUserByToken([FromQuery] string token)
+        {
+            var result = await Mediator.Send(new GetUserByTokenQuery(token));
+            return NewResult(result);
+        }
         [HttpGet(Router.UserRouter.Paginated)]
         public async Task<IActionResult> GetPagination([FromQuery] GetUserPaginationQuery request)
         {
@@ -49,6 +55,7 @@ namespace Tradify.Controllers
             var resutl = await Mediator.Send(new DeleteUserCommand(id));
             return Ok(resutl);
         }
+
 
     }
 }

@@ -11,6 +11,7 @@ using Tradify.Core.Resources.Service;
 using Tradify.Data.Entities;
 using Tradify.Infrastructure.AbstractsRepositories;
 using Tradify.Service.AbstractsServices;
+using Tradify.Service.AbstractsServices.AuthorizationServices;
 using Tradify.Service.AbstractsServices.IdentityServices;
 using Tradify.Service.Services.IdentityServices;
 
@@ -23,18 +24,19 @@ namespace Tradify.Core.Features.Seller.Command.Handlers
         private readonly LocalizationService localize;
         private readonly ISellerService sellerService ;
         private readonly IMapper mapper;
+        private readonly IAuthorizationService authorizationService ;
 
     #endregion
 
     #region constructor
 
     public SellerCommandHandler(LocalizationService localization, ISellerService sellerService,
-        IMapper mapper) : base(localization)
+        IMapper mapper,IAuthorizationService authorizationService) : base(localization)
     {
         this.localize = localization;
         this.sellerService = sellerService;
         this.mapper = mapper;
-
+        this.authorizationService = authorizationService;           
     }
 
 

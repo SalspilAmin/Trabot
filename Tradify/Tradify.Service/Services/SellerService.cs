@@ -7,11 +7,14 @@ using System.ComponentModel.DataAnnotations;
 using System.Text;
 using Tradify.Data.Entities;
 using Tradify.Data.Entities.Identity;
+using Tradify.Data.Helpers;
 using Tradify.Infrastructure.Context;
 using Tradify.Infrastructure.InfrastrucureBases;
 using Tradify.Service.AbstractsServices;
+using Tradify.Service.AbstractsServices.AuthorizationServices;
 using Tradify.Service.AbstractsServices.IdentityServices;
 using Tradify.Service.ServiceBases;
+using static Tradify.Data.AppMetaData.Router;
 
 namespace Tradify.Service.Services
 {
@@ -20,14 +23,16 @@ namespace Tradify.Service.Services
         private readonly IGenericRepository<Sellers> sellerRepo;
         private readonly ApplicationDbContext context;
         private readonly UserManager<User> userManager;
+        private readonly IAuthorizationService authorizationService;            
 
 
 
-        public SellerService(IGenericRepository<Sellers> sellerRepo, UserManager<User> userManager, ApplicationDbContext context) : base(sellerRepo)
+        public SellerService(IGenericRepository<Sellers> sellerRepo, UserManager<User> userManager, ApplicationDbContext context,IAuthorizationService authorization) : base(sellerRepo)
         {
             this.sellerRepo = sellerRepo;
             this.context = context;
             this.userManager = userManager;
+            this.authorizationService = authorization;
 
 
         }
@@ -54,7 +59,7 @@ namespace Tradify.Service.Services
 
 
                     // 3. Check is user have seller Role
-
+                    var Addrole = await userManager.AddToRoleAsync(user, RolesHelper.Seller);
                     var roles = await userManager.GetRolesAsync(user);
 
                     if (!roles.Any(r => r == "Seller"))

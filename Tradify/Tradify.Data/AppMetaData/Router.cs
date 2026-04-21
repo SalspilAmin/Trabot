@@ -20,6 +20,7 @@ namespace Tradify.Data.AppMetaData
             public const string Paginated = prefix + "/Paginated";
             public const string GetByID = prefix +"/Get"+SignleRoute;
             public const string Delete = prefix + "/Delete" + SignleRoute;
+            public const string GetUserByToken = prefix + "/GetUserByToken";
 
         }
         public static class Authentication

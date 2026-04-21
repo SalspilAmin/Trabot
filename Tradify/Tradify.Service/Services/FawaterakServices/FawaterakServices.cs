@@ -33,6 +33,7 @@ namespace Tradify.Service.Services.FawaterakServices
             var client = _httpClientFactory.CreateClient();
             var request = new HttpRequestMessage(HttpMethod.Post,$"{fawaterakOptions.BaseUrl}/createInvoiceLink");
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", fawaterakOptions.ApiKey);
+            request.Content = new StringContent(string.Empty, Encoding.UTF8, "application/json");
             request.Content= new StringContent(JsonConvert.SerializeObject(eInvoice));
 
             var response= client.SendAsync(request).Result;
@@ -47,10 +48,13 @@ namespace Tradify.Service.Services.FawaterakServices
 
         public async Task<IList<Tradify.Data.Helpers.Fawaterak.PaymentMethod>> GetPaymentMethodsAsync() { 
             var client = _httpClientFactory.CreateClient();
+           
             var request = new HttpRequestMessage(HttpMethod.Get, $"{fawaterakOptions.BaseUrl}/getPaymentmethods");
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", fawaterakOptions.ApiKey);
+            request.Headers.Add("Authorization", $"Bearer {fawaterakOptions.ApiKey}");
 
-            var response = client.SendAsync(request).Result;
+
+            request.Content = new StringContent(string.Empty, Encoding.UTF8, "application/json");
+            var response = await client.SendAsync(request);
 
             if (response.IsSuccessStatusCode)
             {
