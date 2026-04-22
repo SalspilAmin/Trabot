@@ -8,10 +8,12 @@ namespace Tradify.Core.Features.StoreImage.Commands.Models
 {
     public class DeleteStoreImageCommand : IRequest<Response<string>>
     {
-        public int ImageId { get; set; }
-        public DeleteStoreImageCommand(int ImageId)
+        public int Id { get; set; }
+      //  public int SellerId { get; set; }   
+        public DeleteStoreImageCommand(int id)//, int sellerId)
         {
-            this.ImageId = ImageId;
+            this.Id = id;
+            //this.SellerId = sellerId;
         }
     }
 }
