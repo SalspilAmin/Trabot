@@ -29,9 +29,14 @@ namespace Tradify.Core.Features.StoreImage.Commands.Validations
         public void ApplyProductValidations()
         {
 
-            RuleFor(x => x.ImageId)
+            RuleFor(x => x.Id)
            .NotEmpty().WithMessage(localize.Get("Required"))
-           .GreaterThan(0).WithMessage(localize.Get("MustBeGreaterThanZero")); ;
+           .GreaterThan(0).WithMessage(localize.Get("MustBeGreaterThanZero"));
+
+          //  RuleFor(x => x.SellerId)
+          //.NotEmpty().WithMessage(localize.Get("Required"))
+          //.GreaterThan(0).WithMessage(localize.Get("MustBeGreaterThanZero"));
+
 
         }
         #endregion

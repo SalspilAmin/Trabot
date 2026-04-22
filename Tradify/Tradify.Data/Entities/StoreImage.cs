@@ -12,6 +12,8 @@ namespace Tradify.Data.Entities
      
         public int StoreId { get; set; }
 
+        public string PublicId { get; set; } // For Update At Cloudinary
+
 
         [ForeignKey(nameof(StoreId))]
         public virtual Stores Stores { get; set; }

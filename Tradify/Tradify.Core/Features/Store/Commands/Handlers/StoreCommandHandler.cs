@@ -149,24 +149,44 @@ namespace Tradify.Core.Features.Store.Commands.Handlers
 
             var storeId = result.Item2.Value;
 
-            // ✅ رفع الصورة
-            var imagePath = await fileService.UploadGenericAsync(
-                UploadFolder.Store,
-                storeId,
-                request.Image);
+            var folderName = $"{UploadFolder.Store}/{storeId}";
 
-            if (!imagePath.StartsWith("/"))
+            var uploadResult = await fileService.UploadImageAsync(
+                         request.Image,
+                         folderName);
+
+            if (uploadResult.Error != "Success")
             {
-
-                return BadRequest<string>(localize.Get(imagePath));
+                return BadRequest<string>(localize.Get(uploadResult.Error));
             }
 
-            // ✅ حفظ الصورة
+
+            // 5️⃣ Save in DB
             var storeImage = new Data.Entities.StoreImage
             {
                 StoreId = storeId,
-                MediaPath = imagePath
+                MediaPath = uploadResult.Url,
+                PublicId = uploadResult.PublicId
             };
+
+            //// ✅ رفع الصورة
+            //var imagePath = await fileService.UploadGenericAsync(
+            //    UploadFolder.Store,
+            //    storeId,
+            //    request.Image);
+
+            //if (!imagePath.StartsWith("/"))
+            //{
+
+            //    return BadRequest<string>(localize.Get(imagePath));
+            //}
+
+            //// ✅ حفظ الصورة
+            //var storeImage = new Data.Entities.StoreImage
+            //{
+            //    StoreId = storeId,
+            //    MediaPath = imagePath
+            //};
 
             await storeImageService.AddAsync(storeImage);
             await storeImageService.SaveChangesAsync();

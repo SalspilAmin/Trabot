@@ -7,7 +7,7 @@ namespace Tradify.Core.Features.Categorie.Queries.Results
     public class GetAllCategoriesResponse
     {
         public int Id { get; set; }
-        public string Name { get; set; } = string.Empty;
+        public string Name { get; set; } 
         public int? ParentCategoryId { get; set; }
     }
 }

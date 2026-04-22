@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,21 +17,32 @@ namespace Tradify.Service.Services
         Variants,
         Store
     }
+ 
     public class FileService : IFileService
 
     {
         #region Fildes
         private readonly IWebHostEnvironment webHostEnvironment;
         private readonly IHttpContextAccessor httpContextAccessor;
+        private readonly Cloudinary cloudinary;
+
         #endregion
 
         #region Constructor
-        public FileService(IWebHostEnvironment webHostEnvironment , IHttpContextAccessor httpContextAccessor)
+        public FileService(IWebHostEnvironment webHostEnvironment , IHttpContextAccessor httpContextAccessor , IConfiguration config)
         {
 
             this.webHostEnvironment = webHostEnvironment;  
-            this.httpContextAccessor = httpContextAccessor; 
+            this.httpContextAccessor = httpContextAccessor;
+            var account = new Account(
+            config["Cloudinary:CloudName"],
+            config["Cloudinary:ApiKey"],
+            config["Cloudinary:ApiSecret"]
+        );
+
+            cloudinary = new Cloudinary(account);
         }
+        
 
         #endregion
 
@@ -84,6 +98,65 @@ namespace Tradify.Service.Services
             
         }
 
+
+       
+
+        public async Task<(string Error, string? Url, string? PublicId)> UploadImageAsync(IFormFile file,  string folder)
+        {
+            try
+            {
+                if (file == null || file.Length == 0)
+                    return ("NoFile",null, null);
+
+                var extension = Path.GetExtension(file.FileName).ToLower();
+                var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".webp" };
+
+                if (!allowedExtensions.Contains(extension))
+                    return ("InvalidImageType",null, null);
+
+                var maxSize = 5 * 1024 * 1024;
+                if (file.Length > maxSize)
+                    return ("FileTooLarge", null, null);
+
+                if (string.IsNullOrEmpty(file.ContentType) || !file.ContentType.StartsWith("image/"))
+                    return ("InvalidFileType", null, null);
+
+                using var stream = file.OpenReadStream();
+
+                var uploadParams = new ImageUploadParams
+                {
+                    File = new FileDescription(file.FileName, stream),
+                    Folder = folder
+                };
+
+                var result = await cloudinary.UploadAsync(uploadParams);
+
+                if (result.Error != null)
+                    return ("FailedToUploadImage", null, null);
+
+                return ("Success", result.SecureUrl.ToString(), result.PublicId);
+            }
+            catch
+            {
+                return ("FailedToUploadImage", null, null);
+            }
+        }
+
+
+        public async Task<bool> DeleteImageAsync(string publicId)
+        {
+            if (string.IsNullOrWhiteSpace(publicId))
+                return false;
+
+            var deleteParams = new DeletionParams(publicId);
+
+            var result = await cloudinary.DestroyAsync(deleteParams);
+
+            return result.Result == "ok";
+        }
+
+
+
         public async Task<string> UploadGenericAsync(UploadFolder folder, int id, IFormFile file)
         {
             try
@@ -107,6 +180,7 @@ namespace Tradify.Service.Services
                 // 4. Validate content type
                 if (string.IsNullOrEmpty(file.ContentType) || !file.ContentType.StartsWith("image/"))
                     return "InvalidFileType";
+
 
                 // 5. Create folder
                 var folderName = folder.ToString().ToLower();

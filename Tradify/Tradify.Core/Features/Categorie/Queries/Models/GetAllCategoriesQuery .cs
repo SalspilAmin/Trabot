@@ -9,8 +9,11 @@ using Tradify.Core.Wrappers;
 
 namespace Tradify.Core.Features.Categorie.Queries.Models
 {
-    public class GetAllCategoriesQuery : IRequest<Response<List<GetAllCategoriesResponse>>>
+    public class GetAllCategoriesQuery : IRequest<PaginatedResult<GetAllCategoriesResponse>>
     {
+        public int PageNumber { get; set; }
+        public int PageSize { get; set; }
+        public int? StoreId { get; set; }
         public int? ParentCategoryId { get; set; }
 
         // Optional filter: root categories only

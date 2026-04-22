@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Tradify.Bases;
 using Tradify.Core.Features.ProductsImages.Commands.Models;
@@ -25,13 +26,12 @@ namespace Tradify.Controllers.Images
         //    return NewResult(result);
         //}
 
-        //[HttpDelete(Router.StoreImage.Delete)]
-        //public async Task<IActionResult> DeleteImage([FromRoute] int imageId)
-        //{
-        //    var command = new DeleteStoreImageCommand(imageId);
-        //    var result = await Mediator.Send(command);
-        //    return NewResult(result);
-        //}
+        [HttpDelete(Router.StoreImage.Delete)]
+        public async Task<IActionResult> DeleteImage([FromRoute] int id)//, int sellerId)
+        {
+            var result = await Mediator.Send(new DeleteStoreImageCommand(id));//, sellerId));
+            return Ok(result);
+        }
 
     }
 }
