@@ -15,7 +15,7 @@ namespace Tradify.Data.Entities
 
         public virtual User User { get; set; }
 
-        public virtual List<CartProduct> CartProducts { get; set; } 
-        public virtual List<Orders> Orders { get; set; }    
+        public virtual List<CartProduct>? CartProducts { get; set; } 
+        public virtual List<Orders>? Orders { get; set; }    
     }
 }

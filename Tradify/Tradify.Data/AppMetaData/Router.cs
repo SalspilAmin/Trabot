@@ -232,7 +232,12 @@ namespace Tradify.Data.AppMetaData
         {
             public const string prefix = Rule + "Seller";
             public const string Create = prefix + "/Create";
-         
+
+        }
+        public static class Cart
+        {
+            public const string prefix = Rule + "Cart";
+            public const string GetByUserId = prefix + SignleRoute;
         }
     }
 }
