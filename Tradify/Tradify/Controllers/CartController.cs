@@ -24,5 +24,11 @@ namespace Tradify.Controllers
             var result = await Mediator.Send(command);
             return NewResult(result);
         }
+        [HttpPost(Router.Cart.AddToCart)]
+        public async Task<IActionResult> AddToCArt([FromQuery] AddToCartCommand command)
+        {
+            var result = await Mediator.Send(command);
+            return NewResult(result);
+        }
     }
 }

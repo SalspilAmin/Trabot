@@ -11,7 +11,7 @@ namespace Tradify.Core.Features.Cart.Queries.Models
     {
         public int UserId { get; set; }
         public GetCartByUserIdQuery(int userId)
-        {
+        { 
             UserId = userId;
         }   
     }
