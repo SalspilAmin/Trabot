@@ -87,21 +87,14 @@ namespace Tradify.Core.Features.ProductsImages.Commands.Handlers
                 return BadRequest<string>(imagePath);
             }
 
-            // 4️⃣ لو IsMain = true → نشيل القديم
-            if (request.IsMain)
-            {
-                var oldMain = await productImageService.GetTableAsTracking()
-                                    .Where(i => i.ProductId == request.ProductId && i.IsMain)
-                                    .ExecuteUpdateAsync(setters => setters.SetProperty(i => i.IsMain, false));
-
-            }
+          
               
             // 5️⃣ Save in DB
             var productImage = new ProductImage
             {
                 ProductId = request.ProductId,
                 MediaPath = imagePath,
-                IsMain = request.IsMain,
+                IsMain =true,
                 SortOrder = request.SortOrder
             };
             
@@ -159,7 +152,7 @@ namespace Tradify.Core.Features.ProductsImages.Commands.Handlers
             var image = await productImageService.GetTableAsTracking()
                 .Include(i => i.Product)
                 .ThenInclude(p => p.Store)
-                .FirstOrDefaultAsync(i => i.Id == request.ImageId 
+                .FirstOrDefaultAsync(i => i.Id == request.Id 
                 && i.Product.Store.SellerId == currentUserId, cancellationToken);
 
             if (image == null)

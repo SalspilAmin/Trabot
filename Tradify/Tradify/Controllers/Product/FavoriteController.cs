@@ -14,21 +14,10 @@ namespace Tradify.Controllers.Product
     [ApiController]
     public class FavoriteController : AppControllerBase
     {
-        //[HttpPost(Router.Favorite.Add)]
-        //public async Task<IActionResult> Add([FromForm] AddFavoriteCommand command)
-        //{
-        //    var response = await Mediator.Send(command);
-        //    return NewResult(response);
-        //}
-        //[HttpDelete(Router.Favorite.Delete)]
-        //public async Task<IActionResult> DeleteFavorite([FromRoute] int FavoriteId)
-        //{
-        //    var response = await Mediator.Send(new DeleteFavoriteCommand(FavoriteId));
-        //    return NewResult(response);
-        //}
+    
 
         [HttpDelete(Router.Favorite.Toggle)]
-        public async Task<IActionResult> ToggleFavorite([FromBody] ToggleFavoriteCommand command)
+        public async Task<IActionResult> ToggleFavorite([FromForm] ToggleFavoriteCommand command)
         {
             var response = await Mediator.Send(command);
             return NewResult(response);

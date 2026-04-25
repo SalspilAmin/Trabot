@@ -11,7 +11,6 @@ namespace Tradify.Core.Features.ProductVariantsImages.Commands.Models
     {
         public int ProductVariantId { get; set; }
         public IFormFile Image { get; set; }
-      //  public int SellerId { get; set; }
 
         
     }

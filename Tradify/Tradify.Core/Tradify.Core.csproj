@@ -6,6 +6,15 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Features\Discont\**" />
+    <Compile Remove="Mapping\FavoriteMapping\Queries\**" />
+    <EmbeddedResource Remove="Features\Discont\**" />
+    <EmbeddedResource Remove="Mapping\FavoriteMapping\Queries\**" />
+    <None Remove="Features\Discont\**" />
+    <None Remove="Mapping\FavoriteMapping\Queries\**" />
+  </ItemGroup>
+
 	
 	
 	<ItemGroup>
@@ -31,18 +40,11 @@
     <Folder Include="Features\Categorie\Queries\Handlers\" />
     <Folder Include="Features\Categorie\Queries\Models\" />
     <Folder Include="Features\Categorie\Queries\Results\" />
-    <Folder Include="Features\Discont\Product\Comands\Handler\" />
-    <Folder Include="Features\Discont\Product\Comands\Models\" />
-    <Folder Include="Features\Discont\Product\Comands\Validations\" />
-    <Folder Include="Features\Discont\Varint\Comands\Handler\" />
-    <Folder Include="Features\Discont\Varint\Comands\Models\" />
-    <Folder Include="Features\Discont\Varint\Comands\Validations\" />
     <Folder Include="Features\Fawaterak\Queries\Validations\" />
     <Folder Include="Features\Order\Queries\Validations\" />
     <Folder Include="Features\Seller\Queries\Handlers\" />
     <Folder Include="Features\Seller\Queries\Models\" />
     <Folder Include="Features\Seller\Queries\Results\" />
-    <Folder Include="Mapping\FavoriteMapping\Queries\" />
     <Folder Include="Mapping\SellerMapping\Querry\" />
     <Folder Include="Mapping\ShipmentTrackingMapping\Command\" />
   </ItemGroup>

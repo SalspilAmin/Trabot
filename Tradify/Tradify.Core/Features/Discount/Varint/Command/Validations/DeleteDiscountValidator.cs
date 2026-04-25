@@ -2,10 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Tradify.Core.Features.ProductVariant.Commands.Models;
+using Tradify.Core.Features.Discount.Varint.Comands.Models;
 using Tradify.Core.Resources.Service;
 
-namespace Tradify.Core.Features.ProductVariant.Commands.Validations
+namespace Tradify.Core.Features.Discount.Varint.Comands.Validations
 {
     public class DeleteDiscountValidator : AbstractValidator<DeleteDiscountCommand>
     {
@@ -28,8 +28,9 @@ namespace Tradify.Core.Features.ProductVariant.Commands.Validations
         public void ApplyProductValidations()
         {
             RuleFor(x => x.VariantId)
-                .GreaterThan(0)
-                .WithMessage(localize.Get("Required"));
+                 .GreaterThan(0).WithMessage(localize.Get("IdMustBeGreaterThanZero"))
+                .NotEmpty().WithMessage(localize.Get("NotEmpty"))
+                .NotNull().WithMessage(localize.Get("Required"));
 
 
         }

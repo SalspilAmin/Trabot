@@ -16,8 +16,6 @@ using Tradify.Service.Services;
 namespace Tradify.Core.Features.Favorites.Commands.Handlers
 {
     public class FavoriteCommandHandler : ResponseHandler,
-                                         IRequestHandler<AddFavoriteCommand, Response<string>>,
-                                         IRequestHandler<DeleteFavoriteCommand, Response<string>>,
                                          IRequestHandler<ToggleFavoriteCommand, Response<ToggleFavoriteResponse>>
 
 
@@ -56,50 +54,19 @@ namespace Tradify.Core.Features.Favorites.Commands.Handlers
         #endregion
 
         #region Methods
-        public async Task<Response<string>> Handle(AddFavoriteCommand request, CancellationToken cancellationToken)
-        {
-            var userId = currentUserService.GetUserId();
-            // ✅ Check if already exists
-            var exists = await favoriteService.GetTableNoTracking()
-                .AnyAsync(x => x.UserId == userId && x.ProductId == request.ProductId);
-
-            if (exists)
-                return BadRequest<string>(localize.Get("AlreadyAddedToFavorites"));
-
-            // ✅ Mapping
-            var favorite = mapper.Map<Favorite>(request);
-
-            // ✅ Add
-            await favoriteService.AddAsync(favorite);
-            await favoriteService.SaveChangesAsync();     
-
-            return Success(localize.Get("AddedToFavoritesSuccessfully"));
-        }
-
-        public async Task<Response<string>> Handle(DeleteFavoriteCommand request, CancellationToken cancellationToken)
-        {
-            var userId = currentUserService.GetUserId();
-
-            // ✅ Get favorite
-            var favorite = await favoriteService.GetTableAsTracking()
-                .FirstOrDefaultAsync(x => x.Id == request.Id && x.UserId == userId);
-
-            if (favorite == null)
-                return NotFound<string>(localize.Get("FavoriteNotFound"));
-
-
-            // ✅ Delete
-            await  favoriteService.DeleteAsync(favorite);
-            await favoriteService.SaveChangesAsync();
-
-            return Success(localize.Get("RemovedFromFavoritesSuccessfully"));
-        }
+        
         public async Task<Response<ToggleFavoriteResponse>> Handle(ToggleFavoriteCommand request, CancellationToken cancellationToken)
         {
             var userId = currentUserService.GetUserId();
 
+            var product = await productService.GetByIdAsync(request.ProductId);
+
+            if (product == null)
+                return NotFound<ToggleFavoriteResponse>(localize.Get("ProductNotFound"));
+
             var favorite = await favoriteService.GetTableAsTracking()
                 .FirstOrDefaultAsync(x => x.UserId == userId && x.ProductId == request.ProductId);
+
 
             if (favorite != null)
             {

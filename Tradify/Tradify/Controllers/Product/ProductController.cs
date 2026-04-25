@@ -48,13 +48,18 @@ namespace Tradify.Controllers.Product
 
 
         [HttpGet(Router.Product.GetByID)]
-        public async Task<IActionResult> GetById([FromRoute] int id )//,int userId)
+        public async Task<IActionResult> GetById([FromRoute] int id )
         {
-            var result = await Mediator.Send(new GetProductByIdQuery(id));  //, userId));
+            var result = await Mediator.Send(new GetProductByIdQuery(id)); 
             return NewResult(result);
         }
 
-        
+        [HttpGet(Router.Product.Discount)]
+        public async Task<IActionResult> GetProductsByDiscount([FromQuery] GetProductDiscountQuery query)
+        {
+            var result = await Mediator.Send(query);
+            return Ok(result);
+        }
 
 
     }

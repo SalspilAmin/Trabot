@@ -19,8 +19,8 @@ namespace Tradify.Core.Features.ProductVariantsImages.Commands.Handlers
 {
     public class ProductVariantImageCommandHandler : ResponseHandler
         , IRequestHandler<AddProductVariantImageCommand, Response<string>>
-        //, IRequestHandler<UpdateProductVariantImageCommand, Response<string>>
-        //, IRequestHandler<DeleteProductVariantImageCommand, Response<string>>
+    //, IRequestHandler<UpdateProductVariantImageCommand, Response<string>>
+    //, IRequestHandler<DeleteProductVariantImageCommand, Response<string>>
 
 
     {
@@ -32,7 +32,7 @@ namespace Tradify.Core.Features.ProductVariantsImages.Commands.Handlers
         private readonly IProductVariantImageService productVariantImageService;
         private readonly IMapper mapper;
         private readonly ICurrentUserService currentUserService;
-        private readonly ISellerService sellerService;  
+        private readonly ISellerService sellerService;
 
 
         #endregion
@@ -43,7 +43,7 @@ namespace Tradify.Core.Features.ProductVariantsImages.Commands.Handlers
                                      IProductVariantImageService productVariantImageService,
                                      IFileService fileService,
                                      ICurrentUserService currentUserService,
-                                     LocalizationService localize , ISellerService sellerService) : base(localize)
+                                     LocalizationService localize, ISellerService sellerService) : base(localize)
         {
             this.productVariantService = productVariantService;
             this.mapper = mapper;
@@ -66,7 +66,7 @@ namespace Tradify.Core.Features.ProductVariantsImages.Commands.Handlers
             var seller = await sellerService.GetTableNoTracking().FirstOrDefaultAsync(s => s.UserId == currentUserId);
 
             // var seller = await sellerService.GetTableNoTracking().FirstOrDefaultAsync(s=>s.Id== request.SellerId);
-            if (seller==null)
+            if (seller == null)
                 return NotFound<string>(localize.Get("SellerNotFound"));
             // 2️⃣ Get productVariant
             var productVariant = await productVariantService.GetTableAsTracking()
@@ -91,7 +91,7 @@ namespace Tradify.Core.Features.ProductVariantsImages.Commands.Handlers
                 return BadRequest<string>(localize.Get(imagePath));
             }
 
-           
+
 
 
             // 5️⃣ Save in DB

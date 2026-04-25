@@ -6,6 +6,7 @@ using Tradify.Core.Features.Product.Commands.Models;
 using Tradify.Core.Features.ProductVariant.Commands.Models;
 using Tradify.Core.Features.ProductVariant.Queries.Models;
 using Tradify.Core.Features.Store.Queries.Models;
+using Tradify.Core.Features.Discount.Varint.Comands.Models;
 using Tradify.Data.AppMetaData;
 
 namespace Tradify.Controllers.Product
@@ -54,21 +55,7 @@ namespace Tradify.Controllers.Product
             return NewResult(result);
         }
 
-        [HttpPut(Router.ProductVariant.AddDiscount)]
-        public async Task<IActionResult> AddDiscount([FromForm] AddDiscountCommand command)
-        {
- 
-            var response = await Mediator.Send(command);
-            return NewResult(response);
-
-        }
-        [HttpDelete(Router.ProductVariant.DeleteDiscount)]
-        public async Task<IActionResult> DeleteDiscount([FromQuery] DeleteDiscountCommand command)
-        {
-            var response = await Mediator.Send(command);
-            return NewResult(response);
-        }
-
+      
         [HttpGet(Router.ProductVariant.GetByProduct)]
         public async Task<IActionResult> GetVariantsByProduct([FromQuery] GetProductVariantsByProductQuery request)
         {

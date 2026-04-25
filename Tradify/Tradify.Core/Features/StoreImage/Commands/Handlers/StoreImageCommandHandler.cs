@@ -76,7 +76,7 @@ namespace Tradify.Core.Features.StoreImage.Commands.Handlers
             if (store.IsDeleted)
                 return NotFound<string>(localize.Get("StoreIsDleated"));
 
-           
+
             if (store.StoreImage != null)
                 return BadRequest<string>(localize.Get("StoreHasImageAlrady"));
 
@@ -94,7 +94,7 @@ namespace Tradify.Core.Features.StoreImage.Commands.Handlers
             //    return BadRequest<string>(localize.Get(imagePath));
             //}
 
-           
+
 
 
             var folderName = $"{UploadFolder.Store}/{request.StoreId}";
@@ -170,11 +170,11 @@ namespace Tradify.Core.Features.StoreImage.Commands.Handlers
         public async Task<Response<string>> Handle(DeleteStoreImageCommand request, CancellationToken cancellationToken)
         {
             var currentUserId = currentUserService.GetUserId();
-           // var currentUserId = request.SellerId;
+            // var currentUserId = request.SellerId;
 
 
-           var seller = await sellerService.GetTableNoTracking()
-                .FirstOrDefaultAsync(s => s.UserId == currentUserId);
+            var seller = await sellerService.GetTableNoTracking()
+                 .FirstOrDefaultAsync(s => s.UserId == currentUserId);
 
             if (seller == null)
                 return Unauthorized<string>("SellerNotFound");

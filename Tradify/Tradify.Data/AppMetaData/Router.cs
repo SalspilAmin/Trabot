@@ -60,10 +60,13 @@ namespace Tradify.Data.AppMetaData
             public const string AddWithImage = prefix + "/AddWithImage";
             public const string List = prefix + "/List";
             
+            public const string Discount = prefix + "/Discount";
+
             public const string Search = prefix + "/Search";
             public const string Store = prefix + "/Store";
 
-
+            public const string AddDiscount = prefix + "/AddDiscount";
+            public const string DeleteDiscount = prefix + "/DeleteDiscount";
             public const string Paginated = prefix + "/Paginated";
             public const string GetByID = prefix + "/Get" + SignleRoute;
             public const string UpdateProduct = prefix + "/Update" ;

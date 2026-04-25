@@ -9,7 +9,6 @@ namespace Tradify.Core.Features.ProductVariant.Commands.Models
 {
     public class AddProductVariantCommand : IRequest<Response<string>>
     {
-       // public int StoreId { get; set; }
         public int ProductId { get; set; }
         public decimal Price { get; set; }
         public decimal Discount { get; set; } = 0;

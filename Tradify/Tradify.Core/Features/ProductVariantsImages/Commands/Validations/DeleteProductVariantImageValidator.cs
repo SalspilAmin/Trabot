@@ -29,7 +29,7 @@ namespace Tradify.Core.Features.ProductVariantsImages.Commands.Validations
         public void ApplyProductValidations()
         {
 
-            RuleFor(x => x.ImageId)
+            RuleFor(x => x.Id)
            .NotEmpty().WithMessage(localize.Get("Required"))
            .GreaterThan(0).WithMessage(localize.Get("MustBeGreaterThanZero")); ;
 
