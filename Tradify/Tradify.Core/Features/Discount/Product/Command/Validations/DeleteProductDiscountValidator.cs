@@ -2,22 +2,20 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Tradify.Core.Features.Favorites.Commands.Models;
-using Tradify.Core.Features.Product.Commands.Models;
+using Tradify.Core.Features.Discount.Product.Comands.Models;
 using Tradify.Core.Resources.Service;
 
-namespace Tradify.Core.Features.Favorites.Commands.Validations
+namespace Tradify.Core.Features.Discount.Product.Comands.Validations
 {
-    internal class AddFavoriteValidator : AbstractValidator<AddFavoriteCommand>
+    public class DeleteProductDiscountValidator : AbstractValidator<DeleteProductDiscountCommand>
     {
-
         #region Fields 
 
         private readonly LocalizationService localize;
         #endregion
 
         #region constructor
-        public AddFavoriteValidator(LocalizationService localization)
+        public DeleteProductDiscountValidator(LocalizationService localization)
         {
             this.localize = localization;
             ApplyProductValidations();
@@ -29,13 +27,10 @@ namespace Tradify.Core.Features.Favorites.Commands.Validations
         #region Validations
         public void ApplyProductValidations()
         {
-
-
-
-
             RuleFor(x => x.ProductId)
-                .GreaterThan(0).WithMessage(localize.Get("Required"));
-
+                 .GreaterThan(0).WithMessage(localize.Get("IdMustBeGreaterThanZero"))
+                 .NotEmpty().WithMessage(localize.Get("NotEmpty"))
+                 .NotNull().WithMessage(localize.Get("Required"));
 
 
         }

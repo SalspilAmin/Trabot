@@ -9,7 +9,6 @@ namespace Tradify.Core.Features.Product.Queries.Models
 {
     public class GetAllProductListQuery : IRequest<List<GetProductPaginationReponse>>
     {
-        // public int UserId { get; set; } 
         public int? StoreId { get; set; }
         public decimal? MinPrice { get; set; }
         public decimal? MaxPrice { get; set; }

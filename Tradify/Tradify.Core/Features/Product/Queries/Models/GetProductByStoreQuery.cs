@@ -8,7 +8,6 @@ namespace Tradify.Core.Features.Product.Queries.Models
 {
     public class GetProductByStoreQuery : IRequest<List<GetProductPaginationReponse>>
     {
-          public int UserId { get; set; } 
         public int StoreId { get; set; }
     }
 }

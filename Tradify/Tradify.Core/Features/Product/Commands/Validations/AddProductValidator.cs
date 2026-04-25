@@ -44,10 +44,6 @@ namespace Tradify.Core.Features.Product.Commands.Validations
                  .NotEmpty().WithMessage(localize.Get("NotEmpty"))
                  .NotNull().WithMessage(localize.Get("Required"));
 
-            //RuleFor(x => x.StoreId)
-            //    .GreaterThan(0).WithMessage(localize.Get("IdMustBeGreaterThanZero"))
-            //    .NotEmpty().WithMessage(localize.Get("NotEmpty"))
-            //    .NotNull().WithMessage(localize.Get("Required"));
 
             RuleFor(x => x.Price)
                 .GreaterThan(0).WithMessage(localize.Get("PriceGreaterThanZero"))

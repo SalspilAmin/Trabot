@@ -9,8 +9,8 @@ namespace Tradify.Core.Features.Favorites.Queries.Models
 {
     public class GetUserFavoritesQuery : IRequest<PaginatedResult<GetSellerProductPaginationReponse>>
     {
-        public int PageNumber { get; set; } = 1;
-        public int PageSize { get; set; } = 10;
+        public int PageNumber { get; set; } 
+        public int PageSize { get; set; } 
     }
     
 }

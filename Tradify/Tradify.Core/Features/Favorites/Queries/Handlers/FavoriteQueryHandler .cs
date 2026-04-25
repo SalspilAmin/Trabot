@@ -56,7 +56,7 @@ namespace Tradify.Core.Features.Favorites.Queries.Handlers
 
             var productsfavorit = favoriteService.GetTableNoTracking()
                 .Where(f => f.UserId == userId)
-                .Select(f => f.Product) // 🔥 أهم خطوة
+                .Select(f => f.Product) 
                 .AsQueryable();
             productsfavorit = productsfavorit.OrderByDescending(p => p.Id);
 

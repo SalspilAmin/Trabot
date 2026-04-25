@@ -29,9 +29,6 @@ namespace Tradify.Core.Features.Favorites.Commands.Validations
         public void ApplyProductValidations()
         {
 
-
-
-
             RuleFor(x => x.ProductId)
                 .GreaterThan(0).WithMessage(localize.Get("Required"));
 

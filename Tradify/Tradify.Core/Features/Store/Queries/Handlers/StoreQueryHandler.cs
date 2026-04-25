@@ -68,16 +68,8 @@ namespace Tradify.Core.Features.Store.Queries.Handlers
                 .ProjectTo<GetAllStoresResponse>(stores )
                 .ToPaginationlist(request.PageNumber, request.PageSize);
 
-            var baseUrl = fileService.GetBaseUrl();
 
-            foreach (var store in result.Data)
-            {
-                if (store.Image != null)
-                {
-                    store.Image.MediaPath =
-                        baseUrl + store.Image.MediaPath.Replace("\\", "/");
-                }
-            }
+          
             return result;
         }
 
@@ -92,17 +84,7 @@ namespace Tradify.Core.Features.Store.Queries.Handlers
 
 
             var result = mapper.Map< List<GetAllStoresResponse>>(stores);
-            var baseUrl = fileService.GetBaseUrl();
-            foreach (var store in result)
-            {
-                if (store.Image != null)
-                {
-                    store.Image.MediaPath =
-                        baseUrl + store.Image.MediaPath.Replace("\\", "/");
-                }
-            }
-            
-
+         
             return result;
         }
 
@@ -145,12 +127,7 @@ namespace Tradify.Core.Features.Store.Queries.Handlers
 
 
             var result = mapper.Map<GetStoreByIdResponse>(store);
-            var baseUrl = fileService.GetBaseUrl();
-            if (result.Image != null)
-            {
-                result.Image.MediaPath =
-                    baseUrl + result.Image.MediaPath.Replace("\\", "/");
-            }
+          
            
             return Success<GetStoreByIdResponse>(result);
 

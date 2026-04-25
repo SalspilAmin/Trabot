@@ -10,6 +10,8 @@ namespace Tradify.Data.Entities
     {
          public bool IsMain { get; set; } = false;
         public int SortOrder { get; set; }
+        public string PublicId { get; set; } // For Update At Cloudinary
+
 
         [ForeignKey(nameof(ProductId))]
         public virtual Products? Product { get; set; }

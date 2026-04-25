@@ -37,55 +37,29 @@ namespace Tradify.Core.Features.StoreImage.Commands.Validations
 
 
             RuleFor(x => x.Image)
-    .NotNull().WithMessage(localize.Get("Required"))
-    .Must(file => file != null && file.Length > 0)
-    .WithMessage(localize.Get("NoFile"))
-    .Must(file => file.ContentType.StartsWith("image/"))
-    .WithMessage(localize.Get("OnlyImagesAllowed"))
-    .Must(file =>
-    {
-        var ext = Path.GetExtension(file.FileName).ToLower();
-        return ext == ".jpg" || ext == ".jpeg" || ext == ".png" || ext == ".webp";
-    })
-    .WithMessage(localize.Get("OnlyImagesAllowed"))
-    .Must(file => file.Length <= 5 * 1024 * 1024)
-    .WithMessage(localize.Get("MaxSizeIs5MB"));
+       .NotNull().WithMessage(localize.Get("Required"))
+       .DependentRules(() =>
+       {
+           RuleFor(x => x.Image.Length)
+               .GreaterThan(0).WithMessage(localize.Get("NoFile"))
+               .LessThanOrEqualTo(5 * 1024 * 1024)
+               .WithMessage(localize.Get("MaxSizeIs5MB"));
+
+           RuleFor(x => x.Image)
+               .Must(file => file.ContentType.StartsWith("image/"))
+               .WithMessage(localize.Get("OnlyImagesAllowed"));
+
+           RuleFor(x => x.Image)
+               .Must(file =>
+               {
+                   var ext = Path.GetExtension(file.FileName).ToLower();
+                   return ext == ".jpg" || ext == ".jpeg" || ext == ".png" || ext == ".webp" || ext == ".jfif";
+               })
+               .WithMessage(localize.Get("OnlyImagesAllowed"));
+       });
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-    //        RuleFor(x => x.Image)
-    //.NotNull().WithMessage(localize.Get("Required"))
-    //.DependentRules(() =>
-    //{
-    //    RuleFor(x => x.Image.Length)
-    //        .LessThanOrEqualTo(5 * 1024 * 1024)
-    //        .WithMessage(localize.Get("MaxSizeIs5MB"));
-
-    //    RuleFor(x => x.Image)
-    //        .Must(x => x.ContentType == "image/jpeg"
-    //                || x.ContentType == "image/png"
-    //                || x.ContentType == "image/webp")
-    //        .WithMessage(localize.Get("OnlyImagesAllowed"));
-
-    //    RuleFor(x => x.Image.FileName)
-    //               .Must(fileName =>
-    //                fileName.EndsWith(".jpg") ||
-    //    fileName.EndsWith(".jpeg") ||
-    //    fileName.EndsWith(".png") ||
-    //    fileName.EndsWith(".webp"))
-    //.WithMessage(localize.Get("OnlyImagesAllowed"));
-    //});
 
 
         }

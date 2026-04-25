@@ -19,19 +19,8 @@ namespace Tradify.Core.Mapping.ProductMapping
 
                  .ForMember(dest => dest.ReviewsCount, src => src.MapFrom(x => x.Reviews != null ? x.Reviews.Count : 0))
 
+               .ForMember(dest => dest.MainImage, opt => opt.MapFrom(src => src.ProductImages.FirstOrDefault(i => i.IsMain)));
 
-
-                
-
-
-
-
-                .ForMember(dest => dest.MainImage,
-                    opt => opt.MapFrom(src =>
-                        src.ProductImages
-                            .OrderByDescending(i => i.IsMain)
-                            .Select(i => i.MediaPath)
-                            .FirstOrDefault()));
 
 
 
