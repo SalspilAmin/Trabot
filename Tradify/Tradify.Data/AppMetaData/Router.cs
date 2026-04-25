@@ -238,6 +238,7 @@ namespace Tradify.Data.AppMetaData
         {
             public const string prefix = Rule + "Cart";
             public const string GetByUserId = prefix + SignleRoute;
+            public const string UpdateCart = prefix + "Update";
         }
     }
 }
