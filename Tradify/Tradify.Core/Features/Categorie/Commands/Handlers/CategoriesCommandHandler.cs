@@ -93,11 +93,10 @@ namespace Tradify.Core.Features.Categorie.Commands.Handlers
                 ParentCategoryId = request.ParentCategoryId
             };
 
-            var result = await cateroriesService.UpdateCategory(categories);//, request.SellerId);
+            var result = await cateroriesService.UpdateCategory(categories);
 
             if (result != "Success")
             {
-                ;
                 return BadRequest<string>(localization.Get(result));
             }
             else

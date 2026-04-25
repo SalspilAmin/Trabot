@@ -9,7 +9,6 @@ namespace Tradify.Core.Features.Product.Commands.Models
 {
     public class AddProductWithImageCommand : IRequest<Response<string>>
     {
-        //public int StoreId { get; set; }
         public string Name { get; set; }
 
         public string Description { get; set; }

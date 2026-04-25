@@ -29,6 +29,8 @@ namespace Tradify.Core.Features.Product.Queries.Handlers
                                                        , IRequestHandler<GetSellerProductsQuery, Response<PaginatedResult<GetSellerProductPaginationReponse>>>
                                                        , IRequestHandler<GetAllProductListQuery, List<GetProductPaginationReponse>>
                                                        , IRequestHandler<GetProductByStoreQuery, List<GetProductPaginationReponse>>
+                                                       , IRequestHandler<GetProductDiscountQuery, PaginatedResult<GetProductDiscountResponse>>
+        
 
 
     {
@@ -161,16 +163,7 @@ namespace Tradify.Core.Features.Product.Queries.Handlers
 
 
 
-            var baseUrl = fileService.GetBaseUrl();
-
-            foreach (var product in result.Data)
-            {
-                if (product.MainImage != null)
-                {
-                    product.MainImage.MediaPath =
-                        baseUrl + product.MainImage.MediaPath.Replace("\\", "/");
-                }
-            }
+          
 
 
 
@@ -264,16 +257,16 @@ namespace Tradify.Core.Features.Product.Queries.Handlers
                 product.IsFavorite = favorites.Contains(product.Id);
             }
 
-            var baseUrl = fileService.GetBaseUrl();
+            //var baseUrl = fileService.GetBaseUrl();
 
-            foreach (var product in result)
-            {
-                if (product.MainImage != null)
-                {
-                    product.MainImage.MediaPath =
-                        baseUrl + product.MainImage.MediaPath.Replace("\\", "/");
-                }
-            }
+            //foreach (var product in result)
+            //{
+            //    if (product.MainImage != null)
+            //    {
+            //        product.MainImage.MediaPath =
+            //            baseUrl + product.MainImage.MediaPath.Replace("\\", "/");
+            //    }
+            //}
 
             return result;
 
@@ -320,20 +313,40 @@ namespace Tradify.Core.Features.Product.Queries.Handlers
                 product.IsFavorite = favorites.Contains(product.Id);
             }
 
-            var baseUrl = fileService.GetBaseUrl();
+            //var baseUrl = fileService.GetBaseUrl();
 
-            foreach (var product in result)
-            {
-                if (product.MainImage != null)
-                {
-                    product.MainImage.MediaPath =
-                        baseUrl + product.MainImage.MediaPath.Replace("\\", "/");
-                }
-            }
+            //foreach (var product in result)
+            //{
+            //    if (product.MainImage != null)
+            //    {
+            //        product.MainImage.MediaPath =
+            //            baseUrl + product.MainImage.MediaPath.Replace("\\", "/");
+            //    }
+            //}
 
             return result;
 
         }
+
+        // Get Product By Discount And Get Discount With It 
+        public async Task<PaginatedResult<GetProductDiscountResponse>> Handle(GetProductDiscountQuery request, CancellationToken cancellationToken)
+        {
+
+            var products = productService
+                .GetTableNoTracking().
+                Include(p=>p.ProductVariants)
+                .Where(p =>p.ProductVariants.Any(v => v.Discount > 0));
+
+            var result = await mapper
+                                .ProjectTo<GetProductDiscountResponse>(products)
+                                .ToPaginationlist(request.PageNumber, request.PageSize);
+
+            return result;
+
+        }
+
+
+
 
 
 
@@ -373,16 +386,16 @@ namespace Tradify.Core.Features.Product.Queries.Handlers
                 product.IsFavorite = favorites.Contains(product.Id);
             }
 
-            var baseUrl = fileService.GetBaseUrl();
+            //var baseUrl = fileService.GetBaseUrl();
 
-            foreach (var product in result)
-            {
-                if (product.MainImage != null)
-                {
-                    product.MainImage.MediaPath =
-                        baseUrl + product.MainImage.MediaPath.Replace("\\", "/");
-                }
-            }
+            //foreach (var product in result)
+            //{
+            //    if (product.MainImage != null)
+            //    {
+            //        product.MainImage.MediaPath =
+            //            baseUrl + product.MainImage.MediaPath.Replace("\\", "/");
+            //    }
+            //}
 
             return result;
 
@@ -412,15 +425,15 @@ namespace Tradify.Core.Features.Product.Queries.Handlers
 
             var result = mapper.Map<GetProductByIdResponse>(product);
 
-            var baseUrl = fileService.GetBaseUrl();
-            if (result.Images != null)
-            {
-                foreach (var image in result.Images ?? [])
-                {
-                    image.MediaPath =
-                        baseUrl + image.MediaPath.Replace("\\", "/");
-                }
-            }
+            //var baseUrl = fileService.GetBaseUrl();
+            //if (result.Images != null)
+            //{
+            //    foreach (var image in result.Images ?? [])
+            //    {
+            //        image.MediaPath =
+            //            baseUrl + image.MediaPath.Replace("\\", "/");
+            //    }
+            //}
             result.IsFavorite = product.Favorites
                   .Any(f => f.UserId == currentUserId);
             return Success<GetProductByIdResponse>(result);

@@ -10,7 +10,6 @@ namespace Tradify.Core.Features.Product.Queries.Models
 {
     public class GetProductPaginationQuery : IRequest<PaginatedResult<GetProductPaginationReponse>>
     {
-       // public int UserId { get; set; } 
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
         public int? StoreId { get; set; }   

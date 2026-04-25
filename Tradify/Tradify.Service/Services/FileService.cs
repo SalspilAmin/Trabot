@@ -53,7 +53,7 @@ namespace Tradify.Service.Services
              // extension
             var extension = Path.GetExtension(File.FileName).ToLower();
 
-            var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".webp" };
+            var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".webp" , ".jfif" };
             if (!allowedExtensions.Contains(extension))
                 return "InvalidImageType";
             // path

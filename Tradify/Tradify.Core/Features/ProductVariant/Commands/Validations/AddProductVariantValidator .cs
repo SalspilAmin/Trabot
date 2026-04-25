@@ -25,9 +25,7 @@ namespace Tradify.Core.Features.ProductVariant.Commands.Validations
         #endregion
         public void ApplyProductVariantValidator()
         {
-            //RuleFor(x => x.StoreId)
-            //   .NotEmpty().WithMessage(localize.Get("NotEmpty"))
-            //   .GreaterThan(0).WithMessage(localize.Get("ProductIdGreaterThanZero"));
+            
 
 
 

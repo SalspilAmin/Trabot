@@ -7,7 +7,6 @@ using System.Text;
 using Tradify.Core.Bases;
 using Tradify.Core.Features.Product.Commands.Models;
 using Tradify.Core.Features.ProductVariant.Commands.Models;
-using Tradify.Core.Features.ProductVariant.Commands.Models;
 using Tradify.Core.Features.Store.Commands.Models;
 using Tradify.Core.Resources.Service;
 using Tradify.Data.Entities;
@@ -22,11 +21,10 @@ namespace Tradify.Core.Features.ProductVariant.Commands.Handlers
     public class ProductVariantCommandHandler : ResponseHandler,
                                         IRequestHandler<AddProductVariantCommand, Response<string>>,
                                         IRequestHandler<AddProductVarintWithImageCommand, Response<string>>
-       
-                                        ,IRequestHandler<UpdateProductVariantCommand, Response<string>>,
+
+                                        , IRequestHandler<UpdateProductVariantCommand, Response<string>>,
                                          IRequestHandler<DeleteProductVariantCommand, Response<string>>
-                                        , IRequestHandler<AddDiscountCommand, Response<string>>
-                                        , IRequestHandler<DeleteDiscountCommand, Response<string>>
+
                                         , IRequestHandler<RestoreProductVariantCommand, Response<string>>
 
 
@@ -38,7 +36,7 @@ namespace Tradify.Core.Features.ProductVariant.Commands.Handlers
         private readonly IMapper mapper;
         private readonly IProductService productService;
         private readonly ICurrentUserService currentUserService;
-        private readonly IFileService fileService; 
+        private readonly IFileService fileService;
         private readonly IProductVariantImageService productVariantImageService;
 
 
@@ -59,9 +57,9 @@ namespace Tradify.Core.Features.ProductVariant.Commands.Handlers
             this.localize = localize;
             this.storeService = storeService;
             this.productService = productService;
-            this.productVariantImageService = productVariantImageService; 
+            this.productVariantImageService = productVariantImageService;
             this.currentUserService = currentUserService;
-            this.fileService = fileService; 
+            this.fileService = fileService;
         }
         #endregion
 
@@ -108,22 +106,27 @@ namespace Tradify.Core.Features.ProductVariant.Commands.Handlers
             var varintId = result.Item2.Value;
 
             // ✅ رفع الصورة
-            var imagePath = await fileService.UploadGenericAsync(
-                UploadFolder.Variants,
-                varintId,
-                request.Image);
+            var folderVarintName = $"{UploadFolder.Variants}/{varintId}";
 
-            if (!imagePath.StartsWith("/"))
+            var uploadVarintResult = await fileService.UploadImageAsync(
+                         request.Image,
+                         folderVarintName);
+
+            if (uploadVarintResult.Error != "Success")
             {
-
-                return BadRequest<string>(localize.Get(imagePath));
+                return BadRequest<string>(localize.Get(uploadVarintResult.Error));
             }
+
+
+
 
             // ✅ حفظ الصورة
             var varintImage = new Data.Entities.ProductVariantImage
             {
                 ProductVariantId = varintId,
-                MediaPath = imagePath
+                MediaPath = uploadVarintResult.Url,
+                PublicId = uploadVarintResult.PublicId
+
             };
 
             await productVariantImageService.AddAsync(varintImage);
@@ -132,21 +135,6 @@ namespace Tradify.Core.Features.ProductVariant.Commands.Handlers
             return Success<string>("Success", meta: varintId);
 
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -168,9 +156,9 @@ namespace Tradify.Core.Features.ProductVariant.Commands.Handlers
 
             if (variant == null)
                 return NotFound<string>(localize.Get("VariantNotFound"));
-            
 
-           
+
+
             // تحقق من التكرار (Color + Size)
             var exists = await productVariantService.GetTableNoTracking()
                 .AnyAsync(v =>
@@ -259,36 +247,9 @@ namespace Tradify.Core.Features.ProductVariant.Commands.Handlers
 
             return Success<string>(localize.Get("VariantRestoredSuccessfully"));
         }
-       
 
-        public async Task<Response<string>> Handle(AddDiscountCommand request, CancellationToken cancellationToken)
-        {
-            var variant = await productVariantService.GetByIdAsync(request.VariantId);
 
-            if (variant == null)
-                NotFound<string>(localize.Get("ProductVariantNotFound"));
-            
-                variant.Discount = request.Discount;
 
-                 await productVariantService.UpdateAsync(variant);
-
-            return Success<string>(localize.Get("DiscountAddedSuccessfully"));
-            
-
-        }
-        public async Task<Response<string>> Handle(DeleteDiscountCommand request, CancellationToken cancellationToken)
-        {
-            var variant = await productVariantService.GetByIdAsync(request.VariantId);
-
-            if (variant == null)
-                return NotFound<string>(localize.Get("ProductVariantNotFound"));
-
-            variant.Discount = 0;
-
-            await productVariantService.UpdateAsync(variant);
-
-            return Success<string>(localize.Get("DiscountDeletedSuccessfully"));
-        }
 
         #endregion
     }

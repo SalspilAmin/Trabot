@@ -9,7 +9,6 @@ namespace Tradify.Core.Mapping.FavoriteMapping
     {
         public FavoriteProfile()
         {
-            AddFavoriteMapping();
             ToggleFavoriteMapping();
         }
     }

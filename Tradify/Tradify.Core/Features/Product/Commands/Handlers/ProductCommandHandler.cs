@@ -22,7 +22,7 @@ using static Tradify.Data.AppMetaData.Router;
 namespace Tradify.Core.Features.Product.Commands.Handlers
 {
     public class ProductCommandHandler : ResponseHandler,
-                                         IRequestHandler<AddProductCommand, Response<string>> ,
+                                         IRequestHandler<AddProductCommand, Response<string>>,
                                          IRequestHandler<AddProductWithImageCommand, Response<string>>,
 
                                          IRequestHandler<UpdateProductCommand, Response<string>>,
@@ -35,7 +35,7 @@ namespace Tradify.Core.Features.Product.Commands.Handlers
     {
         #region Fields
         private readonly LocalizationService localize;
-        private readonly IProductService  productService;
+        private readonly IProductService productService;
         private readonly IStoreService storeService;
         private readonly IProductVariantService productVariantService;
         private readonly IMapper mapper;
@@ -43,7 +43,7 @@ namespace Tradify.Core.Features.Product.Commands.Handlers
         private readonly ICateroriesService cateroriesService;
         private readonly ISellerService sellerService;
         private readonly IFileService fileService;
-        private readonly IAuthorizationService  authorizationService;
+        private readonly IAuthorizationService authorizationService;
         private readonly IProductImageService productImageService;
         private readonly IProductVariantImageService productVariantImageService;
 
@@ -57,16 +57,16 @@ namespace Tradify.Core.Features.Product.Commands.Handlers
                                      ICurrentUserService currentUserService,
                                      IAuthorizationService authorizationService,
                                      LocalizationService localize, ISellerService sellerService
-            ,IFileService fileService, IProductImageService productImageService
+            , IFileService fileService, IProductImageService productImageService
             , IProductVariantImageService productVariantImageService) : base(localize)
         {
             this.productService = productService;
             this.mapper = mapper;
             this.localize = localize;
-            this.storeService = storeService;  
+            this.storeService = storeService;
             this.cateroriesService = cateroriesService;
             this.currentUserService = currentUserService;
-            this.authorizationService = authorizationService;   
+            this.authorizationService = authorizationService;
             this.sellerService = sellerService;
             this.fileService = fileService;
             this.productImageService = productImageService;
@@ -89,15 +89,15 @@ namespace Tradify.Core.Features.Product.Commands.Handlers
             var result = await productService.AddProductWithDefultVarintAsync(product, variant);
 
             if (result.Item1 != "Success")
-            { 
-                return BadRequest<string>(localize.Get(result.Item1)); 
+            {
+                return BadRequest<string>(localize.Get(result.Item1));
             }
-            else 
+            else
             {
                 return Success<string>("Success", meta: result.Item2);
             }
-               
-            }
+
+        }
 
 
         // Add Product With Image
@@ -121,47 +121,54 @@ namespace Tradify.Core.Features.Product.Commands.Handlers
             var productid = result.Item2.Value;
             var varintid = result.Item3.Value;
 
-            // ✅ رفع الصورة
-            var imagePathProduct = await fileService.UploadGenericAsync(
-                UploadFolder.Products,
-                productid,
-                request.Image);
 
+            // Upload Product Image 
 
-            if (!imagePathProduct.StartsWith("/"))
+            var folderName = $"{UploadFolder.Products}/{productid}";
+
+            var uploadResult = await fileService.UploadImageAsync(
+                         request.Image,
+                         folderName);
+
+            if (uploadResult.Error != "Success")
             {
-
-                return BadRequest<string>(localize.Get(imagePathProduct));
+                return BadRequest<string>(localize.Get(uploadResult.Error));
             }
 
-            // ✅ رفع الصورة
-            var imagePathVarint = await fileService.UploadGenericAsync(
-                UploadFolder.Variants,
-                productid,
-                request.Image);
+            // Upload Varint Image 
 
+            var folderVarintName = $"{UploadFolder.Variants}/{varintid}";
 
-            if (!imagePathVarint.StartsWith("/"))
+            var uploadVarintResult = await fileService.UploadImageAsync(
+                         request.Image,
+                         folderVarintName);
+
+            if (uploadVarintResult.Error != "Success")
             {
-
-                return BadRequest<string>(localize.Get(imagePathVarint));
+                return BadRequest<string>(localize.Get(uploadVarintResult.Error));
             }
 
             // ✅ حفظ الصورة
             var productImage = new Data.Entities.ProductImage
             {
                 ProductId = productid,
-                MediaPath = imagePathProduct,
+                MediaPath = uploadResult.Url,
                 IsMain = true,
-                SortOrder=1
+                SortOrder = 1,
+                PublicId = uploadResult.PublicId
+
             };
+
+
 
             var productVarintImage = new Data.Entities.ProductVariantImage
             {
                 ProductVariantId = varintid,
-                MediaPath = imagePathVarint
+                MediaPath = uploadVarintResult.Url,
+                PublicId = uploadVarintResult.PublicId
+
             };
-            
+
             await productVariantImageService.AddAsync(productVarintImage);
 
             await productImageService.AddAsync(productImage);
@@ -212,11 +219,11 @@ namespace Tradify.Core.Features.Product.Commands.Handlers
 
             return Success<string>(localize.Get("ProductUpdatedSuccessfully"));
 
-           
+
         }
         //// Remove Product
 
-        
+
         public async Task<Response<string>> Handle(DeleteProductCommand request, CancellationToken cancellationToken)
         {
             var userId = currentUserService.GetUserId();
@@ -230,7 +237,7 @@ namespace Tradify.Core.Features.Product.Commands.Handlers
             if (product == null)
                 return NotFound<string>(localize.Get("ProductNotFound"));
 
-          
+
             //// التأكد أن هذا المنتج تابع للسيلر الحالي
 
             //if (product.Store?.SellerId != userId && !isAdmin)
@@ -276,7 +283,7 @@ namespace Tradify.Core.Features.Product.Commands.Handlers
 
             //}
 
-           
+
         }
 
 
@@ -289,7 +296,7 @@ namespace Tradify.Core.Features.Product.Commands.Handlers
             if (store == null)
                 return NotFound<string>(localize.Get("StoreNotFound"));
 
-           
+
             var product = await productService
                                    .GetTableAsTracking()
                                    .IgnoreQueryFilters()

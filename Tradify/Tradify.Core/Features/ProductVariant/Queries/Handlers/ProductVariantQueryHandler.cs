@@ -27,7 +27,7 @@ namespace Tradify.Core.Features.ProductVariant.Queries.Handlers
     public class ProductVariantQueryHandler : ResponseHandler, IRequestHandler<GetProductVariantsByProductQuery, Response<PaginatedResult<GetProductVariantByProductResponse>>>
                                                              , IRequestHandler<GetProductVariantByIdQuery, Response<GetProductVariantByIdResponse>>
                                                              , IRequestHandler<GetAllVarintByProductListQuery, List<GetProductVariantByProductResponse>>
-        
+
 
     {
         #region Fields
@@ -56,7 +56,7 @@ namespace Tradify.Core.Features.ProductVariant.Queries.Handlers
             this.localize = localize;
             this.storeService = storeService;
             this.productService = productService;
-            this.fileService   = fileService;
+            this.fileService = fileService;
             this.currentUserService = currentUserService;
         }
         #endregion
@@ -71,7 +71,7 @@ namespace Tradify.Core.Features.ProductVariant.Queries.Handlers
 
 
             //  Query
-            var variants = productVariantService.GetTableNoTracking().Include(v=>v.ProductVariantImage)
+            var variants = productVariantService.GetTableNoTracking().Include(v => v.ProductVariantImage)
                 .Where(v => v.ProductId == request.ProductId);
 
             //  Search
@@ -138,7 +138,7 @@ namespace Tradify.Core.Features.ProductVariant.Queries.Handlers
         public async Task<List<GetProductVariantByProductResponse>> Handle(GetAllVarintByProductListQuery request, CancellationToken cancellationToken)
         {
             //  Query
-            var variants =await productVariantService.GetTableNoTracking().Include(v => v.ProductVariantImage)
+            var variants = await productVariantService.GetTableNoTracking().Include(v => v.ProductVariantImage)
                 .Where(v => v.ProductId == request.ProductId).ToListAsync(cancellationToken);
 
 
@@ -173,18 +173,18 @@ namespace Tradify.Core.Features.ProductVariant.Queries.Handlers
             var result = mapper.Map<GetProductVariantByIdResponse>(variant);
             var baseUrl = fileService.GetBaseUrl();
 
-           
-                if (result.Image != null)
-                {
+
+            if (result.Image != null)
+            {
                 result.Image.MediaPath =
                         baseUrl + result.Image.MediaPath.Replace("\\", "/");
-                }
-           
+            }
+
             return Success<GetProductVariantByIdResponse>(result);
 
         }
 
-      
+
         #endregion
 
     }

@@ -30,11 +30,6 @@ namespace Tradify.Core.Features.Categorie.Commands.Validations
         public void ApplyProductValidations()
         {
 
-            //RuleFor(x => x.SellerId)
-            //    .GreaterThan(0).WithMessage(localize.Get("IdMustBeGreaterThanZero"))
-            //    .NotEmpty().WithMessage(localize.Get("NotEmpty"))
-            //    .NotNull().WithMessage(localize.Get("Required"));
-
 
             RuleFor(x => x.Name)
                 .NotNull().WithMessage(localize.Get("Required"))
