@@ -12,7 +12,7 @@ namespace Tradify.Service.AbstractsServices.FawaterakServices
     {
      public Task<EInvoiceResponseDataModel?> CreateEInvoiceAsync(EInvoiceRequestModel eInvoice);
         public  Task<IList<Tradify.Data.Helpers.Fawaterak.PaymentMethod>> GetPaymentMethodsAsync();
-        public Task<FawaterakPaymentFMethods> GetPaymentItemFromEnum(int paymentMethodId, IList<Tradify.Data.Helpers.Fawaterak.PaymentMethod>? paymentMethods);
+        public Task<FawaterakPaymentFMethods?> GetPaymentItemFromEnum(int paymentMethodId, IList<Tradify.Data.Helpers.Fawaterak.PaymentMethod>? paymentMethods);
         public Task<(BasePaymentDataResponse?, string)> GeneralPay(EInvoiceRequestModel invoice);
         public bool VerifyApiKeyTransaction(string apiKey);
         public bool VerifyCancelTransaction(CancelTransactionModel cancelTransaction);

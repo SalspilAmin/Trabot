@@ -56,20 +56,33 @@ namespace Tradify.Service.Services.FawaterakServices
             request.Content = new StringContent(string.Empty, Encoding.UTF8, "application/json");
             var response = await client.SendAsync(request);
 
+
+
             if (response.IsSuccessStatusCode)
             {
                 var resposnecontent = await response.Content.ReadAsStringAsync();
                 var _response = JsonConvert.DeserializeObject<PaymentMethodsResponse>(resposnecontent);
+                var filtered = new List<Data.Helpers.Fawaterak.PaymentMethod>();
                 foreach (var item in _response.Data)
                 {
-                    item.Id = (int)await GetPaymentItemFromEnum(item.PaymentId, _response.Data);
+                    var type = await GetPaymentItemFromEnum(item.PaymentId, _response.Data);
+
+                    if (type != null)
+                    {
+                        item.Id = (int)type.Value; // لو عندك property
+                        filtered.Add(item);
+
+                    }
+                   
                 }
-                return _response.Data  ;
+                _response.Data= filtered;
+                return _response.Data;
             }
             return null;
-
         }
-       public async Task<FawaterakPaymentFMethods> GetPaymentItemFromEnum(int paymentMethodId, IList<Tradify.Data.Helpers.Fawaterak.PaymentMethod>? paymentMethods=null)
+
+ 
+        public async Task<FawaterakPaymentFMethods?> GetPaymentItemFromEnum(int paymentMethodId, IList<Tradify.Data.Helpers.Fawaterak.PaymentMethod>? paymentMethods=null)
         {
             var methods = paymentMethods ?? await GetPaymentMethodsAsync();
             var method = methods?.FirstOrDefault(x => x.PaymentId == paymentMethodId);
@@ -81,8 +94,11 @@ namespace Tradify.Service.Services.FawaterakServices
             if (name.Contains("Meeza", StringComparison.OrdinalIgnoreCase) ||
                 name.Contains("Wallet", StringComparison.OrdinalIgnoreCase))
                 return FawaterakPaymentFMethods.EWallet;
+            if (name.Contains("Visa", StringComparison.OrdinalIgnoreCase) ||
+                 name.Contains("Mastercard", StringComparison.OrdinalIgnoreCase))
+                return FawaterakPaymentFMethods.Card;
 
-            return FawaterakPaymentFMethods.Card;
+            return null;
 
         }
 

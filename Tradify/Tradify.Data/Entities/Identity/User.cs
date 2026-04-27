@@ -26,12 +26,14 @@ namespace Tradify.Data.Entities.Identity
         public string? Country { get; set; }
         [EncryptColumn]
         public string? Code { get; set; }
+        public int?  CartId { get; set; }            
         public string? OTP {  get; set; }
         [InverseProperty(nameof(UserRefreshToken.user))]
         public virtual ICollection<UserRefreshToken>? UserRefreshTokens { get; set; }
+        
 
         public virtual Sellers? Seller { get; set; }
-     
+        [ForeignKey(nameof(CartId))]
         public virtual Cart Cart{ get; set; }
 
         public virtual ICollection<Orders> Orders { get; set; }

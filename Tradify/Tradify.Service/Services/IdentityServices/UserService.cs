@@ -150,7 +150,9 @@ namespace Tradify.Service.Services.IdentityServices
 
                     }
                     var CreateCartResult = await _cartService.AddAsync(new Data.Entities.Cart() { User = user ,UserId=user.Id});
+                    
                     if(CreateCartResult==null) return ("Failed", null);
+                    user.CartId = CreateCartResult.Id;
                     await trans.CommitAsync();
                     return ("Success",user.Id);
                 }
