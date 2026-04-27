@@ -11,21 +11,16 @@ namespace Tradify.Data.Entities
         public int Id { get; set; }
         public int UserId { get; set; }
 
-        //public int StoreId { get; set; }
         public string BusinessName { get; set; }
         public string BusinessType { get; set; }
        
     
-        //public bool IsVerified { get; set; }
         public bool IsActive { get; set; }
         [ForeignKey(nameof(UserId))]
         public virtual User User { get; set; }
        
         public virtual Stores? Store { get; set; }
 
-       // public virtual ICollection<Products>? Products { get; set; }
-         
-      //  public virtual ICollection<Categories>? Categories { get; set; }
         public virtual ICollection<Payouts> Payouts { get; set; }                   
     }
 }

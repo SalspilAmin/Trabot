@@ -1,0 +1,14 @@
+$kind: http-request
+name: /Api/V1/Category/getAll
+url: "{{baseUrl}}/Api/V1/Category/getAll?PageNumber=2429&PageSize=2429&StoreId=2429&ParentCategoryId=2429&OnlyRoot=true&Search=string&IsDeleted=true"
+method: GET
+queryParams:
+  PageNumber: "2429"
+  PageSize: "2429"
+  StoreId: "2429"
+  ParentCategoryId: "2429"
+  OnlyRoot: "true"
+  Search: string
+  IsDeleted: "true"
+examples: ./.resources/-Api-V1-Category-getAll.resources/examples
+order: 1000

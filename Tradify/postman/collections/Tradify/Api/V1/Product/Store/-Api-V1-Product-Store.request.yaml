@@ -1,0 +1,8 @@
+$kind: http-request
+name: /Api/V1/Product/Store
+url: "{{baseUrl}}/Api/V1/Product/Store?StoreId=2429"
+method: GET
+queryParams:
+  StoreId: "2429"
+examples: ./.resources/-Api-V1-Product-Store.resources/examples
+order: 1000

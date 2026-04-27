@@ -1,0 +1,6 @@
+$kind: http-request
+name: /Api/V1/Store/List
+url: "{{baseUrl}}/Api/V1/Store/List"
+method: GET
+examples: ./.resources/-Api-V1-Store-List.resources/examples
+order: 1000

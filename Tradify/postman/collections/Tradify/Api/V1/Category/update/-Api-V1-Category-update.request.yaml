@@ -1,0 +1,20 @@
+$kind: http-request
+name: /Api/V1/Category/update
+url: "{{baseUrl}}/Api/V1/Category/update"
+method: PUT
+headers:
+  Content-Type: multipart/form-data
+body:
+  type: formdata
+  content:
+    - type: text
+      key: Id
+      value: "9478"
+    - type: text
+      key: Name
+      value: string
+    - type: text
+      key: ParentCategoryId
+      value: "6685"
+examples: ./.resources/-Api-V1-Category-update.resources/examples
+order: 1000

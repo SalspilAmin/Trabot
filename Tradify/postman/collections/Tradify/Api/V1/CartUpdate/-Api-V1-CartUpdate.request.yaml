@@ -1,0 +1,1958 @@
+$kind: http-request
+name: /Api/V1/CartUpdate
+url: "{{baseUrl}}/Api/V1/CartUpdate"
+method: PUT
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "userId": 7109,
+      "cartId": 9213,
+      "productsInCart": [
+        {
+          "id": 8727,
+          "productVariantId": 1525,
+          "productVariant": {
+            "id": 5470,
+            "name": "string",
+            "productId": 4562,
+            "price": 3467.294703900956,
+            "discount": 5455.249587425652,
+            "color": "string",
+            "size": "string",
+            "isDeleted": true,
+            "numberOfProductInStock": 5102,
+            "productVariantImage": {
+              "id": 6976,
+              "mediaPath": "string",
+              "productVariantId": 8897,
+              "publicId": "string",
+              "productVariant": {
+                "value": "<Circular reference to #/components/schemas/ProductVariants detected>"
+              }
+            },
+            "orderItems": [
+              {
+                "id": 1617,
+                "suborderId": 4005,
+                "productVariantId": 692,
+                "quantity": 2765,
+                "price": 9958.223461351301,
+                "subOrder": {
+                  "id": 7518,
+                  "orderId": 9133,
+                  "storeId": 9905,
+                  "productId": 7012,
+                  "quantity": 636,
+                  "productVAriantsId": 6482,
+                  "shipmentId": 989,
+                  "shipmentTrackingId": 6466,
+                  "status": 1,
+                  "createdAt": "1989-05-20T06:40:50.702Z",
+                  "order": {
+                    "id": 198,
+                    "customerId": 6157,
+                    "shippingAddress": "string",
+                    "orderStatus": 0,
+                    "paymentStatus": 2,
+                    "shippingPrice": 4361.143106936592,
+                    "totalAmount": 7758.466240406523,
+                    "createdAt": "1965-09-19T16:54:23.763Z",
+                    "estimatedDelevery": "1982-08-27T00:51:27.792Z",
+                    "invoice_id": 5747,
+                    "invoice_key": "string",
+                    "cartId": 1506,
+                    "cart": {
+                      "id": 6115,
+                      "userId": 3090,
+                      "isDeleted": true,
+                      "user": {
+                        "id": 5828,
+                        "userName": "string",
+                        "normalizedUserName": "string",
+                        "email": "string",
+                        "normalizedEmail": "string",
+                        "emailConfirmed": true,
+                        "passwordHash": "string",
+                        "securityStamp": "string",
+                        "concurrencyStamp": "string",
+                        "phoneNumber": "string",
+                        "phoneNumberConfirmed": false,
+                        "twoFactorEnabled": false,
+                        "lockoutEnd": "2017-05-14T16:18:54.716Z",
+                        "lockoutEnabled": false,
+                        "accessFailedCount": 177,
+                        "address": "string",
+                        "sellerId": 9448,
+                        "isDeleted": true,
+                        "country": "string",
+                        "code": "string",
+                        "otp": "string",
+                        "userRefreshTokens": [
+                          {
+                            "id": 366,
+                            "userId": 4776,
+                            "token": "string",
+                            "refreshToken": "string",
+                            "jwtId": "string",
+                            "isActive": true,
+                            "isRevoked": false,
+                            "addedTime": "1970-08-08T04:23:58.741Z",
+                            "expiredTime": "1982-08-17T07:25:29.602Z",
+                            "user": {
+                              "value": "<Circular reference to #/components/schemas/User detected>"
+                            }
+                          }
+                        ],
+                        "seller": {
+                          "id": 3714,
+                          "userId": 8380,
+                          "businessName": "string",
+                          "businessType": "string",
+                          "isActive": true,
+                          "user": {
+                            "value": "<Circular reference to #/components/schemas/User detected>"
+                          },
+                          "store": {
+                            "id": 6616,
+                            "sellerId": 1856,
+                            "name": "string",
+                            "description": "string",
+                            "isActive": true,
+                            "type": 2,
+                            "createdAt": "1993-11-27T09:26:56.562Z",
+                            "seller": {
+                              "value": "<Circular reference to #/components/schemas/Sellers detected>"
+                            },
+                            "isDeleted": true,
+                            "deletedAt": "1974-03-22T00:52:40.695Z",
+                            "products": [
+                              {
+                                "id": 745,
+                                "name": "string",
+                                "description": "string",
+                                "storeId": 258,
+                                "categoryId": 6358,
+                                "createdAt": "1984-06-27T01:58:13.987Z",
+                                "updateAt": "1953-07-02T04:28:12.222Z",
+                                "isDeleted": true,
+                                "category": {
+                                  "id": 3892,
+                                  "name": "string",
+                                  "parentCategoryId": 9815,
+                                  "isDeleted": true,
+                                  "storeId": 9498,
+                                  "store": {
+                                    "value": "<Circular reference to #/components/schemas/Stores detected>"
+                                  },
+                                  "products": [
+                                    {
+                                      "value": "<Circular reference to #/components/schemas/Products detected>"
+                                    }
+                                  ],
+                                  "parent": {
+                                    "value": "<Circular reference to #/components/schemas/Categories detected>"
+                                  },
+                                  "children": [
+                                    {
+                                      "value": "<Circular reference to #/components/schemas/Categories detected>"
+                                    }
+                                  ]
+                                },
+                                "store": {
+                                  "value": "<Circular reference to #/components/schemas/Stores detected>"
+                                },
+                                "reviews": [
+                                  {
+                                    "id": 5477,
+                                    "productId": 7700,
+                                    "customerId": 7883,
+                                    "instructorId": 9173,
+                                    "rating": 4,
+                                    "comment": "string",
+                                    "isPurchased": true,
+                                    "createdAt": "2018-12-09T11:50:27.406Z",
+                                    "customer": {
+                                      "value": "<Circular reference to #/components/schemas/User detected>"
+                                    },
+                                    "product": {
+                                      "value": "<Circular reference to #/components/schemas/Products detected>"
+                                    },
+                                    "instructor": {
+                                      "id": {
+                                        "value": "<Error: Too many levels of nesting to fake this schema>"
+                                      },
+                                      "userId": {
+                                        "value": "<Error: Too many levels of nesting to fake this schema>"
+                                      },
+                                      "storeId": {
+                                        "value": "<Error: Too many levels of nesting to fake this schema>"
+                                      },
+                                      "name": {
+                                        "value": "<Error: Too many levels of nesting to fake this schema>"
+                                      },
+                                      "jobTitle": {
+                                        "value": "<Error: Too many levels of nesting to fake this schema>"
+                                      },
+                                      "about": {
+                                        "value": "<Error: Too many levels of nesting to fake this schema>"
+                                      },
+                                      "yearsOfExperience": {
+                                        "value": "<Error: Too many levels of nesting to fake this schema>"
+                                      },
+                                      "pricePerSession": {
+                                        "value": "<Error: Too many levels of nesting to fake this schema>"
+                                      },
+                                      "isActive": {
+                                        "value": "<Error: Too many levels of nesting to fake this schema>"
+                                      },
+                                      "user": {
+                                        "value": "<Error: Too many levels of nesting to fake this schema>"
+                                      },
+                                      "store": {
+                                        "value": "<Error: Too many levels of nesting to fake this schema>"
+                                      },
+                                      "reviews": {
+                                        "value": "<Error: Too many levels of nesting to fake this schema>"
+                                      },
+                                      "instructorImage": {
+                                        "value": "<Error: Too many levels of nesting to fake this schema>"
+                                      },
+                                      "educations": {
+                                        "value": "<Error: Too many levels of nesting to fake this schema>"
+                                      },
+                                      "certifications": {
+                                        "value": "<Error: Too many levels of nesting to fake this schema>"
+                                      },
+                                      "services": {
+                                        "value": "<Error: Too many levels of nesting to fake this schema>"
+                                      },
+                                      "schedules": {
+                                        "value": "<Error: Too many levels of nesting to fake this schema>"
+                                      }
+                                    }
+                                  }
+                                ],
+                                "favorites": [
+                                  {
+                                    "id": 9351,
+                                    "userId": 5564,
+                                    "productId": 4133,
+                                    "user": {
+                                      "value": "<Circular reference to #/components/schemas/User detected>"
+                                    },
+                                    "product": {
+                                      "value": "<Circular reference to #/components/schemas/Products detected>"
+                                    }
+                                  }
+                                ],
+                                "productVariants": [
+                                  {
+                                    "value": "<Circular reference to #/components/schemas/ProductVariants detected>"
+                                  }
+                                ],
+                                "productImages": [
+                                  {
+                                    "id": 5544,
+                                    "productId": 6982,
+                                    "mediaPath": "string",
+                                    "isMain": false,
+                                    "sortOrder": 9663,
+                                    "publicId": "string",
+                                    "product": {
+                                      "value": "<Circular reference to #/components/schemas/Products detected>"
+                                    }
+                                  }
+                                ],
+                                "productVideos": [
+                                  {
+                                    "id": 4020,
+                                    "productId": 9197,
+                                    "mediaPath": "string",
+                                    "product": {
+                                      "value": "<Circular reference to #/components/schemas/Products detected>"
+                                    }
+                                  }
+                                ]
+                              }
+                            ],
+                            "categories": [
+                              {
+                                "id": 7712,
+                                "name": "string",
+                                "parentCategoryId": 6212,
+                                "isDeleted": false,
+                                "storeId": 5807,
+                                "store": {
+                                  "value": "<Circular reference to #/components/schemas/Stores detected>"
+                                },
+                                "products": [
+                                  {
+                                    "value": "<Circular reference to #/components/schemas/Products detected>"
+                                  }
+                                ],
+                                "parent": {
+                                  "value": "<Circular reference to #/components/schemas/Categories detected>"
+                                },
+                                "children": [
+                                  {
+                                    "value": "<Circular reference to #/components/schemas/Categories detected>"
+                                  }
+                                ]
+                              }
+                            ],
+                            "storeImage": {
+                              "id": 5846,
+                              "mediaPath": "string",
+                              "storeId": 3511,
+                              "publicId": "string",
+                              "stores": {
+                                "value": "<Circular reference to #/components/schemas/Stores detected>"
+                              }
+                            },
+                            "instructors": [
+                              {
+                                "id": {
+                                  "value": "<Error: Too many levels of nesting to fake this schema>"
+                                },
+                                "userId": {
+                                  "value": "<Error: Too many levels of nesting to fake this schema>"
+                                },
+                                "storeId": {
+                                  "value": "<Error: Too many levels of nesting to fake this schema>"
+                                },
+                                "name": {
+                                  "value": "<Error: Too many levels of nesting to fake this schema>"
+                                },
+                                "jobTitle": {
+                                  "value": "<Error: Too many levels of nesting to fake this schema>"
+                                },
+                                "about": {
+                                  "value": "<Error: Too many levels of nesting to fake this schema>"
+                                },
+                                "yearsOfExperience": {
+                                  "value": "<Error: Too many levels of nesting to fake this schema>"
+                                },
+                                "pricePerSession": {
+                                  "value": "<Error: Too many levels of nesting to fake this schema>"
+                                },
+                                "isActive": {
+                                  "value": "<Error: Too many levels of nesting to fake this schema>"
+                                },
+                                "user": {
+                                  "value": "<Error: Too many levels of nesting to fake this schema>"
+                                },
+                                "store": {
+                                  "value": "<Error: Too many levels of nesting to fake this schema>"
+                                },
+                                "reviews": {
+                                  "value": "<Error: Too many levels of nesting to fake this schema>"
+                                },
+                                "instructorImage": {
+                                  "value": "<Error: Too many levels of nesting to fake this schema>"
+                                },
+                                "educations": {
+                                  "value": "<Error: Too many levels of nesting to fake this schema>"
+                                },
+                                "certifications": {
+                                  "value": "<Error: Too many levels of nesting to fake this schema>"
+                                },
+                                "services": {
+                                  "value": "<Error: Too many levels of nesting to fake this schema>"
+                                },
+                                "schedules": {
+                                  "value": "<Error: Too many levels of nesting to fake this schema>"
+                                }
+                              }
+                            ],
+                            "bookings": [
+                              {
+                                "id": 3998,
+                                "createdAt": "1952-08-19T20:13:08.346Z",
+                                "status": 1,
+                                "customerId": 8260,
+                                "customer": {
+                                  "value": "<Circular reference to #/components/schemas/User detected>"
+                                },
+                                "scheduleId": 6127,
+                                "schedule": {
+                                  "id": 5701,
+                                  "instructorId": 9202,
+                                  "instructor": {
+                                    "id": {
+                                      "value": "<Error: Too many levels of nesting to fake this schema>"
+                                    },
+                                    "userId": {
+                                      "value": "<Error: Too many levels of nesting to fake this schema>"
+                                    },
+                                    "storeId": {
+                                      "value": "<Error: Too many levels of nesting to fake this schema>"
+                                    },
+                                    "name": {
+                                      "value": "<Error: Too many levels of nesting to fake this schema>"
+                                    },
+                                    "jobTitle": {
+                                      "value": "<Error: Too many levels of nesting to fake this schema>"
+                                    },
+                                    "about": {
+                                      "value": "<Error: Too many levels of nesting to fake this schema>"
+                                    },
+                                    "yearsOfExperience": {
+                                      "value": "<Error: Too many levels of nesting to fake this schema>"
+                                    },
+                                    "pricePerSession": {
+                                      "value": "<Error: Too many levels of nesting to fake this schema>"
+                                    },
+                                    "isActive": {
+                                      "value": "<Error: Too many levels of nesting to fake this schema>"
+                                    },
+                                    "user": {
+                                      "value": "<Error: Too many levels of nesting to fake this schema>"
+                                    },
+                                    "store": {
+                                      "value": "<Error: Too many levels of nesting to fake this schema>"
+                                    },
+                                    "reviews": {
+                                      "value": "<Error: Too many levels of nesting to fake this schema>"
+                                    },
+                                    "instructorImage": {
+                                      "value": "<Error: Too many levels of nesting to fake this schema>"
+                                    },
+                                    "educations": {
+                                      "value": "<Error: Too many levels of nesting to fake this schema>"
+                                    },
+                                    "certifications": {
+                                      "value": "<Error: Too many levels of nesting to fake this schema>"
+                                    },
+                                    "services": {
+                                      "value": "<Error: Too many levels of nesting to fake this schema>"
+                                    },
+                                    "schedules": {
+                                      "value": "<Error: Too many levels of nesting to fake this schema>"
+                                    }
+                                  },
+                                  "startTime": "2026-04-07T11:33:15.893Z",
+                                  "endTime": "2013-09-19T18:02:24.922Z",
+                                  "capacity": 8348,
+                                  "reservedCount": 2413,
+                                  "isAvailable": true,
+                                  "bookings": [
+                                    {
+                                      "value": "<Circular reference to #/components/schemas/Bookings detected>"
+                                    }
+                                  ]
+                                },
+                                "instructorId": 9056,
+                                "instructor": {
+                                  "id": {
+                                    "value": "<Error: Too many levels of nesting to fake this schema>"
+                                  },
+                                  "userId": {
+                                    "value": "<Error: Too many levels of nesting to fake this schema>"
+                                  },
+                                  "storeId": {
+                                    "value": "<Error: Too many levels of nesting to fake this schema>"
+                                  },
+                                  "name": {
+                                    "value": "<Error: Too many levels of nesting to fake this schema>"
+                                  },
+                                  "jobTitle": {
+                                    "value": "<Error: Too many levels of nesting to fake this schema>"
+                                  },
+                                  "about": {
+                                    "value": "<Error: Too many levels of nesting to fake this schema>"
+                                  },
+                                  "yearsOfExperience": {
+                                    "value": "<Error: Too many levels of nesting to fake this schema>"
+                                  },
+                                  "pricePerSession": {
+                                    "value": "<Error: Too many levels of nesting to fake this schema>"
+                                  },
+                                  "isActive": {
+                                    "value": "<Error: Too many levels of nesting to fake this schema>"
+                                  },
+                                  "user": {
+                                    "value": "<Error: Too many levels of nesting to fake this schema>"
+                                  },
+                                  "store": {
+                                    "value": "<Error: Too many levels of nesting to fake this schema>"
+                                  },
+                                  "reviews": {
+                                    "value": "<Error: Too many levels of nesting to fake this schema>"
+                                  },
+                                  "instructorImage": {
+                                    "value": "<Error: Too many levels of nesting to fake this schema>"
+                                  },
+                                  "educations": {
+                                    "value": "<Error: Too many levels of nesting to fake this schema>"
+                                  },
+                                  "certifications": {
+                                    "value": "<Error: Too many levels of nesting to fake this schema>"
+                                  },
+                                  "services": {
+                                    "value": "<Error: Too many levels of nesting to fake this schema>"
+                                  },
+                                  "schedules": {
+                                    "value": "<Error: Too many levels of nesting to fake this schema>"
+                                  }
+                                },
+                                "storeId": 5340,
+                                "store": {
+                                  "value": "<Circular reference to #/components/schemas/Stores detected>"
+                                }
+                              }
+                            ]
+                          },
+                          "payouts": [
+                            {
+                              "id": 173,
+                              "sotreId": 338,
+                              "amount": 7109.297858993011,
+                              "paymentMethod": 2,
+                              "paymentStatus": 0,
+                              "processedAt": "2003-10-03T02:56:55.949Z"
+                            }
+                          ]
+                        },
+                        "cart": {
+                          "value": "<Circular reference to #/components/schemas/Cart detected>"
+                        },
+                        "orders": [
+                          {
+                            "value": "<Circular reference to #/components/schemas/Orders detected>"
+                          }
+                        ],
+                        "reviews": [
+                          {
+                            "id": 6729,
+                            "productId": 7546,
+                            "customerId": 5255,
+                            "instructorId": 677,
+                            "rating": 1,
+                            "comment": "string",
+                            "isPurchased": true,
+                            "createdAt": "1990-08-26T02:58:02.579Z",
+                            "customer": {
+                              "value": "<Circular reference to #/components/schemas/User detected>"
+                            },
+                            "product": {
+                              "value": "<Circular reference to #/components/schemas/Products detected>"
+                            },
+                            "instructor": {
+                              "id": {
+                                "value": "<Error: Too many levels of nesting to fake this schema>"
+                              },
+                              "userId": {
+                                "value": "<Error: Too many levels of nesting to fake this schema>"
+                              },
+                              "storeId": {
+                                "value": "<Error: Too many levels of nesting to fake this schema>"
+                              },
+                              "name": {
+                                "value": "<Error: Too many levels of nesting to fake this schema>"
+                              },
+                              "jobTitle": {
+                                "value": "<Error: Too many levels of nesting to fake this schema>"
+                              },
+                              "about": {
+                                "value": "<Error: Too many levels of nesting to fake this schema>"
+                              },
+                              "yearsOfExperience": {
+                                "value": "<Error: Too many levels of nesting to fake this schema>"
+                              },
+                              "pricePerSession": {
+                                "value": "<Error: Too many levels of nesting to fake this schema>"
+                              },
+                              "isActive": {
+                                "value": "<Error: Too many levels of nesting to fake this schema>"
+                              },
+                              "user": {
+                                "value": "<Error: Too many levels of nesting to fake this schema>"
+                              },
+                              "store": {
+                                "value": "<Error: Too many levels of nesting to fake this schema>"
+                              },
+                              "reviews": {
+                                "value": "<Error: Too many levels of nesting to fake this schema>"
+                              },
+                              "instructorImage": {
+                                "value": "<Error: Too many levels of nesting to fake this schema>"
+                              },
+                              "educations": {
+                                "value": "<Error: Too many levels of nesting to fake this schema>"
+                              },
+                              "certifications": {
+                                "value": "<Error: Too many levels of nesting to fake this schema>"
+                              },
+                              "services": {
+                                "value": "<Error: Too many levels of nesting to fake this schema>"
+                              },
+                              "schedules": {
+                                "value": "<Error: Too many levels of nesting to fake this schema>"
+                              }
+                            }
+                          }
+                        ],
+                        "favorites": [
+                          {
+                            "id": 1345,
+                            "userId": 9081,
+                            "productId": 3909,
+                            "user": {
+                              "value": "<Circular reference to #/components/schemas/User detected>"
+                            },
+                            "product": {
+                              "value": "<Circular reference to #/components/schemas/Products detected>"
+                            }
+                          }
+                        ],
+                        "payouts": [
+                          {
+                            "id": 25,
+                            "sotreId": 756,
+                            "amount": 9734.81364753421,
+                            "paymentMethod": 2,
+                            "paymentStatus": 4,
+                            "processedAt": "2004-09-14T18:16:44.080Z"
+                          }
+                        ],
+                        "bookings": [
+                          {
+                            "id": 4764,
+                            "createdAt": "1983-01-15T06:58:10.168Z",
+                            "status": 1,
+                            "customerId": 1723,
+                            "customer": {
+                              "value": "<Circular reference to #/components/schemas/User detected>"
+                            },
+                            "scheduleId": 4734,
+                            "schedule": {
+                              "id": 3716,
+                              "instructorId": 7159,
+                              "instructor": {
+                                "id": {
+                                  "value": "<Error: Too many levels of nesting to fake this schema>"
+                                },
+                                "userId": {
+                                  "value": "<Error: Too many levels of nesting to fake this schema>"
+                                },
+                                "storeId": {
+                                  "value": "<Error: Too many levels of nesting to fake this schema>"
+                                },
+                                "name": {
+                                  "value": "<Error: Too many levels of nesting to fake this schema>"
+                                },
+                                "jobTitle": {
+                                  "value": "<Error: Too many levels of nesting to fake this schema>"
+                                },
+                                "about": {
+                                  "value": "<Error: Too many levels of nesting to fake this schema>"
+                                },
+                                "yearsOfExperience": {
+                                  "value": "<Error: Too many levels of nesting to fake this schema>"
+                                },
+                                "pricePerSession": {
+                                  "value": "<Error: Too many levels of nesting to fake this schema>"
+                                },
+                                "isActive": {
+                                  "value": "<Error: Too many levels of nesting to fake this schema>"
+                                },
+                                "user": {
+                                  "value": "<Error: Too many levels of nesting to fake this schema>"
+                                },
+                                "store": {
+                                  "value": "<Error: Too many levels of nesting to fake this schema>"
+                                },
+                                "reviews": {
+                                  "value": "<Error: Too many levels of nesting to fake this schema>"
+                                },
+                                "instructorImage": {
+                                  "value": "<Error: Too many levels of nesting to fake this schema>"
+                                },
+                                "educations": {
+                                  "value": "<Error: Too many levels of nesting to fake this schema>"
+                                },
+                                "certifications": {
+                                  "value": "<Error: Too many levels of nesting to fake this schema>"
+                                },
+                                "services": {
+                                  "value": "<Error: Too many levels of nesting to fake this schema>"
+                                },
+                                "schedules": {
+                                  "value": "<Error: Too many levels of nesting to fake this schema>"
+                                }
+                              },
+                              "startTime": "2019-04-03T16:54:36.650Z",
+                              "endTime": "2022-08-29T16:22:27.973Z",
+                              "capacity": 966,
+                              "reservedCount": 8701,
+                              "isAvailable": true,
+                              "bookings": [
+                                {
+                                  "value": "<Circular reference to #/components/schemas/Bookings detected>"
+                                }
+                              ]
+                            },
+                            "instructorId": 115,
+                            "instructor": {
+                              "id": {
+                                "value": "<Error: Too many levels of nesting to fake this schema>"
+                              },
+                              "userId": {
+                                "value": "<Error: Too many levels of nesting to fake this schema>"
+                              },
+                              "storeId": {
+                                "value": "<Error: Too many levels of nesting to fake this schema>"
+                              },
+                              "name": {
+                                "value": "<Error: Too many levels of nesting to fake this schema>"
+                              },
+                              "jobTitle": {
+                                "value": "<Error: Too many levels of nesting to fake this schema>"
+                              },
+                              "about": {
+                                "value": "<Error: Too many levels of nesting to fake this schema>"
+                              },
+                              "yearsOfExperience": {
+                                "value": "<Error: Too many levels of nesting to fake this schema>"
+                              },
+                              "pricePerSession": {
+                                "value": "<Error: Too many levels of nesting to fake this schema>"
+                              },
+                              "isActive": {
+                                "value": "<Error: Too many levels of nesting to fake this schema>"
+                              },
+                              "user": {
+                                "value": "<Error: Too many levels of nesting to fake this schema>"
+                              },
+                              "store": {
+                                "value": "<Error: Too many levels of nesting to fake this schema>"
+                              },
+                              "reviews": {
+                                "value": "<Error: Too many levels of nesting to fake this schema>"
+                              },
+                              "instructorImage": {
+                                "value": "<Error: Too many levels of nesting to fake this schema>"
+                              },
+                              "educations": {
+                                "value": "<Error: Too many levels of nesting to fake this schema>"
+                              },
+                              "certifications": {
+                                "value": "<Error: Too many levels of nesting to fake this schema>"
+                              },
+                              "services": {
+                                "value": "<Error: Too many levels of nesting to fake this schema>"
+                              },
+                              "schedules": {
+                                "value": "<Error: Too many levels of nesting to fake this schema>"
+                              }
+                            },
+                            "storeId": 573,
+                            "store": {
+                              "value": "<Circular reference to #/components/schemas/Stores detected>"
+                            }
+                          }
+                        ],
+                        "sentMessages": [
+                          {
+                            "id": 332,
+                            "content": "string",
+                            "senderId": 5882,
+                            "receiverId": 7079,
+                            "isRead": false,
+                            "isDeleted": true,
+                            "isUpdated": false,
+                            "createdAt": "1947-09-15T11:33:33.615Z",
+                            "messageType": 3,
+                            "senderUser": {
+                              "value": "<Circular reference to #/components/schemas/User detected>"
+                            },
+                            "receiverUser": {
+                              "value": "<Circular reference to #/components/schemas/User detected>"
+                            },
+                            "messageMediaPaths": [
+                              {
+                                "id": 7837,
+                                "messageId": 505,
+                                "mediaPath": "string",
+                                "isDeleted": true,
+                                "message": {
+                                  "value": "<Circular reference to #/components/schemas/Message detected>"
+                                }
+                              }
+                            ]
+                          }
+                        ],
+                        "receiveMessages": [
+                          {
+                            "id": 4649,
+                            "content": "string",
+                            "senderId": 8809,
+                            "receiverId": 2912,
+                            "isRead": true,
+                            "isDeleted": true,
+                            "isUpdated": true,
+                            "createdAt": "2002-05-16T17:35:14.903Z",
+                            "messageType": 2,
+                            "senderUser": {
+                              "value": "<Circular reference to #/components/schemas/User detected>"
+                            },
+                            "receiverUser": {
+                              "value": "<Circular reference to #/components/schemas/User detected>"
+                            },
+                            "messageMediaPaths": [
+                              {
+                                "id": 6449,
+                                "messageId": 3354,
+                                "mediaPath": "string",
+                                "isDeleted": false,
+                                "message": {
+                                  "value": "<Circular reference to #/components/schemas/Message detected>"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      "cartProducts": [
+                        {
+                          "id": 6249,
+                          "cartId": 6645,
+                          "cart": {
+                            "value": "<Circular reference to #/components/schemas/Cart detected>"
+                          },
+                          "productVariantId": 5855,
+                          "productVariant": {
+                            "value": "<Circular reference to #/components/schemas/ProductVariants detected>"
+                          },
+                          "quantity": 9683
+                        }
+                      ],
+                      "orders": [
+                        {
+                          "value": "<Circular reference to #/components/schemas/Orders detected>"
+                        }
+                      ]
+                    },
+                    "user": {
+                      "id": 6127,
+                      "userName": "string",
+                      "normalizedUserName": "string",
+                      "email": "string",
+                      "normalizedEmail": "string",
+                      "emailConfirmed": true,
+                      "passwordHash": "string",
+                      "securityStamp": "string",
+                      "concurrencyStamp": "string",
+                      "phoneNumber": "string",
+                      "phoneNumberConfirmed": true,
+                      "twoFactorEnabled": false,
+                      "lockoutEnd": "2010-01-07T14:42:06.841Z",
+                      "lockoutEnabled": true,
+                      "accessFailedCount": 8683,
+                      "address": "string",
+                      "sellerId": 4095,
+                      "isDeleted": true,
+                      "country": "string",
+                      "code": "string",
+                      "otp": "string",
+                      "userRefreshTokens": [
+                        {
+                          "id": 1210,
+                          "userId": 3700,
+                          "token": "string",
+                          "refreshToken": "string",
+                          "jwtId": "string",
+                          "isActive": true,
+                          "isRevoked": true,
+                          "addedTime": "1946-05-13T02:50:07.983Z",
+                          "expiredTime": "1975-05-04T11:33:21.269Z",
+                          "user": {
+                            "value": "<Circular reference to #/components/schemas/User detected>"
+                          }
+                        }
+                      ],
+                      "seller": {
+                        "id": 5260,
+                        "userId": 3563,
+                        "businessName": "string",
+                        "businessType": "string",
+                        "isActive": false,
+                        "user": {
+                          "value": "<Circular reference to #/components/schemas/User detected>"
+                        },
+                        "store": {
+                          "id": 1005,
+                          "sellerId": 5552,
+                          "name": "string",
+                          "description": "string",
+                          "isActive": false,
+                          "type": 1,
+                          "createdAt": "1986-12-23T08:13:25.757Z",
+                          "seller": {
+                            "value": "<Circular reference to #/components/schemas/Sellers detected>"
+                          },
+                          "isDeleted": true,
+                          "deletedAt": "1958-12-26T01:44:08.141Z",
+                          "products": [
+                            {
+                              "id": 9021,
+                              "name": "string",
+                              "description": "string",
+                              "storeId": 1883,
+                              "categoryId": 563,
+                              "createdAt": "1954-01-16T21:36:50.753Z",
+                              "updateAt": "1971-07-09T16:17:18.672Z",
+                              "isDeleted": false,
+                              "category": {
+                                "id": 8988,
+                                "name": "string",
+                                "parentCategoryId": 7174,
+                                "isDeleted": false,
+                                "storeId": 5919,
+                                "store": {
+                                  "value": "<Circular reference to #/components/schemas/Stores detected>"
+                                },
+                                "products": [
+                                  {
+                                    "value": "<Circular reference to #/components/schemas/Products detected>"
+                                  }
+                                ],
+                                "parent": {
+                                  "value": "<Circular reference to #/components/schemas/Categories detected>"
+                                },
+                                "children": [
+                                  {
+                                    "value": "<Circular reference to #/components/schemas/Categories detected>"
+                                  }
+                                ]
+                              },
+                              "store": {
+                                "value": "<Circular reference to #/components/schemas/Stores detected>"
+                              },
+                              "reviews": [
+                                {
+                                  "id": 7597,
+                                  "productId": 972,
+                                  "customerId": 1314,
+                                  "instructorId": 5318,
+                                  "rating": 1,
+                                  "comment": "string",
+                                  "isPurchased": true,
+                                  "createdAt": "2007-05-01T18:58:32.741Z",
+                                  "customer": {
+                                    "value": "<Circular reference to #/components/schemas/User detected>"
+                                  },
+                                  "product": {
+                                    "value": "<Circular reference to #/components/schemas/Products detected>"
+                                  },
+                                  "instructor": {
+                                    "id": {
+                                      "value": "<Error: Too many levels of nesting to fake this schema>"
+                                    },
+                                    "userId": {
+                                      "value": "<Error: Too many levels of nesting to fake this schema>"
+                                    },
+                                    "storeId": {
+                                      "value": "<Error: Too many levels of nesting to fake this schema>"
+                                    },
+                                    "name": {
+                                      "value": "<Error: Too many levels of nesting to fake this schema>"
+                                    },
+                                    "jobTitle": {
+                                      "value": "<Error: Too many levels of nesting to fake this schema>"
+                                    },
+                                    "about": {
+                                      "value": "<Error: Too many levels of nesting to fake this schema>"
+                                    },
+                                    "yearsOfExperience": {
+                                      "value": "<Error: Too many levels of nesting to fake this schema>"
+                                    },
+                                    "pricePerSession": {
+                                      "value": "<Error: Too many levels of nesting to fake this schema>"
+                                    },
+                                    "isActive": {
+                                      "value": "<Error: Too many levels of nesting to fake this schema>"
+                                    },
+                                    "user": {
+                                      "value": "<Error: Too many levels of nesting to fake this schema>"
+                                    },
+                                    "store": {
+                                      "value": "<Error: Too many levels of nesting to fake this schema>"
+                                    },
+                                    "reviews": {
+                                      "value": "<Error: Too many levels of nesting to fake this schema>"
+                                    },
+                                    "instructorImage": {
+                                      "value": "<Error: Too many levels of nesting to fake this schema>"
+                                    },
+                                    "educations": {
+                                      "value": "<Error: Too many levels of nesting to fake this schema>"
+                                    },
+                                    "certifications": {
+                                      "value": "<Error: Too many levels of nesting to fake this schema>"
+                                    },
+                                    "services": {
+                                      "value": "<Error: Too many levels of nesting to fake this schema>"
+                                    },
+                                    "schedules": {
+                                      "value": "<Error: Too many levels of nesting to fake this schema>"
+                                    }
+                                  }
+                                }
+                              ],
+                              "favorites": [
+                                {
+                                  "id": 1890,
+                                  "userId": 5552,
+                                  "productId": 8210,
+                                  "user": {
+                                    "value": "<Circular reference to #/components/schemas/User detected>"
+                                  },
+                                  "product": {
+                                    "value": "<Circular reference to #/components/schemas/Products detected>"
+                                  }
+                                }
+                              ],
+                              "productVariants": [
+                                {
+                                  "value": "<Circular reference to #/components/schemas/ProductVariants detected>"
+                                }
+                              ],
+                              "productImages": [
+                                {
+                                  "id": 9451,
+                                  "productId": 8372,
+                                  "mediaPath": "string",
+                                  "isMain": false,
+                                  "sortOrder": 5840,
+                                  "publicId": "string",
+                                  "product": {
+                                    "value": "<Circular reference to #/components/schemas/Products detected>"
+                                  }
+                                }
+                              ],
+                              "productVideos": [
+                                {
+                                  "id": 8119,
+                                  "productId": 3250,
+                                  "mediaPath": "string",
+                                  "product": {
+                                    "value": "<Circular reference to #/components/schemas/Products detected>"
+                                  }
+                                }
+                              ]
+                            }
+                          ],
+                          "categories": [
+                            {
+                              "id": 6091,
+                              "name": "string",
+                              "parentCategoryId": 8601,
+                              "isDeleted": true,
+                              "storeId": 433,
+                              "store": {
+                                "value": "<Circular reference to #/components/schemas/Stores detected>"
+                              },
+                              "products": [
+                                {
+                                  "value": "<Circular reference to #/components/schemas/Products detected>"
+                                }
+                              ],
+                              "parent": {
+                                "value": "<Circular reference to #/components/schemas/Categories detected>"
+                              },
+                              "children": [
+                                {
+                                  "value": "<Circular reference to #/components/schemas/Categories detected>"
+                                }
+                              ]
+                            }
+                          ],
+                          "storeImage": {
+                            "id": 7403,
+                            "mediaPath": "string",
+                            "storeId": 8490,
+                            "publicId": "string",
+                            "stores": {
+                              "value": "<Circular reference to #/components/schemas/Stores detected>"
+                            }
+                          },
+                          "instructors": [
+                            {
+                              "id": {
+                                "value": "<Error: Too many levels of nesting to fake this schema>"
+                              },
+                              "userId": {
+                                "value": "<Error: Too many levels of nesting to fake this schema>"
+                              },
+                              "storeId": {
+                                "value": "<Error: Too many levels of nesting to fake this schema>"
+                              },
+                              "name": {
+                                "value": "<Error: Too many levels of nesting to fake this schema>"
+                              },
+                              "jobTitle": {
+                                "value": "<Error: Too many levels of nesting to fake this schema>"
+                              },
+                              "about": {
+                                "value": "<Error: Too many levels of nesting to fake this schema>"
+                              },
+                              "yearsOfExperience": {
+                                "value": "<Error: Too many levels of nesting to fake this schema>"
+                              },
+                              "pricePerSession": {
+                                "value": "<Error: Too many levels of nesting to fake this schema>"
+                              },
+                              "isActive": {
+                                "value": "<Error: Too many levels of nesting to fake this schema>"
+                              },
+                              "user": {
+                                "value": "<Error: Too many levels of nesting to fake this schema>"
+                              },
+                              "store": {
+                                "value": "<Error: Too many levels of nesting to fake this schema>"
+                              },
+                              "reviews": {
+                                "value": "<Error: Too many levels of nesting to fake this schema>"
+                              },
+                              "instructorImage": {
+                                "value": "<Error: Too many levels of nesting to fake this schema>"
+                              },
+                              "educations": {
+                                "value": "<Error: Too many levels of nesting to fake this schema>"
+                              },
+                              "certifications": {
+                                "value": "<Error: Too many levels of nesting to fake this schema>"
+                              },
+                              "services": {
+                                "value": "<Error: Too many levels of nesting to fake this schema>"
+                              },
+                              "schedules": {
+                                "value": "<Error: Too many levels of nesting to fake this schema>"
+                              }
+                            }
+                          ],
+                          "bookings": [
+                            {
+                              "id": 8862,
+                              "createdAt": "2011-01-14T15:03:22.827Z",
+                              "status": 1,
+                              "customerId": 1614,
+                              "customer": {
+                                "value": "<Circular reference to #/components/schemas/User detected>"
+                              },
+                              "scheduleId": 7508,
+                              "schedule": {
+                                "id": 3495,
+                                "instructorId": 6497,
+                                "instructor": {
+                                  "id": {
+                                    "value": "<Error: Too many levels of nesting to fake this schema>"
+                                  },
+                                  "userId": {
+                                    "value": "<Error: Too many levels of nesting to fake this schema>"
+                                  },
+                                  "storeId": {
+                                    "value": "<Error: Too many levels of nesting to fake this schema>"
+                                  },
+                                  "name": {
+                                    "value": "<Error: Too many levels of nesting to fake this schema>"
+                                  },
+                                  "jobTitle": {
+                                    "value": "<Error: Too many levels of nesting to fake this schema>"
+                                  },
+                                  "about": {
+                                    "value": "<Error: Too many levels of nesting to fake this schema>"
+                                  },
+                                  "yearsOfExperience": {
+                                    "value": "<Error: Too many levels of nesting to fake this schema>"
+                                  },
+                                  "pricePerSession": {
+                                    "value": "<Error: Too many levels of nesting to fake this schema>"
+                                  },
+                                  "isActive": {
+                                    "value": "<Error: Too many levels of nesting to fake this schema>"
+                                  },
+                                  "user": {
+                                    "value": "<Error: Too many levels of nesting to fake this schema>"
+                                  },
+                                  "store": {
+                                    "value": "<Error: Too many levels of nesting to fake this schema>"
+                                  },
+                                  "reviews": {
+                                    "value": "<Error: Too many levels of nesting to fake this schema>"
+                                  },
+                                  "instructorImage": {
+                                    "value": "<Error: Too many levels of nesting to fake this schema>"
+                                  },
+                                  "educations": {
+                                    "value": "<Error: Too many levels of nesting to fake this schema>"
+                                  },
+                                  "certifications": {
+                                    "value": "<Error: Too many levels of nesting to fake this schema>"
+                                  },
+                                  "services": {
+                                    "value": "<Error: Too many levels of nesting to fake this schema>"
+                                  },
+                                  "schedules": {
+                                    "value": "<Error: Too many levels of nesting to fake this schema>"
+                                  }
+                                },
+                                "startTime": "1991-10-01T23:51:35.865Z",
+                                "endTime": "1971-01-29T20:01:56.590Z",
+                                "capacity": 5669,
+                                "reservedCount": 1823,
+                                "isAvailable": false,
+                                "bookings": [
+                                  {
+                                    "value": "<Circular reference to #/components/schemas/Bookings detected>"
+                                  }
+                                ]
+                              },
+                              "instructorId": 9515,
+                              "instructor": {
+                                "id": {
+                                  "value": "<Error: Too many levels of nesting to fake this schema>"
+                                },
+                                "userId": {
+                                  "value": "<Error: Too many levels of nesting to fake this schema>"
+                                },
+                                "storeId": {
+                                  "value": "<Error: Too many levels of nesting to fake this schema>"
+                                },
+                                "name": {
+                                  "value": "<Error: Too many levels of nesting to fake this schema>"
+                                },
+                                "jobTitle": {
+                                  "value": "<Error: Too many levels of nesting to fake this schema>"
+                                },
+                                "about": {
+                                  "value": "<Error: Too many levels of nesting to fake this schema>"
+                                },
+                                "yearsOfExperience": {
+                                  "value": "<Error: Too many levels of nesting to fake this schema>"
+                                },
+                                "pricePerSession": {
+                                  "value": "<Error: Too many levels of nesting to fake this schema>"
+                                },
+                                "isActive": {
+                                  "value": "<Error: Too many levels of nesting to fake this schema>"
+                                },
+                                "user": {
+                                  "value": "<Error: Too many levels of nesting to fake this schema>"
+                                },
+                                "store": {
+                                  "value": "<Error: Too many levels of nesting to fake this schema>"
+                                },
+                                "reviews": {
+                                  "value": "<Error: Too many levels of nesting to fake this schema>"
+                                },
+                                "instructorImage": {
+                                  "value": "<Error: Too many levels of nesting to fake this schema>"
+                                },
+                                "educations": {
+                                  "value": "<Error: Too many levels of nesting to fake this schema>"
+                                },
+                                "certifications": {
+                                  "value": "<Error: Too many levels of nesting to fake this schema>"
+                                },
+                                "services": {
+                                  "value": "<Error: Too many levels of nesting to fake this schema>"
+                                },
+                                "schedules": {
+                                  "value": "<Error: Too many levels of nesting to fake this schema>"
+                                }
+                              },
+                              "storeId": 6727,
+                              "store": {
+                                "value": "<Circular reference to #/components/schemas/Stores detected>"
+                              }
+                            }
+                          ]
+                        },
+                        "payouts": [
+                          {
+                            "id": 5983,
+                            "sotreId": 6435,
+                            "amount": 8988.756792565899,
+                            "paymentMethod": 2,
+                            "paymentStatus": 2,
+                            "processedAt": "1981-12-29T20:50:47.536Z"
+                          }
+                        ]
+                      },
+                      "cart": {
+                        "value": "<Circular reference to #/components/schemas/Cart detected>"
+                      },
+                      "orders": [
+                        {
+                          "value": "<Circular reference to #/components/schemas/Orders detected>"
+                        }
+                      ],
+                      "reviews": [
+                        {
+                          "id": 2351,
+                          "productId": 8664,
+                          "customerId": 6399,
+                          "instructorId": 9483,
+                          "rating": 3,
+                          "comment": "string",
+                          "isPurchased": false,
+                          "createdAt": "2024-02-18T04:42:32.186Z",
+                          "customer": {
+                            "value": "<Circular reference to #/components/schemas/User detected>"
+                          },
+                          "product": {
+                            "value": "<Circular reference to #/components/schemas/Products detected>"
+                          },
+                          "instructor": {
+                            "id": {
+                              "value": "<Error: Too many levels of nesting to fake this schema>"
+                            },
+                            "userId": {
+                              "value": "<Error: Too many levels of nesting to fake this schema>"
+                            },
+                            "storeId": {
+                              "value": "<Error: Too many levels of nesting to fake this schema>"
+                            },
+                            "name": {
+                              "value": "<Error: Too many levels of nesting to fake this schema>"
+                            },
+                            "jobTitle": {
+                              "value": "<Error: Too many levels of nesting to fake this schema>"
+                            },
+                            "about": {
+                              "value": "<Error: Too many levels of nesting to fake this schema>"
+                            },
+                            "yearsOfExperience": {
+                              "value": "<Error: Too many levels of nesting to fake this schema>"
+                            },
+                            "pricePerSession": {
+                              "value": "<Error: Too many levels of nesting to fake this schema>"
+                            },
+                            "isActive": {
+                              "value": "<Error: Too many levels of nesting to fake this schema>"
+                            },
+                            "user": {
+                              "value": "<Error: Too many levels of nesting to fake this schema>"
+                            },
+                            "store": {
+                              "value": "<Error: Too many levels of nesting to fake this schema>"
+                            },
+                            "reviews": {
+                              "value": "<Error: Too many levels of nesting to fake this schema>"
+                            },
+                            "instructorImage": {
+                              "value": "<Error: Too many levels of nesting to fake this schema>"
+                            },
+                            "educations": {
+                              "value": "<Error: Too many levels of nesting to fake this schema>"
+                            },
+                            "certifications": {
+                              "value": "<Error: Too many levels of nesting to fake this schema>"
+                            },
+                            "services": {
+                              "value": "<Error: Too many levels of nesting to fake this schema>"
+                            },
+                            "schedules": {
+                              "value": "<Error: Too many levels of nesting to fake this schema>"
+                            }
+                          }
+                        }
+                      ],
+                      "favorites": [
+                        {
+                          "id": 2466,
+                          "userId": 7406,
+                          "productId": 7732,
+                          "user": {
+                            "value": "<Circular reference to #/components/schemas/User detected>"
+                          },
+                          "product": {
+                            "value": "<Circular reference to #/components/schemas/Products detected>"
+                          }
+                        }
+                      ],
+                      "payouts": [
+                        {
+                          "id": 2156,
+                          "sotreId": 5465,
+                          "amount": 5446.67003998837,
+                          "paymentMethod": 0,
+                          "paymentStatus": 1,
+                          "processedAt": "1994-04-01T11:37:52.524Z"
+                        }
+                      ],
+                      "bookings": [
+                        {
+                          "id": 5020,
+                          "createdAt": "1965-11-28T16:50:58.928Z",
+                          "status": 1,
+                          "customerId": 3325,
+                          "customer": {
+                            "value": "<Circular reference to #/components/schemas/User detected>"
+                          },
+                          "scheduleId": 4091,
+                          "schedule": {
+                            "id": 9751,
+                            "instructorId": 5014,
+                            "instructor": {
+                              "id": {
+                                "value": "<Error: Too many levels of nesting to fake this schema>"
+                              },
+                              "userId": {
+                                "value": "<Error: Too many levels of nesting to fake this schema>"
+                              },
+                              "storeId": {
+                                "value": "<Error: Too many levels of nesting to fake this schema>"
+                              },
+                              "name": {
+                                "value": "<Error: Too many levels of nesting to fake this schema>"
+                              },
+                              "jobTitle": {
+                                "value": "<Error: Too many levels of nesting to fake this schema>"
+                              },
+                              "about": {
+                                "value": "<Error: Too many levels of nesting to fake this schema>"
+                              },
+                              "yearsOfExperience": {
+                                "value": "<Error: Too many levels of nesting to fake this schema>"
+                              },
+                              "pricePerSession": {
+                                "value": "<Error: Too many levels of nesting to fake this schema>"
+                              },
+                              "isActive": {
+                                "value": "<Error: Too many levels of nesting to fake this schema>"
+                              },
+                              "user": {
+                                "value": "<Error: Too many levels of nesting to fake this schema>"
+                              },
+                              "store": {
+                                "value": "<Error: Too many levels of nesting to fake this schema>"
+                              },
+                              "reviews": {
+                                "value": "<Error: Too many levels of nesting to fake this schema>"
+                              },
+                              "instructorImage": {
+                                "value": "<Error: Too many levels of nesting to fake this schema>"
+                              },
+                              "educations": {
+                                "value": "<Error: Too many levels of nesting to fake this schema>"
+                              },
+                              "certifications": {
+                                "value": "<Error: Too many levels of nesting to fake this schema>"
+                              },
+                              "services": {
+                                "value": "<Error: Too many levels of nesting to fake this schema>"
+                              },
+                              "schedules": {
+                                "value": "<Error: Too many levels of nesting to fake this schema>"
+                              }
+                            },
+                            "startTime": "1956-12-09T13:00:15.746Z",
+                            "endTime": "2004-04-05T03:54:35.385Z",
+                            "capacity": 2748,
+                            "reservedCount": 4312,
+                            "isAvailable": true,
+                            "bookings": [
+                              {
+                                "value": "<Circular reference to #/components/schemas/Bookings detected>"
+                              }
+                            ]
+                          },
+                          "instructorId": 6026,
+                          "instructor": {
+                            "id": {
+                              "value": "<Error: Too many levels of nesting to fake this schema>"
+                            },
+                            "userId": {
+                              "value": "<Error: Too many levels of nesting to fake this schema>"
+                            },
+                            "storeId": {
+                              "value": "<Error: Too many levels of nesting to fake this schema>"
+                            },
+                            "name": {
+                              "value": "<Error: Too many levels of nesting to fake this schema>"
+                            },
+                            "jobTitle": {
+                              "value": "<Error: Too many levels of nesting to fake this schema>"
+                            },
+                            "about": {
+                              "value": "<Error: Too many levels of nesting to fake this schema>"
+                            },
+                            "yearsOfExperience": {
+                              "value": "<Error: Too many levels of nesting to fake this schema>"
+                            },
+                            "pricePerSession": {
+                              "value": "<Error: Too many levels of nesting to fake this schema>"
+                            },
+                            "isActive": {
+                              "value": "<Error: Too many levels of nesting to fake this schema>"
+                            },
+                            "user": {
+                              "value": "<Error: Too many levels of nesting to fake this schema>"
+                            },
+                            "store": {
+                              "value": "<Error: Too many levels of nesting to fake this schema>"
+                            },
+                            "reviews": {
+                              "value": "<Error: Too many levels of nesting to fake this schema>"
+                            },
+                            "instructorImage": {
+                              "value": "<Error: Too many levels of nesting to fake this schema>"
+                            },
+                            "educations": {
+                              "value": "<Error: Too many levels of nesting to fake this schema>"
+                            },
+                            "certifications": {
+                              "value": "<Error: Too many levels of nesting to fake this schema>"
+                            },
+                            "services": {
+                              "value": "<Error: Too many levels of nesting to fake this schema>"
+                            },
+                            "schedules": {
+                              "value": "<Error: Too many levels of nesting to fake this schema>"
+                            }
+                          },
+                          "storeId": 4669,
+                          "store": {
+                            "value": "<Circular reference to #/components/schemas/Stores detected>"
+                          }
+                        }
+                      ],
+                      "sentMessages": [
+                        {
+                          "id": 395,
+                          "content": "string",
+                          "senderId": 2227,
+                          "receiverId": 3292,
+                          "isRead": true,
+                          "isDeleted": false,
+                          "isUpdated": true,
+                          "createdAt": "2001-10-28T09:29:15.535Z",
+                          "messageType": 3,
+                          "senderUser": {
+                            "value": "<Circular reference to #/components/schemas/User detected>"
+                          },
+                          "receiverUser": {
+                            "value": "<Circular reference to #/components/schemas/User detected>"
+                          },
+                          "messageMediaPaths": [
+                            {
+                              "id": 7558,
+                              "messageId": 4923,
+                              "mediaPath": "string",
+                              "isDeleted": false,
+                              "message": {
+                                "value": "<Circular reference to #/components/schemas/Message detected>"
+                              }
+                            }
+                          ]
+                        }
+                      ],
+                      "receiveMessages": [
+                        {
+                          "id": 9149,
+                          "content": "string",
+                          "senderId": 6864,
+                          "receiverId": 6614,
+                          "isRead": true,
+                          "isDeleted": false,
+                          "isUpdated": true,
+                          "createdAt": "1947-08-28T04:16:15.432Z",
+                          "messageType": 2,
+                          "senderUser": {
+                            "value": "<Circular reference to #/components/schemas/User detected>"
+                          },
+                          "receiverUser": {
+                            "value": "<Circular reference to #/components/schemas/User detected>"
+                          },
+                          "messageMediaPaths": [
+                            {
+                              "id": 5035,
+                              "messageId": 1203,
+                              "mediaPath": "string",
+                              "isDeleted": false,
+                              "message": {
+                                "value": "<Circular reference to #/components/schemas/Message detected>"
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    "shipmentId": 7746,
+                    "shipmentTrackingId": 7319,
+                    "orderItems": [
+                      {
+                        "value": "<Circular reference to #/components/schemas/OrderItems detected>"
+                      }
+                    ],
+                    "subOrders": [
+                      {
+                        "value": "<Circular reference to #/components/schemas/SubOrders detected>"
+                      }
+                    ],
+                    "shipment": {
+                      "id": 1716,
+                      "orderId": 1589,
+                      "shipmentTrackingId": 618,
+                      "order": {
+                        "value": "<Circular reference to #/components/schemas/Orders detected>"
+                      },
+                      "shipmentTracking": {
+                        "id": 1628,
+                        "trackingNumber": "string",
+                        "shipmentStatus": 2,
+                        "updatedAt": "1948-12-04T06:30:35.502Z"
+                      },
+                      "updatedAT": "1999-08-25T11:11:27.717Z"
+                    },
+                    "shipmentTracking": {
+                      "id": 784,
+                      "trackingNumber": "string",
+                      "shipmentStatus": 0,
+                      "updatedAt": "1965-06-13T11:42:01.527Z"
+                    }
+                  },
+                  "orderItems": [
+                    {
+                      "value": "<Circular reference to #/components/schemas/OrderItems detected>"
+                    }
+                  ],
+                  "product": {
+                    "id": 3658,
+                    "name": "string",
+                    "description": "string",
+                    "storeId": 9667,
+                    "categoryId": 6897,
+                    "createdAt": "2010-02-10T20:13:37.670Z",
+                    "updateAt": "1965-02-09T10:54:29.747Z",
+                    "isDeleted": true,
+                    "category": {
+                      "id": 1858,
+                      "name": "string",
+                      "parentCategoryId": 7126,
+                      "isDeleted": true,
+                      "storeId": 5051,
+                      "store": {
+                        "value": "<Circular reference to #/components/schemas/Stores detected>"
+                      },
+                      "products": [
+                        {
+                          "value": "<Circular reference to #/components/schemas/Products detected>"
+                        }
+                      ],
+                      "parent": {
+                        "value": "<Circular reference to #/components/schemas/Categories detected>"
+                      },
+                      "children": [
+                        {
+                          "value": "<Circular reference to #/components/schemas/Categories detected>"
+                        }
+                      ]
+                    },
+                    "store": {
+                      "value": "<Circular reference to #/components/schemas/Stores detected>"
+                    },
+                    "reviews": [
+                      {
+                        "id": 6003,
+                        "productId": 5017,
+                        "customerId": 3144,
+                        "instructorId": 9013,
+                        "rating": 2,
+                        "comment": "string",
+                        "isPurchased": true,
+                        "createdAt": "1964-07-23T00:45:37.814Z",
+                        "customer": {
+                          "value": "<Circular reference to #/components/schemas/User detected>"
+                        },
+                        "product": {
+                          "value": "<Circular reference to #/components/schemas/Products detected>"
+                        },
+                        "instructor": {
+                          "id": {
+                            "value": "<Error: Too many levels of nesting to fake this schema>"
+                          },
+                          "userId": {
+                            "value": "<Error: Too many levels of nesting to fake this schema>"
+                          },
+                          "storeId": {
+                            "value": "<Error: Too many levels of nesting to fake this schema>"
+                          },
+                          "name": {
+                            "value": "<Error: Too many levels of nesting to fake this schema>"
+                          },
+                          "jobTitle": {
+                            "value": "<Error: Too many levels of nesting to fake this schema>"
+                          },
+                          "about": {
+                            "value": "<Error: Too many levels of nesting to fake this schema>"
+                          },
+                          "yearsOfExperience": {
+                            "value": "<Error: Too many levels of nesting to fake this schema>"
+                          },
+                          "pricePerSession": {
+                            "value": "<Error: Too many levels of nesting to fake this schema>"
+                          },
+                          "isActive": {
+                            "value": "<Error: Too many levels of nesting to fake this schema>"
+                          },
+                          "user": {
+                            "value": "<Error: Too many levels of nesting to fake this schema>"
+                          },
+                          "store": {
+                            "value": "<Error: Too many levels of nesting to fake this schema>"
+                          },
+                          "reviews": {
+                            "value": "<Error: Too many levels of nesting to fake this schema>"
+                          },
+                          "instructorImage": {
+                            "value": "<Error: Too many levels of nesting to fake this schema>"
+                          },
+                          "educations": {
+                            "value": "<Error: Too many levels of nesting to fake this schema>"
+                          },
+                          "certifications": {
+                            "value": "<Error: Too many levels of nesting to fake this schema>"
+                          },
+                          "services": {
+                            "value": "<Error: Too many levels of nesting to fake this schema>"
+                          },
+                          "schedules": {
+                            "value": "<Error: Too many levels of nesting to fake this schema>"
+                          }
+                        }
+                      }
+                    ],
+                    "favorites": [
+                      {
+                        "id": 318,
+                        "userId": 2036,
+                        "productId": 524,
+                        "user": {
+                          "value": "<Circular reference to #/components/schemas/User detected>"
+                        },
+                        "product": {
+                          "value": "<Circular reference to #/components/schemas/Products detected>"
+                        }
+                      }
+                    ],
+                    "productVariants": [
+                      {
+                        "value": "<Circular reference to #/components/schemas/ProductVariants detected>"
+                      }
+                    ],
+                    "productImages": [
+                      {
+                        "id": 9713,
+                        "productId": 3025,
+                        "mediaPath": "string",
+                        "isMain": false,
+                        "sortOrder": 501,
+                        "publicId": "string",
+                        "product": {
+                          "value": "<Circular reference to #/components/schemas/Products detected>"
+                        }
+                      }
+                    ],
+                    "productVideos": [
+                      {
+                        "id": 6313,
+                        "productId": 3487,
+                        "mediaPath": "string",
+                        "product": {
+                          "value": "<Circular reference to #/components/schemas/Products detected>"
+                        }
+                      }
+                    ]
+                  },
+                  "productVariants": {
+                    "value": "<Circular reference to #/components/schemas/ProductVariants detected>"
+                  },
+                  "shipment": {
+                    "id": 7750,
+                    "orderId": 7728,
+                    "shipmentTrackingId": 1915,
+                    "order": {
+                      "value": "<Circular reference to #/components/schemas/Orders detected>"
+                    },
+                    "shipmentTracking": {
+                      "id": 6630,
+                      "trackingNumber": "string",
+                      "shipmentStatus": 3,
+                      "updatedAt": "1949-03-24T14:02:10.240Z"
+                    },
+                    "updatedAT": "1958-03-29T23:36:41.896Z"
+                  },
+                  "shipmentTracking": {
+                    "id": 5474,
+                    "trackingNumber": "string",
+                    "shipmentStatus": 0,
+                    "updatedAt": "1947-02-24T22:58:49.605Z"
+                  }
+                },
+                "productVariant": {
+                  "value": "<Circular reference to #/components/schemas/ProductVariants detected>"
+                }
+              }
+            ],
+            "product": {
+              "id": 7642,
+              "name": "string",
+              "description": "string",
+              "storeId": 3448,
+              "categoryId": 2398,
+              "createdAt": "1974-10-23T06:22:59.580Z",
+              "updateAt": "1980-01-30T00:56:16.119Z",
+              "isDeleted": false,
+              "category": {
+                "id": 6683,
+                "name": "string",
+                "parentCategoryId": 3438,
+                "isDeleted": true,
+                "storeId": 5205,
+                "store": {
+                  "value": "<Circular reference to #/components/schemas/Stores detected>"
+                },
+                "products": [
+                  {
+                    "value": "<Circular reference to #/components/schemas/Products detected>"
+                  }
+                ],
+                "parent": {
+                  "value": "<Circular reference to #/components/schemas/Categories detected>"
+                },
+                "children": [
+                  {
+                    "value": "<Circular reference to #/components/schemas/Categories detected>"
+                  }
+                ]
+              },
+              "store": {
+                "value": "<Circular reference to #/components/schemas/Stores detected>"
+              },
+              "reviews": [
+                {
+                  "id": 1697,
+                  "productId": 7006,
+                  "customerId": 8798,
+                  "instructorId": 8838,
+                  "rating": 4,
+                  "comment": "string",
+                  "isPurchased": false,
+                  "createdAt": "1983-08-19T13:42:11.755Z",
+                  "customer": {
+                    "value": "<Circular reference to #/components/schemas/User detected>"
+                  },
+                  "product": {
+                    "value": "<Circular reference to #/components/schemas/Products detected>"
+                  },
+                  "instructor": {
+                    "id": {
+                      "value": "<Error: Too many levels of nesting to fake this schema>"
+                    },
+                    "userId": {
+                      "value": "<Error: Too many levels of nesting to fake this schema>"
+                    },
+                    "storeId": {
+                      "value": "<Error: Too many levels of nesting to fake this schema>"
+                    },
+                    "name": {
+                      "value": "<Error: Too many levels of nesting to fake this schema>"
+                    },
+                    "jobTitle": {
+                      "value": "<Error: Too many levels of nesting to fake this schema>"
+                    },
+                    "about": {
+                      "value": "<Error: Too many levels of nesting to fake this schema>"
+                    },
+                    "yearsOfExperience": {
+                      "value": "<Error: Too many levels of nesting to fake this schema>"
+                    },
+                    "pricePerSession": {
+                      "value": "<Error: Too many levels of nesting to fake this schema>"
+                    },
+                    "isActive": {
+                      "value": "<Error: Too many levels of nesting to fake this schema>"
+                    },
+                    "user": {
+                      "value": "<Error: Too many levels of nesting to fake this schema>"
+                    },
+                    "store": {
+                      "value": "<Error: Too many levels of nesting to fake this schema>"
+                    },
+                    "reviews": {
+                      "value": "<Error: Too many levels of nesting to fake this schema>"
+                    },
+                    "instructorImage": {
+                      "value": "<Error: Too many levels of nesting to fake this schema>"
+                    },
+                    "educations": {
+                      "value": "<Error: Too many levels of nesting to fake this schema>"
+                    },
+                    "certifications": {
+                      "value": "<Error: Too many levels of nesting to fake this schema>"
+                    },
+                    "services": {
+                      "value": "<Error: Too many levels of nesting to fake this schema>"
+                    },
+                    "schedules": {
+                      "value": "<Error: Too many levels of nesting to fake this schema>"
+                    }
+                  }
+                }
+              ],
+              "favorites": [
+                {
+                  "id": 6444,
+                  "userId": 2615,
+                  "productId": 4197,
+                  "user": {
+                    "value": "<Circular reference to #/components/schemas/User detected>"
+                  },
+                  "product": {
+                    "value": "<Circular reference to #/components/schemas/Products detected>"
+                  }
+                }
+              ],
+              "productVariants": [
+                {
+                  "value": "<Circular reference to #/components/schemas/ProductVariants detected>"
+                }
+              ],
+              "productImages": [
+                {
+                  "id": 4540,
+                  "productId": 1194,
+                  "mediaPath": "string",
+                  "isMain": true,
+                  "sortOrder": 6528,
+                  "publicId": "string",
+                  "product": {
+                    "value": "<Circular reference to #/components/schemas/Products detected>"
+                  }
+                }
+              ],
+              "productVideos": [
+                {
+                  "id": 186,
+                  "productId": 2949,
+                  "mediaPath": "string",
+                  "product": {
+                    "value": "<Circular reference to #/components/schemas/Products detected>"
+                  }
+                }
+              ]
+            }
+          },
+          "quantity": 5419
+        }
+      ]
+    }
+examples: ./.resources/-Api-V1-CartUpdate.resources/examples
+order: 1000

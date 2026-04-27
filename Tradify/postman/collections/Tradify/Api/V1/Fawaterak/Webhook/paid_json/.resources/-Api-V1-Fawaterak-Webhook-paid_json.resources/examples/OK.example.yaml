@@ -1,0 +1,27 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/Api/V1/Fawaterak/Webhook/paid_json"
+  method: POST
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "hashKey": "string",
+        "invoice_id": 2294,
+        "invoice_key": "string",
+        "invoice_status": "string",
+        "payment_method": "string",
+        "pay_load": "string",
+        "payload": {
+          "OrderId": "string"
+        }
+      }
+response:
+  statusCode: 200
+  statusText: OK
+  body:
+    type: text
+    content: ""
+order: 1000

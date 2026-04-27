@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 using Tradify.Data.Entities;
+using Tradify.Data.Entities.Appointments;
 using Tradify.Data.Entities.Chat;
 using Tradify.Data.Entities.Comments;
 using Tradify.Data.Entities.Identity;
@@ -52,9 +53,7 @@ namespace Tradify.Infrastructure.Context
         public DbSet<Stores> Stores { get; set; }
 
         public DbSet<SubOrders> SubOrders { get; set; }
-        public DbSet<Appointment> Appointments { get; set; }
 
-        public DbSet<StoreBooking> StoreBookings { get; set; }
 
         public DbSet<Message> Messages { get; set; }
         public DbSet<MessageMediaPath> MessageMediaPaths { get; set; }
@@ -70,6 +69,14 @@ namespace Tradify.Infrastructure.Context
         public DbSet<Sellers> Sellers { get; set; } 
 
         public DbSet<StoreImage> StoreImages { get; set; }  
+
+        public DbSet<Bookings> Bookings { get; set; }
+        public DbSet<Certifications> Certifications { get; set; }
+        public DbSet<Education> Education { get; set; }
+        public DbSet<InstructorImage> InstructorImage { get; set; }
+        public DbSet<Service> Service { get; set; }
+        public DbSet<Instructors> Instructors { get; set; }
+
 
         #endregion
 
@@ -100,6 +107,7 @@ namespace Tradify.Infrastructure.Context
             modelBuilder.Entity<ProductVariants>().HasQueryFilter(v => !v.IsDeleted &&!v.Product.IsDeleted);
             modelBuilder.Entity<Products>().HasQueryFilter(p => !p.IsDeleted && !p.Store.IsDeleted);
             modelBuilder.Entity<Categories>().HasQueryFilter(s => !s.IsDeleted);
+            modelBuilder.Entity<Instructors>().HasQueryFilter(s => !s.IsActive);
 
 
 

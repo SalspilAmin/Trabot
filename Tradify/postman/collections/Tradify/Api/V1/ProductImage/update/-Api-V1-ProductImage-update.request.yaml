@@ -1,0 +1,22 @@
+$kind: http-request
+name: /Api/V1/ProductImage/update
+url: "{{baseUrl}}/Api/V1/ProductImage/update"
+method: PUT
+headers:
+  Content-Type: multipart/form-data
+pathVariables:
+  imageId: "2429"
+body:
+  type: formdata
+  content:
+    - type: text
+      key: ImageId
+      value: "9265"
+    - type: text
+      key: IsMain
+      value: "true"
+    - type: text
+      key: SortOrder
+      value: "5620"
+examples: ./.resources/-Api-V1-ProductImage-update.resources/examples
+order: 1000

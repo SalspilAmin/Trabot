@@ -1,0 +1,14 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/Api/V1/Authentication/ConfirmEmail?userId=2429&code=string"
+  method: GET
+  queryParams:
+    userId: "2429"
+    code: string
+response:
+  statusCode: 200
+  statusText: OK
+  body:
+    type: text
+    content: ""
+order: 1000

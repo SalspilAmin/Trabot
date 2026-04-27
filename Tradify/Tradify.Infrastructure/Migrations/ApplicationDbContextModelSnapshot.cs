@@ -128,7 +128,7 @@ namespace Tradify.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Tradify.Data.Entities.Appointment", b =>
+            modelBuilder.Entity("Tradify.Data.Entities.Appointments.Bookings", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -136,19 +136,22 @@ namespace Tradify.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("CustomerId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("DateTime")
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("InstructorId")
+                    b.Property<int>("CustomerId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("StoreBookingId")
+                    b.Property<int>("InstructorId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("StoreBookingId1")
+                    b.Property<int>("ScheduleId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StoreId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -157,11 +160,188 @@ namespace Tradify.Infrastructure.Migrations
 
                     b.HasIndex("InstructorId");
 
-                    b.HasIndex("StoreBookingId");
+                    b.HasIndex("ScheduleId");
 
-                    b.HasIndex("StoreBookingId1");
+                    b.HasIndex("StoreId");
 
-                    b.ToTable("Appointments");
+                    b.ToTable("Bookings");
+                });
+
+            modelBuilder.Entity("Tradify.Data.Entities.Appointments.Certifications", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("InstructorId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InstructorId");
+
+                    b.ToTable("Certifications");
+                });
+
+            modelBuilder.Entity("Tradify.Data.Entities.Appointments.Education", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Degree")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Institution")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("InstructorId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Year")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InstructorId");
+
+                    b.ToTable("Education");
+                });
+
+            modelBuilder.Entity("Tradify.Data.Entities.Appointments.InstructorImage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("InstructorId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("MediaPath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PublicId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InstructorId")
+                        .IsUnique();
+
+                    b.ToTable("InstructorImage");
+                });
+
+            modelBuilder.Entity("Tradify.Data.Entities.Appointments.InstructorSchedules", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Capacity")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("InstructorId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsAvailable")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("ReservedCount")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InstructorId");
+
+                    b.ToTable("InstructorSchedules");
+                });
+
+            modelBuilder.Entity("Tradify.Data.Entities.Appointments.Instructors", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("About")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("JobTitle")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("PricePerSession")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("StoreId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("YearsOfExperience")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StoreId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Instructors");
+                });
+
+            modelBuilder.Entity("Tradify.Data.Entities.Appointments.Service", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("InstructorId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InstructorId");
+
+                    b.ToTable("Service");
                 });
 
             modelBuilder.Entity("Tradify.Data.Entities.Cart", b =>
@@ -1010,10 +1190,13 @@ namespace Tradify.Infrastructure.Migrations
                     b.Property<int>("CustomerId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("InstructorId")
+                        .HasColumnType("int");
+
                     b.Property<bool>("IsPurchased")
                         .HasColumnType("bit");
 
-                    b.Property<int>("ProductId")
+                    b.Property<int?>("ProductId")
                         .HasColumnType("int");
 
                     b.Property<byte>("Rating")
@@ -1022,6 +1205,8 @@ namespace Tradify.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CustomerId");
+
+                    b.HasIndex("InstructorId");
 
                     b.HasIndex("ProductId");
 
@@ -1107,28 +1292,6 @@ namespace Tradify.Infrastructure.Migrations
                     b.ToTable("Shipments");
                 });
 
-            modelBuilder.Entity("Tradify.Data.Entities.StoreBooking", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("InstructorId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("StoreId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("StoreId")
-                        .IsUnique();
-
-                    b.ToTable("StoreBookings");
-                });
-
             modelBuilder.Entity("Tradify.Data.Entities.StoreImage", b =>
                 {
                     b.Property<int>("Id")
@@ -1186,6 +1349,9 @@ namespace Tradify.Infrastructure.Migrations
 
                     b.Property<int>("SellerId")
                         .HasColumnType("int");
+
+                    b.Property<byte>("Type")
+                        .HasColumnType("tinyint");
 
                     b.HasKey("Id");
 
@@ -1318,32 +1484,113 @@ namespace Tradify.Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Tradify.Data.Entities.Appointment", b =>
+            modelBuilder.Entity("Tradify.Data.Entities.Appointments.Bookings", b =>
                 {
                     b.HasOne("Tradify.Data.Entities.Identity.User", "Customer")
-                        .WithMany("Appointments")
+                        .WithMany("Bookings")
                         .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
-                    b.HasOne("Tradify.Data.Entities.Sellers", "Instructor")
+                    b.HasOne("Tradify.Data.Entities.Appointments.Instructors", "Instructor")
                         .WithMany()
                         .HasForeignKey("InstructorId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("Tradify.Data.Entities.StoreBooking", "StoreBooking")
-                        .WithMany()
-                        .HasForeignKey("StoreBookingId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                    b.HasOne("Tradify.Data.Entities.Appointments.InstructorSchedules", "Schedule")
+                        .WithMany("Bookings")
+                        .HasForeignKey("ScheduleId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
-                    b.HasOne("Tradify.Data.Entities.StoreBooking", null)
-                        .WithMany("Appointments")
-                        .HasForeignKey("StoreBookingId1");
+                    b.HasOne("Tradify.Data.Entities.Stores", "Store")
+                        .WithMany("Bookings")
+                        .HasForeignKey("StoreId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("Customer");
 
                     b.Navigation("Instructor");
 
-                    b.Navigation("StoreBooking");
+                    b.Navigation("Schedule");
+
+                    b.Navigation("Store");
+                });
+
+            modelBuilder.Entity("Tradify.Data.Entities.Appointments.Certifications", b =>
+                {
+                    b.HasOne("Tradify.Data.Entities.Appointments.Instructors", "Instructor")
+                        .WithMany("Certifications")
+                        .HasForeignKey("InstructorId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Instructor");
+                });
+
+            modelBuilder.Entity("Tradify.Data.Entities.Appointments.Education", b =>
+                {
+                    b.HasOne("Tradify.Data.Entities.Appointments.Instructors", "Instructor")
+                        .WithMany("Educations")
+                        .HasForeignKey("InstructorId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Instructor");
+                });
+
+            modelBuilder.Entity("Tradify.Data.Entities.Appointments.InstructorImage", b =>
+                {
+                    b.HasOne("Tradify.Data.Entities.Appointments.Instructors", "Instructor")
+                        .WithOne("InstructorImage")
+                        .HasForeignKey("Tradify.Data.Entities.Appointments.InstructorImage", "InstructorId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Instructor");
+                });
+
+            modelBuilder.Entity("Tradify.Data.Entities.Appointments.InstructorSchedules", b =>
+                {
+                    b.HasOne("Tradify.Data.Entities.Appointments.Instructors", "Instructor")
+                        .WithMany("Schedules")
+                        .HasForeignKey("InstructorId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Instructor");
+                });
+
+            modelBuilder.Entity("Tradify.Data.Entities.Appointments.Instructors", b =>
+                {
+                    b.HasOne("Tradify.Data.Entities.Stores", "Store")
+                        .WithMany("Instructors")
+                        .HasForeignKey("StoreId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Tradify.Data.Entities.Identity.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Store");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Tradify.Data.Entities.Appointments.Service", b =>
+                {
+                    b.HasOne("Tradify.Data.Entities.Appointments.Instructors", "Instructor")
+                        .WithMany("Services")
+                        .HasForeignKey("InstructorId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Instructor");
                 });
 
             modelBuilder.Entity("Tradify.Data.Entities.Cart", b =>
@@ -1383,15 +1630,15 @@ namespace Tradify.Infrastructure.Migrations
                         .HasForeignKey("ParentCategoryId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Tradify.Data.Entities.Stores", "Stores")
+                    b.HasOne("Tradify.Data.Entities.Stores", "Store")
                         .WithMany("Categories")
                         .HasForeignKey("StoreId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Parent");
 
-                    b.Navigation("Stores");
+                    b.Navigation("Store");
                 });
 
             modelBuilder.Entity("Tradify.Data.Entities.Chat.Message", b =>
@@ -1702,13 +1949,18 @@ namespace Tradify.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Tradify.Data.Entities.Appointments.Instructors", "Instructor")
+                        .WithMany("Reviews")
+                        .HasForeignKey("InstructorId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("Tradify.Data.Entities.Products", "Product")
                         .WithMany("Reviews")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProductId");
 
                     b.Navigation("Customer");
+
+                    b.Navigation("Instructor");
 
                     b.Navigation("Product");
                 });
@@ -1741,17 +1993,6 @@ namespace Tradify.Infrastructure.Migrations
                     b.Navigation("Order");
 
                     b.Navigation("ShipmentTracking");
-                });
-
-            modelBuilder.Entity("Tradify.Data.Entities.StoreBooking", b =>
-                {
-                    b.HasOne("Tradify.Data.Entities.Stores", "Store")
-                        .WithOne("StoreBooking")
-                        .HasForeignKey("Tradify.Data.Entities.StoreBooking", "StoreId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Store");
                 });
 
             modelBuilder.Entity("Tradify.Data.Entities.StoreImage", b =>
@@ -1826,6 +2067,26 @@ namespace Tradify.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Tradify.Data.Entities.Appointments.InstructorSchedules", b =>
+                {
+                    b.Navigation("Bookings");
+                });
+
+            modelBuilder.Entity("Tradify.Data.Entities.Appointments.Instructors", b =>
+                {
+                    b.Navigation("Certifications");
+
+                    b.Navigation("Educations");
+
+                    b.Navigation("InstructorImage");
+
+                    b.Navigation("Reviews");
+
+                    b.Navigation("Schedules");
+
+                    b.Navigation("Services");
+                });
+
             modelBuilder.Entity("Tradify.Data.Entities.Cart", b =>
                 {
                     b.Navigation("CartProducts");
@@ -1852,7 +2113,7 @@ namespace Tradify.Infrastructure.Migrations
 
             modelBuilder.Entity("Tradify.Data.Entities.Identity.User", b =>
                 {
-                    b.Navigation("Appointments");
+                    b.Navigation("Bookings");
 
                     b.Navigation("Cart")
                         .IsRequired();
@@ -1917,18 +2178,15 @@ namespace Tradify.Infrastructure.Migrations
                     b.Navigation("Store");
                 });
 
-            modelBuilder.Entity("Tradify.Data.Entities.StoreBooking", b =>
-                {
-                    b.Navigation("Appointments");
-                });
-
             modelBuilder.Entity("Tradify.Data.Entities.Stores", b =>
                 {
+                    b.Navigation("Bookings");
+
                     b.Navigation("Categories");
 
-                    b.Navigation("Products");
+                    b.Navigation("Instructors");
 
-                    b.Navigation("StoreBooking");
+                    b.Navigation("Products");
 
                     b.Navigation("StoreImage");
                 });

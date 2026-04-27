@@ -1,0 +1,8 @@
+$kind: http-request
+name: /Api/V1/ShipmentTracking/AddShipmentTracking
+url: "{{baseUrl}}/Api/V1/ShipmentTracking/AddShipmentTracking"
+method: POST
+pathVariables:
+  id: "2429"
+examples: ./.resources/-Api-V1-ShipmentTracking-AddShipmentTracking.resources/examples
+order: 1000

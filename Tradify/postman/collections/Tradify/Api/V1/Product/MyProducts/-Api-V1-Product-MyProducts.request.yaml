@@ -1,0 +1,16 @@
+$kind: http-request
+name: /Api/V1/Product/MyProducts
+url: "{{baseUrl}}/Api/V1/Product/MyProducts?Search=string&CategoryId=2429&MinPrice=8408.431110527232&MaxPrice=8408.431110527232&OutOfStock=true&Discount=true&IsDeleted=true&PageNumber=2429&PageSize=2429"
+method: GET
+queryParams:
+  Search: string
+  CategoryId: "2429"
+  MinPrice: "8408.431110527232"
+  MaxPrice: "8408.431110527232"
+  OutOfStock: "true"
+  Discount: "true"
+  IsDeleted: "true"
+  PageNumber: "2429"
+  PageSize: "2429"
+examples: ./.resources/-Api-V1-Product-MyProducts.resources/examples
+order: 1000

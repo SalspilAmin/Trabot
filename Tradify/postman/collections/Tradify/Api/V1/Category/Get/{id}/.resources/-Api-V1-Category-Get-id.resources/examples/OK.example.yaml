@@ -1,0 +1,15 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/Api/V1/Category/Get/:id?includeChildren=false"
+  method: GET
+  queryParams:
+    includeChildren: "false"
+  pathVariables:
+    id: "2429"
+response:
+  statusCode: 200
+  statusText: OK
+  body:
+    type: text
+    content: ""
+order: 1000

@@ -1,0 +1,31 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/Api/V1/Product/AddProduct"
+  method: POST
+  headers:
+    Content-Type: multipart/form-data
+  body:
+    type: formdata
+    content:
+      - type: text
+        key: Name
+        value: string
+      - type: text
+        key: Description
+        value: string
+      - type: text
+        key: CategoryId
+        value: "9551"
+      - type: text
+        key: Price
+        value: "8991.76811721261"
+      - type: text
+        key: Stock
+        value: "8903"
+response:
+  statusCode: 200
+  statusText: OK
+  body:
+    type: text
+    content: ""
+order: 1000

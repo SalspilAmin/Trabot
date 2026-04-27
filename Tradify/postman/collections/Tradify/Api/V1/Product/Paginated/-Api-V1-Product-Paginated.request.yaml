@@ -1,0 +1,16 @@
+$kind: http-request
+name: /Api/V1/Product/Paginated
+url: "{{baseUrl}}/Api/V1/Product/Paginated?PageNumber=2429&PageSize=2429&StoreId=2429&MinPrice=8408.431110527232&MaxPrice=8408.431110527232&CategoryId=2429&MinRating=2429&Discount=true&Search=string"
+method: GET
+queryParams:
+  PageNumber: "2429"
+  PageSize: "2429"
+  StoreId: "2429"
+  MinPrice: "8408.431110527232"
+  MaxPrice: "8408.431110527232"
+  CategoryId: "2429"
+  MinRating: "2429"
+  Discount: "true"
+  Search: string
+examples: ./.resources/-Api-V1-Product-Paginated.resources/examples
+order: 1000

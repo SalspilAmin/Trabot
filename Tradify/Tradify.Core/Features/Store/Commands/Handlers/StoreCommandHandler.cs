@@ -34,7 +34,7 @@ namespace Tradify.Core.Features.Store.Commands.Handlers
         #region Fields
         private readonly LocalizationService localize;
         private readonly UserManager<Tradify.Data.Entities.Identity.User> _userManager;
-
+        private readonly ICurrentUserService currentUserService;
         private readonly IStoreService storeService;
         private readonly IMapper mapper;
         private readonly ApplicationDbContext applicationDbContext;
@@ -52,11 +52,12 @@ namespace Tradify.Core.Features.Store.Commands.Handlers
                                      , LocalizationService localize
                                      , ISellerService sellerService
                                      , IFileService fileService
-                                     , IStoreImageService storeImageService) : base(localize)
-        {
+                                     , IStoreImageService storeImageService
+                                     ,ICurrentUserService currentUserService) : base(localize)
+        { 
             this.storeService = storeService;
             this._userManager = userManager;
-
+            this.currentUserService = currentUserService;
             this.mapper = mapper;
             this.localize = localize;
             this.applicationDbContext = applicationDbContext;
@@ -200,14 +201,17 @@ namespace Tradify.Core.Features.Store.Commands.Handlers
         // Update Store
         public async Task<Response<string>> Handle(UpdateStoreCommand request, CancellationToken cancellationToken)
         {
-            var store = await storeService.GetByIdAsync(request.Id);
-            if (store == null) return NotFound<string>(localize.Get("StoreNotFound"));
-           
-            if (store.SellerId != request.SellerId)
-                return  BadRequest<string>(localize.Get("NotOwner"));
+            var ValidSeller = await currentUserService.GetValidSellerContextAsync();
 
-            mapper.Map(request,  store);
-            await storeService.UpdateAsync(store);
+            if (ValidSeller.Error != null)
+                return BadRequest<string>(localize.Get(ValidSeller.Error));
+
+            var seller = ValidSeller.Seller;
+            var store = ValidSeller.Store;
+
+            store.Name = request.Name;
+            store.Description = request.Description;
+
             await storeService.SaveChangesAsync();
 
             return Success<string>(localize.Get("StoreUpdatedSuccessfully"));

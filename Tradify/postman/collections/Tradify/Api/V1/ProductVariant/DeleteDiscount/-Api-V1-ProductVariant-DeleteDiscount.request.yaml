@@ -1,0 +1,8 @@
+$kind: http-request
+name: /Api/V1/ProductVariant/DeleteDiscount
+url: "{{baseUrl}}/Api/V1/ProductVariant/DeleteDiscount?VariantId=2429"
+method: DELETE
+queryParams:
+  VariantId: "2429"
+examples: ./.resources/-Api-V1-ProductVariant-DeleteDiscount.resources/examples
+order: 1000

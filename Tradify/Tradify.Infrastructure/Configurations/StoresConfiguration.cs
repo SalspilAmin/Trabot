@@ -11,6 +11,10 @@ namespace Tradify.Infrastructure.Configurations
     {
         public void Configure(EntityTypeBuilder<Stores> builder)
         {
+            builder.Property(x => x.Type)
+                   .HasConversion<byte>()
+                   .HasColumnType("tinyint");
+
             builder.HasOne(x => x.StoreImage)
                        .WithOne(x => x.Stores)
                        .HasForeignKey<StoreImage>(x => x.StoreId)
@@ -20,7 +24,17 @@ namespace Tradify.Infrastructure.Configurations
                            .WithOne(x => x.Store)
                            .HasForeignKey(x => x.StoreId).OnDelete(DeleteBehavior.Restrict);
 
-            builder.HasOne(x=> x.StoreBooking).WithOne(x=>x.Store).HasForeignKey<StoreBooking>( x => x.StoreId).IsRequired().OnDelete(DeleteBehavior.Restrict);
+            builder.HasMany(x => x.Categories)
+                         .WithOne(x => x.Store)
+                         .HasForeignKey(x => x.StoreId).OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasMany(x => x.Instructors)
+                           .WithOne(x => x.Store)
+                           .HasForeignKey(x => x.StoreId).OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasMany(x => x.Bookings)
+                           .WithOne(x => x.Store)
+                           .HasForeignKey(x => x.StoreId).OnDelete(DeleteBehavior.Restrict);
 
         }
     }

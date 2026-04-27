@@ -1,0 +1,6 @@
+$kind: http-request
+name: /Api/V1/Authorization/Role/GitList
+url: "{{baseUrl}}/Api/V1/Authorization/Role/GitList"
+method: GET
+examples: ./.resources/-Api-V1-Authorization-Role-GitList.resources/examples
+order: 1000

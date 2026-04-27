@@ -1,0 +1,14 @@
+$kind: http-request
+name: /Api/V1/Favorite/toggle
+url: "{{baseUrl}}/Api/V1/Favorite/toggle"
+method: DELETE
+headers:
+  Content-Type: multipart/form-data
+body:
+  type: formdata
+  content:
+    - type: text
+      key: ProductId
+      value: "7421"
+examples: ./.resources/-Api-V1-Favorite-toggle.resources/examples
+order: 1000

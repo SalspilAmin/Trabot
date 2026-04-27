@@ -1,0 +1,30 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/Api/V1/Product/Update"
+  method: PUT
+  headers:
+    Content-Type: multipart/form-data
+  pathVariables:
+    productId: "2429"
+  body:
+    type: formdata
+    content:
+      - type: text
+        key: ProductId
+        value: "4317"
+      - type: text
+        key: Name
+        value: string
+      - type: text
+        key: Description
+        value: string
+      - type: text
+        key: CategoryId
+        value: "3143"
+response:
+  statusCode: 200
+  statusText: OK
+  body:
+    type: text
+    content: ""
+order: 1000

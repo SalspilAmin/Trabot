@@ -1,0 +1,17 @@
+$kind: http-request
+name: /Api/V1/ProductVariant/AddDiscount
+url: "{{baseUrl}}/Api/V1/ProductVariant/AddDiscount"
+method: PUT
+headers:
+  Content-Type: multipart/form-data
+body:
+  type: formdata
+  content:
+    - type: text
+      key: VariantId
+      value: "8704"
+    - type: text
+      key: Discount
+      value: "6406.468271261063"
+examples: ./.resources/-Api-V1-ProductVariant-AddDiscount.resources/examples
+order: 1000

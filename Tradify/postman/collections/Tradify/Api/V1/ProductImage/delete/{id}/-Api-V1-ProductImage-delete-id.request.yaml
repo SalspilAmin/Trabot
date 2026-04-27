@@ -1,0 +1,9 @@
+$kind: http-request
+name: /Api/V1/ProductImage/delete/:id
+url: "{{baseUrl}}/Api/V1/ProductImage/delete/:id"
+method: DELETE
+pathVariables:
+  id: string
+  imageId: "2429"
+examples: ./.resources/-Api-V1-ProductImage-delete-id.resources/examples
+order: 1000
