@@ -37,6 +37,7 @@
 
   <ItemGroup>
     <Folder Include="Features\Authorization\Queries\Validator\" />
+    <Folder Include="Features\Cart\Commands\Results\" />
     <Folder Include="Features\Categorie\Queries\Handlers\" />
     <Folder Include="Features\Categorie\Queries\Models\" />
     <Folder Include="Features\Categorie\Queries\Results\" />

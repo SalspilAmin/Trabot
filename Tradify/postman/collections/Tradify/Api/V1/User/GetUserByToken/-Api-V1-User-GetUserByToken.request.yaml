@@ -1,0 +1,8 @@
+$kind: http-request
+name: /Api/V1/User/GetUserByToken
+url: "{{baseUrl}}/Api/V1/User/GetUserByToken?token=string"
+method: GET
+queryParams:
+  token: string
+examples: ./.resources/-Api-V1-User-GetUserByToken.resources/examples
+order: 1000

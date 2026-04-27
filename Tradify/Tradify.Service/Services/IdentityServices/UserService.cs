@@ -31,10 +31,11 @@ namespace Tradify.Service.Services.IdentityServices
         private readonly IEmailService _emailService;
         private readonly IWatsappService watsappService;
         private readonly JwtSettings jwtSettings;
+        private readonly ICartService _cartService; 
 
         public UserService(ApplicationDbContext applicationDbContext,IHttpContextAccessor httpContextAccessor,
             UserManager<User> userManager,IUrlHelper urlHelper,IEmailService emailService,IWatsappService watsappService
-            , JwtSettings jwtSettings)
+            , JwtSettings jwtSettings, ICartService _cartService)
         {
             this.applicationDbContext = applicationDbContext;
             this.httpContextAccessor = httpContextAccessor;
@@ -43,6 +44,7 @@ namespace Tradify.Service.Services.IdentityServices
             this._emailService = emailService;
             this.watsappService = watsappService;
             this.jwtSettings = jwtSettings;
+            this._cartService=_cartService;
         }
 
         public bool IsEmail(string input)
@@ -147,11 +149,13 @@ namespace Tradify.Service.Services.IdentityServices
                         if (result == false) return ("Failed", null);
 
                     }
+                    var CreateCartResult = await _cartService.AddAsync(new Data.Entities.Cart() { User = user ,UserId=user.Id});
+                    if(CreateCartResult==null) return ("Failed", null);
                     await trans.CommitAsync();
                     return ("Success",user.Id);
                 }
 
-                catch (Exception ex) 
+                catch (Exception ex)  
         
                 {
 

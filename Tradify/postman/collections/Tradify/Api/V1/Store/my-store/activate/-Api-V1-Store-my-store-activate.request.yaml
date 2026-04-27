@@ -1,0 +1,6 @@
+$kind: http-request
+name: /Api/V1/Store/my-store/activate
+url: "{{baseUrl}}/Api/V1/Store/my-store/activate"
+method: PUT
+examples: ./.resources/-Api-V1-Store-my-store-activate.resources/examples
+order: 1000

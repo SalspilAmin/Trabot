@@ -13,9 +13,10 @@ namespace Tradify.Data.Entities
         public int UserId { get; set; }
         [ForeignKey(nameof(UserId))]
 
+        public bool IsDeleted { get; set; } =false;
         public virtual User User { get; set; }
 
-        public virtual List<CartProduct> CartProducts { get; set; } 
-        public virtual List<Orders> Orders { get; set; }    
+        public virtual List<CartProduct>? CartProducts { get; set; } 
+        public virtual List<Orders>? Orders { get; set; }    
     }
 }

@@ -1,0 +1,13 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/Api/V1/Authorization/Claims/ManageUserClaims"
+  method: GET
+  pathVariables:
+    userId: "2429"
+response:
+  statusCode: 200
+  statusText: OK
+  body:
+    type: text
+    content: ""
+order: 1000

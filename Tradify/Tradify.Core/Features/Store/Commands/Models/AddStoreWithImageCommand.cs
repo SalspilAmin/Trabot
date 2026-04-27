@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Tradify.Core.Bases;
+using Tradify.Data.Enums;
 
 namespace Tradify.Core.Features.Store.Commands.Models
 {
@@ -12,6 +13,7 @@ namespace Tradify.Core.Features.Store.Commands.Models
         public string Name { get; set; }
         public string Description { get; set; }
         public int SellerId { get; set; }
+        public StoreType Type { get; set; }
 
         public IFormFile Image { get; set; } 
     }

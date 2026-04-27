@@ -1,0 +1,19 @@
+$kind: http-request
+name: /Api/V1/ShipmentTracking/UpdateShipmentStatus
+url: "{{baseUrl}}/Api/V1/ShipmentTracking/UpdateShipmentStatus"
+method: PUT
+headers:
+  Content-Type: multipart/form-data
+pathVariables:
+  Id: "2429"
+body:
+  type: formdata
+  content:
+    - type: text
+      key: ShipmentTrackingId
+      value: "8039"
+    - type: text
+      key: Status
+      value: "2"
+examples: ./.resources/-Api-V1-ShipmentTracking-UpdateShipmentStatus.resources/examples
+order: 1000

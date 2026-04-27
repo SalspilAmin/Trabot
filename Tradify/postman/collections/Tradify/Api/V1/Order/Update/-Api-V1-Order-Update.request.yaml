@@ -1,0 +1,17 @@
+$kind: http-request
+name: /Api/V1/Order/Update
+url: "{{baseUrl}}/Api/V1/Order/Update"
+method: PUT
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "id": 3721,
+      "paymentStatus": 4,
+      "invoice_id": 6205,
+      "invoice_key": "string"
+    }
+examples: ./.resources/-Api-V1-Order-Update.resources/examples
+order: 1000

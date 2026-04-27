@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 using System.Xml.Linq;
+using Tradify.Data.Entities.Appointments;
+using Tradify.Data.Enums;
 
 namespace Tradify.Data.Entities
 {
@@ -17,19 +19,26 @@ namespace Tradify.Data.Entities
         public string Name { get; set; }
         public string Description { get; set; }
         public bool IsActive { get; set; }
-        
+        public StoreType Type { get; set; }
 
-        //public bool CreatedAt { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
         [ForeignKey(nameof(SellerId))]
         public virtual Sellers? Seller { get; set; }
         public bool IsDeleted { get; set; } = false;
-        public DateTime? DeletedAt { get; set; } 
+        public DateTime? DeletedAt { get; set; }
 
-        public  virtual ICollection<Products>? Products { get; set; }
+        // For Store Type Product
+        public virtual ICollection<Products>? Products { get; set; }
         public virtual ICollection<Categories>? Categories { get; set; }
-        public virtual StoreBooking? StoreBooking { get; set; }
         public virtual StoreImage? StoreImage { get; set; }
+
+
+        //  For Store Type Service
+        public virtual ICollection<Instructors>? Instructors { get; set; }
+        public virtual ICollection<Bookings>? Bookings { get; set; }
+
+
 
     }
 }

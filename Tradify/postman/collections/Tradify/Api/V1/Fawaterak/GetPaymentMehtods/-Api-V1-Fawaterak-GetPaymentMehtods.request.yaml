@@ -1,0 +1,6 @@
+$kind: http-request
+name: /Api/V1/Fawaterak/GetPaymentMehtods
+url: "{{baseUrl}}/Api/V1/Fawaterak/GetPaymentMehtods"
+method: GET
+examples: ./.resources/-Api-V1-Fawaterak-GetPaymentMehtods.resources/examples
+order: 1000

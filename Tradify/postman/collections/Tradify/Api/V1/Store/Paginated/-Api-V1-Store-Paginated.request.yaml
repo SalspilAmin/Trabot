@@ -1,0 +1,11 @@
+$kind: http-request
+name: /Api/V1/Store/Paginated
+url: "{{baseUrl}}/Api/V1/Store/Paginated?PageNumber=2429&PageSize=2429&IsDeleted=false&IsActive=false"
+method: GET
+queryParams:
+  PageNumber: "2429"
+  PageSize: "2429"
+  IsDeleted: "false"
+  IsActive: "false"
+examples: ./.resources/-Api-V1-Store-Paginated.resources/examples
+order: 1000

@@ -1,0 +1,8 @@
+$kind: http-request
+name: /Api/V1/Authorization/Claims/ManageUserClaims
+url: "{{baseUrl}}/Api/V1/Authorization/Claims/ManageUserClaims"
+method: GET
+pathVariables:
+  userId: "2429"
+examples: ./.resources/-Api-V1-Authorization-Claims-ManageUserClaims.resources/examples
+order: 1000

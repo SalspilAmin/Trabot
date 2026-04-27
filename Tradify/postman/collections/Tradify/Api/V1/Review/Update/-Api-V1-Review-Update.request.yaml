@@ -1,0 +1,22 @@
+$kind: http-request
+name: /Api/V1/Review/Update
+url: "{{baseUrl}}/Api/V1/Review/Update"
+method: PUT
+headers:
+  Content-Type: multipart/form-data
+pathVariables:
+  RwviewId: "2429"
+body:
+  type: formdata
+  content:
+    - type: text
+      key: Id
+      value: "5547"
+    - type: text
+      key: Rating
+      value: "7833"
+    - type: text
+      key: Comment
+      value: string
+examples: ./.resources/-Api-V1-Review-Update.resources/examples
+order: 1000
