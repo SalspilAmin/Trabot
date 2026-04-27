@@ -1,0 +1,8 @@
+$kind: http-request
+name: /Api/V1/Authentication/GoogleCallBack
+url: "{{baseUrl}}/Api/V1/Authentication/GoogleCallBack?code=string"
+method: GET
+queryParams:
+  code: string
+examples: ./.resources/-Api-V1-Authentication-GoogleCallBack.resources/examples
+order: 1000

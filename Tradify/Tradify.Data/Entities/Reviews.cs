@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
+using Tradify.Data.Entities.Appointments;
 using Tradify.Data.Entities.Identity;
 using Tradify.Data.Enums;
 
@@ -11,10 +12,12 @@ namespace Tradify.Data.Entities
     {
         public int Id { get; set; }
 
-        public int ProductId { get; set; }
+        public int? ProductId { get; set; }
         public int CustomerId { get; set; }
+        public int? InstructorId  { get; set; }
 
-       // public int UserId { get; set; }
+
+        // public int UserId { get; set; }
 
         public RatingValue Rating { get; set; }
 
@@ -27,7 +30,8 @@ namespace Tradify.Data.Entities
         [ForeignKey(nameof(ProductId))]
         public virtual Products? Product { get; set; }
 
-       
+        [ForeignKey(nameof(InstructorId))]
+        public virtual Instructors? Instructor { get; set; }
 
     }
 }

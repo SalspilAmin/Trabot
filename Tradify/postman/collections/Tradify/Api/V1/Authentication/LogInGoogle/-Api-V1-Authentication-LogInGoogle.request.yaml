@@ -1,0 +1,6 @@
+$kind: http-request
+name: /Api/V1/Authentication/LogInGoogle
+url: "{{baseUrl}}/Api/V1/Authentication/LogInGoogle"
+method: GET
+examples: ./.resources/-Api-V1-Authentication-LogInGoogle.resources/examples
+order: 1000

@@ -1,0 +1,26 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/Api/V1/Fawaterak/Webhook/cancel"
+  method: POST
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "hashKey": "string",
+        "paymentMethod": "string",
+        "referenceId": "string",
+        "status": "string",
+        "pay_load": {
+          "merchant_reference": "string",
+          "trasaction_data": "string"
+        }
+      }
+response:
+  statusCode: 200
+  statusText: OK
+  body:
+    type: text
+    content: ""
+order: 1000

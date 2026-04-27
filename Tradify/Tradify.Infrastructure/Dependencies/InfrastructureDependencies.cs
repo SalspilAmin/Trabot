@@ -37,8 +37,7 @@ namespace Tradify.Infrastructure.Dependencies
             services.AddTransient<IImageOrVideoPathRepository , ImageOrVideoPathRepository>();  
             services.AddTransient<IInteractionWithPostRepository , InteractionWithPostRepository>();    
             services.AddTransient<IPostRepository , PostRepository>();  
-            services.AddTransient<IAppointmentsRepository , AppointmentsRepository>();  
-            services.AddTransient<IStoreBookingRepository, StoreBookingRepository>();
+            
             services.AddTransient<IRefreshTokenRepository , RefreshTokenRepository>();
             services.AddTransient<ICartRepository,CartRepository>();
             services.AddTransient<ICartProductRepository, CartProductRepository>();
@@ -47,6 +46,15 @@ namespace Tradify.Infrastructure.Dependencies
             services.AddTransient<IProductVariantImageRepository, ProductVariantImageRepository>();
             services.AddTransient<IOrderItemsRepository, OrderItemsRepository>();
             services.AddTransient<IStoreRepository, StoreRepository>();
+
+            services.AddTransient<IBookingsRepositorie, BookingsRepositorie>();
+            services.AddTransient<ICertificationsRepositorie, CertificationsRepositorie>();
+            services.AddTransient<IEducationRepositorie, EducationRepositorie>();
+            services.AddTransient<IInstructorImageRepositories, InstructorImageRepositories>();
+            services.AddTransient<IInstructorSchedulesRepositorie, InstructorSchedulesRepositorie>();
+            services.AddTransient<IInstructorsRepositorie, InstructorsRepositorie>();
+            services.AddTransient<IServiceRepositorie, ServiceRepositorie>();
+
 
 
 

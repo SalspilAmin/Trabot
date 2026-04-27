@@ -29,6 +29,10 @@ namespace Tradify.Infrastructure.Seeder
                 {
                     Name = "Seller"
                 });
+                await roleManager.CreateAsync(new Role()
+                {
+                    Name = "Instructor"
+                });
             }
         }
     }

@@ -1,0 +1,8 @@
+$kind: http-request
+name: /Api/V1/Authentication/GoogleResult
+url: "{{baseUrl}}/Api/V1/Authentication/GoogleResult?RequestID=string"
+method: GET
+queryParams:
+  RequestID: string
+examples: ./.resources/-Api-V1-Authentication-GoogleResult.resources/examples
+order: 1000

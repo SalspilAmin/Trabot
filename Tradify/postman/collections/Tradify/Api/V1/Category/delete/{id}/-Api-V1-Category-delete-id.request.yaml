@@ -1,0 +1,8 @@
+$kind: http-request
+name: /Api/V1/Category/delete/:id
+url: "{{baseUrl}}/Api/V1/Category/delete/:id"
+method: DELETE
+pathVariables:
+  id: "2429"
+examples: ./.resources/-Api-V1-Category-delete-id.resources/examples
+order: 1000

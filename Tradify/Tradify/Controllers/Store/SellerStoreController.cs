@@ -15,7 +15,7 @@ namespace Tradify.Controllers.Store
     public class SellerStoreController : AppControllerBase
     {
         [HttpPut(Router.Store.UpdateStore)]
-        public async Task<IActionResult> UpdateStore([FromBody] UpdateStoreCommand command)
+        public async Task<IActionResult> UpdateStore([FromForm] UpdateStoreCommand command)
         {
             var response = await Mediator.Send(command);
             return NewResult(response);

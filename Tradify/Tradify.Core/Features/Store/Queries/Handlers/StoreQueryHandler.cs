@@ -15,8 +15,10 @@ using Tradify.Core.Features.User.Queries.Models;
 using Tradify.Core.Features.User.Queries.Results;
 using Tradify.Core.Resources.Service;
 using Tradify.Core.Wrappers;
+using Tradify.Data.Enums;
 using Tradify.Service.AbstractsServices;
 using Tradify.Service.Services;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using static Tradify.Data.AppMetaData.Router;
 
 namespace Tradify.Core.Features.Store.Queries.Handlers
@@ -53,6 +55,12 @@ namespace Tradify.Core.Features.Store.Queries.Handlers
         {
 
             var stores = storeService.GetTableNoTracking().Include(x => x.StoreImage).AsQueryable();
+           
+            if (request.Type.HasValue)
+            {
+                stores = stores.Where(v => v.Type == request.Type);
+            }
+
             if (request.IsDeleted.HasValue)
             {
                 stores = stores.IgnoreQueryFilters()
@@ -80,7 +88,14 @@ namespace Tradify.Core.Features.Store.Queries.Handlers
         {
 
                  
-            var stores = await storeService.GetTableNoTracking().Include(x => x.StoreImage).ToListAsync(cancellationToken);
+            var query =  storeService.GetTableNoTracking().Include(x => x.StoreImage).AsQueryable(); 
+
+            if (request.Type.HasValue)
+            {
+                query = query.Where(v => v.Type == request.Type);
+            }
+
+            var stores = await query.ToListAsync(cancellationToken);
 
 
             var result = mapper.Map< List<GetAllStoresResponse>>(stores);

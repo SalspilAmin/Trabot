@@ -25,14 +25,19 @@ namespace Tradify.Core.Features.Store.Commands.Validations
         #region Validations
         private void ApplyValidations()
         {
-            RuleFor(x => x.Id).GreaterThan(0).WithMessage("InvalidStoreId");
+            
+
             RuleFor(x => x.Description)
                 .NotEmpty().WithMessage(localize.Get("NotEmpty"))
+               .NotNull().WithMessage(localize.Get("Required"))
+
                 .MaximumLength(1000).WithMessage(localize.Get("MaxLengthis1000"));
             RuleFor(x => x.Name)
                .NotEmpty().WithMessage(localize.Get("NotEmpty"))
                .NotNull().WithMessage(localize.Get("Required"))
                .MaximumLength(255).WithMessage(localize.Get("MaxLengthis255"));
+
+
             #endregion
         }
     }

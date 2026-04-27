@@ -1,0 +1,8 @@
+$kind: http-request
+name: /Api/V1/Product/Search
+url: "{{baseUrl}}/Api/V1/Product/Search?Search=string"
+method: GET
+queryParams:
+  Search: string
+examples: ./.resources/-Api-V1-Product-Search.resources/examples
+order: 1000

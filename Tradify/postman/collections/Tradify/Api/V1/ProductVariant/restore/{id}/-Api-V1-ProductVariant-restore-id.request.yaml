@@ -1,0 +1,8 @@
+$kind: http-request
+name: /Api/V1/ProductVariant/restore/:id
+url: "{{baseUrl}}/Api/V1/ProductVariant/restore/:id"
+method: PATCH
+pathVariables:
+  id: "2429"
+examples: ./.resources/-Api-V1-ProductVariant-restore-id.resources/examples
+order: 1000

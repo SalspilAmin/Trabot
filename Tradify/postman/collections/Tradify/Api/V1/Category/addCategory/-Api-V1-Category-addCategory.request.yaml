@@ -1,0 +1,17 @@
+$kind: http-request
+name: /Api/V1/Category/addCategory
+url: "{{baseUrl}}/Api/V1/Category/addCategory"
+method: POST
+headers:
+  Content-Type: multipart/form-data
+body:
+  type: formdata
+  content:
+    - type: text
+      key: Name
+      value: string
+    - type: text
+      key: ParentCategoryId
+      value: "700"
+examples: ./.resources/-Api-V1-Category-addCategory.resources/examples
+order: 1000

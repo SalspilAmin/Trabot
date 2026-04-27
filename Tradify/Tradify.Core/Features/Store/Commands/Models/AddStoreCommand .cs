@@ -3,8 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
+using System.Text.Json.Serialization;
 using Tradify.Core.Bases;
 using Tradify.Data.Entities;
+using Tradify.Data.Enums;
 
 namespace Tradify.Core.Features.Store.Commands.Models
 {
@@ -14,7 +16,9 @@ namespace Tradify.Core.Features.Store.Commands.Models
         public string Description { get; set; }
 
         public int SellerId { get; set; }
-     
- 
+
+        public StoreType Type { get; set; }
+
+
     }
 }

@@ -43,7 +43,12 @@ namespace Tradify.Core.Features.Store.Commands.Validations
                 .NotEmpty().WithMessage(localize.Get("NotEmpty"))
                 .NotNull().WithMessage(localize.Get("Required"));
 
-            
+
+            RuleFor(x => x.Type)
+
+              .NotEmpty().WithMessage(localize.Get("NotEmpty"))
+              .NotNull().WithMessage(localize.Get("Required"));
+
 
 
 

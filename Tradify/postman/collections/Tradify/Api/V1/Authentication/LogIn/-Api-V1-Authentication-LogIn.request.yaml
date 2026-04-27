@@ -1,0 +1,17 @@
+$kind: http-request
+name: /Api/V1/Authentication/LogIn
+url: "{{baseUrl}}/Api/V1/Authentication/LogIn"
+method: POST
+headers:
+  Content-Type: multipart/form-data
+body:
+  type: formdata
+  content:
+    - type: text
+      key: EmailOrPhone
+      value: string
+    - type: text
+      key: Password
+      value: string
+examples: ./.resources/-Api-V1-Authentication-LogIn.resources/examples
+order: 1000

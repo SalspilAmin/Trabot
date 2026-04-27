@@ -1,0 +1,31 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/Api/V1/Authorization/Role/UpdateUserRoles"
+  method: PUT
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "userId": 9433,
+        "userRoles": [
+          {
+            "id": 4571,
+            "name": "string",
+            "hasRole": false
+          },
+          {
+            "id": 2994,
+            "name": "string",
+            "hasRole": false
+          }
+        ]
+      }
+response:
+  statusCode: 200
+  statusText: OK
+  body:
+    type: text
+    content: ""
+order: 1000
