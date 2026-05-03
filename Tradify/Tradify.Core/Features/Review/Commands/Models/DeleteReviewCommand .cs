@@ -10,9 +10,9 @@ namespace Tradify.Core.Features.Review.Commands.Models
     {
         public int Id { get; set; }
 
-        public DeleteReviewCommand(int Id) 
+        public DeleteReviewCommand(int id) 
         {
-            this.Id = Id;
+            this.Id = id;
         }
     }
 }

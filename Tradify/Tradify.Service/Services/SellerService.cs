@@ -59,19 +59,14 @@ namespace Tradify.Service.Services
 
 
                     // 3. Check is user have seller Role
+                    if (user.EmailConfirmed == false)
+                        return ("UserMustConfirmedEmailFirst", null);
+
                     var Addrole = await userManager.AddToRoleAsync(user, RolesHelper.Seller);
                     var roles = await userManager.GetRolesAsync(user);
 
                     if (!roles.Any(r => r == "Seller"))
                         return ("UserIsNotAssignedto(Seller_Role)", null);
-
-
-                    // 4. Check is user already Seller
-                    var existingSeller = await GetTableNoTracking()
-                    .FirstOrDefaultAsync(s => s.UserId == seller.UserId);
-
-                    if (existingSeller != null)
-                        return ("UserIsAlreadySeller", null);
 
                     //5. Cheack Busnis Name
                     var existBusinessName =await GetTableNoTracking()
@@ -80,6 +75,13 @@ namespace Tradify.Service.Services
                     if (existBusinessName)
                         return ("BusinessNameAlreadyExist", null);
 
+
+                    // 4. Check is user already Seller
+                    var existingSeller = await GetTableNoTracking()
+                    .FirstOrDefaultAsync(s => s.UserId == seller.UserId);
+
+                    if (existingSeller != null)
+                        return ("UserIsAlreadySeller", null);
                     //  1. Default values
                     seller.IsActive = true;
                     seller.BusinessName = seller.BusinessName.Trim().ToLower();

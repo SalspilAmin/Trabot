@@ -6,7 +6,7 @@ using Tradify.Infrastructure.InfrastrucureBases;
 
 namespace Tradify.Infrastructure.AbstractsRepositories
 {
-    internal interface IServiceRepositorie :IGenericRepository<Service>
+    public interface IServiceRepositorie :IGenericRepository<Service>
     {
     }
 }

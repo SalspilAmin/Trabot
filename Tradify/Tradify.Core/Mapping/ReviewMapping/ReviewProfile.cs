@@ -10,7 +10,7 @@ namespace Tradify.Core.Mapping.ReviewMapping
         public ReviewProfile()
         {
             AddReviewMapping();
-            ProductReviewMapping();
+            ReviewsMapping();
         }
     }
     

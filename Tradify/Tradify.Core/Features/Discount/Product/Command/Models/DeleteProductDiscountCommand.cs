@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using Tradify.Core.Bases;
 
-namespace Tradify.Core.Features.Discount.Product.Comands.Models
+namespace Tradify.Core.Features.Discount.Product.Command.Models
 {
     public class DeleteProductDiscountCommand : IRequest<Response<string>>
     {

@@ -15,6 +15,7 @@ using Tradify.Infrastructure.Context;
 using Tradify.Infrastructure.Dependencies;
 using Tradify.Infrastructure.Seeder;
 using Tradify.Service.Dependencies;
+using Twilio.TwiML.Voice;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -79,13 +80,22 @@ using (var scope = app.Services.CreateScope())
 {
     var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<Role>>();
+    var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
     await RoleSeeder.SeedAsync(roleManager);
     await UserSeeder.SeedAsync(userManager,builder.Configuration);
+    await EducationSeeder.SeedAsync(context);
+    await CertificationsSeeder.SeedAsync(context);
+    await ServiceSeeder.SeedAsync(context);
+    await InstructorSchedulesSeeder.SeedAsync(context);
+
+    
+
 }
 
 // Configure the HTTP request pipeline.
 
-    app.UseSwagger();
+app.UseSwagger();
     app.UseSwaggerUI();
 
 

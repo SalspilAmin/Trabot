@@ -57,14 +57,26 @@ namespace Tradify.Service.Dependencies
             services.AddTransient<IAuthorizationService, AuthorizationService>();
             services.AddTransient<IFavoriteService, FavoriteService>();
             services.AddTransient<IProductVariantImageService, ProductVariantImageService>();
-
             services.AddTransient<IOrderItemsService, OrderItemsService>();
             services.AddTransient<IStoreImageService, StoreImageService>();
+            services.AddTransient<IBookingsService, BookingsService>();
+            services.AddTransient<ICertificationsService, CertificationsService>();
+            services.AddTransient<IEducationService, EducationService>();
+            services.AddTransient<IInstructorImageService, InstructorImageService>();
+            services.AddTransient<IInstructorSchedulesService, InstructorSchedulesService>();
+            services.AddTransient<IInstructorsService, InstructorsService>();
+            services.AddTransient<IServiceService, ServiceService>();
+
+
 
             services.AddHttpContextAccessor();
             services.AddScoped<ICurrentUserService, CurrentUserService>();
 
+
             
+
+
+
             return services;
 
         }

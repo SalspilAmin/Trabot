@@ -6,7 +6,6 @@ using Tradify.Core.Features.Product.Commands.Models;
 using Tradify.Core.Features.ProductVariant.Commands.Models;
 using Tradify.Core.Features.ProductVariant.Queries.Models;
 using Tradify.Core.Features.Store.Queries.Models;
-using Tradify.Core.Features.Discount.Varint.Comands.Models;
 using Tradify.Data.AppMetaData;
 
 namespace Tradify.Controllers.Product

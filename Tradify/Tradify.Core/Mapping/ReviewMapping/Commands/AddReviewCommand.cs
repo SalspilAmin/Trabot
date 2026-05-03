@@ -13,7 +13,9 @@ namespace Tradify.Core.Mapping.ReviewMapping
     {
         public void AddReviewMapping()
         {
-            CreateMap<AddReviewCommand, Reviews>();
+            CreateMap<AddProductReviewCommand, Reviews>();
+
+            CreateMap<AddInstructorReviewCommand, Reviews>();
 
         }
     }

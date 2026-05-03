@@ -1,9 +1,0 @@
-$kind: http-request
-name: /Api/V1/Authentication/ConfirmEmail
-url: "{{baseUrl}}/Api/V1/Authentication/ConfirmEmail?userId=2429&code=string"
-method: GET
-queryParams:
-  userId: "2429"
-  code: string
-examples: ./.resources/-Api-V1-Authentication-ConfirmEmail.resources/examples
-order: 1000
