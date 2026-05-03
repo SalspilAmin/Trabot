@@ -9,14 +9,11 @@ using Tradify.Core.Wrappers;
 
 namespace Tradify.Core.Features.Review.Queries.Models
 {
-    public class GetProductReviewsQuery : IRequest<Response<PaginatedResult<ProductReviewsResponse>>>
+    public class GetProductReviewsQuery : IRequest<Response<PaginatedResult<ReviewsResponse>>>
     {
         public int ProductId { get; set; }
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
-        public GetProductReviewsQuery(int productId)
-        {
-            ProductId = productId;
-        }
+       
     }
 }

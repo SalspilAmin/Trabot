@@ -14,10 +14,13 @@ namespace Tradify.Data.Entities.Appointments
         public string Name { get; set; }
         public string JobTitle { get; set; }
         public string About { get; set; }
+        public decimal PricePerSession { get; set; }
 
         public int YearsOfExperience { get; set; }
-
-        public decimal PricePerSession { get; set; }
+        public decimal Discount { get; set; } = 0;
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        public decimal FinalPrice { get; private set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
 
         public bool IsActive { get; set; }

@@ -1,9 +1,0 @@
-$kind: http-request
-name: /Api/V1/Favorite/Paginated
-url: "{{baseUrl}}/Api/V1/Favorite/Paginated?PageNumber=2429&PageSize=2429"
-method: GET
-queryParams:
-  PageNumber: "2429"
-  PageSize: "2429"
-examples: ./.resources/-Api-V1-Favorite-Paginated.resources/examples
-order: 1000

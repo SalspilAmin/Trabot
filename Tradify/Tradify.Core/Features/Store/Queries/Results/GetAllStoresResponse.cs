@@ -11,6 +11,7 @@ namespace Tradify.Core.Features.Store.Queries.Results
         public string Name { get; set; }
         public bool IsActive { get; set; }
         public StoreImageResponse Image { get; set; }
+        public string Type { get; set; }
 
 
     }

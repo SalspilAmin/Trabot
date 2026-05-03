@@ -36,6 +36,11 @@ namespace Tradify.Infrastructure.Configurations
             builder.HasMany(x => x.Schedules)
                          .WithOne(x => x.Instructor)
                          .HasForeignKey(x => x.InstructorId).OnDelete(DeleteBehavior.Restrict);
+
+            // Computed Column
+            builder.Property(v => v.FinalPrice)
+                   .HasColumnType("decimal(18,2)")
+                   .HasComputedColumnSql("[PricePerSession] - ([PricePerSession] * ([Discount] / 100))");
         }
     }
 }

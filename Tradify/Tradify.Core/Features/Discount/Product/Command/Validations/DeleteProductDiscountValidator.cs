@@ -2,10 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Tradify.Core.Features.Discount.Product.Comands.Models;
+using Tradify.Core.Features.Discount.Product.Command.Models;
 using Tradify.Core.Resources.Service;
 
-namespace Tradify.Core.Features.Discount.Product.Comands.Validations
+namespace Tradify.Core.Features.Discount.Product.Command.Validations
 {
     public class DeleteProductDiscountValidator : AbstractValidator<DeleteProductDiscountCommand>
     {

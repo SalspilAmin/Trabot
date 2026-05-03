@@ -23,7 +23,7 @@ using static Tradify.Data.AppMetaData.Router;
 
 namespace Tradify.Core.Features.Product.Queries.Handlers
 {
-    public class ProductQueryHandler : ResponseHandler , IRequestHandler<GetProductPaginationQuery, PaginatedResult<GetProductPaginationReponse>>
+    public class ProductQueryHandler : ResponseHandler , IRequestHandler<GetProductPaginationQuery, Response<PaginatedResult<GetProductPaginationReponse>>>
                                                        , IRequestHandler<GetProductByIdQuery, Response<GetProductByIdResponse>>
                                                        , IRequestHandler<GetProductBySearchListQuery, List<GetProductPaginationReponse>>
                                                        , IRequestHandler<GetSellerProductsQuery, Response<PaginatedResult<GetSellerProductPaginationReponse>>>
@@ -73,7 +73,8 @@ namespace Tradify.Core.Features.Product.Queries.Handlers
         #region Mehtods
         // Get All Product Pagition With Filter
 
-        public async Task<PaginatedResult<GetProductPaginationReponse>> Handle(GetProductPaginationQuery request, CancellationToken cancellationToken)
+        #region Get All Product Pagition With Filter
+        public async Task<Response<PaginatedResult<GetProductPaginationReponse>>> Handle(GetProductPaginationQuery request, CancellationToken cancellationToken)
         {
 
 
@@ -84,6 +85,27 @@ namespace Tradify.Core.Features.Product.Queries.Handlers
             var products = productService
                 .GetTableNoTracking().Include(p => p.ProductImages).Include(p => p.Reviews)
                 .Include(p => p.Category).Include(p => p.Favorites).AsQueryable();
+
+
+            // Store
+            if (request.StoreId.HasValue)
+            {
+                var store = await storeService
+                                   .GetTableNoTracking()
+                                   .Where(s => s.Id == request.StoreId)
+                                   .Select(s => new { s.Id, s.Type })
+                                   .FirstOrDefaultAsync();
+                if (store == null)
+                    return BadRequest<PaginatedResult<GetProductPaginationReponse>>(localization.Get("StoreNotFound"));
+
+                if (store.Type != Data.Enums.StoreType.Product)
+                    return BadRequest<PaginatedResult<GetProductPaginationReponse>>(localization.Get("ThisStoreTypeDosn'tSupportProducts"));
+
+
+                products = products.Where(p =>
+                    p.StoreId == request.StoreId);
+            }
+
 
             // Search
             if (!string.IsNullOrWhiteSpace(request.Search))
@@ -108,12 +130,16 @@ namespace Tradify.Core.Features.Product.Queries.Handlers
                     p.CategoryId == request.CategoryId);
             }
 
-            // Store
-            if (request.StoreId.HasValue)
-            {
-                products = products.Where(p =>
-                    p.StoreId == request.StoreId);
-            }
+        
+
+
+
+
+
+
+
+
+
             //  Min Price
             if (request.MinPrice.HasValue)
             {
@@ -161,17 +187,15 @@ namespace Tradify.Core.Features.Product.Queries.Handlers
 
 
 
-
-
-          
-
-
-
-            return result;
+            return Success(result);
 
         }
+        #endregion
 
         // Get All Product List
+
+        #region Get All Product List
+
 
 
         public async Task<List<GetProductPaginationReponse>> Handle(GetAllProductListQuery request, CancellationToken cancellationToken)
@@ -273,9 +297,11 @@ namespace Tradify.Core.Features.Product.Queries.Handlers
 
         }
 
-
+        #endregion
 
         //Get all Product List By Search 
+
+        #region  Get all Product List By Search 
 
 
         public async Task<List<GetProductPaginationReponse>> Handle(GetProductBySearchListQuery request, CancellationToken cancellationToken)
@@ -328,7 +354,11 @@ namespace Tradify.Core.Features.Product.Queries.Handlers
 
         }
 
+        #endregion
+
         // Get Product By Discount And Get Discount With It 
+
+        #region Get Product By Discount
         public async Task<PaginatedResult<GetProductDiscountResponse>> Handle(GetProductDiscountQuery request, CancellationToken cancellationToken)
         {
 
@@ -345,13 +375,12 @@ namespace Tradify.Core.Features.Product.Queries.Handlers
 
         }
 
-
-
-
+        #endregion
 
 
         //Get all Product List By Store 
 
+        #region Get all Product List By Store 
 
         public async Task<List<GetProductPaginationReponse>> Handle(GetProductByStoreQuery request, CancellationToken cancellationToken)
         {
@@ -402,10 +431,12 @@ namespace Tradify.Core.Features.Product.Queries.Handlers
         }
 
 
-
+        #endregion
 
 
         // Get Product By Id 
+
+        #region Get Product By Id 
         public async Task<Response<GetProductByIdResponse>> Handle(GetProductByIdQuery request, CancellationToken cancellationToken)
         {
              var currentUserId = currentUserService.GetUserId();
@@ -440,9 +471,11 @@ namespace Tradify.Core.Features.Product.Queries.Handlers
 
         }
 
-   
+        #endregion
 
+        // Get Seller Products
 
+        #region Get Seller Products
 
 
         public async Task<Response<PaginatedResult<GetSellerProductPaginationReponse>>> Handle(GetSellerProductsQuery request,CancellationToken cancellationToken)
@@ -530,7 +563,7 @@ namespace Tradify.Core.Features.Product.Queries.Handlers
 
         }
 
-
+        #endregion
     }
 
     #endregion

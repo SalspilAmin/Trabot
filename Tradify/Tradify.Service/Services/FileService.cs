@@ -15,7 +15,8 @@ namespace Tradify.Service.Services
     {
         Products,
         Variants,
-        Store
+        Store,
+        Instructor
     }
  
     public class FileService : IFileService

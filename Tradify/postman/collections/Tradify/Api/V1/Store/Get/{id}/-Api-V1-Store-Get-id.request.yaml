@@ -1,8 +1,0 @@
-$kind: http-request
-name: /Api/V1/Store/Get/:id
-url: "{{baseUrl}}/Api/V1/Store/Get/:id"
-method: GET
-pathVariables:
-  id: "2429"
-examples: ./.resources/-Api-V1-Store-Get-id.resources/examples
-order: 1000

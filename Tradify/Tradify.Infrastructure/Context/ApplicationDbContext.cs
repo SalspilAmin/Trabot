@@ -3,6 +3,7 @@ using EntityFrameworkCore.EncryptColumn.Interfaces;
 using EntityFrameworkCore.EncryptColumn.Util;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -76,6 +77,7 @@ namespace Tradify.Infrastructure.Context
         public DbSet<InstructorImage> InstructorImage { get; set; }
         public DbSet<Service> Service { get; set; }
         public DbSet<Instructors> Instructors { get; set; }
+        public DbSet<InstructorSchedules> InstructorSchedules { get; set; } 
 
 
         #endregion
@@ -107,7 +109,7 @@ namespace Tradify.Infrastructure.Context
             modelBuilder.Entity<ProductVariants>().HasQueryFilter(v => !v.IsDeleted &&!v.Product.IsDeleted);
             modelBuilder.Entity<Products>().HasQueryFilter(p => !p.IsDeleted && !p.Store.IsDeleted);
             modelBuilder.Entity<Categories>().HasQueryFilter(s => !s.IsDeleted);
-            modelBuilder.Entity<Instructors>().HasQueryFilter(s => !s.IsActive);
+            modelBuilder.Entity<Instructors>().HasQueryFilter(s => s.IsActive);
 
 
 

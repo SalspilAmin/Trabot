@@ -78,7 +78,60 @@ namespace Tradify.Data.AppMetaData
 
         }
         
-            public static class ShipmentTracking
+
+
+            public static class Instructor
+            {
+                   public const string prefix = Rule + "Instructor";
+                   public const string Add = prefix + "/AddInstructor";
+                   public const string AddWithImage = prefix + "/AddWithImage";
+                   public const string JopTitle = prefix + "/JopTitle";
+                   public const string GetByID = prefix + "/Get" + SignleRoute;
+                   public const string Paginated = prefix + "/Paginated";
+                   public const string AddDiscount = prefix + "/AddDiscount";
+                   public const string DeleteDiscount = prefix + "/DeleteDiscount";
+                   public const string WithDiscount = prefix + "/WithDiscount";
+
+            
+
+        }
+
+        public static class InstructorEducation
+        {
+            public const string prefix = Rule + "InstructorEducation";
+            public const string Add = prefix + "/AddEducation";
+            public const string GetByInstructor = prefix + "/ByInstructor";
+
+
+        }
+        public static class InstructorService
+        {
+            public const string prefix = Rule + "InstructorService";
+            public const string Add = prefix + "/AddService";
+            public const string GetByInstructor = prefix + "/ByInstructor";
+
+
+        }
+
+        public static class InstructorSchedules
+        {
+            public const string prefix = Rule + "InstructorSchedules";
+            public const string Add = prefix + "/AddSchedules";
+            public const string GetByInstructor = prefix + "/ByInstructor";
+
+
+        }
+        
+        public static class InstructorCertification
+        {
+            public const string prefix = Rule + "InstructorCertification";
+            public const string Add = prefix + "/AddCertification";
+            public const string GetByInstructor = prefix + "/ByInstructor";
+
+
+        }
+        
+        public static class ShipmentTracking
         {
             public const string prefix = Rule + "ShipmentTracking";
             public const string Add = prefix + "/AddShipmentTracking";
@@ -92,10 +145,13 @@ namespace Tradify.Data.AppMetaData
         public static class Review
         {
             public const string prefix = Rule + "Review";
-            public const string Add = prefix + "/AddReview";
+            public const string AddProductReview = prefix + "/AddProductReview";
+            public const string AddInstructorReview = prefix + "/AddInstructorReview";
+
             public const string Update = prefix + "/Update" ;
             public const string Delete = prefix + "/Delete" + SignleRoute;
-            public const string Paginated = prefix + "/Paginated";
+            public const string ProductReviews = prefix + "/ProductReviews";
+            public const string InstructorReviews = prefix + "/InstructorReviews";
 
 
 
@@ -203,7 +259,9 @@ namespace Tradify.Data.AppMetaData
             public const string GetDeletedStores = prefix + "/DeletedStores";
             public const string List = prefix + "/List";
 
-            
+
+            public const string AddStoreServiceDiscount = prefix + "/AddStoreServiceDiscount";
+            public const string DeleteStoreServiceDiscount = prefix + "/DeleteStoreServiceDiscount";
 
 
 

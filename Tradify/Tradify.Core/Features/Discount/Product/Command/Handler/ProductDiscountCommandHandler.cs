@@ -5,12 +5,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Tradify.Core.Bases;
-using Tradify.Core.Features.Discount.Product.Comands.Models;
-using Tradify.Core.Features.Discount.Varint.Comands.Models;
+using Tradify.Core.Features.Discount.Product.Command.Models;
 using Tradify.Core.Resources.Service;
 using Tradify.Service.AbstractsServices;
 
-namespace Tradify.Core.Features.Discount.Product.Comands.Handler
+namespace Tradify.Core.Features.Discount.Product.Command.Handler
 {
     public class ProductDiscountCommandHandler : ResponseHandler,
                                                        IRequestHandler<AddProductDiscountCommand, Response<string>>
@@ -80,6 +79,7 @@ namespace Tradify.Core.Features.Discount.Product.Comands.Handler
             }
 
             await productVariantService.UpdateRangeAsync(variants);
+            await productVariantService.SaveChangesAsync();
 
             return Success<string>(localize.Get("DiscountAddedSuccessfully"));
 
@@ -114,6 +114,7 @@ namespace Tradify.Core.Features.Discount.Product.Comands.Handler
             }
 
             await productVariantService.UpdateRangeAsync(variants);
+            await productVariantService.SaveChangesAsync();
 
             return Success<string>(localize.Get("DiscountDeletedSuccessfully"));
         }
