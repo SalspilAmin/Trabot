@@ -153,6 +153,7 @@ namespace Tradify.Service.Services.IdentityServices
                     
                     if(CreateCartResult==null) return ("Failed", null);
                     user.CartId = CreateCartResult.Id;
+                    await UserManager.UpdateAsync(user);
                     await trans.CommitAsync();
                     return ("Success",user.Id);
                 }

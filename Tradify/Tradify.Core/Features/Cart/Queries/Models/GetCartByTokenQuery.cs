@@ -7,12 +7,12 @@ using Tradify.Core.Features.Cart.Queries.Results;
 
 namespace Tradify.Core.Features.Cart.Queries.Models
 {
-    public class GetCartByUserIdQuery : IRequest<Response<GetCartByUserIdQueryResult>>
+    public class GetCartByTokenQuery : IRequest<Response<GetCartByUserIdQueryResult>>
     {
-        public int UserId { get; set; }
-        public GetCartByUserIdQuery(int userId)
+        public string Token { get; set; }
+        public GetCartByTokenQuery(string Token)
         { 
-            UserId = userId;
+            this.Token= Token;
         }   
     }
 }
