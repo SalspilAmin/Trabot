@@ -77,7 +77,7 @@ namespace Tradify.Service.Services
 
 
                     //5. Check Product
-                    var product = await productService.GetByIdAsync(variants.ProductId);
+                    var product = await productService.GetByIdAsync((int)variants.ProductId);
 
                     if (product == null)
                         return ("ProductNotFound", null);

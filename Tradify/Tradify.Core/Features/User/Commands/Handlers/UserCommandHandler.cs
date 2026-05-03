@@ -8,6 +8,7 @@ using Tradify.Core.Bases;
 using Tradify.Core.Features.User.Commands.Models;
 using Tradify.Core.Resources.Service;
 using Tradify.Data.Entities.Identity;
+using Tradify.Infrastructure.Context;
 using Tradify.Service.AbstractsServices.IdentityServices;
 
 namespace Tradify.Core.Features.User.Commands.Handlers
@@ -20,18 +21,20 @@ namespace Tradify.Core.Features.User.Commands.Handlers
         private readonly UserManager<Data.Entities.Identity.User> userManager;
         private readonly IMapper mapper;
         private readonly IUserService userService;
+        private readonly ApplicationDbContext context;
 
         #endregion
 
         #region constructor
 
         public UserCommandHandler(LocalizationService localization,UserManager<Data.Entities.Identity.User>  _userManager,
-            IMapper mapper,IUserService userService) : base(localization)
+            IMapper mapper,IUserService userService,ApplicationDbContext dbContext) : base(localization)
         {
             this.localize = localization;   
             this.userManager = _userManager;
             this.mapper = mapper;   
             this.userService = userService;
+            this.context = dbContext;   
 
         }
 
@@ -87,6 +90,8 @@ namespace Tradify.Core.Features.User.Commands.Handlers
 
             //if Not Exist notfound
             if (user == null) return NotFound<string>();
+
+
             var result = await userManager.DeleteAsync(user);
             if (!result.Succeeded) return BadRequest<string>(localize.Get("DeletedFailed"));
             return Success<string>(localize.Get("Deleted"));

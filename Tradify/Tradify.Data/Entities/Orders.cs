@@ -12,7 +12,7 @@ namespace Tradify.Data.Entities
     public class Orders
     {
         public int Id { get; set; }
-        public int CustomerId { get; set; }
+        public int? CustomerId { get; set; }
         public string ShippingAddress { get; set; } 
 
         public OrderStatus? OrderStatus { get; set; }

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.OpenApi;
+using Newtonsoft.Json;
 using System;
 using System.Buffers.Text;
 using System.Collections.Generic;
@@ -12,6 +13,7 @@ using Tradify.Data.Helpers.Fawaterak.Einvoice;
 using Tradify.Data.Helpers.Fawaterak.WebHook;
 using Tradify.Service.AbstractsServices.FawaterakServices;
 using Tradify.Service.AbstractsServices.IdentityServices;
+using Twilio.TwiML.Messaging;
 
 namespace Tradify.Service.Services.FawaterakServices
 {
@@ -28,21 +30,31 @@ namespace Tradify.Service.Services.FawaterakServices
             this._userService = userService;
         }
 
-        public async Task<EInvoiceResponseDataModel?> CreateEInvoiceAsync(EInvoiceRequestModel eInvoice)
+        public async Task<EInvoiceResponseDataModel?> CreateEInvoiceAsync(EInvoiceRequestLink eInvoice)
         {
             var client = _httpClientFactory.CreateClient();
             var request = new HttpRequestMessage(HttpMethod.Post,$"{fawaterakOptions.BaseUrl}/createInvoiceLink");
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", fawaterakOptions.ApiKey);
-            request.Content = new StringContent(string.Empty, Encoding.UTF8, "application/json");
-            request.Content= new StringContent(JsonConvert.SerializeObject(eInvoice));
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", fawaterakOptions.ApiKey);
 
-            var response= client.SendAsync(request).Result;
+            var json = JsonConvert.SerializeObject(eInvoice);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            request.Content = content; 
+
+
+
+            var response = client.SendAsync(request).Result;
             if (response.IsSuccessStatusCode)
             {
                 var resposnecontent = await response.Content.ReadAsStringAsync();
                 var _response= JsonConvert.DeserializeObject<EInvoiceResponseModel>(resposnecontent);
                 return _response!.Data;
             }
+            var errorContent = await response.Content.ReadAsStringAsync();
+            Console.WriteLine("===============================");
+            Console.WriteLine($"API ERROR: {errorContent}");
+            Console.WriteLine("===============================");
             return null; 
         }
 

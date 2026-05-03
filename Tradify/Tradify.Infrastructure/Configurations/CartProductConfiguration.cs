@@ -11,9 +11,9 @@ namespace Tradify.Infrastructure.Configurations
     {
         public void Configure(EntityTypeBuilder<CartProduct> builder)
         {
-            builder.HasOne(x => x.Cart).WithMany(x => x.CartProducts).HasForeignKey(x => x.CartId).OnDelete(DeleteBehavior.Restrict);
+            builder.HasOne(x => x.Cart).WithMany(x => x.CartProducts).HasForeignKey(x => x.CartId).OnDelete(DeleteBehavior.SetNull);
 
-            builder.HasOne(x => x.ProductVariant).WithMany().HasForeignKey(x => x.ProductVariantId).OnDelete(DeleteBehavior.Restrict);
+            builder.HasOne(x => x.ProductVariant).WithMany().HasForeignKey(x => x.ProductVariantId).OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

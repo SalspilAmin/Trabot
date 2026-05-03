@@ -9,8 +9,16 @@ using Tradify.Data.Helpers.Fawaterak.Einvoice;
 
 namespace Tradify.Core.Features.Fawaterak.Comands.Models
 {
-    public class EInvoiceRequestLinkCommand :EInvoiceRequestModel ,IRequest<Response<EInvoiceResponseDataModel>>
+    
+    public class EInvoiceRequestLinkCommand : CustomerModelJsonlink, IRequest<Response<EInvoiceResponseDataModel>>
     {
-       public int orderId {  get; set; }    
+
+        public int orderId {  get; set; }
+
+        public int customerId { get; set; }
+     
+
     }
+
+   
 }

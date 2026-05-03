@@ -18,20 +18,18 @@ namespace Tradify.Core.Features.Fawaterak.Comands.Validations
 
         public void ApplyValidationsRules()
         {
-            RuleFor(x=>x.Customer.CustomerId).NotEmpty().WithMessage(localization.Get("NotEmpty"))
-                 .NotNull().WithMessage(localization.Get("Required"));
-            RuleFor(x => x.Customer.FirstName).NotEmpty().WithMessage(localization.Get("NotEmpty"))
-                .NotNull().WithMessage(localization.Get("Required"));
-            RuleFor(x => x.Customer.LastName).NotEmpty().WithMessage(localization.Get("NotEmpty"))
-                .NotNull().WithMessage(localization.Get("Required"));
-            RuleFor(x => x.Customer).NotEmpty().WithMessage(localization.Get("NotEmpty"))
-                .NotNull().WithMessage(localization.Get("Required"));
-            RuleFor(x => x.PaymentMethodId).NotEmpty().WithMessage(localization.Get("NotEmpty"))
-                .NotNull().WithMessage(localization.Get("Required"));
-            RuleFor(x => x.CartTotal).NotEmpty().WithMessage(localization.Get("NotEmpty"))
-                .NotNull().WithMessage(localization.Get("Required"));
-            RuleFor(x => x.CartItems).NotEmpty().WithMessage(localization.Get("NotEmpty"))
-                .NotNull().WithMessage(localization.Get("Required"));
+            
+            //RuleFor(x => x.Customer.FirstName).NotEmpty().WithMessage(localization.Get("NotEmpty"))
+            //    .NotNull().WithMessage(localization.Get("Required"));
+            //RuleFor(x => x.Customer.LastName).NotEmpty().WithMessage(localization.Get("NotEmpty"))
+            //    .NotNull().WithMessage(localization.Get("Required"));
+            //RuleFor(x => x.Customer).NotEmpty().WithMessage(localization.Get("NotEmpty"))
+            //    .NotNull().WithMessage(localization.Get("Required"));
+            
+            //RuleFor(x => x.CartTotal).NotEmpty().WithMessage(localization.Get("NotEmpty"))
+            //    .NotNull().WithMessage(localization.Get("Required"));
+            //RuleFor(x => x.CartItems).NotEmpty().WithMessage(localization.Get("NotEmpty"))
+            //    .NotNull().WithMessage(localization.Get("Required"));
 
         }
     }

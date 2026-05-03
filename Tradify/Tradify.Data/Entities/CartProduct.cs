@@ -9,13 +9,13 @@ namespace Tradify.Data.Entities
     public class CartProduct
     {
         public int Id { get; set; } // optional, can also use composite key
-        public int CartId { get; set; }
+        public int? CartId { get; set; }
         [ForeignKey(nameof(CartId))]
-        public virtual Cart Cart { get; set; }
+        public virtual Cart? Cart { get; set; }
 
-        public int ProductVariantId { get; set; }
+        public int? ProductVariantId { get; set; }
         [ForeignKey(nameof(ProductVariantId))]
-        public virtual ProductVariants ProductVariant { get; set; }
+        public virtual ProductVariants? ProductVariant { get; set; }
         public int Quantity { get; set; }
 
 

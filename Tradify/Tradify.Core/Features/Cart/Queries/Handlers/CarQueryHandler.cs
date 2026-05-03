@@ -56,7 +56,7 @@ namespace Tradify.Core.Features.Cart.Queries.Handlers
             var ProductsInCart = Cart.CartProducts;
             if (ProductsInCart == null) return Success<GetCartByUserIdQueryResult>(new GetCartByUserIdQueryResult() { UserId=user.Id,CartId=Cart.Id,ProductsInCart=null});
             var result =  mapper.Map<GetCartByUserIdQueryResult>(Cart);
-
+           
             return Success<GetCartByUserIdQueryResult>(result);
           
 

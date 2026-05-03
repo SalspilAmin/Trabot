@@ -139,10 +139,10 @@ namespace Tradify.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("CustomerId")
+                    b.Property<int?>("CustomerId")
                         .HasColumnType("int");
 
-                    b.Property<int>("InstructorId")
+                    b.Property<int?>("InstructorId")
                         .HasColumnType("int");
 
                     b.Property<int>("ScheduleId")
@@ -369,13 +369,14 @@ namespace Tradify.Infrastructure.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<int>("UserId")
+                    b.Property<int?>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("UserId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[UserId] IS NOT NULL");
 
                     b.ToTable("Carts");
                 });
@@ -388,10 +389,10 @@ namespace Tradify.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CartId")
+                    b.Property<int?>("CartId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ProductVariantId")
+                    b.Property<int?>("ProductVariantId")
                         .HasColumnType("int");
 
                     b.Property<int>("Quantity")
@@ -806,7 +807,7 @@ namespace Tradify.Infrastructure.Migrations
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<int>("CustomerId")
+                    b.Property<int?>("CustomerId")
                         .HasColumnType("int");
 
                     b.Property<DateTimeOffset>("EstimatedDelevery")
@@ -1068,7 +1069,7 @@ namespace Tradify.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ProductVariantId")
+                    b.Property<int?>("ProductVariantId")
                         .HasColumnType("int");
 
                     b.Property<string>("PublicId")
@@ -1078,7 +1079,8 @@ namespace Tradify.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ProductVariantId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[ProductVariantId] IS NOT NULL");
 
                     b.ToTable("ProductVariantImages");
                 });
@@ -1115,7 +1117,7 @@ namespace Tradify.Infrastructure.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("ProductId")
+                    b.Property<int?>("ProductId")
                         .HasColumnType("int");
 
                     b.Property<string>("Size")
@@ -1506,14 +1508,11 @@ namespace Tradify.Infrastructure.Migrations
                     b.HasOne("Tradify.Data.Entities.Identity.User", "Customer")
                         .WithMany("Bookings")
                         .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("Tradify.Data.Entities.Appointments.Instructors", "Instructor")
                         .WithMany()
-                        .HasForeignKey("InstructorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("InstructorId");
 
                     b.HasOne("Tradify.Data.Entities.Appointments.InstructorSchedules", "Schedule")
                         .WithMany("Bookings")
@@ -1615,8 +1614,7 @@ namespace Tradify.Infrastructure.Migrations
                     b.HasOne("Tradify.Data.Entities.Identity.User", "User")
                         .WithOne("Cart")
                         .HasForeignKey("Tradify.Data.Entities.Cart", "UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("User");
                 });
@@ -1626,14 +1624,12 @@ namespace Tradify.Infrastructure.Migrations
                     b.HasOne("Tradify.Data.Entities.Cart", "Cart")
                         .WithMany("CartProducts")
                         .HasForeignKey("CartId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("Tradify.Data.Entities.ProductVariants", "ProductVariant")
                         .WithMany()
                         .HasForeignKey("ProductVariantId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Cart");
 
@@ -1798,8 +1794,7 @@ namespace Tradify.Infrastructure.Migrations
                     b.HasOne("Tradify.Data.Entities.Identity.User", "User")
                         .WithMany("Orders")
                         .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("Tradify.Data.Entities.Shipments", "Shipment")
                         .WithMany()
@@ -1911,8 +1906,7 @@ namespace Tradify.Infrastructure.Migrations
                     b.HasOne("Tradify.Data.Entities.ProductVariants", "ProductVariant")
                         .WithOne("ProductVariantImage")
                         .HasForeignKey("Tradify.Data.Entities.ProductVariantImage", "ProductVariantId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("ProductVariant");
                 });
@@ -1922,8 +1916,7 @@ namespace Tradify.Infrastructure.Migrations
                     b.HasOne("Tradify.Data.Entities.Products", "Product")
                         .WithMany("ProductVariants")
                         .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Product");
                 });

@@ -84,10 +84,13 @@ using (var scope = app.Services.CreateScope())
 
     await RoleSeeder.SeedAsync(roleManager);
     await UserSeeder.SeedAsync(userManager,builder.Configuration);
-    await EducationSeeder.SeedAsync(context);
-    await CertificationsSeeder.SeedAsync(context);
+   await InstructorSchedulesSeeder.SeedAsync(context);
     await ServiceSeeder.SeedAsync(context);
-    await InstructorSchedulesSeeder.SeedAsync(context);
+  
+    await CertificationsSeeder.SeedAsync(context);
+    await EducationSeeder.SeedAsync(context);
+   
+    
 
     
 

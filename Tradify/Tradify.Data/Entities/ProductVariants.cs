@@ -11,7 +11,7 @@ namespace Tradify.Data.Entities
        
         public int Id { get; set; }
         public string Name { get; set; }    
-        public int ProductId { get; set; }
+        public int? ProductId { get; set; }
         public decimal Price { get; set; }
 
         public decimal Discount { get; set; } = 0;

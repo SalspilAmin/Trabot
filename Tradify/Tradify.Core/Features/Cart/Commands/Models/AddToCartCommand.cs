@@ -10,7 +10,9 @@ namespace Tradify.Core.Features.Cart.Commands.Models
 {
     public class AddToCartCommand : IRequest<Response<string>>
     {
+        public int UserId { get; set; }
         public int CartId { get; set; } 
+
 
         public ProductVariantRequestToCart ProductVariant {  get; set; }
 
@@ -19,20 +21,11 @@ namespace Tradify.Core.Features.Cart.Commands.Models
     public class ProductVariantRequestToCart
     {
         public int Id { get; set; }
-        public string Name { get; set; }
+       
         public int ProductId { get; set; }
-        public decimal Price { get; set; }
-
-        public decimal Discount { get; set; } = 0;
-        public string? Color { get; set; }
-        public string? Size { get; set; }
-
-        public string ProductVarintName => $"{Color ?? ""} {Size ?? ""}".Trim();
-
-   
-
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-        public decimal FinalPrice { get; private set; }
+        public int Quentity {  get; set; }
+  
+  
     }
 
 }
