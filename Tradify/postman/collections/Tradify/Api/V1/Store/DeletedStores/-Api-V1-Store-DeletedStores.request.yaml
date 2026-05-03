@@ -1,9 +1,0 @@
-$kind: http-request
-name: /Api/V1/Store/DeletedStores
-url: "{{baseUrl}}/Api/V1/Store/DeletedStores?PageNumber=2429&PageSize=2429"
-method: GET
-queryParams:
-  PageNumber: "2429"
-  PageSize: "2429"
-examples: ./.resources/-Api-V1-Store-DeletedStores.resources/examples
-order: 1000

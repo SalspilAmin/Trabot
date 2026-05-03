@@ -38,7 +38,7 @@ namespace Tradify.Core.Features.Store.Queries.Handlers
         private readonly IFileService fileService;
         #endregion
 
-    #region Constructor
+         #region Constructor
     public StoreQueryHandler(LocalizationService localization, IFileService fileService, IMapper mapper, IStoreService storeService) : base(localization)
     {
         this.mapper = mapper;

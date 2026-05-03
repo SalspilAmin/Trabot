@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>996c7567-3446-4cb8-8fba-7c8502057186</UserSecretsId>
 	  <NoWarn>NU1903</NoWarn>
+
   </PropertyGroup>
 
   <ItemGroup>
@@ -20,6 +21,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="10.0.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.6" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="10.1.7" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="10.1.7" />
   </ItemGroup>
 
   <ItemGroup>

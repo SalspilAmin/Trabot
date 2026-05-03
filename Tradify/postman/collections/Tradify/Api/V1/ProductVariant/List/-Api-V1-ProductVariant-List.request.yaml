@@ -1,8 +1,0 @@
-$kind: http-request
-name: /Api/V1/ProductVariant/List
-url: "{{baseUrl}}/Api/V1/ProductVariant/List?ProductId=2429"
-method: GET
-queryParams:
-  ProductId: "2429"
-examples: ./.resources/-Api-V1-ProductVariant-List.resources/examples
-order: 1000

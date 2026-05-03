@@ -29,15 +29,18 @@ namespace Tradify.Core.Features.Review.Commands.Validations
 
 
             RuleFor(x => x.Id)
-               .GreaterThan(0).WithMessage(localize.Get("Required"));
+                 .GreaterThan(0).WithMessage(localize.Get("IdMustBeGreaterThanZero"))
+                .NotEmpty().WithMessage(localize.Get("NotEmpty"))
+                .NotNull().WithMessage(localize.Get("Required"));
 
             RuleFor(x => x.Rating)
-               .Must(r => r >= 1 && r <= 5).WithMessage(localize.Get("InvalidRatingValue"));
+            .NotEmpty().WithMessage(localize.Get("NotEmpty"))
+           .NotNull().WithMessage(localize.Get("Required"));
 
 
 
             RuleFor(x => x.Comment)
-                .MaximumLength(1000).WithMessage(localize.Get("CommentTooLong"));
+                .MaximumLength(1000).WithMessage(localize.Get("MaxLengthis1000"));
         }
 
         #endregion

@@ -29,8 +29,9 @@ namespace Tradify.Core.Features.Review.Commands.Validations
 
 
             RuleFor(x => x.Id)
-                .GreaterThan(0)
-                .WithMessage(localize.Get("Required"));
+                 .GreaterThan(0).WithMessage(localize.Get("IdMustBeGreaterThanZero"))
+                .NotEmpty().WithMessage(localize.Get("NotEmpty"))
+                .NotNull().WithMessage(localize.Get("Required"));
         }
 
         #endregion

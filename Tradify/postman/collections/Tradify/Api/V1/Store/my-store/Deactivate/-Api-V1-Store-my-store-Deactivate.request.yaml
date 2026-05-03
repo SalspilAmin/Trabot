@@ -1,6 +1,0 @@
-$kind: http-request
-name: /Api/V1/Store/my-store/Deactivate
-url: "{{baseUrl}}/Api/V1/Store/my-store/Deactivate"
-method: PUT
-examples: ./.resources/-Api-V1-Store-my-store-Deactivate.resources/examples
-order: 1000

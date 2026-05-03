@@ -118,16 +118,7 @@ namespace Tradify.Core.Features.ProductVariant.Queries.Handlers
                 .ToPaginationlist(request.PageNumber, request.PageSize);
 
 
-            var baseUrl = fileService.GetBaseUrl();
-
-            foreach (var varint in result.Data)
-            {
-                if (varint.Image != null)
-                {
-                    varint.Image.MediaPath =
-                        baseUrl + varint.Image.MediaPath.Replace("\\", "/");
-                }
-            }
+       
 
             return Success(result);
 
@@ -142,18 +133,8 @@ namespace Tradify.Core.Features.ProductVariant.Queries.Handlers
                 .Where(v => v.ProductId == request.ProductId).ToListAsync(cancellationToken);
 
 
-
-
             var result = mapper.Map<List<GetProductVariantByProductResponse>>(variants);
-            var baseUrl = fileService.GetBaseUrl();
-            foreach (var varint in result)
-            {
-                if (varint.Image != null)
-                {
-                    varint.Image.MediaPath =
-                        baseUrl + varint.Image.MediaPath.Replace("\\", "/");
-                }
-            }
+         
 
 
             return result;
@@ -171,15 +152,7 @@ namespace Tradify.Core.Features.ProductVariant.Queries.Handlers
                 return NotFound<GetProductVariantByIdResponse>(localize.Get("VariantNotFound"));
 
             var result = mapper.Map<GetProductVariantByIdResponse>(variant);
-            var baseUrl = fileService.GetBaseUrl();
-
-
-            if (result.Image != null)
-            {
-                result.Image.MediaPath =
-                        baseUrl + result.Image.MediaPath.Replace("\\", "/");
-            }
-
+           
             return Success<GetProductVariantByIdResponse>(result);
 
         }

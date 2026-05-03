@@ -1,8 +1,0 @@
-$kind: http-request
-name: /Api/V1/Store/restore/:id
-url: "{{baseUrl}}/Api/V1/Store/restore/:id"
-method: PUT
-pathVariables:
-  id: "2429"
-examples: ./.resources/-Api-V1-Store-restore-id.resources/examples
-order: 1000

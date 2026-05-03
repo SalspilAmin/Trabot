@@ -52,6 +52,14 @@ namespace Tradify.Service.Services
         {
             var userId = GetUserId();
 
+            var user = await context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+
+            if (user == null)
+                return new SellerContextResult { Error = "UserNotFound" };
+
+            if (user.IsDeleted)
+                return new SellerContextResult { Error = "SellerLinkedToDeletedUser" };
+
             var seller = await sellerService.GetTableNoTracking()
                 .FirstOrDefaultAsync(x => x.UserId == userId);
 
@@ -61,13 +69,9 @@ namespace Tradify.Service.Services
             if (!seller.IsActive)
                 return new SellerContextResult { Error = "SellerNotActive" };
 
-            var user = await context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            
 
-            if (user == null)
-                return new SellerContextResult { Error = "UserNotFound" };
-
-            if (user.IsDeleted)
-                return new SellerContextResult { Error = "SellerConectWithDeletedUser" };
+           
 
             var store = await storeService.GetBySellerIdAsync(seller.Id);
 

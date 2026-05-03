@@ -1,9 +1,0 @@
-$kind: http-request
-name: /Api/V1/Product/Discount
-url: "{{baseUrl}}/Api/V1/Product/Discount?PageNumber=2429&PageSize=2429"
-method: GET
-queryParams:
-  PageNumber: "2429"
-  PageSize: "2429"
-examples: ./.resources/-Api-V1-Product-Discount.resources/examples
-order: 1000

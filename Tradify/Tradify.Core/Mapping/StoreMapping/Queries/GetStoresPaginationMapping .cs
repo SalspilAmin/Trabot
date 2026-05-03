@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 using Tradify.Core.Features.Store.Commands.Models;
 using Tradify.Core.Features.Store.Queries.Models;
@@ -17,7 +18,8 @@ namespace Tradify.Core.Mapping.StoreMapping
             CreateMap<Stores, GetAllStoresResponse>()
                     .ForMember(dest => dest.Id, src => src.MapFrom(x => x.Id))
 
-                    .ForMember(dest => dest.Name, src => src.MapFrom(x => x.Name))
+                    .ForMember(dest => dest.Name, src => src.MapFrom(x => CultureInfo.CurrentCulture.TextInfo.ToTitleCase(x.Name.ToLower())))
+                    .ForMember(dest => dest.Type, src => src.MapFrom(x => x.Type.ToString()))
 
 
                     .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive))

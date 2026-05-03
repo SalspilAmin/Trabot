@@ -18,7 +18,8 @@ using Tradify.Service.Services.AuthorizationServices;
 namespace Tradify.Core.Features.Review.Commands.Handlers
 {
     public class ReviewCpmmandHandler : ResponseHandler
-        , IRequestHandler<AddReviewCommand, Response<string>>
+        , IRequestHandler<AddProductReviewCommand, Response<string>>
+        , IRequestHandler<AddInstructorReviewCommand, Response<string>>
         , IRequestHandler<UpdateReviewCommand, Response<string>>
         , IRequestHandler<DeleteReviewCommand, Response<string>>
 
@@ -27,15 +28,10 @@ namespace Tradify.Core.Features.Review.Commands.Handlers
 
         #region Fields
         private readonly LocalizationService localize;
-        private readonly IProductService productService;
         private readonly IMapper mapper;
-        private readonly ICurrentUserService currentUserService;
         private readonly IReviewService reviewService;
-        private readonly IOrderItemsService orderItemsService;
+        private readonly ICurrentUserService currentUserService;
         private readonly IAuthorizationService authorizationService;
-
-
-
 
         #endregion
 
@@ -44,79 +40,76 @@ namespace Tradify.Core.Features.Review.Commands.Handlers
                                      IMapper mapper,
                                      IProductService productService,
                                      IReviewService reviewService,
-                                     ICurrentUserService currentUserService,
-                                     IOrderItemsService orderItemsService,
-                                     IAuthorizationService authorizationService,
-
+                                    ICurrentUserService currentUserService,
+                                    IAuthorizationService authorizationService,
                                      LocalizationService localize) : base(localize)
         {
             this.mapper = mapper;
-            this.productService = productService;
             this.localize = localize;
-            this.currentUserService = currentUserService;
             this.reviewService = reviewService;
-            this.orderItemsService = orderItemsService;
-            this.authorizationService = authorizationService;
+            this.currentUserService = currentUserService;   
+            this.authorizationService = authorizationService;   
         }
         #endregion
 
         #region Methods
 
-        public async Task<Response<string>> Handle(AddReviewCommand request, CancellationToken cancellationToken)
+        // Add Product Review
+        public async Task<Response<string>> Handle(AddProductReviewCommand request, CancellationToken cancellationToken)
         {
-            var userId = currentUserService.GetUserId();
+            var review = mapper.Map<Data.Entities.Reviews>(request);
 
-            // 1️⃣ Check Product Exists
-            var product = await productService.GetTableAsTracking().Include(p => p.Store).FirstOrDefaultAsync(p => p.Id == request.ProductId);
-            if (product == null)
-                return NotFound<string>(localize.Get("ProductNotFound"));
 
-            // 2️⃣ Check Owner
-            if (product.Store.SellerId == userId)
-                return BadRequest<string>(localize.Get("YouCannotReviewYourOwnProduct"));
+            var result = await reviewService.AddReview(review);
 
-            // 3️⃣ Check Already Reviewed
-            var alreadyReviewed = await reviewService
-                .GetTableNoTracking()
-                .AnyAsync(x => x.ProductId == request.ProductId && x.CustomerId == userId);
+            if (result.Item1 != "Success")
+            {
+                return BadRequest<string>(localize.Get(result.Item1));
+            }
+            else
+            {
+                return Success<string>("Success", meta: result.Item2);
+            }
 
-            if (alreadyReviewed)
-                return BadRequest<string>(localize.Get("YouAlreadyReviewedThisProduct"));
 
-            // 4️⃣ Check Verified Purchase
-            var hasBought = await orderItemsService.GetTableNoTracking()
-                             .Include(oi => oi.SubOrder)
-                             .ThenInclude(so => so.Order)
-                             .Include(oi => oi.ProductVariant)
-                             .AnyAsync(oi =>
-                             oi.ProductVariant.ProductId == request.ProductId &&
-                             oi.SubOrder.Order.CustomerId == userId);
-            // 5️⃣ Create Review
-            var review = mapper.Map<Reviews>(request);
-            review.CustomerId = userId;
-            review.IsPurchased = hasBought;
-
-            await reviewService.AddAsync(review);
-            await reviewService.SaveChangesAsync();
-
-            return Success(localize.Get("ReviewAddedSuccessfully"));
         }
 
 
+
+
+        // Add Product Review
+        public async Task<Response<string>> Handle(AddInstructorReviewCommand request, CancellationToken cancellationToken)
+        {
+            var review = mapper.Map<Data.Entities.Reviews>(request);
+
+
+            var result = await reviewService.AddReview(review);
+
+            if (result.Item1 != "Success")
+            {
+                return BadRequest<string>(localize.Get(result.Item1));
+            }
+            else
+            {
+                return Success<string>("Success", meta: result.Item2);
+            }
+
+
+        }
+
+        // Update User Review
         public async Task<Response<string>> Handle(UpdateReviewCommand request, CancellationToken cancellationToken)
         {
             var userId = currentUserService.GetUserId();
 
             // 1️⃣ Get Review
-            var review = await reviewService.GetByIdAsync(request.Id);
+            var review = await reviewService.GetTableAsTracking()
+                .FirstOrDefaultAsync(r=>r.Id==request.Id&&r.CustomerId== userId);
 
             if (review == null)
                 return NotFound<string>(localize.Get("ReviewNotFound"));
 
-            // 2️⃣ Check Owner
-            if (review.CustomerId != userId)
-                return BadRequest<string>(localize.Get("YouCanOnlyEditYourReview"));
-
+          
             // 3️⃣ Update
             review.Rating = (RatingValue)request.Rating;
             review.Comment = request.Comment;
@@ -127,30 +120,37 @@ namespace Tradify.Core.Features.Review.Commands.Handlers
 
         }
 
-            public async Task<Response<string>> Handle(DeleteReviewCommand request, CancellationToken cancellationToken)
-            {
+
+
+        public async Task<Response<string>> Handle(DeleteReviewCommand request, CancellationToken cancellationToken)
+        {
             var userId = currentUserService.GetUserId();
             var isAdmin = await authorizationService.IsUserInRoleAsync(userId, "Admin");
 
-            // 1️⃣ Get Review + Product + Store
             var review = await reviewService.GetTableAsTracking()
-                .Include(r => r.Product)
-                .ThenInclude(p => p.Store)
-                .FirstOrDefaultAsync(r => r.Id == request.Id &&
-                (r.CustomerId == userId|| r.Product.Store.SellerId == userId|| isAdmin));
+                .FirstOrDefaultAsync(r => r.Id == request.Id);
 
             if (review == null)
                 return NotFound<string>(localize.Get("ReviewNotFound"));
 
-           
+            var isOwner = review.CustomerId == userId;
 
-            // 3️⃣ Delete
+            var isProductSeller =
+                review.Product != null &&
+                review.Product.Store.Seller.UserId == userId;
+
+            var isInstructorOwner =
+                review.Instructor != null &&
+                review.Instructor.UserId == userId;
+
+            if (!(isOwner || isProductSeller || isInstructorOwner || isAdmin))
+                return Unauthorized<string>(localize.Get("Unauthorized"));
+
             await reviewService.DeleteAsync(review);
             await reviewService.SaveChangesAsync();
 
             return Success(localize.Get("ReviewDeletedSuccessfully"));
-            }
-
+        }
         #endregion
 
 
