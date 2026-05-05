@@ -151,10 +151,15 @@ namespace Tradify.Service.Services.IdentityServices
                     }
                     var CreateCartResult = await _cartService.AddAsync(new Data.Entities.Cart() { User = user ,UserId=user.Id});
                     
-                    if(CreateCartResult==null) return ("Failed", null);
+                    if(CreateCartResult==null) return ("Failed", null); applicationDbContext.SaveChanges();  
                     user.CartId = CreateCartResult.Id;
-                    await UserManager.UpdateAsync(user);
-                   applicationDbContext.SaveChanges();  
+                  
+                    var updateResult = await UserManager.UpdateAsync(user);
+                    if (!updateResult.Succeeded)
+                    {
+                        return (string.Join(",", updateResult.Errors.Select(x => x.Description).ToList()), null);
+                    }
+                    await applicationDbContext.SaveChangesAsync();
                     await trans.CommitAsync();
                     return ("Success",user.Id);
                 }
@@ -209,7 +214,7 @@ namespace Tradify.Service.Services.IdentityServices
               .Select(x => x.Value)
               .ToList()
             };
-
+           
             return userInfo;
 
         }

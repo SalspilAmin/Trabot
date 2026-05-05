@@ -83,16 +83,16 @@ using (var scope = app.Services.CreateScope())
     var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
     await RoleSeeder.SeedAsync(roleManager);
-    await UserSeeder.SeedAsync(userManager,builder.Configuration);
-   await InstructorSchedulesSeeder.SeedAsync(context);
-    await ServiceSeeder.SeedAsync(context);
-  
-    await CertificationsSeeder.SeedAsync(context);
-    await EducationSeeder.SeedAsync(context);
-   
-    
+    await UserSeeder.SeedAsync(userManager, builder.Configuration);
+    //await InstructorSchedulesSeeder.SeedAsync(context);
+    // await ServiceSeeder.SeedAsync(context);
 
-    
+    // await CertificationsSeeder.SeedAsync(context);
+    // await EducationSeeder.SeedAsync(context);
+
+
+
+
 
 }
 

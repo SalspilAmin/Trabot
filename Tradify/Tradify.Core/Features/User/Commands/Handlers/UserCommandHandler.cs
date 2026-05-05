@@ -91,9 +91,10 @@ namespace Tradify.Core.Features.User.Commands.Handlers
             //if Not Exist notfound
             if (user == null) return NotFound<string>();
 
-
-            var result = await userManager.DeleteAsync(user);
-            if (!result.Succeeded) return BadRequest<string>(localize.Get("DeletedFailed"));
+            user.IsDeleted = true;
+         var result=  await userManager.UpdateAsync(user);
+         //   var result = await userManager.DeleteAsync(user);
+           if (!result.Succeeded) return BadRequest<string>(localize.Get("DeletedFailed"));
             return Success<string>(localize.Get("Deleted"));
         }
 
