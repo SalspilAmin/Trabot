@@ -13,7 +13,7 @@ namespace Tradify.Controllers
     {
 
         [HttpGet(Router.Cart.GetByToken)]
-        public async Task<IActionResult> GetCart([FromRoute] string Token)
+        public async Task<IActionResult> GetCart([FromQuery] string Token)
         {
             var result = await Mediator.Send(new GetCartByTokenQuery(Token));
             return NewResult(result);

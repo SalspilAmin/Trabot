@@ -47,7 +47,7 @@ namespace Tradify.Core.Features.Fawaterak.Comands.Handler
             var order = await ordersService.GetByIdAsync(requestCommnad.orderId);
             var CustomerModelJsonlink = new CustomerModelJsonlink() { FirstName = requestCommnad.FirstName, LastName = requestCommnad.LastName, Email = requestCommnad.Email, Phone = requestCommnad.Phone };
             var request = new EInvoiceRequestLink(CustomerModelJsonlink) { Customer = CustomerModelJsonlink };
-            request.CartItems=new List<CartItemModel> { new CartItemModel() };  
+            request.CartItems=new List<CartItemModel> {  };  
             // check of order
             if (order == null) return BadRequest<EInvoiceResponseDataModel>("NotFound");
             var listOFCartProduct = order.cart.CartProducts.ToList();
