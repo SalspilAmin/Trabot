@@ -14,14 +14,12 @@ namespace Tradify.Core.Mapping.InstructorSchedulesMapping
         public void GetInstructorSchedulesMapping()
         {
             CreateMap<InstructorSchedules, GetInstructorSchedulesResponse>()
-               .ForMember(dest => dest.Day,opt => opt.MapFrom(src => src.Day.ToString()))
+               .ForMember(dest => dest.Day, opt => opt.MapFrom(src => src.Day.ToString()))
 
                .ForMember(dest => dest.StartTime, opt => opt.MapFrom(
-                                       src =>DateTime.Today.Add(src.StartTime).ToString("hh:mm tt", new CultureInfo("en-US"))))
+                                       src => DateTime.Today.Add(src.StartTime).ToString("hh:mm tt", new CultureInfo("en-US"))))
                .ForMember(dest => dest.EndTime, opt => opt.MapFrom(
-                  src =>DateTime.Today.Add(src.EndTime).ToString("hh:mm tt", new CultureInfo("en-US"))))
-               .ForMember(dest => dest.Available, opt => opt.MapFrom(src => src.Available))
-               .ForMember(dest => dest.IsAvailable, opt => opt.MapFrom(src => src.IsAvailable));
+                  src => DateTime.Today.Add(src.EndTime).ToString("hh:mm tt", new CultureInfo("en-US"))));
         }
     }
 }

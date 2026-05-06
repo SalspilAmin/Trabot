@@ -19,7 +19,6 @@ namespace Tradify.Infrastructure.Seeder
                 StartTime = start,
                 EndTime = end,
                 Capacity = capacity,
-                ReservedCount = 0,
                 IsAvailable = true
 
             };
