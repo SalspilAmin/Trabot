@@ -6,14 +6,18 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Tradify.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class new_Update : Migration
+    public partial class UpdateBooking : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropColumn(
+                name: "ReservedCount",
+                table: "InstructorSchedules");
+
             migrationBuilder.AddColumn<DateTime>(
-                name: "CreatedAt",
-                table: "Instructors",
+                name: "BookingDate",
+                table: "Bookings",
                 type: "datetime2",
                 nullable: false,
                 defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
@@ -23,8 +27,15 @@ namespace Tradify.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "CreatedAt",
-                table: "Instructors");
+                name: "BookingDate",
+                table: "Bookings");
+
+            migrationBuilder.AddColumn<int>(
+                name: "ReservedCount",
+                table: "InstructorSchedules",
+                type: "int",
+                nullable: false,
+                defaultValue: 0);
         }
     }
 }

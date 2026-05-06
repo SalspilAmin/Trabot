@@ -10,6 +10,7 @@ using System.Globalization;
 using Tradify.Core.Dependencies;
 using Tradify.Core.MiddleWare;
 using Tradify.Core.Resources.Service;
+using Tradify.Data.Entities;
 using Tradify.Data.Entities.Identity;
 using Tradify.Infrastructure.Context;
 using Tradify.Infrastructure.Dependencies;
@@ -84,13 +85,18 @@ using (var scope = app.Services.CreateScope())
 
     await RoleSeeder.SeedAsync(roleManager);
     await UserSeeder.SeedAsync(userManager,builder.Configuration);
+    await SellerSeeder.SeedAsync(context);
+    await StoreSeeder.SeedAsync(context);
+    await StoreImageSeeder.SeedAsync(context);
+    await CategorySeeder.SeedAsync(context);
+    await InsreuctorSeeder.SeedAsync(context);
+
+    await InstructorImageSeeder.SeedAsync(context);
+
     await EducationSeeder.SeedAsync(context);
     await CertificationsSeeder.SeedAsync(context);
     await ServiceSeeder.SeedAsync(context);
     await InstructorSchedulesSeeder.SeedAsync(context);
-
-    
-
 }
 
 // Configure the HTTP request pipeline.
