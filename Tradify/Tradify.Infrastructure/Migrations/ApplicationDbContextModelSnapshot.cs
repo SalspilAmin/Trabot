@@ -136,6 +136,9 @@ namespace Tradify.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime>("BookingDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -164,7 +167,7 @@ namespace Tradify.Infrastructure.Migrations
 
                     b.HasIndex("StoreId");
 
-                    b.ToTable("Bookings");
+                    b.ToTable("Bookings", (string)null);
                 });
 
             modelBuilder.Entity("Tradify.Data.Entities.Appointments.Certifications", b =>
@@ -186,7 +189,7 @@ namespace Tradify.Infrastructure.Migrations
 
                     b.HasIndex("InstructorId");
 
-                    b.ToTable("Certifications");
+                    b.ToTable("Certifications", (string)null);
                 });
 
             modelBuilder.Entity("Tradify.Data.Entities.Appointments.Education", b =>
@@ -215,7 +218,7 @@ namespace Tradify.Infrastructure.Migrations
 
                     b.HasIndex("InstructorId");
 
-                    b.ToTable("Education");
+                    b.ToTable("Education", (string)null);
                 });
 
             modelBuilder.Entity("Tradify.Data.Entities.Appointments.InstructorImage", b =>
@@ -242,7 +245,7 @@ namespace Tradify.Infrastructure.Migrations
                     b.HasIndex("InstructorId")
                         .IsUnique();
 
-                    b.ToTable("InstructorImage");
+                    b.ToTable("InstructorImage", (string)null);
                 });
 
             modelBuilder.Entity("Tradify.Data.Entities.Appointments.InstructorSchedules", b =>
@@ -268,9 +271,6 @@ namespace Tradify.Infrastructure.Migrations
                     b.Property<bool>("IsAvailable")
                         .HasColumnType("bit");
 
-                    b.Property<int>("ReservedCount")
-                        .HasColumnType("int");
-
                     b.Property<TimeSpan>("StartTime")
                         .HasColumnType("time");
 
@@ -278,7 +278,7 @@ namespace Tradify.Infrastructure.Migrations
 
                     b.HasIndex("InstructorId");
 
-                    b.ToTable("InstructorSchedules");
+                    b.ToTable("InstructorSchedules", (string)null);
                 });
 
             modelBuilder.Entity("Tradify.Data.Entities.Appointments.Instructors", b =>
@@ -333,7 +333,7 @@ namespace Tradify.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Instructors");
+                    b.ToTable("Instructors", (string)null);
                 });
 
             modelBuilder.Entity("Tradify.Data.Entities.Appointments.Service", b =>
@@ -355,7 +355,7 @@ namespace Tradify.Infrastructure.Migrations
 
                     b.HasIndex("InstructorId");
 
-                    b.ToTable("Service");
+                    b.ToTable("Service", (string)null);
                 });
 
             modelBuilder.Entity("Tradify.Data.Entities.Cart", b =>
@@ -378,7 +378,7 @@ namespace Tradify.Infrastructure.Migrations
                         .IsUnique()
                         .HasFilter("[UserId] IS NOT NULL");
 
-                    b.ToTable("Carts");
+                    b.ToTable("Carts", (string)null);
                 });
 
             modelBuilder.Entity("Tradify.Data.Entities.CartProduct", b =>
@@ -404,7 +404,7 @@ namespace Tradify.Infrastructure.Migrations
 
                     b.HasIndex("ProductVariantId");
 
-                    b.ToTable("CartProducts");
+                    b.ToTable("CartProducts", (string)null);
                 });
 
             modelBuilder.Entity("Tradify.Data.Entities.Categories", b =>
@@ -434,7 +434,7 @@ namespace Tradify.Infrastructure.Migrations
 
                     b.HasIndex("StoreId");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("Tradify.Data.Entities.Chat.Message", b =>
@@ -475,7 +475,7 @@ namespace Tradify.Infrastructure.Migrations
 
                     b.HasIndex("SenderId");
 
-                    b.ToTable("Messages");
+                    b.ToTable("Messages", (string)null);
                 });
 
             modelBuilder.Entity("Tradify.Data.Entities.Chat.MessageMediaPath", b =>
@@ -500,7 +500,7 @@ namespace Tradify.Infrastructure.Migrations
 
                     b.HasIndex("MessageId");
 
-                    b.ToTable("MessageMediaPaths");
+                    b.ToTable("MessageMediaPaths", (string)null);
                 });
 
             modelBuilder.Entity("Tradify.Data.Entities.Comments.Comment", b =>
@@ -537,7 +537,7 @@ namespace Tradify.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Comments");
+                    b.ToTable("Comments", (string)null);
                 });
 
             modelBuilder.Entity("Tradify.Data.Entities.Comments.ReplyOFComment", b =>
@@ -575,7 +575,7 @@ namespace Tradify.Infrastructure.Migrations
 
                     b.HasIndex("UserIdThatWriteAReplyOFComment");
 
-                    b.ToTable("ReplyOFComments");
+                    b.ToTable("ReplyOFComments", (string)null);
                 });
 
             modelBuilder.Entity("Tradify.Data.Entities.Favorite", b =>
@@ -598,7 +598,7 @@ namespace Tradify.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Favorites");
+                    b.ToTable("Favorites", (string)null);
                 });
 
             modelBuilder.Entity("Tradify.Data.Entities.Identity.Role", b =>
@@ -756,7 +756,7 @@ namespace Tradify.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserRefreshToken");
+                    b.ToTable("UserRefreshToken", (string)null);
                 });
 
             modelBuilder.Entity("Tradify.Data.Entities.OrderItems", b =>
@@ -790,7 +790,7 @@ namespace Tradify.Infrastructure.Migrations
 
                     b.HasIndex("SuborderId");
 
-                    b.ToTable("OrderItems");
+                    b.ToTable("OrderItems", (string)null);
                 });
 
             modelBuilder.Entity("Tradify.Data.Entities.Orders", b =>
@@ -851,7 +851,7 @@ namespace Tradify.Infrastructure.Migrations
 
                     b.HasIndex("ShipmentTrackingId");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Orders", (string)null);
                 });
 
             modelBuilder.Entity("Tradify.Data.Entities.Payments", b =>
@@ -888,7 +888,7 @@ namespace Tradify.Infrastructure.Migrations
 
                     b.HasIndex("StoreId");
 
-                    b.ToTable("Payments");
+                    b.ToTable("Payments", (string)null);
                 });
 
             modelBuilder.Entity("Tradify.Data.Entities.Payouts", b =>
@@ -926,7 +926,7 @@ namespace Tradify.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Payouts");
+                    b.ToTable("Payouts", (string)null);
                 });
 
             modelBuilder.Entity("Tradify.Data.Entities.Posts.ImageOrVideoPath", b =>
@@ -954,7 +954,7 @@ namespace Tradify.Infrastructure.Migrations
 
                     b.HasIndex("PostId");
 
-                    b.ToTable("ImageOrVideoPaths");
+                    b.ToTable("ImageOrVideoPaths", (string)null);
                 });
 
             modelBuilder.Entity("Tradify.Data.Entities.Posts.InteractionWithPost", b =>
@@ -986,7 +986,7 @@ namespace Tradify.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("InteractionWithPosts");
+                    b.ToTable("InteractionWithPosts", (string)null);
                 });
 
             modelBuilder.Entity("Tradify.Data.Entities.Posts.Post", b =>
@@ -1022,7 +1022,7 @@ namespace Tradify.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Posts");
+                    b.ToTable("Posts", (string)null);
                 });
 
             modelBuilder.Entity("Tradify.Data.Entities.ProductImage", b =>
@@ -1054,7 +1054,7 @@ namespace Tradify.Infrastructure.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductImage");
+                    b.ToTable("ProductImage", (string)null);
                 });
 
             modelBuilder.Entity("Tradify.Data.Entities.ProductVariantImage", b =>
@@ -1082,7 +1082,7 @@ namespace Tradify.Infrastructure.Migrations
                         .IsUnique()
                         .HasFilter("[ProductVariantId] IS NOT NULL");
 
-                    b.ToTable("ProductVariantImages");
+                    b.ToTable("ProductVariantImages", (string)null);
                 });
 
             modelBuilder.Entity("Tradify.Data.Entities.ProductVariants", b =>
@@ -1127,7 +1127,7 @@ namespace Tradify.Infrastructure.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductVariants");
+                    b.ToTable("ProductVariants", (string)null);
                 });
 
             modelBuilder.Entity("Tradify.Data.Entities.ProductVideo", b =>
@@ -1149,7 +1149,7 @@ namespace Tradify.Infrastructure.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductVideo");
+                    b.ToTable("ProductVideo", (string)null);
                 });
 
             modelBuilder.Entity("Tradify.Data.Entities.Products", b =>
@@ -1189,7 +1189,7 @@ namespace Tradify.Infrastructure.Migrations
 
                     b.HasIndex("StoreId");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("Tradify.Data.Entities.Reviews", b =>
@@ -1229,7 +1229,7 @@ namespace Tradify.Infrastructure.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("Reviews");
+                    b.ToTable("Reviews", (string)null);
                 });
 
             modelBuilder.Entity("Tradify.Data.Entities.Sellers", b =>
@@ -1259,7 +1259,7 @@ namespace Tradify.Infrastructure.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("Sellers");
+                    b.ToTable("Sellers", (string)null);
                 });
 
             modelBuilder.Entity("Tradify.Data.Entities.ShipmentTracking", b =>
@@ -1282,7 +1282,7 @@ namespace Tradify.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ShipmentTracking");
+                    b.ToTable("ShipmentTracking", (string)null);
                 });
 
             modelBuilder.Entity("Tradify.Data.Entities.Shipments", b =>
@@ -1308,7 +1308,7 @@ namespace Tradify.Infrastructure.Migrations
 
                     b.HasIndex("ShipmentTrackingId");
 
-                    b.ToTable("Shipments");
+                    b.ToTable("Shipments", (string)null);
                 });
 
             modelBuilder.Entity("Tradify.Data.Entities.StoreImage", b =>
@@ -1335,7 +1335,7 @@ namespace Tradify.Infrastructure.Migrations
                     b.HasIndex("StoreId")
                         .IsUnique();
 
-                    b.ToTable("StoreImages");
+                    b.ToTable("StoreImages", (string)null);
                 });
 
             modelBuilder.Entity("Tradify.Data.Entities.Stores", b =>
@@ -1377,7 +1377,7 @@ namespace Tradify.Infrastructure.Migrations
                     b.HasIndex("SellerId")
                         .IsUnique();
 
-                    b.ToTable("Stores");
+                    b.ToTable("Stores", (string)null);
                 });
 
             modelBuilder.Entity("Tradify.Data.Entities.SubOrders", b =>
@@ -1427,7 +1427,7 @@ namespace Tradify.Infrastructure.Migrations
 
                     b.HasIndex("ShipmentTrackingId");
 
-                    b.ToTable("SubOrders");
+                    b.ToTable("SubOrders", (string)null);
                 });
 
             modelBuilder.Entity("Tradify.Data.Entities.UserConnection.UserConnection", b =>
@@ -1449,7 +1449,7 @@ namespace Tradify.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("userConnections");
+                    b.ToTable("userConnections", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>

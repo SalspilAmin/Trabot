@@ -14,7 +14,10 @@ namespace Tradify.Data.Entities.Appointments
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public BookingStatus Status { get; set; }
 
-        public int? CustomerId { get; set; }
+        public DateTime BookingDate { get; set; } // تاريخ المعاد الفعلي
+
+        public int CustomerId { get; set; }
+
 
         [ForeignKey(nameof(CustomerId))]
         public virtual User Customer { get; set; }
