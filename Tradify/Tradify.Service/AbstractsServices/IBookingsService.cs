@@ -9,5 +9,9 @@ namespace Tradify.Service.AbstractsServices
 {
     public interface IBookingsService : IBookingsRepositorie
     {
+        public  Task<(string, int?)> AddBookingAsync(Bookings booking);
+        public Task<bool> IsInstructorAvailableToday(int instructorId);
+
+
     }
 }
