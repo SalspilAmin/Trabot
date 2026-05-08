@@ -131,19 +131,14 @@ namespace Tradify.Core.Features.Instructor.Queries.Handlers
 
                 .FirstOrDefaultAsync(p => p.Id == request.Id);
 
-
-
-
             if (instructor == null) return NotFound<GetInstructorByIdResponse>(localization.Get("InstructorNotFound"));
 
             var result = mapper.Map<GetInstructorByIdResponse>(instructor);
 
+          result.AvailableToday = await bookingsService
+                    .IsInstructorAvailableToday(result.Id);
 
-            result.AvailableToday = instructor.Schedules
-                  .Any(s => s.IsAvailable &&
-                        s.Day == today );
-
-
+           
             return Success<GetInstructorByIdResponse>(result);
 
         }
@@ -198,7 +193,12 @@ namespace Tradify.Core.Features.Instructor.Queries.Handlers
                               EF.Functions.Like(p.JobTitle, $"%{jobTitle}%"));
 
             }
-
+            // Discount
+            if (request.Discount == true)
+            {
+                instructors = instructors.Where(i =>
+                    i.Discount > 0);
+            }
 
             //  Min Price
             if (request.MinPrice.HasValue)
@@ -230,17 +230,7 @@ namespace Tradify.Core.Features.Instructor.Queries.Handlers
                 instructors = instructors.Where(i => i.YearsOfExperience >= request.MinYearsOfExperience);
             }
 
-            // AvalipalToday
 
-            if (request.AvailableToday.HasValue)
-            {
-                var available = request.AvailableToday.Value;
-
-                instructors = instructors.Where(i =>
-                    i.Schedules.Any(s =>
-                        s.IsAvailable &&
-                        s.Day == today ));
-            }
 
 
             instructors = instructors.OrderByDescending(i => i.Id);
@@ -251,161 +241,22 @@ namespace Tradify.Core.Features.Instructor.Queries.Handlers
                                   .ProjectTo<GetInstructorPagnitionRespons>(instructors)
                                   .ToPaginationlist(request.PageNumber, request.PageSize);
 
-            var ids = result.Data.Select(x => x.Id).ToList();
-
-            var availableIds = await instructorsService.GetTableNoTracking()
-                .Where(i => ids.Contains(i.Id))
-                .Select(i => new
-                {
-                    i.Id,
-                    Available = i.Schedules.Any(s =>
-                        s.IsAvailable &&
-                        s.Day == today )
-                }).ToListAsync();
 
             foreach (var item in result.Data)
             {
-                item.AvailableToday =
-                    availableIds.First(x => x.Id == item.Id).Available;
+                item.AvailableToday = await bookingsService
+                    .IsInstructorAvailableToday(item.Id);
             }
 
-
+            if (request.AvailableToday.HasValue)
+            {
+                result.Data = result.Data
+                    .Where(x => x.AvailableToday == request.AvailableToday.Value)
+                    .ToList();
+            }
             return Success(result);
 
         }
-
-
-
-
-
-
-
-
-        //public async Task<Response<PaginatedResult<GetInstructorPagnitionRespons>>> Handle(GetInstructorPagnitionQuery request, CancellationToken cancellationToken)
-        //{
-        //    var today = DateTime.UtcNow.DayOfWeek;
-
-
-        //    var instructors = instructorsService
-        //        .GetTableNoTracking().Include(p => p.Schedules).AsQueryable();
-
-        //    // Store
-        //    if (request.StoreId.HasValue)
-        //    {
-        //        var store = await storeService
-        //                           .GetTableNoTracking()
-        //                           .Where(s => s.Id == request.StoreId)
-        //                           .Select(s => new { s.Id, s.Type })
-        //                           .FirstOrDefaultAsync();
-        //        if (store == null)
-        //            return BadRequest<PaginatedResult<GetInstructorPagnitionRespons>>(localization.Get("StoreNotFound"));
-
-        //        if (store.Type != Data.Enums.StoreType.Service)
-        //            return BadRequest<PaginatedResult<GetInstructorPagnitionRespons>>(localization.Get("ThisStoreTypeDosn'tSupportInstructors"));
-
-
-        //        instructors = instructors.Where(p =>
-        //            p.StoreId == request.StoreId);
-        //    }
-
-
-        //    // Search
-        //    if (!string.IsNullOrWhiteSpace(request.Search))
-        //    {
-        //        var search = request.Search.Trim();
-        //        instructors = instructors.Where(p =>
-        //                      EF.Functions.Like(p.Name, $"%{search}%"));
-
-        //    }
-
-        //    // JopTitle
-        //    if (!string.IsNullOrWhiteSpace(request.JobTitle))
-        //    {
-        //        var jobTitle = request.JobTitle.Trim();
-        //        instructors = instructors.Where(p =>
-        //                      EF.Functions.Like(p.JobTitle, $"%{jobTitle}%"));
-
-        //    }
-
-
-        //    //  Min Price
-        //    if (request.MinPrice.HasValue)
-        //    {
-        //        instructors = instructors.Where(i => i.PricePerSession >= request.MinPrice);
-        //    }
-
-        //    //  Max Price
-        //    if (request.MaxPrice.HasValue)
-        //    {
-        //        instructors = instructors.Where(i => i.PricePerSession <= request.MaxPrice);
-        //    }
-
-
-        //    // rating
-        //    if (request.MinRating.HasValue)
-        //    {
-        //        var minRating = request.MinRating.Value;
-
-        //        instructors = instructors.Where(p =>
-        //            p.Reviews.Any() &&
-        //            p.Reviews.Average(r => (double)r.Rating) >= minRating);
-        //    }
-
-        //    //  Min Years Of Exprianc
-
-        //    if (request.MinYearsOfExperience.HasValue)
-        //    {
-        //        instructors = instructors.Where(i => i.YearsOfExperience >= request.MinYearsOfExperience);
-        //    }
-
-
-         
-
-
-        //    instructors = instructors.OrderByDescending(i => i.Id);
-
-
-
-        //    var result = await mapper
-        //                          .ProjectTo<GetInstructorPagnitionRespons>(instructors)
-        //                          .ToPaginationlist(request.PageNumber, request.PageSize);
-
-        //    var ids = result.Data.Select(x => x.Id).ToList();
-
-        //    var schedules = await instructorSchedulesService.GetTableNoTracking()
-        //        .Where(s => ids.Contains(s.InstructorId))
-        //        .ToListAsync();
-
-        //    var targetDates = schedules
-        //        .Select(s => instructorSchedulesService.GetNextDate(s.Day).Date)
-        //        .Distinct()
-        //        .ToList();
-
-        //    var bookings = await bookingsService.GetTableNoTracking()
-        //        .Where(b => targetDates.Contains(b.BookingDate.Date)
-        //                 && b.Status != BookingStatus.Cancelled)
-        //        .ToListAsync();
-
-        //    var bookingsLookup = bookings
-        //        .GroupBy(b => new { b.ScheduleId, Date = b.BookingDate.Date })
-        //        .ToDictionary(g => g.Key, g => g.Count());
-
-
-        //    return Success(result);
-
-        //}
-
-
-
-
-
-
-
-
-
-
-
-
 
         #endregion
 

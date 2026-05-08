@@ -15,6 +15,7 @@ namespace Tradify.Core.Features.Instructor.Queries.Models
         public int? StoreId { get; set; }
         public string? Search { get; set; }
         public string? JobTitle { get; set; }
+        public bool? Discount { get; set; }
 
         public decimal? MinPrice { get; set; }
         public decimal? MaxPrice { get; set; }

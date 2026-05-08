@@ -104,6 +104,19 @@ namespace Tradify.Data.AppMetaData
 
 
         }
+        public static class Booking
+        {
+            public const string prefix = Rule + "Booking";
+            public const string Add = prefix + "/AddBooking";
+            public const string GetUserBookings = prefix + "/GetUserBookings";
+            public const string GetInstructorBooking = prefix + "/GetInstructorBooking";
+            public const string RescheduleBooking = prefix + "/Reschedule";
+
+            public const string CanceldBooking = prefix + "/Canceld";
+            
+
+        }
+        
         public static class InstructorService
         {
             public const string prefix = Rule + "InstructorService";
