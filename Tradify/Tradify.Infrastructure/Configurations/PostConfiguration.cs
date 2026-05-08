@@ -13,9 +13,9 @@ namespace Tradify.Infrastructure.Configurations
         {
             // Relation with User
             builder.HasOne(p => p.User)
-                   .WithMany()
+                   .WithMany(x=>x.Posts)
                    .HasForeignKey(p => p.UserId)
-                   .OnDelete(DeleteBehavior.Restrict);
+                   .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

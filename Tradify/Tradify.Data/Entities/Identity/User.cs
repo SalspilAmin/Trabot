@@ -7,6 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 using Tradify.Data.Entities.Appointments;
 using Tradify.Data.Entities.Chat;
+using Tradify.Data.Entities.Posts;
 using Tradify.Data.Helpers;
 
 namespace Tradify.Data.Entities.Identity
@@ -43,6 +44,7 @@ namespace Tradify.Data.Entities.Identity
         public virtual ICollection<Payouts>? Payouts { get; set; }
         public virtual ICollection<Bookings>? Bookings { get; set; }
 
+        public virtual ICollection<Post>? Posts { get; set; }
         public virtual ICollection<Message>? SentMessages { get; set; }
         public virtual ICollection<Message>? ReceiveMessages { get; set; }
 

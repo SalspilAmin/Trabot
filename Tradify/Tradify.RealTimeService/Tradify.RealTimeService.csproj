@@ -20,8 +20,4 @@
     <ProjectReference Include="..\Tradify.Service\Tradify.Service.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="AddDependencies\" />
-  </ItemGroup>
-
 </Project>

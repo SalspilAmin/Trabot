@@ -14,7 +14,7 @@ namespace Tradify.Data.Entities.Posts
         public string? Content { get; set; }
         public string? Caption { get; set; }
         [ForeignKey("User")]
-        public int UserId { get; set; }
+        public int? UserId { get; set; }
         public bool IsDeleted { get; set; } = false;
         public bool IsUpdated { get; set; } = false;
         public DateTimeOffset CreatedDate { get; set; } = DateTimeOffset.UtcNow;
@@ -25,6 +25,6 @@ namespace Tradify.Data.Entities.Posts
         public virtual User? User { get; set; }
       
         public virtual ICollection<ImageOrVideoPath>? ImageOrVideo_Paths { get; set; }
-       public virtual ICollection<InteractionWithPost>  interactionWithPosts { get; set; }
+       public virtual ICollection<InteractionWithPost>?  interactionWithPosts { get; set; }
     }
 }

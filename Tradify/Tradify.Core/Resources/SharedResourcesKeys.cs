@@ -199,9 +199,11 @@ namespace Tradify.Core.Resources
 
         public const string IdMustBeGreaterThanZero = "IdMustBeGreaterThanZero";
 
+        public const string MaxSizeIs100MB = "MaxSizeIs100MB";
 
-        
-
+        public const string ContentTooLong = "ContentTooLong";
+        public const string Allowedextensions = "Allowedextensions";
+        public const string MaxNumberOfFilles4 = "MaxNumberOfFilles4";
 
 
 
