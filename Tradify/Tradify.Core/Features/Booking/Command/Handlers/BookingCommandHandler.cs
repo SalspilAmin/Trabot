@@ -15,7 +15,9 @@ namespace Tradify.Core.Features.Booking.Command.Handlers
 {
     public class BookingCommandHandler : ResponseHandler,
                                          IRequestHandler<AddBookingCommand, Response<string>>,
-                                         IRequestHandler<CancelBookingCommand, Response<string>>
+                                         IRequestHandler<CancelBookingCommand, Response<string>>,
+                                         IRequestHandler<RescheduleBookingCommand, Response<string>>
+
 
 
 
@@ -66,6 +68,7 @@ namespace Tradify.Core.Features.Booking.Command.Handlers
 
         }
 
+        //Canceld Booking
         public async Task<Response<string>> Handle(CancelBookingCommand request, CancellationToken cancellationToken)
         {
             var currantuser = currentUserService.GetUserId();
@@ -93,7 +96,25 @@ namespace Tradify.Core.Features.Booking.Command.Handlers
         }
 
 
+        // Rescedul Booking
 
+
+        public async Task<Response<string>> Handle(RescheduleBookingCommand request, CancellationToken cancellationToken)
+        {
+
+            var result = await bookingsService.RescheduleBookingAsync(request.BookingId ,request.NewScheduleId);
+
+            if (result != "Success")
+            {
+                return BadRequest<string>(localize.Get(result));
+            }
+            else
+            {
+                return Success<string>(localize.Get("Success"));
+            }
+
+
+        }
 
         #endregion
     }

@@ -183,5 +183,134 @@ namespace Tradify.Service.Services
             }
         }
 
+
+
+        // RescheduleBookingAsync
+
+        public async Task<string> RescheduleBookingAsync(int bookingId, int newScheduleId)
+        {
+            using (var transaction = await context.Database
+                .BeginTransactionAsync(System.Data.IsolationLevel.Serializable))
+            {
+                try
+                {
+                    //  1. Get User 
+                    var currentUserId = currentUserService.GetUserId();
+
+                    var user = await context.Users.FirstOrDefaultAsync(u => u.Id == currentUserId);
+
+                    if (user == null)
+                        return "UserNotFound";
+
+                    if (user.IsDeleted)
+                        return "UserIsDeleted";
+
+                    // Old Booking
+                    var booking = await GetTableAsTracking()
+                        .Include(x => x.Instructor)
+                        .FirstOrDefaultAsync(x => x.Id == bookingId);
+
+                    if (booking == null)
+                        return "BookingNotFound";
+
+                    if (booking.CustomerId != currentUserId)
+                        return "Unauthorized";
+
+                    if (booking.Status == BookingStatus.Cancelled)
+                        return "BookingAlreadyCancelled";
+
+                    if (booking.BookingDate <= DateTime.UtcNow)
+                        return "AppointmentAlreadyStarted";
+
+                    // New Schedule
+                    var newSchedule = await instructorSchedulesService
+                        .GetTableNoTracking()
+                        .Include(x => x.Instructor)
+                        .FirstOrDefaultAsync(x => x.Id == newScheduleId);
+
+                    if (newSchedule == null)
+                        return "ScheduleNotFound";
+                    if (newSchedule.Id== booking.ScheduleId)
+                        return "AlreadyBookedThisSchedule";
+
+                    if (booking.InstructorId != newSchedule.InstructorId)
+                        return "ThisScheduleNotFortheSameInstructor";
+
+                    if (!newSchedule.IsAvailable)
+                        return "ScheduleNotAvailable";
+
+                    // Prevent booking yourself
+                    if (newSchedule.Instructor.UserId == currentUserId)
+                        return "YouCantBookYourself";
+
+                    // New Booking Date
+                    var newBookingDate =
+                        instructorSchedulesService.GetNextDate(newSchedule.Day);
+
+
+
+                    if (booking.ScheduleId == newSchedule.Id &&booking.BookingDate.Date == newBookingDate.Date)
+                    {
+                        return "AlreadyBookedThisSchedule";
+                    }
+                    // Check capacity
+                    var bookedCount = await GetTableNoTracking()
+                    .CountAsync(x =>
+                    x.Id != bookingId &&
+        x.ScheduleId == newScheduleId &&
+        x.BookingDate.Date == newBookingDate.Date &&
+        x.Status != BookingStatus.Cancelled);
+
+                    var availableSeats =
+                        Math.Max(0, newSchedule.Capacity - bookedCount);
+
+                    if (availableSeats <= 0)
+                        return "NoAvailableSlotsRemaining";
+
+                    //// Prevent duplicate booking
+                   
+                    //var alreadyBooked = await GetTableNoTracking()
+                    //           .AnyAsync(x =>
+                    //               x.Id != bookingId &&
+                    //               x.CustomerId == currentUserId &&
+                    //               x.ScheduleId == newScheduleId &&
+                    //               x.BookingDate.Date == newBookingDate.Date &&
+                    //               x.Status != BookingStatus.Cancelled);
+
+                    //if (alreadyBooked)
+                    //    return "AlreadyBookedThisSchedule";
+
+                    // Update booking
+                    booking.ScheduleId = newSchedule.Id;
+
+                    booking.BookingDate = newBookingDate;
+
+                    booking.InstructorId = newSchedule.InstructorId;
+
+                    booking.StoreId = newSchedule.Instructor.StoreId;
+
+                    await UpdateAsync(booking);
+
+                    await SaveChangesAsync();
+
+                    await transaction.CommitAsync();
+
+                    return "Success";
+                }
+                catch (Exception ex)
+                {
+                    await transaction.RollbackAsync();
+
+                    logger.LogError(ex, ex.Message);
+
+                    return "Failed";
+                }
+            }
+        }
+
+
+
+
+
     }
 }

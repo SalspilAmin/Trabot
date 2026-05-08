@@ -41,5 +41,12 @@ namespace Tradify.Controllers.Instructor
             var response = await Mediator.Send(command);
             return Ok(response);
         }
+
+        [HttpPut(Router.Booking.RescheduleBooking)]
+        public async Task<IActionResult> RescheduleBooking([FromForm] RescheduleBookingCommand command)
+        {
+            var response = await Mediator.Send(command);
+            return Ok(response);
+        }
     }
 }

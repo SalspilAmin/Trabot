@@ -12,6 +12,6 @@ namespace Tradify.Service.AbstractsServices
         public  Task<(string, int?)> AddBookingAsync(Bookings booking);
         public Task<bool> IsInstructorAvailableToday(int instructorId);
 
-
+        public Task<string> RescheduleBookingAsync(int bookingId, int newScheduleId);
     }
 }
