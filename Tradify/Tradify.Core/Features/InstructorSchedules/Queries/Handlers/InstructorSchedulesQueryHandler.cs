@@ -140,7 +140,7 @@ namespace Tradify.Core.Features.InstructorSchedules.Queries.Handlers
                 var mappedSchedule = mapper.Map<GetInstructorSchedulesResponse>(schedule);
 
                 mappedSchedule.Available = availableSlots;
-                mappedSchedule.Date = bookingDate;
+                mappedSchedule.Date = bookingDate.ToString("yyyy-MM-dd");
                 mappedSchedule.IsAvailable = availableSlots > 0 && schedule.IsAvailable;
 
                 resultList.Add(mappedSchedule);

@@ -10,5 +10,7 @@ namespace Tradify.Service.AbstractsServices
     {
         public Task<(string, int?)> AddInstructorSchedulesAsync(InstructorSchedules schedules);
         public DateTime GetNextDate(DayOfWeek targetDay);
+
+
     }
 }
