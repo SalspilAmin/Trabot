@@ -306,4 +306,16 @@
   <data name="OrderItemsNotFound" xml:space="preserve">
     <value>واحدات الاوردر غير موجودة</value>
   </data>
+  <data name="MaxSizeIs100MB" xml:space="preserve">
+    <value>حجم الملف اكبر من 100ميجابايت</value>
+  </data>
+  <data name="ContentTooLong" xml:space="preserve">
+    <value>محتوي كبير</value>
+  </data>
+  <data name="Allowedextensions" xml:space="preserve">
+    <value> ".jpg", ".jpeg", ".png", ".webp"  الامتدادات الصالحة</value>
+  </data>
+  <data name="MaxNumberOfFilles4" xml:space="preserve">
+    <value>الحد الاقصي  4 ملفات</value>
+  </data>
 </root>

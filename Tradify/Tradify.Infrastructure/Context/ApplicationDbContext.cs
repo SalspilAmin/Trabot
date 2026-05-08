@@ -110,6 +110,8 @@ namespace Tradify.Infrastructure.Context
             modelBuilder.Entity<Products>().HasQueryFilter(p => !p.IsDeleted && !p.Store.IsDeleted);
             modelBuilder.Entity<Categories>().HasQueryFilter(s => !s.IsDeleted);
             modelBuilder.Entity<Instructors>().HasQueryFilter(s => s.IsActive);
+            modelBuilder.Entity<User>()
+             .HasQueryFilter(x => x.IsDeleted == false);
 
 
 

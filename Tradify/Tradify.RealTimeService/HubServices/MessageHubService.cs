@@ -21,23 +21,26 @@ namespace Tradify.RealTimeService.HubServices
             this.hubContext = hubcontext;
         }
 
-        public async Task NotifyReceiverAboutPost(int UserId, Message message,List<MessageMediaPath?> media = null)
+        public async Task NotifyReceiverAboutPost(int UserId, Message message,MessageMediaPath? media = null)
         {
             try
             {
-//List<string> ConnectionIdOFUsersThatIsConnectedNow = await userConnectionRepository.GetTableNoTracking().Select(x => x.ConnectionId).ToListAsync();
-                //if (ConnectionIdOFUsersThatIsConnectedNow is null)
-                //{
-                //    // No users are connected, so we don't need to send anything
-                //    return;
-                //}
+                // get userConnection
+                var ReciverUserConnection = await userConnectionRepository.GetByIdAsync(message.ReceiverId);
 
-                //if (hubContext.Clients is null)
-                //{
+                if (ReciverUserConnection is null)
+                {
+                    // No users are connected, so we don't need to send anything
+                    return;
+                }
 
-                //    return;
-                //}
-//await hubContext.Clients.Clients(ConnectionIdOFUsersThatIsConnectedNow).SendAsync("ReceivePost", post);
+                if (hubContext.Clients is null)
+                {
+
+                    return;
+                }
+
+                await hubContext.Clients.Client(ReciverUserConnection.ConnectionId).SendAsync("ReceivePost",message,media  );
 
             }
             catch (Exception ex)

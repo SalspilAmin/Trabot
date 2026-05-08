@@ -11,6 +11,7 @@ namespace Tradify.Data.Helpers.Results
         public string? Email { get; set; }
         public string? Phone {  get; set; }
         public string UserName { get; set; }
+        public int? CartId { get; set; }
         public List<string> Roles { get; set; }
     }
 }

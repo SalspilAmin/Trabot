@@ -14,13 +14,15 @@ using Tradify.Service.AbstractsServices.IdentityServices;
 
 namespace Tradify.Core.Features.Cart.Queries.Handlers
 {
-    public class CarQueryHandler : ResponseHandler, IRequestHandler<GetCartByUserIdQuery, Response<GetCartByUserIdQueryResult>>
+    public class CarQueryHandler : ResponseHandler, IRequestHandler<GetCartByTokenQuery, Response<GetCartByUserIdQueryResult>>
     {
 
         #region fields
         private readonly IMapper mapper;
         private readonly LocalizationService localization;
         private readonly UserManager<Tradify.Data.Entities.Identity.User> userManager;
+        private readonly IUserService userService;
+
         
 
 
@@ -32,25 +34,29 @@ namespace Tradify.Core.Features.Cart.Queries.Handlers
 
         public CarQueryHandler(LocalizationService localization,
              IMapper mapper, UserManager<Tradify.Data.Entities.Identity.User> userManager
-            , ICateroriesService cateroriesService) : base(localization)
+            , ICateroriesService cateroriesService,IUserService userService) : base(localization)
         {
             this.mapper = mapper;
             this.localization = localization;
             this.userManager = userManager;
+            this.userService = userService;
           
 
         }
 
         #endregion
-        public async Task<Response<GetCartByUserIdQueryResult>> Handle(GetCartByUserIdQuery request, CancellationToken cancellationToken)
+        public async Task<Response<GetCartByUserIdQueryResult>> Handle(GetCartByTokenQuery request, CancellationToken cancellationToken)
         {
             //GeT user and Check
-            var user = await userManager.FindByIdAsync(request.UserId.ToString());
+            var userinfo = await userService.GetUserInformationByToken(request.Token);
+            var user = await userManager.FindByIdAsync(userinfo.UserId.ToString());
             if (user == null) return BadRequest<GetCartByUserIdQueryResult>(localization.Get("NotFound"));
             var Cart= user.Cart;
+            if (Cart== null) return BadRequest<GetCartByUserIdQueryResult>(localization.Get("NotFound"));
             var ProductsInCart = Cart.CartProducts;
+            if (ProductsInCart.Count == 0) return Success<GetCartByUserIdQueryResult>(new GetCartByUserIdQueryResult() { UserId=user.Id,CartId=Cart.Id,ProductsInCart=null});
             var result =  mapper.Map<GetCartByUserIdQueryResult>(Cart);
-
+           
             return Success<GetCartByUserIdQueryResult>(result);
           
 

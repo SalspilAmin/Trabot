@@ -49,7 +49,7 @@ namespace Tradify.Core.Features.User.Queries.Handlers
         {
             var User =  _userManager.Users.Where(x=>x.IsDeleted==false).FirstOrDefault(x=>x.Id==request.Id);
             if (User == null) return NotFound<GetUserByIdResponse>(localization.Get("NotFound"));
-
+        
             var result =  mapper.Map<GetUserByIdResponse>(User);
 
             return Success<GetUserByIdResponse>(result);
@@ -68,6 +68,8 @@ namespace Tradify.Core.Features.User.Queries.Handlers
         {
             var result = await userService.GetUserInformationByToken(request.AccessToken);
             if (result == null) return NotFound<UserInfoFromToken>(localization.Get("NotFound"));
+            var user = await _userManager.FindByIdAsync(result.UserId);
+            result.CartId = user.CartId;
             return Success<UserInfoFromToken>(result);      
         }
         #endregion

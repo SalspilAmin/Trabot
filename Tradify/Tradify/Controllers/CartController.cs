@@ -12,10 +12,10 @@ namespace Tradify.Controllers
     public class CartController : AppControllerBase
     {
 
-        [HttpGet(Router.Cart.GetByUserId)]
-        public async Task<IActionResult> GetCart([FromRoute] int Id)
+        [HttpGet(Router.Cart.GetByToken)]
+        public async Task<IActionResult> GetCart([FromQuery] string Token)
         {
-            var result = await Mediator.Send(new GetCartByUserIdQuery(Id));
+            var result = await Mediator.Send(new GetCartByTokenQuery(Token));
             return NewResult(result);
         }
         [HttpPut(Router.Cart.UpdateCart)]

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,6 +16,8 @@ using Tradify.Data.Entities.Identity;
 using Tradify.Infrastructure.Context;
 using Tradify.Infrastructure.Dependencies;
 using Tradify.Infrastructure.Seeder;
+using Tradify.RealTimeService.AddDependencies;
+using Tradify.RealTimeService.HubNegotiation;
 using Tradify.Service.Dependencies;
 using Twilio.TwiML.Voice;
 
@@ -29,7 +32,7 @@ options.UseSqlServer(builder.Configuration.GetConnectionString("First")).UseLazy
 builder.Configuration.AddJsonFile("Secret.json");
 
 #region Dependencies
-builder.Services.AddInfrasturcureDepndencies().AddServicesDepencies().AddCoreDependencies()
+builder.Services.AddInfrasturcureDepndencies().AddServicesDepencies().AddCoreDependencies().AddRealTimeDepndencies()
     .AdServiceRegisteration(builder.Configuration);
 
 builder.Services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
@@ -73,7 +76,10 @@ builder.Host.UseSerilog((context, config) =>
 // اختياري
 builder.Services.AddLogging();
 builder.Services.AddSwaggerGen();
-
+builder.Services.Configure<FormOptions>(options =>
+{
+    options.MultipartBodyLengthLimit = 104857600; // 100 MB
+});
 
 
 var app = builder.Build();
@@ -84,6 +90,7 @@ using (var scope = app.Services.CreateScope())
     var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
     await RoleSeeder.SeedAsync(roleManager);
+
     await UserSeeder.SeedAsync(userManager,builder.Configuration);
     await SellerSeeder.SeedAsync(context);
     await StoreSeeder.SeedAsync(context);
@@ -97,6 +104,7 @@ using (var scope = app.Services.CreateScope())
     await CertificationsSeeder.SeedAsync(context);
     await ServiceSeeder.SeedAsync(context);
     await InstructorSchedulesSeeder.SeedAsync(context);
+
 }
 
 // Configure the HTTP request pipeline.
@@ -117,5 +125,5 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-
+app.MapHub<HubNegotiation>("/ConnectionHub");
 app.Run();

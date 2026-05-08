@@ -10,7 +10,7 @@ namespace Tradify.Core.Mapping.FawaterakMapping
     {
         public void ProductMapping()
         {
-            CreateMap<Products, ProductINRequestApi>()
+            CreateMap<ProductVariants, ProductINRequestApi>()
                 .ForMember(dest => dest.name, opt => opt.MapFrom(src => src.Name))
                // .ForMember(dest => dest.price, opt => opt.MapFrom(src => src.Price))
                 ;

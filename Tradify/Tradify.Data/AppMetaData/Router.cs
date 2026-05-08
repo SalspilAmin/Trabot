@@ -311,9 +311,15 @@ namespace Tradify.Data.AppMetaData
         public static class Cart
         {
             public const string prefix = Rule + "Cart";
-            public const string GetByUserId = prefix + SignleRoute;
+            public const string GetByToken = prefix + "/GetByToken";
             public const string UpdateCart = prefix + "Update";
             public const string AddToCart = prefix + "/AddToCart";
         }
+        public static class Post {
+
+            public const string prefix = Rule + "Post";
+            public const string AddPost = prefix + "/AddPost";
+        }
+
     }
 }

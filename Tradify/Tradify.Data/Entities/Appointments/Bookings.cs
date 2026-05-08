@@ -18,6 +18,7 @@ namespace Tradify.Data.Entities.Appointments
 
         public int CustomerId { get; set; }
 
+
         [ForeignKey(nameof(CustomerId))]
         public virtual User Customer { get; set; }
 
@@ -26,7 +27,7 @@ namespace Tradify.Data.Entities.Appointments
         [ForeignKey(nameof(ScheduleId))]
         public virtual InstructorSchedules Schedule { get; set; }
 
-        public int InstructorId { get; set; }
+        public int? InstructorId { get; set; }
 
         [ForeignKey(nameof(InstructorId))]
         public virtual Instructors Instructor { get; set; }

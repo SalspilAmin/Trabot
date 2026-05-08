@@ -7,6 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 using Tradify.Data.Entities.Appointments;
 using Tradify.Data.Entities.Chat;
+using Tradify.Data.Entities.Posts;
 using Tradify.Data.Helpers;
 
 namespace Tradify.Data.Entities.Identity
@@ -27,12 +28,14 @@ namespace Tradify.Data.Entities.Identity
         public string? Country { get; set; }
         [EncryptColumn]
         public string? Code { get; set; }
+        public int?  CartId { get; set; }            
         public string? OTP {  get; set; }
         [InverseProperty(nameof(UserRefreshToken.user))]
         public virtual ICollection<UserRefreshToken>? UserRefreshTokens { get; set; }
+        
 
         public virtual Sellers? Seller { get; set; }
-     
+        [ForeignKey(nameof(CartId))]
         public virtual Cart Cart{ get; set; }
 
         public virtual ICollection<Orders> Orders { get; set; }
@@ -41,6 +44,7 @@ namespace Tradify.Data.Entities.Identity
         public virtual ICollection<Payouts>? Payouts { get; set; }
         public virtual ICollection<Bookings>? Bookings { get; set; }
 
+        public virtual ICollection<Post>? Posts { get; set; }
         public virtual ICollection<Message>? SentMessages { get; set; }
         public virtual ICollection<Message>? ReceiveMessages { get; set; }
 

@@ -55,21 +55,25 @@ namespace Tradify.Core.Features.Order.Commands.Handler
             var order = mapper.Map<Tradify.Data.Entities.Orders>(request);
             if (order != null)
             {
+                var SubOrders=new List<SubOrders>();
                 foreach (var item in ProductsVariantsList)
                 {
+                    
                     if (item.InStock == true)
                     {
                         var cartproduct = Cart.CartProducts.FirstOrDefault(x => x.ProductVariantId == item.Id);
                         var subOrders = new SubOrders { Order = order, OrderId = order.Id, Product = item.Product, StoreId = item.Product.StoreId, Quantity = cartproduct.Quantity, ProductVAriantsId = item.Id, ProductVariants = item, Status = Data.Enums.OrderStatus.processing };
-                        order.subOrders.Add(subOrders);
+                         SubOrders.Add(subOrders);
+                        
                         var orderitem = new Tradify.Data.Entities.OrderItems { ProductVariantId = item.Id, SuborderId = subOrders.Id, Quantity = cartproduct.Quantity, Price = item.Price, SubOrder = subOrders };
                         order.OrderItems.Add(orderitem);
                         item.NumberOfProductInStock-=subOrders.Quantity;
 
                     }
+                    
 
                 }
-
+                order.subOrders= SubOrders;
             }
             var result = await ordersService.AddAsync(order);
             if (result != null)

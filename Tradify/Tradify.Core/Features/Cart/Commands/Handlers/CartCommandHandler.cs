@@ -88,19 +88,22 @@ namespace Tradify.Core.Features.Cart.Commands.Handlers
                 try
                 {
 
-                    //GeT user and Check
+                    //GeT cart and  user and Check
+                    var user = await userManager.FindByIdAsync(request.UserId.ToString());
                     var cart = await cartService.GetByIdAsync(request.CartId);
+             //       if(cart.Id!=user.CartId) return BadRequest<string>(localization.Get("NotFound"));
                     var productVariant = await productVariantService.GetByIdAsync(request.ProductVariant.Id);
 
-                    if (cart == null || cart.IsDeleted || productVariant.IsDeleted || productVariant == null)
+                    if (cart == null || cart.IsDeleted || productVariant == null || productVariant.IsDeleted)
                         return BadRequest<string>(localization.Get("NotFound"));
 
-                    var cartProduct = new CartProduct() { Cart = cart, CartId = cart.Id, ProductVariant = productVariant, ProductVariantId = productVariant.Id };
+                    var cartProduct = new CartProduct() { Cart = cart, CartId = cart.Id, ProductVariant = productVariant, ProductVariantId = productVariant.Id,Quantity=request.ProductVariant.Quentity };
                     cart.CartProducts.Add(cartProduct);
+                    
 
                     await context.SaveChangesAsync();
 
-
+                    await trans.CommitAsync();
                     return Success<string>(localization.Get("Success"));
                 }
                 catch (Exception ex)
