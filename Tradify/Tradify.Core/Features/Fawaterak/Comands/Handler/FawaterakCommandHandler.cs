@@ -68,6 +68,7 @@ namespace Tradify.Core.Features.Fawaterak.Comands.Handler
             request.RedirectionUrls.OnSuccess = "https://dev.fawaterk.com/success";
             request.RedirectionUrls.OnPending = "https://dev.fawaterk.com/pending";
             request.RedirectionUrls.OnFailure = "https://dev.fawaterk.com/fail";
+            request.RedirectionUrls.webhookUrl = "https://localhost:7003/Api/V1/Fawaterak/WebHookEnvoiceLInk";
             var result = await fawaterakServices.CreateEInvoiceAsync(request);
 
             if (result != null)

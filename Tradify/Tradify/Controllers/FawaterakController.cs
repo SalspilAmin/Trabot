@@ -53,6 +53,12 @@ namespace Tradify.Controllers
             var result = await Mediator.Send(request);
             return NewResult(result);
         }
+        [HttpPost(Router.Fawaterak.WebHookEnvoiceLInk)]
+        public async Task<IActionResult> WebhookEnvoiceLink([FromBody] WebHookFawaterakEnvoiceLinkQuery request)
+        {
+            var result = await Mediator.Send(request);
+            return NewResult(result);
+        }
 
     }
 }

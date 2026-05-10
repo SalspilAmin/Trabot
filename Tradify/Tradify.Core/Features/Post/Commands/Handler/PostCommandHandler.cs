@@ -9,6 +9,9 @@ using System.Text;
 using Tradify.Core.Bases;
 using Tradify.Core.Features.Post.Commands.Models;
 using Tradify.Core.Resources.Service;
+using Tradify.Data.Entities.Posts;
+using Tradify.Data.Enums;
+using Tradify.Data.Helpers.Results;
 using Tradify.RealTimeService.HubServices;
 using Tradify.Service.AbstractsServices;
 using Tradify.Service.Services;
@@ -34,7 +37,7 @@ namespace Tradify.Core.Features.Post.Commands.Handler
      , IMapper mapper,
            PostHubService postHubService, UserManager<Tradify.Data.Entities.Identity.User> userManager
             ,IFileService fileService,
-           IImageOrVideoPathService imageOrVideoPathService) : base(localization)
+           IImageOrVideoPathService imageOrVideoPathService,IPostService postService) : base(localization)
         {
             this.localization = localization;
    
@@ -43,6 +46,8 @@ namespace Tradify.Core.Features.Post.Commands.Handler
             this.postHubService = postHubService;
             this.userManager = userManager; 
             this.fileService = fileService;
+            this.postService = postService;
+            this.imageOrVideoPathService = imageOrVideoPathService;
         }
 
       
@@ -55,7 +60,9 @@ namespace Tradify.Core.Features.Post.Commands.Handler
 
                 try
                 {
+                    PostType postType = request.MediaFilles.Count > 0 ? PostType.ImageOrVideo : PostType.Text;
                     var post = mapper.Map<Tradify.Data.Entities.Posts.Post>(request);
+                    post.PostType = (request.MediaFilles.Count==0)? PostType.Text:PostType.ImageOrVideo;
                     if (post == null) return BadRequest<int?>(localization.Get("NotFound"));
                     var user = await userManager.FindByIdAsync(request.UserId.ToString());
                     if (user == null) return BadRequest<int?>(localization.Get("NotFound"));
@@ -109,21 +116,26 @@ namespace Tradify.Core.Features.Post.Commands.Handler
                     var resultOfAddPost = await postService.AddAsync(post);
                     if (resultOfAddPost == null) return BadRequest<int?>(localization.Get("UnprocessableEntity"));
                     await  postService.SaveChangesAsync();
+                    post.ImageOrVideo_Paths = new List<ImageOrVideoPath>();
                     foreach (var UrlFile in UrlsOfFilles)
                     {
-                        var resultOfCreatImagepath = await imageOrVideoPathService.AddAsync(new Data.Entities.Posts.ImageOrVideoPath()
+                        var imageORVideoPath = new Data.Entities.Posts.ImageOrVideoPath()
                         {
                             PostId = post.Id
                         ,
-                            Posts = post
+                        Posts = post
                         ,
                             Image_Or_VideoPath = UrlFile
-                        }
-                        );
+                        };
+                        var resultOfCreatImagepath = await imageOrVideoPathService.AddAsync(imageORVideoPath);
                         post.ImageOrVideo_Paths.Add(resultOfCreatImagepath);
                     }
+                    if (user.Posts == null) user.Posts = new List<Tradify.Data.Entities.Posts.Post>(); // التأمين ضد الـ Null
+
                     user.Posts.Add(post);
-                    var NotifyAddPost = postHubService.NotifyAllAboutPost(post);
+                    user.Posts.Add(post);
+                    var notifyPost =  mapper.Map<PostResult>(post);
+                   await postHubService.NotifyAllAboutPost(notifyPost);
                     await postService.SaveChangesAsync();
                   await  userManager.UpdateAsync(user);
                     await transaction.CommitAsync();

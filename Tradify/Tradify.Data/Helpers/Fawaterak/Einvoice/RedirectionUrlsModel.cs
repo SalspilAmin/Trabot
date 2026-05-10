@@ -28,7 +28,11 @@ namespace Tradify.Data.Helpers.Fawaterak.Einvoice
         [JsonProperty("pendingUrl")]
         [Url]
         public string? OnPending { get; set; }
-    
+
+        [JsonProperty("webhookUrl")]
+        [Url]
+        public string? webhookUrl { get; set; }
+
 
     }
 }

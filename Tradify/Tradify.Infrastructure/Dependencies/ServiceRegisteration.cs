@@ -114,9 +114,11 @@ namespace Tradify.Infrastructure.Dependencies
             {
                 options.AddPolicy("AllowSpecificOrigin", policy =>
                 {
-                    policy.WithOrigins("https://frontend.com") // دومين الموقع المسموح
-                          .AllowAnyHeader()                   // السماح بأي هيدر
-                          .AllowAnyMethod();                  // السماح بأي طريقة (GET, POST...)
+                    policy
+             .AllowAnyHeader()
+             .AllowAnyMethod()
+             .AllowCredentials()
+             .SetIsOriginAllowed(_ => true);              
                 });
 
                 // أو السماح لأي دومين (تجريبي فقط)

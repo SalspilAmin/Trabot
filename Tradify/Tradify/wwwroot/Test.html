@@ -1,40 +1,173 @@
 ﻿<!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>SignalR Test</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tradify SignalR Test</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.0/signalr.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        #status {
+            font-weight: bold;
+            color: orange;
+        }
+
+        .container {
+            display: flex;
+            gap: 20px;
+        }
+
+        .box {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            flex: 1;
+            height: 70vh;
+            overflow-y: auto;
+        }
+
+        .input-group {
+            margin-bottom: 10px;
+            display: flex;
+            gap: 10px;
+        }
+
+        input {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            flex: 1;
+        }
+
+        button {
+            padding: 8px 15px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+            button:hover {
+                background: #0056b3;
+            }
+
+        .post-card {
+            background: #e9ecef;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+            border-left: 4px solid #28a745;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            background: #f8f9fa;
+            padding: 8px;
+            margin-bottom: 5px;
+            border-radius: 4px;
+            border-left: 3px solid #007bff;
+        }
+    </style>
 </head>
 <body>
 
-    <h2>Simple Chat Test</h2>
+    <div class="header">
+        <h2>Tradify Real-Time Dashboard</h2>
+        <p id="status">Status: Connecting... 🟠</p>
+    </div>
 
-    <input type="text" id="userInput" placeholder="User" />
-    <input type="text" id="messageInput" placeholder="Message" />
-    <button onclick="sendMessage()">Send</button>
+    <div class="container">
+        <div class="box">
+            <h3>💬 Chat Test</h3>
+            <div class="input-group">
+                <input type="text" id="userInput" placeholder="Your Name" style="flex: 0.3;" />
+                <input type="text" id="messageInput" placeholder="Type a message..." />
+                <button onclick="sendMessage()">Send</button>
+            </div>
+            <ul id="messagesList"></ul>
+        </div>
 
-    <ul id="messagesList"></ul>
+        <div class="box">
+            <h3>📰 Live Posts (From API)</h3>
+            <p style="font-size: 12px; color: gray;">Add a post from Swagger, it will appear here automatically.</p>
+            <div id="postsList"></div>
+        </div>
+    </div>
 
-    <script>const connection = new signalR.HubConnectionBuilder()
-        .withUrl("https://localhost:5001/chatHub")
-        .withAutomaticReconnect()
-        .build();
+    <script>
+        // استخدام رابط نسبي لأن الملف داخل wwwroot
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/ConnectionHub")
+            .withAutomaticReconnect()
+            .build();
 
-    connection.start()
-        .then(() => console.log("Connected"))
-        .catch(err => console.error(err));
+        // 1. استقبال رسائل الشات
+        connection.on("ReceiveMessage", function (user, message) {
+            const li = document.createElement("li");
+            li.innerHTML = `<strong>${user}</strong>: ${message}`;
+            document.getElementById("messagesList").prepend(li); // prepend لإضافة الأحدث في الأعلى
+        });
 
-    connection.on("ReceiveMessage", function (user, message) {
-        const li = document.createElement("li");
-        li.textContent = user + ": " + message;
-        document.getElementById("messagesList").appendChild(li);
-    });
+        // 2. استقبال المنشورات (Posts)
+        connection.on("ReceivePost", function (post) {
+            console.log("POST RECEIVED:", post);
+            const div = document.createElement("div");
+            div.className = "post-card";
+            div.innerHTML = `
+                    <h4>${post.caption || "No Caption"}</h4>
+                    <p>${post.content || "No Content"}</p>
+                `;
+            document.getElementById("postsList").prepend(div); // prepend لإضافة الأحدث في الأعلى
+        });
 
-    function sendMessage() {
-        const user = document.getElementById("userInput").value;
-        const message = document.getElementById("messageInput").value;
+        // بدء الاتصال
+        connection.start()
+            .then(() => {
+                console.log("Connected Successfully!");
+                const statusEl = document.getElementById("status");
+                statusEl.innerText = "Status: Connected 🟢";
+                statusEl.style.color = "green";
+            })
+            .catch(err => {
+                console.error("SignalR Connection Error:", err);
+                const statusEl = document.getElementById("status");
+                statusEl.innerText = "Status: Disconnected 🔴";
+                statusEl.style.color = "red";
+            });
 
-        connection.invoke("SendMessage", user, message);
-    }</script>
+        // دالة إرسال رسالة الشات للباك إند
+        function sendMessage() {
+            const user = document.getElementById("userInput").value;
+            const message = document.getElementById("messageInput").value;
+
+            if (user && message) {
+                // استدعاء دالة SendMessage في الـ Hub
+                connection.invoke("SendMessage", user, message).catch(function (err) {
+                    console.error("Error sending message:", err.toString());
+                });
+                document.getElementById("messageInput").value = ""; // تفريغ حقل النص
+            } else {
+                alert("Please enter both Name and Message.");
+            }
+        }
+    </script>
 
 </body>
 </html>

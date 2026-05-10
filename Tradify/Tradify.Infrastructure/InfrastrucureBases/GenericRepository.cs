@@ -25,9 +25,17 @@ namespace Tradify.Infrastructure.InfrastrucureBases
         #endregion
         public async Task<T> AddAsync(T entity)
         {
-            
-             await applicationDbContext.Set<T>().AddAsync(entity);
-            return entity;
+            try
+            {
+                 await applicationDbContext.Set<T>().AddAsync(entity);
+            return entity; 
+            }
+            catch (Exception ex)
+            {
+                // المشكلة هنا! الكود يمسك الخطأ ويعيد null بدلاً من إخبارك بالسبب
+                return null;
+            }
+          
         }
 
         public async Task AddRangeAsync(ICollection<T> entities)

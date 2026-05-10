@@ -5,11 +5,12 @@ using System.Text;
 
 namespace Tradify.Core.Mapping.Post
 {
-    public partial class PostMapping : Profile
+    public partial class PostProfile : Profile
     {
-        public PostMapping()
+        public PostProfile()
         {
-        
+            AddPostMapping();
+            GetListOfPostsByUserMap();
         }
     }
 }

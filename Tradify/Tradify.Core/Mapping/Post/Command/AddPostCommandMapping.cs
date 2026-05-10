@@ -6,7 +6,7 @@ using Tradify.Data.Entities.Posts;
 
 namespace Tradify.Core.Mapping.Post
 {
-    public partial class PostMapping
+    public partial class PostProfile
     {
         public void AddPostMapping()
         {
@@ -18,6 +18,9 @@ namespace Tradify.Core.Mapping.Post
             .ForMember(dest => dest.Comments, opt => opt.Ignore())
             .ForMember(dest => dest.interactionWithPosts, opt => opt.Ignore())
             .ForMember(dest => dest.User, opt => opt.Ignore());
+
+
+           
         }
     }
 }

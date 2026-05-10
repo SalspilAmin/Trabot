@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Tradify.Data.Entities;
 using Tradify.Data.Enums.Fawaterak;
 using Tradify.Data.Helpers.Fawaterak;
 using Tradify.Data.Helpers.Fawaterak.Einvoice;
@@ -17,6 +18,8 @@ namespace Tradify.Service.AbstractsServices.FawaterakServices
         public bool VerifyApiKeyTransaction(string apiKey);
         public bool VerifyCancelTransaction(CancelTransactionModel cancelTransaction);
         public bool VerifyWebhook(WebHookModel webHook);
+        public Task<string> WebHookFawaterakEnvoiceLink(Tradify.Data.Entities.Orders order,string Payment_status);
+
 
     }
 }
