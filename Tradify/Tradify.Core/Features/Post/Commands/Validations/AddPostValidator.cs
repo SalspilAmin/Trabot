@@ -52,7 +52,7 @@ namespace Tradify.Core.Features.Post.Commands.Validations
             // 🔹 Media Files (optional but validated if exists)
             RuleFor(x => x.MediaFilles)
                 .Must(files => files == null || files.Count <= 4)
-                .WithMessage(localize.Get(""));
+                .WithMessage(localize.Get("MaxNumberOfFilles4"));
                 
             // 🔹 Each file validation
             RuleForEach(x => x.MediaFilles).ChildRules(file =>

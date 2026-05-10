@@ -287,6 +287,7 @@ namespace Tradify.Data.AppMetaData
             public const string EInvoiceLink = prefix + "/InvoiceLink";
             public const string invoiceInitPay = prefix + "/invoiceInitPay";
             public const string WebHook = prefix + "/Webhook";
+            public const string WebHookEnvoiceLInk = prefix + "/WebHookEnvoiceLInk";
             public const string Webhookpaid_json = WebHook + "/paid_json";
             public const string WebhookCancel = WebHook + "/cancel";
             public const string Webhookfailed = WebHook + "/failed";

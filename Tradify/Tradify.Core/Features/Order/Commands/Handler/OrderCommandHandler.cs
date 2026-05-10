@@ -55,25 +55,60 @@ namespace Tradify.Core.Features.Order.Commands.Handler
             var order = mapper.Map<Tradify.Data.Entities.Orders>(request);
             if (order != null)
             {
-                var SubOrders=new List<SubOrders>();
+                var subOrdersList=new List<SubOrders>();
                 foreach (var item in ProductsVariantsList)
                 {
-                    
-                    if (item.InStock == true)
-                    {
-                        var cartproduct = Cart.CartProducts.FirstOrDefault(x => x.ProductVariantId == item.Id);
-                        var subOrders = new SubOrders { Order = order, OrderId = order.Id, Product = item.Product, StoreId = item.Product.StoreId, Quantity = cartproduct.Quantity, ProductVAriantsId = item.Id, ProductVariants = item, Status = Data.Enums.OrderStatus.processing };
-                         SubOrders.Add(subOrders);
-                        
-                        var orderitem = new Tradify.Data.Entities.OrderItems { ProductVariantId = item.Id, SuborderId = subOrders.Id, Quantity = cartproduct.Quantity, Price = item.Price, SubOrder = subOrders };
-                        order.OrderItems.Add(orderitem);
-                        item.NumberOfProductInStock-=subOrders.Quantity;
 
+                    if (item.InStock != true || item.NumberOfProductInStock <= 0)
+                        continue;
+                   
+
+                        var cartproduct = Cart.CartProducts.FirstOrDefault(x => x.ProductVariantId == item.Id);
+
+                    // Check If SubOrder For This Store Already Exists
+                    var existingSubOrder = subOrdersList
+                        .FirstOrDefault(x => x.StoreId == item.Product.StoreId);
+                    // Create New SubOrder If Not Exists
+                    if (existingSubOrder == null)
+                    {
+                        existingSubOrder = new SubOrders
+                        {
+                            Order = order
+                            ,OrderId=order.Id,
+                            StoreId = item.Product.StoreId,
+                            Status = Data.Enums.OrderStatus.processing,
+                            Quantity = cartproduct.Quantity,
+                            ProductVAriantsId=item.Id,
+                            ProductVariants=item,
+                            Product=item.Product,
+                            OrderItems = new List<Tradify.Data.Entities.OrderItems>()
+                        };
+
+                        subOrdersList.Add(existingSubOrder);
                     }
-                    
+
+                    var orderItem = new OrderItems
+                    {
+                        ProductVariantId = item.Id,
+                        Quantity = cartproduct.Quantity,
+                        Price = item.Price,
+                        SubOrder = existingSubOrder
+                    };
+
+
+                  
+                        order.OrderItems.Add(orderItem);
+                    existingSubOrder.OrderItems.Add(orderItem);
+                    existingSubOrder.Quantity += cartproduct.Quantity;
+
+                    // Reduce Stock
+                    item.NumberOfProductInStock -= cartproduct.Quantity;
+
+
+
 
                 }
-                order.subOrders= SubOrders;
+                order.subOrders= subOrdersList;
             }
             var result = await ordersService.AddAsync(order);
             if (result != null)

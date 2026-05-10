@@ -11,10 +11,10 @@ namespace Tradify.RealTimeService.HubNegotiation
 {
      public class HubNegotiation : Hub
     {
-        private readonly ILogger logger;
+        private readonly ILogger<HubNegotiation> logger;
         private readonly IUserConnectionRepository userConnection;
 
-        public HubNegotiation(ILogger logger, IUserConnectionRepository userConnection)
+        public HubNegotiation(ILogger<HubNegotiation> logger, IUserConnectionRepository userConnection)
         {
             this.logger = logger;
             this.userConnection = userConnection;
@@ -26,9 +26,9 @@ namespace Tradify.RealTimeService.HubNegotiation
                 try
                 {
                     string ConnectionId = Context.ConnectionId;
-                    int userId = int.Parse(Context.User.FindFirst(nameof(UserClaimModel.Id))?.Value);
+                  //  int userId = int.Parse(Context.User.FindFirst(nameof(UserClaimModel.Id))?.Value);
                     // to test code will intialize this id for user
-                    userId = 2;
+                  int  userId = 2;
                     await userConnection.AddAsync(new Data.Entities.UserConnection.UserConnection()
                     { 
                         ConnectionId = ConnectionId,

@@ -6,11 +6,13 @@ using System.Collections.Generic;
 using System.Net.Http.Headers;
 using System.Security.Cryptography;
 using System.Text;
+using Tradify.Data.Entities;
 using Tradify.Data.Enums;
 using Tradify.Data.Enums.Fawaterak;
 using Tradify.Data.Helpers.Fawaterak;
 using Tradify.Data.Helpers.Fawaterak.Einvoice;
 using Tradify.Data.Helpers.Fawaterak.WebHook;
+using Tradify.Service.AbstractsServices;
 using Tradify.Service.AbstractsServices.FawaterakServices;
 using Tradify.Service.AbstractsServices.IdentityServices;
 using Twilio.TwiML.Messaging;
@@ -22,12 +24,16 @@ namespace Tradify.Service.Services.FawaterakServices
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly FawaterakOptions fawaterakOptions;
         private readonly IUserService _userService;
+        private readonly IPaymentService _paymentService;
+        private readonly IOrdersService _ordersService; 
 
-        public FawaterakServices(IHttpClientFactory httpClientFactory, FawaterakOptions fawaterakOptions,IUserService userService)
+        public FawaterakServices(IHttpClientFactory httpClientFactory, FawaterakOptions fawaterakOptions,IUserService userService,IPaymentService paymentService
+            ,IOrdersService ordersService)
         {
             _httpClientFactory = httpClientFactory;
             this.fawaterakOptions = fawaterakOptions;
             this._userService = userService;
+            this._paymentService = paymentService;
         }
 
         public async Task<EInvoiceResponseDataModel?> CreateEInvoiceAsync(EInvoiceRequestLink eInvoice)
@@ -193,6 +199,80 @@ namespace Tradify.Service.Services.FawaterakServices
             return BitConverter.ToString(hashBytes).Replace("-","").ToString();
 
         }
+
+
+        
         #endregion
-        }
+        public async Task<string> WebHookFawaterakEnvoiceLink(Tradify.Data.Entities.Orders order, string Payment_status) 
+        {
+            using (var Trans = await _paymentService.BeginTransactionAsync())
+            {
+
+                try
+                {
+                    if (order == null || order.subOrders == null || !order.subOrders.Any()) return "NotFound";
+
+                    // Create Payment For Each Store
+                    foreach (var subOrder in order.subOrders)
+                    {
+                        // Calculate Store Total
+                        decimal totalAmount = 0;
+
+                        if (subOrder.OrderItems != null && subOrder.OrderItems.Any())
+                        {
+                            totalAmount = subOrder.OrderItems
+                                .Sum(x => x.Price * x.Quantity);
+                        }
+
+                        // Create Payment
+                        var payment = new Payments()
+                        {
+                            Amount = totalAmount,
+
+                            CustomerId = (int)order.CustomerId,
+
+                            OrderId = order.Id,
+
+                            StoreId = subOrder.StoreId,
+
+                            PaymentStatus = Payment_status switch {
+
+                                "Paid" => Tradify.Data.Enums.PaymentStatus.Paid,
+
+                                "Pending" => Tradify.Data.Enums.PaymentStatus.Pending,
+
+                                "Failed" => Tradify.Data.Enums.PaymentStatus.Failed,
+
+                                _ => Tradify.Data.Enums.PaymentStatus.Pending
+                            },
+
+                            PaymentMethod = Tradify.Data.Enums.PaymentMethod.Wallet
+
+                        };
+                        
+                        await _paymentService.AddAsync(payment);
+
+                    }
+                    // Save Changes
+                    await _paymentService.SaveChangesAsync();
+
+                    // Commit Transaction
+                    await Trans.CommitAsync();
+
+                    return "Success";
+                }
+                catch (Exception ex)
+                {
+                    await Trans.RollbackAsync();
+
+                    return ex.Message;
+                }
+              
+
+
+            }
+           }
+
+
+    }
 }
