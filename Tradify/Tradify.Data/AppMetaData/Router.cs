@@ -316,11 +316,17 @@ namespace Tradify.Data.AppMetaData
             public const string UpdateCart = prefix + "Update";
             public const string AddToCart = prefix + "/AddToCart";
         }
-        public static class Post {
+        public static class Post
+        {
 
             public const string prefix = Rule + "Post";
             public const string AddPost = prefix + "/AddPost";
+            public const string GetPostsOfUserByID = prefix+ "/GetPostsOfUserByID"+ SignleRoute;
+            public const string GetPostByID = prefix + "/GetPostByID" + SignleRoute;
+            public const string GetPosts = prefix + "/GetPosts";
+
+
         }
 
-    }
+     }
 }

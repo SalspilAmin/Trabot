@@ -133,7 +133,6 @@ namespace Tradify.Core.Features.Post.Commands.Handler
                     if (user.Posts == null) user.Posts = new List<Tradify.Data.Entities.Posts.Post>(); // التأمين ضد الـ Null
 
                     user.Posts.Add(post);
-                    user.Posts.Add(post);
                     var notifyPost =  mapper.Map<PostResult>(post);
                    await postHubService.NotifyAllAboutPost(notifyPost);
                     await postService.SaveChangesAsync();

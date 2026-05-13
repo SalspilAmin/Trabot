@@ -12,6 +12,7 @@ using Tradify.Data.Entities;
 using Tradify.Infrastructure.Context;
 using Tradify.Service.AbstractsServices;
 using Tradify.Service.Services;
+using static Tradify.Data.AppMetaData.Router;
 
 namespace Tradify.Core.Features.Cart.Commands.Handlers
 {
@@ -48,23 +49,69 @@ namespace Tradify.Core.Features.Cart.Commands.Handlers
                     if (user == null) return BadRequest<GetCartByUserIdQueryResult>(localization.Get("NotFound"));
                     var Cart = user.Cart;
 
-                    if (request.ProductsInCart.Count == 0)
+                    // If client sends empty list => clear cart
+                    if (request.ProductsInCart == null || !request.ProductsInCart.Any())
                     {
-                        Cart.CartProducts = null;
+                        context.CartProducts.RemoveRange(Cart.CartProducts);
 
+                        await context.SaveChangesAsync();
+                        await trans.CommitAsync();
 
+                        var emptyResult = mapper.Map<GetCartByUserIdQueryResult>(Cart);
+
+                        return Success(emptyResult);
                     }
-                    var productsinCartToUser = mapper.Map<List<CartProduct>>(request.ProductsInCart);
-                    foreach (var item in productsinCartToUser)
+
+                    // Existing items in DB
+
+                    var existingCartProducts = Cart.CartProducts.ToList();
+
+                    //  Use ProductVariantId as the stable identifier from the client
+                    var requestedVariantIds = request.ProductsInCart
+                        .Select(x => x.ProductVariantId)
+                        .ToHashSet();
+
+                    // Remove items no longer in the request
+                    var productsToRemove = existingCartProducts
+                        .Where(x => !requestedVariantIds.Contains((int)x.ProductVariantId))
+                        .ToList();
+
+                    context.CartProducts.RemoveRange(productsToRemove);
+                    // Update or Add
+                    foreach (var item in request.ProductsInCart)
                     {
-                        item.Cart = Cart;
-                        item.CartId = Cart.Id;
+                        // Update existing
+                        if (item.Id != 0)
+                        {
+                            var existingProduct = existingCartProducts
+                                .FirstOrDefault(x => x.Id == item.Id);
+
+                            if (existingProduct != null)
+                            {
+                                existingProduct.ProductVariantId = item.ProductVariantId;
+                                existingProduct.Quantity = item.Quantity;
+                            }
+                        }
+                        else
+                        {
+                            // Add new product
+                            var newCartProduct = new CartProduct
+                            {
+                                ProductVariantId = item.ProductVariantId,
+                                Quantity = item.Quantity,
+                                CartId = Cart.Id
+                            };
+
+                            await context.CartProducts.AddAsync(newCartProduct);
+                        }
                     }
-                    user.Cart.CartProducts = productsinCartToUser;
+
                     await context.SaveChangesAsync();
+                    await trans.CommitAsync();
+
                     var result = mapper.Map<GetCartByUserIdQueryResult>(Cart);
 
-                    return Success<GetCartByUserIdQueryResult>(result);
+                    return Success(result);
                 }
                 catch (Exception ex)
                 {

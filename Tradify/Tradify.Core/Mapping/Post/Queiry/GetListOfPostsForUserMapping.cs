@@ -37,6 +37,9 @@ namespace Tradify.Core.Mapping.Post
 
                 .ForMember(dest => dest.ImageOrVideo_Paths,
                     opt => opt.MapFrom(src => src.ImageOrVideo_Paths)).ReverseMap();
+
+
+            
         }
     }
 }
