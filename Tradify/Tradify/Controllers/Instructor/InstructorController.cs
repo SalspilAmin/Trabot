@@ -50,12 +50,39 @@ namespace Tradify.Controllers.Instructor
             return Ok(result);
         }
 
+        [HttpGet(Router.Instructor.BySeller)]
+        public async Task<IActionResult> GetInstructorBySeller([FromQuery] GetSellerInstructorQuery query)
+        {
+            var result = await Mediator.Send(query);
+            return Ok(result);
+        }
+
 
         [HttpGet(Router.Instructor.WithDiscount)]
         public async Task<IActionResult> GetInstructorWithDiscount([FromQuery] GetInstructorWithDiscountQuery query)
         {
             var result = await Mediator.Send(query);
             return Ok(result);
+        }
+
+
+        [HttpPut(Router.Instructor.Update)]
+        public async Task<IActionResult> Update([FromForm] UpdateInstructoreCommand command)
+        {
+            var result = await Mediator.Send(command);
+            return NewResult(result);
+        }
+        [HttpPut(Router.Instructor.DisActive)]
+        public async Task<IActionResult> DisActive([FromRoute] int id)
+        {
+            var result = await Mediator.Send(new DisActiveInstructorCommand(id));
+            return NewResult(result);
+        }
+        [HttpPut(Router.Instructor.Active)]
+        public async Task<IActionResult> Active([FromRoute] int id)
+        {
+            var result = await Mediator.Send(new ActiveInstructorCommand(id));
+            return NewResult(result);
         }
     }
 }

@@ -18,18 +18,20 @@ namespace Tradify.Controllers.Images
             return NewResult(result);
         }
 
-        //[HttpPut(Router.StoreImage.Update)]
-        //public async Task<IActionResult> UpdateImage([FromRoute] int imageId, [FromForm] UpdateStoreImageCommand command)
-        //{
+        [HttpPut(Router.StoreImage.Update)]
+        public async Task<IActionResult> UpdateImage( [FromForm] UpdateStoreImageCommand command)
+        {
 
-        //    var result = await Mediator.Send(command);
-        //    return NewResult(result);
-        //}
+            var result = await Mediator.Send(command);
+            return NewResult(result);
+        }
+
+
 
         [HttpDelete(Router.StoreImage.Delete)]
-        public async Task<IActionResult> DeleteImage([FromRoute] int id)//, int sellerId)
+        public async Task<IActionResult> DeleteImage([FromRoute] int id)
         {
-            var result = await Mediator.Send(new DeleteStoreImageCommand(id));//, sellerId));
+            var result = await Mediator.Send(new DeleteStoreImageCommand(id));
             return Ok(result);
         }
 

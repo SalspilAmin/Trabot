@@ -21,6 +21,7 @@ namespace Tradify.Infrastructure.Seeder
 
         public static async Task SeedAsync(ApplicationDbContext context)
         {
+
             var services = new List<Service>()
             {
 
