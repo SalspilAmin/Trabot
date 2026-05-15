@@ -22,9 +22,7 @@ namespace Tradify.Data.Entities
         public int Quantity { get; set; }
         public int ProductVAriantsId { get; set; }
 
-        public int? ShipmentId { get; set; }
 
-        public int? ShipmentTrackingId { get; set; }
 
         public OrderStatus Status { get; set; } 
          
@@ -42,10 +40,18 @@ namespace Tradify.Data.Entities
         [ForeignKey(nameof(ProductVAriantsId))]
         public virtual ProductVariants ProductVariants { get; set; }
 
-        [ForeignKey(nameof(ShipmentId))]
         public virtual Shipments? Shipment { get; set; }
-        [ForeignKey(nameof(ShipmentTrackingId))]
-        public virtual ShipmentTracking? ShipmentTracking { get; set; }
+
+
+        //public int? ShipmentId { get; set; }
+
+
+        //[ForeignKey(nameof(ShipmentId))]
+        //public int? ShipmentTrackingId { get; set; }
+
+
+        //[ForeignKey(nameof(ShipmentTrackingId))]
+        //public virtual ShipmentTracking? ShipmentTracking { get; set; }
 
     }
 }

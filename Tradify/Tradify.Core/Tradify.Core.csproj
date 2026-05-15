@@ -63,6 +63,7 @@
     <Folder Include="Mapping\Interactions\Commands\" />
     <Folder Include="Mapping\Interactions\Queries\" />
     <Folder Include="Mapping\SellerMapping\Querry\" />
+    <Folder Include="Mapping\Post\Queiry\" />
     <Folder Include="Mapping\ShipmentTrackingMapping\Command\" />
   </ItemGroup>
 

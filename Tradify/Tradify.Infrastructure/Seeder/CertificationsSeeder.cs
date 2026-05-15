@@ -76,6 +76,115 @@ CreateCertification(9, "Vision Correction Specialist"),
    CreateCertification(10, "General Medicine Practitioner License"),
 CreateCertification(10, "Primary Care Certification"),
 CreateCertification(10, "Emergency First Aid Training"),
+
+
+
+    // =========================
+    // Body Gym
+    // =========================
+
+    // Captain Ahmed Samy
+    CreateCertification(14, "NASM Certified Personal Trainer"),
+    CreateCertification(14, "Strength & Conditioning Specialist"),
+    CreateCertification(14, "Sports Nutrition Certification"),
+
+    // Captain Nour Ali
+    CreateCertification(15, "ACE Personal Trainer Certification"),
+    CreateCertification(15, "Functional Training Specialist"),
+
+    // Captain Mostafa Adel
+    CreateCertification(16, "Professional Bodybuilding Coach"),
+    CreateCertification(16, "Advanced Resistance Training Certification"),
+
+    // Captain Omar Khaled
+    CreateCertification(17, "CrossFit Level 2 Trainer"),
+    CreateCertification(17, "HIIT Training Specialist"),
+
+    // Captain Youssef Nabil
+    CreateCertification(18, "Certified Nutrition Coach"),
+    CreateCertification(18, "Weight Management Specialist"),
+
+
+    // =========================
+    // Smart Learn Center
+    // =========================
+
+    // Mr. Ahmed Hassan
+    CreateCertification(19, "STEM Education Certification"),
+    CreateCertification(19, "Advanced Mathematics Teaching Methods"),
+
+    // Ms. Sara Mohamed
+    CreateCertification(20, "TESOL Certification"),
+    CreateCertification(20, "IELTS Preparation Instructor"),
+
+    // Mr. Mostafa Ali
+    CreateCertification(21, "Physics Laboratory Safety Training"),
+    CreateCertification(21, "Modern Teaching Strategies"),
+
+    // Ms. Nada Ibrahim
+    CreateCertification(22, "Biology Lab Management Certification"),
+
+    // Mr. Omar Khaled
+    CreateCertification(23, "Organic Chemistry Lab Training"),
+    CreateCertification(23, "Scientific Research Methods"),
+
+    // Ms. Mariam Adel
+    CreateCertification(24, "Full Stack Web Development"),
+    CreateCertification(24, "Python Programming Instructor"),
+
+    // Mr. Youssef Samir
+    CreateCertification(25, "Arabic Grammar Teaching Certification"),
+
+    // Ms. Reem Tarek
+    CreateCertification(26, "DALF Certification"),
+    CreateCertification(26, "French Conversation Instructor"),
+
+    // Mr. Hany Fathy
+    CreateCertification(27, "Modern History Teaching Skills"),
+
+    // Ms. Salma Nabil
+    CreateCertification(28, "SAT Preparation Instructor"),
+    CreateCertification(28, "Critical Thinking Skills Training"),
+
+
+    // =========================
+    // Flash Studio
+    // =========================
+
+    // Ahmed Samy
+    CreateCertification(29, "Professional Photography Certification"),
+    CreateCertification(29, "Portrait Photography Specialist"),
+
+    // Sara Adel
+    CreateCertification(30, "Adobe Photoshop Expert"),
+    CreateCertification(30, "Advanced Photo Retouching"),
+
+    // Mostafa Nabil
+    CreateCertification(31, "Cinematic Videography Certification"),
+    CreateCertification(31, "Video Editing with Premiere Pro"),
+
+    // Reem Tarek
+    CreateCertification(32, "Creative Direction Certification"),
+    CreateCertification(32, "Visual Storytelling Workshop"),
+
+
+    // =========================
+    // Smile Care Clinic
+    // =========================
+
+    // Dr. Kareem El-Sayed
+    CreateCertification(33, "Advanced Dental Implantology"),
+    CreateCertification(33, "Oral Surgery Specialist"),
+    CreateCertification(33, "Digital Smile Design Certification"),
+
+    // Dr. Laila Farouk
+    CreateCertification(34, "Certified Orthodontic Specialist"),
+    CreateCertification(34, "Invisalign Provider Certification"),
+
+    // Dr. Hossam Abdelrahman
+    CreateCertification(35, "General Dentistry License"),
+    CreateCertification(35, "Teeth Whitening Specialist"),
+
             };
 
 

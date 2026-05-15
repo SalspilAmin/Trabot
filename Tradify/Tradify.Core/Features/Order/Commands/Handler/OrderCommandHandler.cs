@@ -162,8 +162,8 @@ namespace Tradify.Core.Features.Order.Commands.Handler
             if (order.PaymentStatus == PaymentStatus.Paid)
                 return BadRequest<string>(localization.Get("CannotDeletePaidOrder"));
 
-            if (order.ShipmentId != null )
-                return BadRequest<string>(localization.Get("OrderAlreadyShipped"));
+            //if (order.ShipmentId != null )
+            //    return BadRequest<string>(localization.Get("OrderAlreadyShipped"));
 
             //// 3️⃣ Delete Order Items (if needed)
             //if (order.OrderItems != null && order.OrderItems.Count > 0)

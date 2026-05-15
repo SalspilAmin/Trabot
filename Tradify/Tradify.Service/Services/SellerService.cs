@@ -39,14 +39,14 @@ namespace Tradify.Service.Services
 
 
 
-        public async Task<(string, int?)> AddSellerAsync(Sellers seller)
+        public async Task<(string, int?)> AddSellerAsync(Sellers seller ,int userId )
         {
             using (var transaction = context.Database.BeginTransaction())
             {
                 try
                 {
                     //  1. Check if user exist
-                    var user = await context.Users.FirstOrDefaultAsync(u => u.Id == seller.UserId);
+                    var user = await context.Users.FirstOrDefaultAsync(u => u.Id == userId);
 
                     if (user == null)
                     {
@@ -59,9 +59,6 @@ namespace Tradify.Service.Services
 
 
                     // 3. Check is user have seller Role
-                    if (user.EmailConfirmed == false)
-                        return ("UserMustConfirmedEmailFirst", null);
-
                     var Addrole = await userManager.AddToRoleAsync(user, RolesHelper.Seller);
                     var roles = await userManager.GetRolesAsync(user);
 
@@ -78,11 +75,12 @@ namespace Tradify.Service.Services
 
                     // 4. Check is user already Seller
                     var existingSeller = await GetTableNoTracking()
-                    .FirstOrDefaultAsync(s => s.UserId == seller.UserId);
+                    .FirstOrDefaultAsync(s => s.UserId == userId);
 
                     if (existingSeller != null)
                         return ("UserIsAlreadySeller", null);
                     //  1. Default values
+                    seller.UserId = userId;
                     seller.IsActive = true;
                     seller.BusinessName = seller.BusinessName.Trim().ToLower();
                     // 2. Save

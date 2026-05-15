@@ -11,11 +11,16 @@ using Tradify.Data.Entities.Appointments;
 using Tradify.Service.AbstractsServices;
 using Tradify.Service.AbstractsServices.AuthorizationServices;
 using Tradify.Service.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace Tradify.Core.Features.Certification.Command.Handlers
 {
     public class CertificationCommandHandler : ResponseHandler,
-                                         IRequestHandler<AddInstructorCertificationCommand, Response<string>>
+                                         IRequestHandler<AddInstructorCertificationCommand, Response<string>>,
+                                         IRequestHandler<UpdateInstructorCertificationCommand, Response<string>>,
+                                         IRequestHandler<DeleteInstructorCertificationCommand, Response<string>>
+
+
 
 
 
@@ -26,6 +31,7 @@ namespace Tradify.Core.Features.Certification.Command.Handlers
         private readonly IInstructorsService instructorsService;
         private readonly IMapper mapper;
         private readonly ICertificationsService certificationsService;
+        private readonly ICurrentUserService currentUserService;
 
         #endregion
 
@@ -33,12 +39,14 @@ namespace Tradify.Core.Features.Certification.Command.Handlers
         public CertificationCommandHandler(IMapper mapper,
                                      IInstructorsService instructorsService,
                                      LocalizationService localize,
-                                     ICertificationsService certificationsService) : base(localize)
+                                     ICertificationsService certificationsService,
+                                     ICurrentUserService currentUserService ) : base(localize)
         {
             this.mapper = mapper;
             this.localize = localize;
             this.instructorsService = instructorsService;
             this.certificationsService = certificationsService;
+            this.currentUserService = currentUserService;
         }
         #endregion
 
@@ -66,7 +74,58 @@ namespace Tradify.Core.Features.Certification.Command.Handlers
         }
 
 
-       
+        //Update Instructor Certification 
+
+        public async Task<Response<string>> Handle(UpdateInstructorCertificationCommand request, CancellationToken cancellationToken)
+        {
+            var curantUser = currentUserService.GetUserId();
+            var instructor = await instructorsService.GetTableNoTracking()
+                .FirstOrDefaultAsync(i => i.UserId == curantUser);
+
+            if (instructor == null)
+                return BadRequest<string>(localize.Get("InstructorNotFound"));
+
+            var certification = await certificationsService.GetTableAsTracking()
+                .FirstOrDefaultAsync(c => c.Id == request.Id && c.InstructorId == instructor.Id);
+
+            if (certification == null)
+                return BadRequest<string>(localize.Get("CertificationNotFound"));
+
+            certification.Title = request.Title;
+           
+
+            await certificationsService.SaveChangesAsync();
+
+            return Success<string>(localize.Get("CertificationUpdatedSuccessfully"));
+        }
+
+
+        // Delete Instructor Certification 
+
+
+        public async Task<Response<string>> Handle(DeleteInstructorCertificationCommand request, CancellationToken cancellationToken)
+        {
+            var curantUser = currentUserService.GetUserId();
+            var instructor = await instructorsService.GetTableNoTracking()
+                .FirstOrDefaultAsync(i => i.UserId == curantUser);
+
+            if (instructor == null)
+                return BadRequest<string>(localize.Get("InstructorNotFound"));
+
+            var certification = await certificationsService.GetTableAsTracking()
+                .FirstOrDefaultAsync(c => c.Id == request.Id && c.InstructorId == instructor.Id);
+
+            if (certification == null)
+                return BadRequest<string>(localize.Get("CertificationNotFound"));
+
+
+            await certificationsService.DeleteAsync(certification);
+            await certificationsService.SaveChangesAsync();
+            return Success<string>(localize.Get("CertificationDeletedSuccessfully"));
+
+        }
+
+
 
 
 

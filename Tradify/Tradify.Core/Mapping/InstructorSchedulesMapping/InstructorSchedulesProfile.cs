@@ -11,6 +11,7 @@ namespace Tradify.Core.Mapping.InstructorSchedulesMapping
         {
             AddInstructorSchedulesMapping();
             GetInstructorSchedulesMapping();
+            GetNotAvilableInstructoreSchedulesMapping();
         }
     }
     

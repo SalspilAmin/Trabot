@@ -73,6 +73,12 @@ namespace Tradify.Service.Services
                     if (!instructor.IsActive)
                         return ("instructorNotActive", null);
 
+
+
+                    // Validate time range
+                    if (schedules.EndTime <= schedules.StartTime)
+                        return ("InvalidTimeRange", null);
+
                     // 4. Check Overlapping
                     var hasConflict = await context.InstructorSchedules
                         .AnyAsync(s =>
@@ -89,7 +95,8 @@ namespace Tradify.Service.Services
                     var schedulesExists = await context.InstructorSchedules
                               .AnyAsync(s => s.InstructorId == instructor.Id
                                         && s.StartTime == schedules.StartTime
-                                        && s.EndTime == schedules.EndTime);
+                                        && s.EndTime == schedules.EndTime
+                                        &&s.Day==schedules.Day);
 
                     if (schedulesExists)
                         return ("schedulesExistsAlreadyExists", null);

@@ -26,5 +26,19 @@ namespace Tradify.Controllers.Instructor
             var result = await Mediator.Send(new GetCertificationByInstructorQuery(id));
             return Ok(result);
         }
+
+        [HttpPut(Router.InstructorCertification.UpdateCertification)]
+        public async Task<IActionResult> UpdateCertification([FromForm] UpdateInstructorCertificationCommand command)
+        {
+            var response = await Mediator.Send(command);
+            return NewResult(response);
+        }
+
+        [HttpDelete(Router.InstructorCertification.Delete)]
+        public async Task<IActionResult> Delete([FromRoute] int id)
+        {
+            var resutl = await Mediator.Send(new DeleteInstructorCertificationCommand(id));
+            return Ok(resutl);
+        }
     }
 }

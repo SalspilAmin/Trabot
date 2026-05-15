@@ -10,6 +10,8 @@ namespace Tradify.Core.Mapping.SellerMapping
         public SellerProflie() 
         {
             AddSellerMapping();
+            GetSellerByIdMapping();
+            GetAllSellerMapping();
         }
     }
 }

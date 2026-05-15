@@ -10,7 +10,7 @@ namespace Tradify.Service.AbstractsServices
     public interface ISellerService : ISellerRepository
 
     {
-        Task<(string, int?)> AddSellerAsync(Sellers seller);
+        Task<(string, int?)> AddSellerAsync(Sellers seller , int userId);
         
     }
 }

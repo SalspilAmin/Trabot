@@ -8,19 +8,21 @@ using System.Text;
 using Tradify.Core.Bases;
 using Tradify.Core.Features.ProductVariantsImages.Commands.Models;
 using Tradify.Core.Features.ProductVariantsImages.Commands.Models;
+using Tradify.Core.Features.StoreImage.Commands.Models;
 using Tradify.Core.Features.User.Commands.Models;
 using Tradify.Core.Resources.Service;
 using Tradify.Data.Entities;
 using Tradify.Service.AbstractsServices;
 using Tradify.Service.Services;
+using static Tradify.Data.AppMetaData.Router;
 
 
 namespace Tradify.Core.Features.ProductVariantsImages.Commands.Handlers
 {
     public class ProductVariantImageCommandHandler : ResponseHandler
         , IRequestHandler<AddProductVariantImageCommand, Response<string>>
-    //, IRequestHandler<UpdateProductVariantImageCommand, Response<string>>
-    //, IRequestHandler<DeleteProductVariantImageCommand, Response<string>>
+    , IRequestHandler<UpdateProductVariantImageCommand, Response<string>>
+    , IRequestHandler<DeleteProductVariantImageCommand, Response<string>>
 
 
     {
@@ -55,17 +57,16 @@ namespace Tradify.Core.Features.ProductVariantsImages.Commands.Handlers
         }
         #endregion
 
-
-
-
         #region Methods
+
+        //Add Product VArint Image 
+        #region Add Product VArint Image 
         public async Task<Response<string>> Handle(AddProductVariantImageCommand request, CancellationToken cancellationToken)
         {
             // 1️⃣ Get current user
             var currentUserId = currentUserService.GetUserId();
             var seller = await sellerService.GetTableNoTracking().FirstOrDefaultAsync(s => s.UserId == currentUserId);
 
-            // var seller = await sellerService.GetTableNoTracking().FirstOrDefaultAsync(s=>s.Id== request.SellerId);
             if (seller == null)
                 return NotFound<string>(localize.Get("SellerNotFound"));
             // 2️⃣ Get productVariant
@@ -75,117 +76,138 @@ namespace Tradify.Core.Features.ProductVariantsImages.Commands.Handlers
                      .FirstOrDefaultAsync(p => p.Id == request.ProductVariantId &&
                                           p.Product.Store.SellerId == seller.Id);
             if (productVariant == null)
-                return NotFound<string>(localize.Get("ProductNotFound"));
+                return NotFound<string>(localize.Get("ProductVariantNotFound"));
 
 
+            // has already image
+
+
+            if (productVariant.ProductVariantImage != null)
+                return BadRequest<string>(localize.Get("ProductVarianHasImageAlrady"));
 
 
             // 3️⃣ Upload image
-            var imagePath = await fileService.UploadGenericAsync(
-            UploadFolder.Store,
-            request.ProductVariantId,
-            request.Image);
 
-            if (!imagePath.StartsWith("/"))
+            var folderName = $"{UploadFolder.Variants}/{request.ProductVariantId}";
+
+            var uploadResult = await fileService.UploadImageAsync(
+                         request.Image,
+                         folderName);
+
+            if (uploadResult.Error != "Success")
             {
-                return BadRequest<string>(localize.Get(imagePath));
+                return BadRequest<string>(localize.Get(uploadResult.Error));
             }
 
 
-
-
             // 5️⃣ Save in DB
-            var productVariantImage = new ProductVariantImage
+            var varintImage = new Data.Entities.ProductVariantImage
             {
                 ProductVariantId = request.ProductVariantId,
-                MediaPath = imagePath,
-
+                MediaPath = uploadResult.Url,
+                PublicId = uploadResult.PublicId
             };
 
-            await productVariantImageService.AddAsync(productVariantImage);
+
+            await productVariantImageService.AddAsync(varintImage);
             await productVariantImageService.SaveChangesAsync();
 
             return Success(localize.Get("ImageAddedSuccessfully"));
 
 
         }
+        #endregion
+
+        // Update product varint image 
+
+        #region Update product varint image
+        public async Task<Response<string>> Handle(UpdateProductVariantImageCommand request, CancellationToken cancellationToken)
+        {
+            var currentUserId = currentUserService.GetUserId();
+            var seller = await sellerService.GetTableNoTracking()
+                .FirstOrDefaultAsync(s => s.UserId == currentUserId);
+            if (seller == null)
+                return Unauthorized<string>(localize.Get("SellerNotFound"));
+            // 1 Get image
+            var image = await productVariantImageService.GetTableAsTracking()
+                        .FirstOrDefaultAsync(i => i.Id == request.ImageId
+                        && i.ProductVariant.Product.Store.SellerId == seller.Id);
+
+
+            if (image == null)
+                return NotFound<string>(localize.Get("ImageNotFound"));
+
+            // Upload New Image
+
+            var folderName = $"{UploadFolder.Variants}/{image.ProductVariantId}";
+
+            var uploadResult = await fileService.UploadImageAsync(
+                         request.Image,
+                         folderName);
+
+            if (uploadResult.Error != "Success")
+            {
+                return BadRequest<string>(localize.Get(uploadResult.Error));
+            }
+
+
+            //  Delete image
+
+            if (!string.IsNullOrWhiteSpace(image.PublicId))
+            {
+                await fileService.DeleteImageAsync(image.PublicId);
+            }
+
+
+            // Update Database
+            image.MediaPath = uploadResult.Url;
+            image.PublicId = uploadResult.PublicId;
+
+
+            await productVariantImageService.UpdateAsync(image);
+            await productVariantImageService.SaveChangesAsync();
+
+            return Success<string>(localize.Get("ImageUpdatedSuccessfully"));
+        }
+
+        #endregion
+
+        //Delete product varint Image 
+
+        #region Delete product varint Image 
+        public async Task<Response<string>> Handle(DeleteProductVariantImageCommand request, CancellationToken cancellationToken)
+        {
+            var currentUserId = currentUserService.GetUserId();
+            var seller = await sellerService.GetTableNoTracking()
+                .FirstOrDefaultAsync(s => s.UserId == currentUserId);
+            if (seller == null)
+                return Unauthorized<string>(localize.Get("SellerNotFound"));
+            // 1 Get image
+            var image = await productVariantImageService.GetTableAsTracking()
+                        .FirstOrDefaultAsync(i => i.Id == request.Id
+                        && i.ProductVariant.Product.Store.SellerId == seller.Id);
+
+
+            if (image == null)
+                return NotFound<string>(localize.Get("ImageNotFound"));
+
+
+            // 3️⃣ Delete image
+
+            if (!string.IsNullOrWhiteSpace(image.PublicId))
+            {
+                await fileService.DeleteImageAsync(image.PublicId);
+            }
 
 
 
+            await productVariantImageService.DeleteAsync(image);
+            await productVariantImageService.SaveChangesAsync();
 
-        //public async Task<Response<string>> Handle(UpdateProductVariantImageCommand request, CancellationToken cancellationToken)
-        //{
-        //    var currentUserId = currentUserService.GetUserId();
+            return Success<string>(localize.Get("ImageDeletedSuccessfully"));
+        }
 
-        //    // 1️⃣ Get image
-        //    var image = await productVariantImageService.GetTableAsTracking()
-        //                .Include(i => i.ProductVariant)
-        //                .ThenInclude(v => v.Product)
-        //                .ThenInclude(p => p.Store)
-        //                .FirstOrDefaultAsync(i => i.Id == request.ImageId &&
-        //                 i.ProductVariant.Product.Store.SellerId == currentUserId);
-
-
-        //    if (image == null)
-        //        return NotFound<string>(localize.Get("ImageNotFound"));
-
-
-
-
-        //    if (request.IsMain && !image.IsMain)
-        //    {
-        //        var oldMainImages = await productVariantImageService.GetTableAsTracking()
-        //            .Where(i => i.ProductVariantId == image.ProductVariantId && i.IsMain)
-        //           .ExecuteUpdateAsync(setters =>
-        //                setters.SetProperty(i => i.IsMain, false));
-        //    }
-
-        //    // 4️⃣ Update fields
-        //    image.IsMain = request.IsMain;
-        //    image.SortOrder = request.SortOrder;
-
-        //    await productVariantImageService.UpdateAsync(image);
-        //    await productVariantImageService.SaveChangesAsync();
-
-        //    return Success<string>(localize.Get("ImageUpdatedSuccessfully"));
-        //}
-
-        //public async Task<Response<string>> Handle(DeleteProductVariantImageCommand request, CancellationToken cancellationToken)
-        //{
-        //    // 1️⃣ Get image with related product
-        //    var currentUserId = currentUserService.GetUserId();
-
-        //    var image = await productVariantImageService.GetTableAsTracking()
-        //                .Include(i => i.ProductVariant)
-        //                .ThenInclude(v => v.Product)
-        //                .ThenInclude(p => p.Store)
-        //                .FirstOrDefaultAsync(i => i.Id == request.ImageId &&
-        //                 i.ProductVariant.Product.Store.SellerId == currentUserId);
-        //    if (image == null)
-        //        return NotFound<string>(localize.Get("ImageNotFound"));
-
-        //    if (image.IsMain)
-        //    {
-        //        var anotherImage = await productVariantImageService.GetTableAsTracking()
-        //            .FirstOrDefaultAsync(i => i.ProductVariantId == image.ProductVariantId && i.Id != image.Id);
-
-        //        if (anotherImage != null)
-        //            anotherImage.IsMain = true;
-        //    }
-
-        //    // 3️⃣ Delete image
-        //    if (!string.IsNullOrWhiteSpace(image.MediaPath))
-        //    {
-        //        await fileService.DeleteFile(image.MediaPath);
-        //    }
-        //    await productVariantImageService.DeleteAsync(image);
-        //    await productVariantImageService.SaveChangesAsync();
-
-        //    return Success<string>(localize.Get("ImageDeletedSuccessfully"));
-        //}
-
-
-
+        #endregion
 
 
         #endregion

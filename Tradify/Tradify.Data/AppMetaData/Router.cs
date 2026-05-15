@@ -88,11 +88,14 @@ namespace Tradify.Data.AppMetaData
                    public const string JopTitle = prefix + "/JopTitle";
                    public const string GetByID = prefix + "/Get" + SignleRoute;
                    public const string Paginated = prefix + "/Paginated";
+                   public const string BySeller = prefix + "/BySeller";
                    public const string AddDiscount = prefix + "/AddDiscount";
                    public const string DeleteDiscount = prefix + "/DeleteDiscount";
                    public const string WithDiscount = prefix + "/WithDiscount";
+                   public const string Update = prefix + "/Update";
+                   public const string Active = prefix + "/Active" + SignleRoute;
+                   public const string DisActive = prefix + "/DisActive" + SignleRoute;
 
-            
 
         }
 
@@ -101,7 +104,9 @@ namespace Tradify.Data.AppMetaData
             public const string prefix = Rule + "InstructorEducation";
             public const string Add = prefix + "/AddEducation";
             public const string GetByInstructor = prefix + "/ByInstructor";
+            public const string Delete = prefix + "/Delete" + SignleRoute;
 
+            public const string UpdateEducation = prefix + "/Update";
 
         }
         public static class Booking
@@ -123,7 +128,9 @@ namespace Tradify.Data.AppMetaData
             public const string Add = prefix + "/AddService";
             public const string GetByInstructor = prefix + "/ByInstructor";
 
+            public const string Delete = prefix + "/Delete" + SignleRoute;
 
+            public const string UpdateService = prefix + "/Update";
         }
 
         public static class InstructorSchedules
@@ -131,8 +138,12 @@ namespace Tradify.Data.AppMetaData
             public const string prefix = Rule + "InstructorSchedules";
             public const string Add = prefix + "/AddSchedules";
             public const string GetByInstructor = prefix + "/ByInstructor";
+            public const string GetNotAvilable = prefix + "/NotAvilable";
 
+            public const string Delete = prefix + "/Delete" + SignleRoute;
+            public const string Restore = prefix + "/Restore" + SignleRoute;
 
+            public const string UpdateSchedules = prefix + "/Update";
         }
         
         public static class InstructorCertification
@@ -141,6 +152,9 @@ namespace Tradify.Data.AppMetaData
             public const string Add = prefix + "/AddCertification";
             public const string GetByInstructor = prefix + "/ByInstructor";
 
+            public const string Delete = prefix + "/Delete" + SignleRoute;
+
+            public const string UpdateCertification = prefix + "/Update";
 
         }
         
@@ -199,8 +213,19 @@ namespace Tradify.Data.AppMetaData
 
 
         
+        public static class InstructorImage
+        {
+            public const string prefix = Rule + "InstructorImage";
+            public const string Add = prefix + "/addInstructorImage";
+            public const string Update = prefix + "/update";
+            public const string Delete = prefix + "/delete" + SignleRoute;
 
-              public static class StoreImage
+
+
+
+        }
+
+        public static class StoreImage
         {
             public const string prefix = Rule + "StoreImage";
             public const string Add = prefix + "/addStoreImage";
@@ -307,8 +332,15 @@ namespace Tradify.Data.AppMetaData
         {
             public const string prefix = Rule + "Seller";
             public const string Create = prefix + "/Create";
+            public const string Paginated = prefix + "/Paginated";
+            public const string GetByID = prefix + "/Get" + SignleRoute;
+            public const string Profile = prefix + "/Profile" + SignleRoute;
+            public const string Update = prefix + "/Update";
+            public const string Active = prefix + "/Active" + SignleRoute;
+            public const string DisActive = prefix + "/DisActive" + SignleRoute;
 
         }
+
         public static class Cart
         {
             public const string prefix = Rule + "Cart";

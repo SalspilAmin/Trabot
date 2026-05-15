@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -14,13 +15,14 @@ using Tradify.Data;
 using Tradify.Data.Entities;
 using Tradify.Service.AbstractsServices;
 using Tradify.Service.Services;
+using static Tradify.Data.AppMetaData.Router;
 
 
 namespace Tradify.Core.Features.StoreImage.Commands.Handlers
 {
     public class StoreImageCommandHandler : ResponseHandler
         , IRequestHandler<AddStoreImageCommand, Response<string>>
-        //, IRequestHandler<UpdateStoreImageCommand, Response<string>>
+        , IRequestHandler<UpdateStoreImageCommand, Response<string>>
         , IRequestHandler<DeleteStoreImageCommand, Response<string>>
 
 
@@ -58,6 +60,10 @@ namespace Tradify.Core.Features.StoreImage.Commands.Handlers
         #endregion
 
         #region Methods
+
+        // Add Store Image
+
+        #region Add Store Image
         public async Task<Response<string>> Handle(AddStoreImageCommand request, CancellationToken cancellationToken)
         {
 
@@ -124,49 +130,65 @@ namespace Tradify.Core.Features.StoreImage.Commands.Handlers
 
         }
 
+        #endregion
+
+        // Update Store Image 
+
+        #region Update Store Image
+        public async Task<Response<string>> Handle(UpdateStoreImageCommand request, CancellationToken cancellationToken)
+        {
+            var currentUserId = currentUserService.GetUserId();
+            var seller = await sellerService.GetTableNoTracking()
+                .FirstOrDefaultAsync(s => s.UserId == currentUserId);
+            if (seller == null)
+                return Unauthorized<string>(localize.Get("SellerNotFound"));
+            // 1 Get image
+            var image = await storeImageService.GetTableAsTracking()
+                        .Include(s => s.Stores)
+                        .FirstOrDefaultAsync(i => i.Id == request.ImageId
+                        &&i.Stores.SellerId == seller.Id);
 
 
+            if (image == null)
+                return NotFound<string>(localize.Get("ImageNotFound"));
 
-        //public async Task<Response<string>> Handle(UpdateStoreImageCommand request, CancellationToken cancellationToken)
-        //{
-        //    var currentUserId = currentUserService.GetUserId();
-        //    var seller = await sellerService.GetTableNoTracking()
-        //        .FirstOrDefaultAsync(s => s.UserId == currentUserId);
-        //    // 1️⃣ Get image
-        //    var image = await storeImageService.GetTableAsTracking()
-        //                .Include(s => s.Stores)
-        //                .FirstOrDefaultAsync(i => i.Id == request.ImageId &&
-        //                 i.Stores.SellerId == seller.Id);
+            // Upload New Image
 
+            var folderName = $"{UploadFolder.Store}/{seller.Store.Id}";
 
-        //    if (image == null)
-        //        return NotFound<string>(localize.Get("ImageNotFound"));
+            var uploadResult = await fileService.UploadImageAsync(
+                         request.Image,
+                         folderName);
 
-
+            if (uploadResult.Error != "Success")
+            {
+                return BadRequest<string>(localize.Get(uploadResult.Error));
+            }
 
 
-        //    if (request.IsMain && !image.IsMain)
-        //    {
-        //        var oldMainImages = await storeImageService.GetTableAsTracking()
-        //            .Where(i => i.StoreId == image.StoreId && i.IsMain)
-        //           .ExecuteUpdateAsync(setters =>
-        //                setters.SetProperty(i => i.IsMain, false));
-        //    }
+            //  Delete image
 
-        //    // 4️⃣ Update fields
-        //    image.IsMain = request.IsMain;
-        //    image.SortOrder = request.SortOrder;
+            if (!string.IsNullOrWhiteSpace(image.PublicId))
+            {
+                await fileService.DeleteImageAsync(image.PublicId);
+            }
+           
 
-        //    await storeImageService.UpdateAsync(image);
-        //    await storeImageService.SaveChangesAsync();
+            // Update Database
+            image.MediaPath = uploadResult.Url;
+            image.PublicId = uploadResult.PublicId;
 
-        //    return Success<string>(localize.Get("ImageUpdatedSuccessfully"));
-        //}
+           
+            await storeImageService.UpdateAsync(image);
+            await storeImageService.SaveChangesAsync();
 
+            return Success<string>(localize.Get("ImageUpdatedSuccessfully"));
+        }
 
+        #endregion
 
         //Delete Store Image 
-
+        #region Delete Store Image 
         public async Task<Response<string>> Handle(DeleteStoreImageCommand request, CancellationToken cancellationToken)
         {
             var currentUserId = currentUserService.GetUserId();
@@ -210,9 +232,7 @@ namespace Tradify.Core.Features.StoreImage.Commands.Handlers
             return Success<string>(localize.Get("ImageDeletedSuccessfully"));
         }
 
-
-
-
+        #endregion
 
         #endregion
     }

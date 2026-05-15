@@ -11,7 +11,8 @@ namespace Tradify.Core.Features.ProductsImages.Commands.Models
     {
         public int ProductId { get; set; }
         public IFormFile Image { get; set; }
+        public bool IsMain { get; set; }
 
-        public int SortOrder { get; set; }
+
     }
 }
