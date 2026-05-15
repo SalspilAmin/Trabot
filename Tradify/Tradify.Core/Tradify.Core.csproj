@@ -42,12 +42,26 @@
     <Folder Include="Features\Categorie\Queries\Handlers\" />
     <Folder Include="Features\Categorie\Queries\Models\" />
     <Folder Include="Features\Categorie\Queries\Results\" />
+    <Folder Include="Features\Comments\Queries\Handler\" />
+    <Folder Include="Features\Comments\Queries\Models\" />
+    <Folder Include="Features\Comments\Queries\Results\" />
+    <Folder Include="Features\Comments\Queries\Validations\" />
     <Folder Include="Features\Fawaterak\Queries\Validations\" />
+    <Folder Include="Features\Interactions\Commands\Handler\" />
+    <Folder Include="Features\Interactions\Commands\Models\" />
+    <Folder Include="Features\Interactions\Commands\Validations\" />
+    <Folder Include="Features\Interactions\Queries\Handler\" />
+    <Folder Include="Features\Interactions\Queries\Models\" />
+    <Folder Include="Features\Interactions\Queries\Results\" />
+    <Folder Include="Features\Interactions\Queries\Validations\" />
     <Folder Include="Features\Order\Queries\Validations\" />
     <Folder Include="Features\Post\Queries\Validations\" />
     <Folder Include="Features\Seller\Queries\Handlers\" />
     <Folder Include="Features\Seller\Queries\Models\" />
     <Folder Include="Features\Seller\Queries\Results\" />
+    <Folder Include="Mapping\Comments\Queries\" />
+    <Folder Include="Mapping\Interactions\Commands\" />
+    <Folder Include="Mapping\Interactions\Queries\" />
     <Folder Include="Mapping\SellerMapping\Querry\" />
     <Folder Include="Mapping\ShipmentTrackingMapping\Command\" />
   </ItemGroup>

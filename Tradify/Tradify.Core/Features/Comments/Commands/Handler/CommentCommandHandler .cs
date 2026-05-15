@@ -1,0 +1,125 @@
+﻿using AutoMapper;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Text;
+using Tradify.Core.Bases;
+using Tradify.Core.Features.Comments.Commands.Models;
+using Tradify.Core.Resources.Service;
+using Tradify.Data.Entities.Comments;
+using Tradify.Data.Helpers.Results;
+using Tradify.RealTimeService.HubServices;
+using Tradify.Service.AbstractsServices;
+
+namespace Tradify.Core.Features.Comments.Commands.Handler
+{
+    public class CommentCommandHandler :
+     ResponseHandler,
+     IRequestHandler<AddCommentCommand, Response<int?>>,
+            IRequestHandler<UpdateCommentCommand, Response<string>>,
+    IRequestHandler<DeleteCommentCommand, Response<string>>
+    {
+        private readonly ICommentService commentService;
+        private readonly IMapper mapper;
+        private readonly PostHubService postHubService;
+        private readonly LocalizationService localizationService;
+        private readonly IReplyOFCommentService replyOFCommentService;
+
+        public CommentCommandHandler(
+            ICommentService commentService,
+            IMapper mapper,
+            PostHubService postHubService,
+            LocalizationService localization,
+            IReplyOFCommentService replyOFCommentService) : base(localization)
+        {
+            this.commentService = commentService;
+            this.mapper = mapper;
+            this.postHubService = postHubService;
+            this.localizationService = localization;
+            this.replyOFCommentService = replyOFCommentService;
+        }
+
+        public async Task<Response<int?>> Handle(
+            AddCommentCommand request,
+            CancellationToken cancellationToken)
+        {
+            try
+            {
+                var comment = mapper.Map<Comment>(request);
+
+                var result = await commentService.AddAsync(comment);
+
+                await commentService.SaveChangesAsync();
+
+                var notifyComment =
+                    mapper.Map<CommentResult>(result);
+
+                await postHubService
+                    .NotifyAddComment(notifyComment);
+
+                return Created<int?>(result.Id);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest<int?>(ex.Message);
+            }
+        }
+
+        public async Task<Response<string>> Handle(
+       UpdateCommentCommand request,
+       CancellationToken cancellationToken)
+        {
+            try
+            {
+                var comment =
+                    await commentService.GetByIdAsync(
+                        request.CommentId);
+
+                if (comment == null)
+                    return NotFound<string>(localizationService.Get("NotFound"));
+
+                comment.Content = request.Content;
+                comment.IsUpdated = true;
+
+                await commentService.SaveChangesAsync();
+
+                return Success("Success");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest<string>(ex.Message);
+            }
+        }
+
+
+        public async Task<Response<string>> Handle(
+       DeleteCommentCommand request,
+       CancellationToken cancellationToken)
+        {
+            try
+            {
+                var comment =
+                    await commentService.GetByIdAsync(
+                        request.CommentId);
+
+                if (comment == null)
+                    return NotFound<string>(localizationService.Get("NotFound"));
+
+                comment.IsDeleted = true;
+
+                await commentService.SaveChangesAsync();
+
+                await postHubService
+                    .NotifyDeleteComment(comment.Id);
+
+                return Success(localizationService.Get("Success"));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest<string>(ex.Message);
+            }
+        }
+
+    }
+}
