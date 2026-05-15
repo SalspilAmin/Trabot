@@ -23,6 +23,7 @@ namespace Tradify.Core.Features.InstructorSchedules.Queries.Handlers
 {
     public class InstructorSchedulesQueryHandler : ResponseHandler
                                                      , IRequestHandler<GetInstructorSchedulesQuery, List<GetInstructorSchedulesResponse>>
+                                                     , IRequestHandler<GetNotAvilableInstructoreSchedulesQuery, Response<List<GetNotAvilableInstructoreSchedulesResponse>>>
 
 
     {
@@ -32,17 +33,20 @@ namespace Tradify.Core.Features.InstructorSchedules.Queries.Handlers
         private readonly IInstructorsService instructorsService;
         private readonly IInstructorSchedulesService instructorSchedulesService;
         private readonly IBookingsService bookingsService;
+        private readonly ICurrentUserService currentUserService;
         #endregion
 
         #region Constructor
         public InstructorSchedulesQueryHandler(LocalizationService localization, IMapper mapper, IInstructorsService instructorsService
-            , IInstructorSchedulesService instructorSchedulesService , IBookingsService bookingsService) : base(localization)
+            , IInstructorSchedulesService instructorSchedulesService , IBookingsService bookingsService
+            , ICurrentUserService currentUserService) : base(localization)
         {
             this.mapper = mapper;
             this.localization = localization;
             this.instructorsService = instructorsService;
             this.instructorSchedulesService = instructorSchedulesService;
-            this.bookingsService = bookingsService; 
+            this.bookingsService = bookingsService;
+            this.currentUserService = currentUserService;   
         }
 
         #endregion
@@ -147,6 +151,31 @@ namespace Tradify.Core.Features.InstructorSchedules.Queries.Handlers
             }
 
             return resultList;
+        }
+
+
+
+        public async Task<Response<List<GetNotAvilableInstructoreSchedulesResponse>>> Handle(GetNotAvilableInstructoreSchedulesQuery request, CancellationToken cancellationToken)
+        {
+            var curantuser = currentUserService.GetUserId();
+
+            var instructor = await instructorsService.GetTableNoTracking()
+                .FirstOrDefaultAsync(i=>i.UserId== curantuser);
+
+            if (instructor == null)
+                return BadRequest<List<GetNotAvilableInstructoreSchedulesResponse>>
+                    (localization.Get("InstructorNotFound"));
+            // 1. Get schedules
+            var schedules = await instructorSchedulesService.GetTableNoTracking()
+                .Where(e => e.InstructorId == instructor.Id&& !e.IsAvailable)
+                .ToListAsync();
+
+            if (schedules.Count == 0)
+                return BadRequest<List<GetNotAvilableInstructoreSchedulesResponse>>(localization.Get("ThereIsNotAvilableInstructoreSchedules"));
+
+            var resultList = mapper.Map<List<GetNotAvilableInstructoreSchedulesResponse>>(schedules);
+
+            return Success(resultList);
         }
 
 

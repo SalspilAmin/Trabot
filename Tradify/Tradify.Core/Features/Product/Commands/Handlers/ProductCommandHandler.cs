@@ -135,18 +135,18 @@ namespace Tradify.Core.Features.Product.Commands.Handlers
                 return BadRequest<string>(localize.Get(uploadResult.Error));
             }
 
-            // Upload Varint Image 
+            //// Upload Varint Image 
 
-            var folderVarintName = $"{UploadFolder.Variants}/{varintid}";
+            //var folderVarintName = $"{UploadFolder.Variants}/{varintid}";
 
-            var uploadVarintResult = await fileService.UploadImageAsync(
-                         request.Image,
-                         folderVarintName);
+            //var uploadVarintResult = await fileService.UploadImageAsync(
+            //             request.Image,
+            //             folderVarintName);
 
-            if (uploadVarintResult.Error != "Success")
-            {
-                return BadRequest<string>(localize.Get(uploadVarintResult.Error));
-            }
+            //if (uploadVarintResult.Error != "Success")
+            //{
+            //    return BadRequest<string>(localize.Get(uploadVarintResult.Error));
+            //}
 
             // ✅ حفظ الصورة
             var productImage = new Data.Entities.ProductImage
@@ -164,8 +164,8 @@ namespace Tradify.Core.Features.Product.Commands.Handlers
             var productVarintImage = new Data.Entities.ProductVariantImage
             {
                 ProductVariantId = varintid,
-                MediaPath = uploadVarintResult.Url,
-                PublicId = uploadVarintResult.PublicId
+                MediaPath = uploadResult.Url,
+                PublicId = uploadResult.PublicId
 
             };
 

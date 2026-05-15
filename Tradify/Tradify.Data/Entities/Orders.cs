@@ -19,7 +19,6 @@ namespace Tradify.Data.Entities
 
         public PaymentStatus PaymentStatus { get; set; } = PaymentStatus.Pending;
 
-        //public virtual List<Products> Products { get; set; }
 
         public decimal? ShippingPrice { get; set; }
         public decimal? TotalAmount { get; set; }
@@ -35,9 +34,7 @@ namespace Tradify.Data.Entities
 
         [ForeignKey(nameof(CustomerId))]
         public virtual User? User { get; set; }
-        public int? ShipmentId { get; set; } = null;
-
-        public int? ShipmentTrackingId { get; set; } = null;
+       
 
 
         //public virtual  ICollection<Products>? products { get; set; }
@@ -46,10 +43,12 @@ namespace Tradify.Data.Entities
 
         public virtual ICollection<SubOrders>? subOrders { get; set; }
 
+        //public int? ShipmentId { get; set; } = null;
 
-        [ForeignKey(nameof(ShipmentId))]
-        public virtual Shipments? Shipment { get; set; }
-        [ForeignKey(nameof(ShipmentTrackingId))]
-        public virtual ShipmentTracking? ShipmentTracking { get; set; }
+        //public int? ShipmentTrackingId { get; set; } = null;
+        ////[ForeignKey(nameof(ShipmentId))]
+        ////public virtual Shipments? Shipment { get; set; }
+        ////[ForeignKey(nameof(ShipmentTrackingId))]
+        ////public virtual ShipmentTracking? ShipmentTracking { get; set; }
     }
 }

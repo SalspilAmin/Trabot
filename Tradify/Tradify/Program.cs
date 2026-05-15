@@ -92,20 +92,30 @@ using (var scope = app.Services.CreateScope())
     await RoleSeeder.SeedAsync(roleManager);
 
     await UserSeeder.SeedAsync(userManager,builder.Configuration);
-    await SellerSeeder.SeedAsync(context);
-    await StoreSeeder.SeedAsync(context);
-    await StoreImageSeeder.SeedAsync(context);
-    await CategorySeeder.SeedAsync(context);
-    await InsreuctorSeeder.SeedAsync(context);
+    //   await SellerSeeder.SeedAsync(context);
+    //   await StoreSeeder.SeedAsync(context);
+    //  await StoreImageSeeder.SeedAsync(context);
+    //  await CategorySeeder.SeedAsync(context);
+    //   await InstructorSeeader.SeedAsync(context);
 
-    await InstructorImageSeeder.SeedAsync(context);
+    // await InstructorImageSeeder.SeedAsync(context);
 
-    await EducationSeeder.SeedAsync(context);
-    await CertificationsSeeder.SeedAsync(context);
-    await ServiceSeeder.SeedAsync(context);
-    await InstructorSchedulesSeeder.SeedAsync(context);
+    //  await EducationSeeder.SeedAsync(context);
+    //   await CertificationsSeeder.SeedAsync(context);
+    //  await ServiceSeeder.SeedAsync(context);
+    //  await InstructorSchedulesSeeder.SeedAsync(context);
+
+    // await CartSeeder.SeedAsync(context);
+    // await InstructorReviewSeeder.SeedAsync(context);
+  //  await ProductSeeder.SeedAsync(context);
+   // await ProductReviewSeeder.SeedAsync(context);
+
+
+
+
 
 }
+
 
 // Configure the HTTP request pipeline.
 

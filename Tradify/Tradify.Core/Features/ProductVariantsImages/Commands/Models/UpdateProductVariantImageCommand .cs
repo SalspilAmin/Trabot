@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,8 +10,7 @@ namespace Tradify.Core.Features.ProductVariantsImages.Commands.Models
     public class UpdateProductVariantImageCommand : IRequest<Response<string>>
     {
         public int ImageId { get; set; }
-        public bool IsMain { get; set; }
-        public int SortOrder { get; set; } = 0;
+        public IFormFile Image { get; set; }
     }
     
 }

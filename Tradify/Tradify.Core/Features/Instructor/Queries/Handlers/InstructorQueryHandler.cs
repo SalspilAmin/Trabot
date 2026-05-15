@@ -28,6 +28,8 @@ namespace Tradify.Core.Features.Instructor.Queries.Handlers
                                                          , IRequestHandler<GetInstructorByIdQuery, Response<GetInstructorByIdResponse>>
                                                          , IRequestHandler<GetInstructorPagnitionQuery, Response<PaginatedResult<GetInstructorPagnitionRespons>>>
                                                          , IRequestHandler<GetInstructorWithDiscountQuery, PaginatedResult<GetInstructorWithDiscountResponse>>
+                                                         , IRequestHandler<GetSellerInstructorQuery, Response<PaginatedResult<GetInstructorPagnitionRespons>>>
+
 
 
 
@@ -277,6 +279,132 @@ namespace Tradify.Core.Features.Instructor.Queries.Handlers
                                   .ToPaginationlist(request.PageNumber, request.PageSize);
 
             return result;
+        }
+
+        #endregion
+
+        //Get Seller Instructor Pagntion
+
+        #region Get Instructor Pangtion
+
+        public async Task<Response<PaginatedResult<GetInstructorPagnitionRespons>>> Handle(GetSellerInstructorQuery request, CancellationToken cancellationToken)
+        {
+            var today = DateTime.UtcNow.DayOfWeek;
+
+
+            //  1. Check if seller exist
+            var ValidSeller = await currentUserService.GetValidSellerContextAsync();
+
+            if (ValidSeller.Error != null)
+                return BadRequest <PaginatedResult<GetInstructorPagnitionRespons>> (localization.Get(ValidSeller.Error));
+
+
+            // 2. Get Seller , Store
+            var seller = ValidSeller.Seller;
+            var store = ValidSeller.Store;
+
+            //3. Cheack If Store Type Is Service 
+
+            if (store.Type != StoreType.Service)
+                return BadRequest<PaginatedResult<GetInstructorPagnitionRespons>>(localization.Get("ThisActionAllowedForServiceStoresOnly"));
+
+
+
+
+
+            var instructors = instructorsService
+                .GetTableNoTracking().Include(p => p.Schedules).Where(i=>i.StoreId==store.Id).AsQueryable();
+
+
+
+
+            if (request.IsActive.HasValue)
+            {
+                instructors = instructors.IgnoreQueryFilters()
+                                   .Where(v => v.IsActive == request.IsActive);
+            }
+
+
+            // Search
+            if (!string.IsNullOrWhiteSpace(request.Search))
+            {
+                var search = request.Search.Trim();
+                instructors = instructors.Where(p =>
+                              EF.Functions.Like(p.Name, $"%{search}%"));
+
+            }
+
+            // JopTitle
+            if (!string.IsNullOrWhiteSpace(request.JobTitle))
+            {
+                var jobTitle = request.JobTitle.Trim();
+                instructors = instructors.Where(p =>
+                              EF.Functions.Like(p.JobTitle, $"%{jobTitle}%"));
+
+            }
+            // Discount
+            if (request.Discount == true)
+            {
+                instructors = instructors.Where(i =>
+                    i.Discount > 0);
+            }
+
+            //  Min Price
+            if (request.MinPrice.HasValue)
+            {
+                instructors = instructors.Where(i => i.PricePerSession >= request.MinPrice);
+            }
+
+            //  Max Price
+            if (request.MaxPrice.HasValue)
+            {
+                instructors = instructors.Where(i => i.PricePerSession <= request.MaxPrice);
+            }
+
+
+            // rating
+            if (request.MinRating.HasValue)
+            {
+                var minRating = request.MinRating.Value;
+
+                instructors = instructors.Where(p =>
+                    p.Reviews.Any() &&
+                    p.Reviews.Average(r => (double)r.Rating) >= minRating);
+            }
+
+            //  Min Years Of Exprianc
+
+            if (request.MinYearsOfExperience.HasValue)
+            {
+                instructors = instructors.Where(i => i.YearsOfExperience >= request.MinYearsOfExperience);
+            }
+
+
+
+
+            instructors = instructors.OrderByDescending(i => i.Id);
+
+
+
+            var result = await mapper
+                                  .ProjectTo<GetInstructorPagnitionRespons>(instructors)
+                                  .ToPaginationlist(request.PageNumber, request.PageSize);
+
+
+            foreach (var item in result.Data)
+            {
+                item.AvailableToday = await bookingsService
+                    .IsInstructorAvailableToday(item.Id);
+            }
+
+            if (request.AvailableToday.HasValue)
+            {
+                result.Data = result.Data
+                    .Where(x => x.AvailableToday == request.AvailableToday.Value)
+                    .ToList();
+            }
+            return Success(result);
+
         }
 
         #endregion

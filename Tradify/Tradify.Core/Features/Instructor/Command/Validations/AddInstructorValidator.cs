@@ -30,6 +30,23 @@ namespace Tradify.Core.Features.Instructor.Command.Validations
         public void ApplyProductValidations()
         {
 
+            RuleFor(x => x.UserName)
+                .NotEmpty().WithMessage(localize.Get("NotEmpty"))
+                .NotNull().WithMessage(localize.Get("Required"))
+                .MaximumLength(100).WithMessage(localize.Get("MaxLengthis100"));
+
+
+            RuleFor(x => x.EmailOrPhone)
+               .NotEmpty().WithMessage(localize.Get("NotEmpty"))
+               .NotNull().WithMessage(localize.Get("Required"));
+            RuleFor(x => x.Password)
+                 .NotEmpty().WithMessage(localize.Get("NotEmpty"))
+                 .NotNull().WithMessage(localize.Get("Required"));
+            RuleFor(x => x.ConfirmPassword).NotEmpty().WithMessage(localize.Get("NotEmpty"))
+                 .NotNull().WithMessage(localize.Get("Required")).Equal(x => x.Password).WithMessage(localize.Get("PasswordNotEqualConfirmPass"));
+
+
+
             RuleFor(x => x.Name)
                 .NotNull().WithMessage(localize.Get("Required"))
                 .NotEmpty().WithMessage(localize.Get("NotEmpty"))
@@ -47,10 +64,7 @@ namespace Tradify.Core.Features.Instructor.Command.Validations
                  .MaximumLength(1000).WithMessage(localize.Get("MaxLengthis1000"));
 
 
-            RuleFor(x => x.UserId)
-                 .GreaterThan(0).WithMessage(localize.Get("IdMustBeGreaterThanZero"))
-                 .NotEmpty().WithMessage(localize.Get("NotEmpty"))
-                 .NotNull().WithMessage(localize.Get("Required"));
+           
 
 
             RuleFor(x => x.PricePerSession)

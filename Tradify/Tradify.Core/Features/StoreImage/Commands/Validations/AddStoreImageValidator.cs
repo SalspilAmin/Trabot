@@ -31,8 +31,9 @@ namespace Tradify.Core.Features.StoreImage.Commands.Validations
         {
 
             RuleFor(x => x.StoreId)
-            .NotEmpty().WithMessage(localize.Get("Required"));
-
+.GreaterThan(0).WithMessage(localize.Get("IdMustBeGreaterThanZero"))
+                .NotEmpty().WithMessage(localize.Get("NotEmpty"))
+                .NotNull().WithMessage(localize.Get("Required"));
 
 
 

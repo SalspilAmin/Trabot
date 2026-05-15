@@ -56,7 +56,7 @@ namespace Tradify.Service.Services
              // extension
             var extension = Path.GetExtension(File.FileName).ToLower();
 
-            var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".webp" , ".jfif" };
+            var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".webp"  };
             if (!allowedExtensions.Contains(extension))
                 return "InvalidImageType";
             // path
@@ -102,7 +102,7 @@ namespace Tradify.Service.Services
         }
 
 
-       
+        // For cloudinary
 
         public async Task<(string Error, string? Url, string? PublicId)> UploadImageAsync(IFormFile file,  string folder)
         {
@@ -145,6 +145,7 @@ namespace Tradify.Service.Services
             }
         }
 
+        // For cloudinary
 
         public async Task<bool> DeleteImageAsync(string publicId)
         {

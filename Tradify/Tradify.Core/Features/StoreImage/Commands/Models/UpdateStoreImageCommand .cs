@@ -1,7 +1,5 @@
 ﻿using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using Microsoft.AspNetCore.Http;
 using Tradify.Core.Bases;
 
 namespace Tradify.Core.Features.StoreImage.Commands.Models
@@ -9,8 +7,8 @@ namespace Tradify.Core.Features.StoreImage.Commands.Models
     public class UpdateStoreImageCommand : IRequest<Response<string>>
     {
         public int ImageId { get; set; }
-        public bool IsMain { get; set; }
-        public int SortOrder { get; set; } = 0;
+        public IFormFile Image { get; set; }
+
     }
-    
+
 }

@@ -36,7 +36,7 @@ namespace Tradify.Service.Services
         }
 
 
-        public async Task<(string, int?)> AddInstructorAsync(Instructors instructors)
+        public async Task<(string, int?)> AddInstructorAsync(Instructors instructors ,int UserId)
         {
             using (var transaction = await context.Database.BeginTransactionAsync())
             {
@@ -59,7 +59,7 @@ namespace Tradify.Service.Services
                         return ("ThisActionAllowedForServiceStoresOnly", null);
 
                     //5. Check if user exist
-                    var user = await context.Users.FirstOrDefaultAsync(u => u.Id == instructors.UserId);
+                    var user = await context.Users.FirstOrDefaultAsync(u => u.Id == UserId);
 
                     if (user == null)
                     {
@@ -74,7 +74,7 @@ namespace Tradify.Service.Services
 
                     //7. Check is user already Instructor
                     var existingInstructor = await GetTableNoTracking()
-                    .FirstOrDefaultAsync(I => I.UserId == instructors.UserId);
+                    .FirstOrDefaultAsync(I => I.UserId == UserId);
 
                     if (existingInstructor != null)
                         return ("UserIsAlreadyInstructor", null);
@@ -89,19 +89,24 @@ namespace Tradify.Service.Services
 
                     //9. Add Instructore Role 
 
-                    if (user.EmailConfirmed==false)
-                        return ("UserMustConfirmedEmailFirst", null);
+                  
 
 
 
                     var Addrole = await userManager.AddToRoleAsync(user, RolesHelper.Instructor);
+
+                    if (!Addrole.Succeeded)
+                        return ("FailedToAddInstructorRole", null);
                     var roles = await userManager.GetRolesAsync(user);
 
                     if (!roles.Any(r => r == "Instructor"))
                         return ("UserIsNotAssignedto(Instructor_Role)", null);
 
+                    
+
                     //  1. Default values
                     instructors.StoreId = store.Id;
+                    instructors.UserId = UserId;
                     instructors.IsActive = true;
                     instructors.CreatedAt = DateTime.UtcNow;
                     instructors.JobTitle = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(instructors.JobTitle.ToLower().Trim());

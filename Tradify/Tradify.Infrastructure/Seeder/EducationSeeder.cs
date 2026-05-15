@@ -72,6 +72,85 @@ namespace Tradify.Infrastructure.Seeder
                 CreateEducation(10, "Dip. Family Medicine", "Cairo University", 2018),
                 CreateEducation(10, "Cert. Primary Healthcare", "WHO", 2020),
 
+                   // =========================
+// Body Gym
+// =========================
+
+CreateEducation(14, "Bachelor of Physical Education", "Helwan University", 2016),
+CreateEducation(14, "Diploma in Sports Nutrition", "Cairo University", 2018),
+
+CreateEducation(15, "Bachelor of Physical Education", "Alexandria University", 2019),
+
+CreateEducation(16, "BSc Sports Science", "Cairo University", 2015),
+CreateEducation(16, "MSc Sports Training", "Ain Shams University", 2018),
+
+
+CreateEducation(18, "BSc Nutrition Science", "Mansoura University", 2017),
+
+
+// =========================
+// Smart Learn Center
+// =========================
+
+CreateEducation(19, "BSc Mathematics", "Cairo University", 2012),
+CreateEducation(19, "Diploma in Education", "Ain Shams University", 2014),
+CreateEducation(19, "MSc Applied Mathematics", "Cairo University", 2017),
+
+CreateEducation(20, "BA English Literature", "Alexandria University", 2013),
+CreateEducation(20, "Diploma in Teaching English", "British University in Egypt", 2016),
+
+CreateEducation(21, "BSc Physics", "Mansoura University", 2011),
+CreateEducation(21, "MSc Applied Physics", "Cairo University", 2015),
+
+CreateEducation(22, "BSc Biology", "Zagazig University", 2014),
+
+CreateEducation(23, "BSc Chemistry", "Ain Shams University", 2010),
+CreateEducation(23, "MSc Organic Chemistry", "Cairo University", 2014),
+
+CreateEducation(24, "BSc Computer Science", "Helwan University", 2015),
+CreateEducation(24, "Diploma in Software Engineering", "Cairo University", 2017),
+
+CreateEducation(25, "BA Arabic Language", "Cairo University", 2009),
+CreateEducation(25, "Diploma in Arabic Literature", "Ain Shams University", 2012),
+
+CreateEducation(26, "BA French Language", "Ain Shams University", 2013),
+
+CreateEducation(27, "BA History", "Alexandria University", 2008),
+CreateEducation(27, "Diploma in Modern History", "Cairo University", 2011),
+
+CreateEducation(28, "BSc Engineering", "Benha University", 2012),
+CreateEducation(28, "MBA", "Arab Academy for Science and Technology", 2018),
+
+
+// =========================
+// Flash Studio
+// =========================
+
+CreateEducation(29, "Bachelor of Fine Arts", "Helwan University", 2014),
+
+CreateEducation(30, "Diploma in Graphic Design", "Modern Academy", 2016),
+
+CreateEducation(31, "Bachelor of Media Production", "6th October University", 2015),
+
+CreateEducation(32, "Bachelor of Media Arts", "6th October University", 2012),
+CreateEducation(32, "Master in Creative Media", "Cairo University", 2017),
+
+
+// =========================
+// Smile Care Clinic
+// =========================
+
+CreateEducation(33, "BDS", "Cairo University", 2009),
+CreateEducation(33, "MSc Oral Surgery", "Ain Shams University", 2014),
+CreateEducation(33, "PhD Dental Surgery", "Cairo University", 2019),
+
+CreateEducation(34, "BDS", "Alexandria University", 2011),
+CreateEducation(34, "MSc Orthodontics", "Cairo University", 2016),
+
+CreateEducation(35, "BDS", "Mansoura University", 2013),
+CreateEducation(35, "Diploma in Cosmetic Dentistry", "Ain Shams University", 2017),
+
+
             };
 
 

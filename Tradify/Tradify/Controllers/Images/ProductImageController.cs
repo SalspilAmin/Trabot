@@ -19,7 +19,7 @@ namespace Tradify.Controllers.Images
         }
 
         [HttpPut(Router.ProductImage.Update)]
-        public async Task<IActionResult> UpdateImage([FromRoute] int imageId, [FromForm] UpdateProductImageCommand command)
+        public async Task<IActionResult> UpdateImage( [FromForm] UpdateProductImageCommand command)
         {
            
             var result = await Mediator.Send(command);
@@ -27,9 +27,9 @@ namespace Tradify.Controllers.Images
         }
 
         [HttpDelete(Router.ProductImage.Delete)]
-        public async Task<IActionResult> DeleteImage([FromRoute] int imageId)
+        public async Task<IActionResult> DeleteImage([FromRoute] int id)
         {
-            var command = new DeleteProductImageCommand(imageId);
+            var command = new DeleteProductImageCommand(id);
             var result = await Mediator.Send(command);
             return NewResult(result);
         }

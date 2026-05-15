@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Tradify.Core.Features.Instructor.Command.Models;
+using Tradify.Core.Features.Seller.Command.Models;
 using Tradify.Core.Features.User.Commands.Models;
 using Tradify.Data.Entities.Identity;
 using Tradify.Service.AbstractsServices.WhatsappServices;
@@ -20,6 +22,20 @@ namespace Tradify.Core.Mapping.UserMapping
             CreateMap<AddUserCommand,User>().ForMember(dest=> dest.UserName,opt=>opt.MapFrom(x=>x.UserName))
                 .ForMember(dest=>dest.Email,opt=>opt.MapFrom(x=>x.EmailOrPhone))
                 .ForMember(dest=>dest.PhoneNumber,opt=>opt.MapFrom(x=>x.EmailOrPhone));
+
+
+            CreateMap<AddInstructorCommand, User>().ForMember(dest => dest.UserName, opt => opt.MapFrom(x => x.UserName))
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(x => x.EmailOrPhone))
+                .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(x => x.EmailOrPhone));
+
+
+            CreateMap<AddInstructorWithImageCommand, User>().ForMember(dest => dest.UserName, opt => opt.MapFrom(x => x.UserName))
+             .ForMember(dest => dest.Email, opt => opt.MapFrom(x => x.EmailOrPhone))
+             .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(x => x.EmailOrPhone));
+
+            CreateMap<AddSellerCommand, User>().ForMember(dest => dest.UserName, opt => opt.MapFrom(x => x.UserName))
+              .ForMember(dest => dest.Email, opt => opt.MapFrom(x => x.EmailOrPhone))
+              .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(x => x.EmailOrPhone));
         }
 
     }

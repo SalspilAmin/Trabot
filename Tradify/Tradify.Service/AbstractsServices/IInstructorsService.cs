@@ -8,6 +8,6 @@ namespace Tradify.Service.AbstractsServices
 {
     public interface IInstructorsService :IInstructorsRepositorie
     {
-        public  Task<(string, int?)> AddInstructorAsync(Instructors instructors);
+        public  Task<(string, int?)> AddInstructorAsync(Instructors instructors ,int UserId);
     }
 }

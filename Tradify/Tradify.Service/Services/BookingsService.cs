@@ -266,20 +266,7 @@ namespace Tradify.Service.Services
 
                     if (availableSeats <= 0)
                         return "NoAvailableSlotsRemaining";
-
-                    //// Prevent duplicate booking
                    
-                    //var alreadyBooked = await GetTableNoTracking()
-                    //           .AnyAsync(x =>
-                    //               x.Id != bookingId &&
-                    //               x.CustomerId == currentUserId &&
-                    //               x.ScheduleId == newScheduleId &&
-                    //               x.BookingDate.Date == newBookingDate.Date &&
-                    //               x.Status != BookingStatus.Cancelled);
-
-                    //if (alreadyBooked)
-                    //    return "AlreadyBookedThisSchedule";
-
                     // Update booking
                     booking.ScheduleId = newSchedule.Id;
 

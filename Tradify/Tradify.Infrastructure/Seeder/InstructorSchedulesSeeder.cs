@@ -102,6 +102,115 @@ namespace Tradify.Infrastructure.Seeder
         AddSchedule(10, DayOfWeek.Tuesday,TimeSpan.FromHours(9), TimeSpan.FromHours(13), 8),
         AddSchedule(10, DayOfWeek.Thursday, TimeSpan.FromHours(9), TimeSpan.FromHours(13), 8),
         AddSchedule(10, DayOfWeek.Sunday,   TimeSpan.FromHours(16),TimeSpan.FromHours(20), 6),
+
+    
+    // =========================
+    // Body Gym
+    // =========================
+
+    // Captain Ahmed Samy
+    AddSchedule(14, DayOfWeek.Sunday, TimeSpan.FromHours(10), TimeSpan.FromHours(14), 15),
+    AddSchedule(14, DayOfWeek.Tuesday, TimeSpan.FromHours(17), TimeSpan.FromHours(21), 12),
+
+    // Captain Nour Ali
+    AddSchedule(15, DayOfWeek.Monday, TimeSpan.FromHours(9), TimeSpan.FromHours(13), 10),
+    AddSchedule(15, DayOfWeek.Wednesday, TimeSpan.FromHours(18), TimeSpan.FromHours(21), 8),
+
+    // Captain Mostafa Adel
+    AddSchedule(16, DayOfWeek.Saturday, TimeSpan.FromHours(16), TimeSpan.FromHours(20), 20),
+    AddSchedule(16, DayOfWeek.Monday, TimeSpan.FromHours(17), TimeSpan.FromHours(21), 18),
+
+    // Captain Omar Khaled
+    AddSchedule(17, DayOfWeek.Sunday, TimeSpan.FromHours(18), TimeSpan.FromHours(21), 14),
+    AddSchedule(17, DayOfWeek.Thursday, TimeSpan.FromHours(10), TimeSpan.FromHours(14), 12),
+
+    // Captain Youssef Nabil
+    AddSchedule(18, DayOfWeek.Tuesday, TimeSpan.FromHours(11), TimeSpan.FromHours(15), 10),
+
+
+    // =========================
+    // Smart Learn Center
+    // =========================
+
+    // Mr. Ahmed Hassan
+    AddSchedule(19, DayOfWeek.Saturday, TimeSpan.FromHours(14), TimeSpan.FromHours(18), 25),
+    AddSchedule(19, DayOfWeek.Tuesday, TimeSpan.FromHours(16), TimeSpan.FromHours(20), 20),
+
+    // Ms. Sara Mohamed
+    AddSchedule(20, DayOfWeek.Sunday, TimeSpan.FromHours(12), TimeSpan.FromHours(16), 18),
+    AddSchedule(20, DayOfWeek.Wednesday, TimeSpan.FromHours(17), TimeSpan.FromHours(20), 15),
+    AddSchedule(20, DayOfWeek.Thursday, TimeSpan.FromHours(12), TimeSpan.FromHours(16), 18),
+
+    // Mr. Mostafa Ali
+    AddSchedule(21, DayOfWeek.Monday, TimeSpan.FromHours(15), TimeSpan.FromHours(19), 22),
+    AddSchedule(21, DayOfWeek.Thursday, TimeSpan.FromHours(10), TimeSpan.FromHours(13), 15),
+
+    // Ms. Nada Ibrahim
+    AddSchedule(22, DayOfWeek.Sunday, TimeSpan.FromHours(9), TimeSpan.FromHours(12), 16),
+
+    // Mr. Omar Khaled
+    AddSchedule(23, DayOfWeek.Tuesday, TimeSpan.FromHours(14), TimeSpan.FromHours(18), 20),
+    AddSchedule(23, DayOfWeek.Friday, TimeSpan.FromHours(10), TimeSpan.FromHours(13), 12),
+
+    // Ms. Mariam Adel
+    AddSchedule(24, DayOfWeek.Saturday, TimeSpan.FromHours(18), TimeSpan.FromHours(22), 30),
+    AddSchedule(24, DayOfWeek.Monday, TimeSpan.FromHours(10), TimeSpan.FromHours(13), 15),
+
+    // Mr. Youssef Samir
+    AddSchedule(25, DayOfWeek.Wednesday, TimeSpan.FromHours(12), TimeSpan.FromHours(16), 18),
+    AddSchedule(25, DayOfWeek.Saturday, TimeSpan.FromHours(12), TimeSpan.FromHours(16), 18),
+
+
+    // Ms. Reem Tarek
+    AddSchedule(26, DayOfWeek.Sunday, TimeSpan.FromHours(17), TimeSpan.FromHours(20), 14),
+    AddSchedule(26, DayOfWeek.Thursday, TimeSpan.FromHours(11), TimeSpan.FromHours(14), 10),
+
+    // Mr. Hany Fathy
+    AddSchedule(27, DayOfWeek.Monday, TimeSpan.FromHours(12), TimeSpan.FromHours(15), 18),
+    AddSchedule(27, DayOfWeek.Saturday, TimeSpan.FromHours(12), TimeSpan.FromHours(16), 18),
+
+
+    // Ms. Salma Nabil
+    AddSchedule(28, DayOfWeek.Tuesday, TimeSpan.FromHours(18), TimeSpan.FromHours(21), 25),
+    AddSchedule(28, DayOfWeek.Friday, TimeSpan.FromHours(14), TimeSpan.FromHours(18), 25),
+
+
+    // =========================
+    // Flash Studio
+    // =========================
+
+    // Ahmed Samy
+    AddSchedule(29, DayOfWeek.Friday, TimeSpan.FromHours(16), TimeSpan.FromHours(22), 5),
+    AddSchedule(29, DayOfWeek.Saturday, TimeSpan.FromHours(14), TimeSpan.FromHours(20), 5),
+
+    // Sara Adel
+    AddSchedule(30, DayOfWeek.Monday, TimeSpan.FromHours(13), TimeSpan.FromHours(18), 7),
+
+    // Mostafa Nabil
+    AddSchedule(31, DayOfWeek.Thursday, TimeSpan.FromHours(17), TimeSpan.FromHours(22), 6),
+    AddSchedule(31, DayOfWeek.Friday, TimeSpan.FromHours(12), TimeSpan.FromHours(18), 8),
+
+    // Reem Tarek
+    AddSchedule(32, DayOfWeek.Sunday, TimeSpan.FromHours(15), TimeSpan.FromHours(20), 10),
+    AddSchedule(32, DayOfWeek.Tuesday, TimeSpan.FromHours(15), TimeSpan.FromHours(20), 10),
+
+
+    // =========================
+    // Smile Care Clinic
+    // =========================
+
+    // Dr. Kareem El-Sayed
+    AddSchedule(33, DayOfWeek.Sunday, TimeSpan.FromHours(10), TimeSpan.FromHours(15), 8),
+    AddSchedule(33, DayOfWeek.Wednesday, TimeSpan.FromHours(16), TimeSpan.FromHours(20), 6),
+    AddSchedule(33, DayOfWeek.Thursday, TimeSpan.FromHours(11), TimeSpan.FromHours(15), 7),
+
+    // Dr. Laila Farouk
+    AddSchedule(34, DayOfWeek.Monday, TimeSpan.FromHours(12), TimeSpan.FromHours(17), 10),
+    AddSchedule(34, DayOfWeek.Tuesday, TimeSpan.FromHours(10), TimeSpan.FromHours(14), 8),
+
+    // Dr. Hossam Abdelrahman
+    AddSchedule(35, DayOfWeek.Saturday, TimeSpan.FromHours(10), TimeSpan.FromHours(14), 12),
+    AddSchedule(35, DayOfWeek.Wednesday, TimeSpan.FromHours(15), TimeSpan.FromHours(19), 10),
             };
 
 
