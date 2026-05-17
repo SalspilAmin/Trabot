@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
 using Tradify.Data.Entities;
+using Tradify.Data.Enums;
 using Tradify.Infrastructure.AbstractsRepositories;
 using Tradify.Infrastructure.Context;
 using Tradify.Infrastructure.InfrastrucureBases;
@@ -73,32 +74,23 @@ namespace Tradify.Service.Services
                 try
                 {
                     //  1. Check if seller exist
+                    var ValidSeller = await currentUserService.GetValidSellerContextAsync();
 
-                    var userId = currentUserService.GetUserId();
-                    var seller = await sellerService.GetTableNoTracking().FirstOrDefaultAsync(x => x.UserId == userId);
+                    if (ValidSeller.Error != null)
+                        return (ValidSeller.Error, null, null);
 
-                    if (seller == null)
-                        return ("SellerNotFound", null, null);
+                    // 2. Get Seller , Store
+                    var seller = ValidSeller.Seller;
+                    var store = ValidSeller.Store;
 
-                    //2. Check if seller active
-                    if (seller.IsActive == false)
-                        return ("SellerNotActive", null, null);
+                    //3. Cheack If Store Type Is Service 
 
-                    //3.cheack if seller conected with user deleated 
-                    var user = await context.Users.FirstOrDefaultAsync(u => u.Id == userId);
-                    if (user == null)
-                        return ("UserNotFound", null, null);
-                    if (user.IsDeleted)
-                        return ("SellerConectWithDeletedUser", null, null);
+                    if (store.Type != StoreType.Product)
 
-                    //4.check  Store 
+                        return ("ThisActionAllowedForProductStoresOnly", null, null);
 
-                    var store = await storeService.GetBySellerIdAsync(seller.Id);
-                    //var store = await context.Stores
-                    //             .FirstOrDefaultAsync(x => x.Id == product.StoreId);
 
-                    if (store == null)
-                        return ("YouMustCreateStoreFirst", null, null);
+
                     //5. Check Category
                     var category = await cateroriesService.GetByIdAsync(product.CategoryId);
 

@@ -9,7 +9,7 @@ using Tradify.Core.Wrappers;
 
 namespace Tradify.Core.Features.Product.Queries.Models
 {
-    public class GetProductPaginationQuery : IRequest<Response<PaginatedResult<GetProductPaginationReponse>>>
+    public class GetProductPaginationQuery : IRequest<Response<GetProductPaginationWrapper>>
     {
         public int PageNumber { get; set; }
         public int PageSize { get; set; }

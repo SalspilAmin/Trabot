@@ -23,7 +23,7 @@ using static Tradify.Data.AppMetaData.Router;
 
 namespace Tradify.Core.Features.Product.Queries.Handlers
 {
-    public class ProductQueryHandler : ResponseHandler , IRequestHandler<GetProductPaginationQuery, Response<PaginatedResult<GetProductPaginationReponse>>>
+    public class ProductQueryHandler : ResponseHandler , IRequestHandler<GetProductPaginationQuery, Response<GetProductPaginationWrapper>>
                                                        , IRequestHandler<GetProductByIdQuery, Response<GetProductByIdResponse>>
                                                        , IRequestHandler<GetProductBySearchListQuery, List<GetProductPaginationReponse>>
                                                        , IRequestHandler<GetSellerProductsQuery, Response<PaginatedResult<GetSellerProductPaginationReponse>>>
@@ -74,7 +74,7 @@ namespace Tradify.Core.Features.Product.Queries.Handlers
         // Get All Product Pagition With Filter
 
         #region Get All Product Pagition With Filter
-        public async Task<Response<PaginatedResult<GetProductPaginationReponse>>> Handle(GetProductPaginationQuery request, CancellationToken cancellationToken)
+        public async Task<Response<GetProductPaginationWrapper>> Handle(GetProductPaginationQuery request, CancellationToken cancellationToken)
         {
 
 
@@ -86,7 +86,8 @@ namespace Tradify.Core.Features.Product.Queries.Handlers
                 .GetTableNoTracking().Include(p => p.ProductImages).Include(p => p.Reviews)
                 .Include(p => p.Category).Include(p => p.Favorites).AsQueryable();
 
-
+            decimal storeMinPrice = 0;
+            decimal storeMaxPrice = 0;
             // Store
             if (request.StoreId.HasValue)
             {
@@ -96,14 +97,23 @@ namespace Tradify.Core.Features.Product.Queries.Handlers
                                    .Select(s => new { s.Id, s.Type })
                                    .FirstOrDefaultAsync();
                 if (store == null)
-                    return BadRequest<PaginatedResult<GetProductPaginationReponse>>(localization.Get("StoreNotFound"));
+                    return BadRequest<GetProductPaginationWrapper>(localization.Get("StoreNotFound"));
 
                 if (store.Type != Data.Enums.StoreType.Product)
-                    return BadRequest<PaginatedResult<GetProductPaginationReponse>>(localization.Get("ThisStoreTypeDosn'tSupportProducts"));
+                    return BadRequest<GetProductPaginationWrapper>(localization.Get("ThisStoreTypeDosn'tSupportProducts"));
 
 
                 products = products.Where(p =>
                     p.StoreId == request.StoreId);
+
+                var variantsQuery = products
+       .SelectMany(p => p.ProductVariants);
+
+                if (await variantsQuery.AnyAsync())
+                {
+                    storeMinPrice = await variantsQuery.MinAsync(v => v.FinalPrice);
+                    storeMaxPrice = await variantsQuery.MaxAsync(v => v.FinalPrice);
+                }
             }
 
 
@@ -131,15 +141,6 @@ namespace Tradify.Core.Features.Product.Queries.Handlers
             }
 
         
-
-
-
-
-
-
-
-
-
             //  Min Price
             if (request.MinPrice.HasValue)
             {
@@ -185,9 +186,15 @@ namespace Tradify.Core.Features.Product.Queries.Handlers
                 product.IsFavorite = favorites.Contains(product.Id);
             }
 
+            var response = new GetProductPaginationWrapper
+            {
+                StoreMinPrice = storeMinPrice,
+                StoreMaxPrice = storeMaxPrice,
+                Products = result
+            };
 
+            return Success(response);
 
-            return Success(result);
 
         }
         #endregion

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -149,6 +150,8 @@ namespace Tradify.Core.Features.Order.Commands.Handler
 
             // 1️⃣ Get Order
             var order =  ordersService.GetTableAsTracking()
+                .Include(o=>o.subOrders)
+                .ThenInclude(s=>s.Shipment)
                 .FirstOrDefault(o => o.Id == request.OrderId);
                 //.FirstOrDefault(o => o.Id == request.OrderId && o.CanBeCanceled== userId);
 
@@ -162,8 +165,8 @@ namespace Tradify.Core.Features.Order.Commands.Handler
             if (order.PaymentStatus == PaymentStatus.Paid)
                 return BadRequest<string>(localization.Get("CannotDeletePaidOrder"));
 
-            //if (order.ShipmentId != null )
-            //    return BadRequest<string>(localization.Get("OrderAlreadyShipped"));
+            if (order.subOrders.Any(s => s.Shipment != null))
+                return BadRequest<string>(localization.Get("OrderAlreadyShipped"));
 
             //// 3️⃣ Delete Order Items (if needed)
             //if (order.OrderItems != null && order.OrderItems.Count > 0)

@@ -8,7 +8,7 @@ using Tradify.Core.Wrappers;
 
 namespace Tradify.Core.Features.Instructor.Queries.Models
 {
-    public class GetInstructorPagnitionQuery : IRequest<Response<PaginatedResult<GetInstructorPagnitionRespons>>>
+    public class GetInstructorPagnitionQuery : IRequest<Response<GetInstructorPaginationWrapper>>
     {
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
