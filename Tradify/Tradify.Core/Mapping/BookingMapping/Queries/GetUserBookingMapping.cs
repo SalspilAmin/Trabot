@@ -10,7 +10,7 @@ using Tradify.Data.Entities.Appointments;
 
 namespace Tradify.Core.Mapping.BookingMapping
 {
-    public partial class BookingProfile 
+    public partial class BookingProfile
     {
         public void GetUserBookingMapping()
         {
@@ -29,17 +29,18 @@ namespace Tradify.Core.Mapping.BookingMapping
 
                  .ForMember(dest => dest.BookingStatus, opt => opt.MapFrom(src => src.Status.ToString()))
 
-                 .ForMember(dest => dest.BookingDate,opt => opt.MapFrom(src => src.BookingDate.ToString("yyyy-MM-dd")))
+                 .ForMember(dest => dest.BookingDate, opt => opt.MapFrom(src => src.BookingDate.ToString("yyyy-MM-dd")))
 
                  .ForMember(dest => dest.StoreName, opt => opt.MapFrom(src => CultureInfo.CurrentCulture.TextInfo.ToTitleCase(src.Store.Name.ToLower())))
 
 
-                 .ForMember(dest => dest.InstructorName, opt => opt.MapFrom(src => CultureInfo.CurrentCulture.TextInfo.ToTitleCase(src.Instructor.Name.ToLower())));
+                 .ForMember(dest => dest.InstructorName, opt => opt.MapFrom(src => CultureInfo.CurrentCulture.TextInfo.ToTitleCase(src.Instructor.Name.ToLower())))
+
+                 .ForMember(dest => dest.InstructorId, opt => opt.MapFrom(src => src.Instructor.Id));
 
 
 
 
         }
-    
     }
 }

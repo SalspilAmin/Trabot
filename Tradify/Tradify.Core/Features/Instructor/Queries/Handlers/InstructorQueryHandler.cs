@@ -26,7 +26,7 @@ namespace Tradify.Core.Features.Instructor.Queries.Handlers
 {
     public class InstructorQueryHandler : ResponseHandler, IRequestHandler<GetInstructorJopTitleQuery, Response<PaginatedResult<GetInstructorJopTitleResponse>>>
                                                          , IRequestHandler<GetInstructorByIdQuery, Response<GetInstructorByIdResponse>>
-                                                         , IRequestHandler<GetInstructorPagnitionQuery, Response<PaginatedResult<GetInstructorPagnitionRespons>>>
+                                                         , IRequestHandler<GetInstructorPagnitionQuery, Response<GetInstructorPaginationWrapper>>
                                                          , IRequestHandler<GetInstructorWithDiscountQuery, PaginatedResult<GetInstructorWithDiscountResponse>>
                                                          , IRequestHandler<GetSellerInstructorQuery, Response<PaginatedResult<GetInstructorPagnitionRespons>>>
 
@@ -150,13 +150,16 @@ namespace Tradify.Core.Features.Instructor.Queries.Handlers
 
         #region Get Instructor Pangtion
 
-        public async Task<Response<PaginatedResult<GetInstructorPagnitionRespons>>> Handle(GetInstructorPagnitionQuery request, CancellationToken cancellationToken)
+        public async Task<Response<GetInstructorPaginationWrapper>> Handle(GetInstructorPagnitionQuery request, CancellationToken cancellationToken)
         {
             var today = DateTime.UtcNow.DayOfWeek;
 
 
             var instructors = instructorsService
                 .GetTableNoTracking().Include(p => p.Schedules).AsQueryable();
+
+            decimal storeMinPrice = 0;
+            decimal storeMaxPrice = 0;
 
             // Store
             if (request.StoreId.HasValue)
@@ -167,14 +170,24 @@ namespace Tradify.Core.Features.Instructor.Queries.Handlers
                                    .Select(s => new { s.Id, s.Type })
                                    .FirstOrDefaultAsync();
                 if (store == null)
-                    return BadRequest<PaginatedResult<GetInstructorPagnitionRespons>>(localization.Get("StoreNotFound"));
+                    return BadRequest<GetInstructorPaginationWrapper>(localization.Get("StoreNotFound"));
 
                 if (store.Type != Data.Enums.StoreType.Service)
-                    return BadRequest<PaginatedResult<GetInstructorPagnitionRespons>>(localization.Get("ThisStoreTypeDosn'tSupportInstructors"));
+                    return BadRequest<GetInstructorPaginationWrapper>(localization.Get("ThisStoreTypeDosn'tSupportInstructors"));
 
 
                 instructors = instructors.Where(p =>
                     p.StoreId == request.StoreId);
+
+                instructors = instructors.Where(i =>
+    i.StoreId == request.StoreId);
+
+                if (await instructors.AnyAsync())
+                {
+                    storeMinPrice = await instructors.MinAsync(i => i.PricePerSession);
+
+                    storeMaxPrice = await instructors.MaxAsync(i => i.PricePerSession);
+                }
             }
 
 
@@ -256,7 +269,14 @@ namespace Tradify.Core.Features.Instructor.Queries.Handlers
                     .Where(x => x.AvailableToday == request.AvailableToday.Value)
                     .ToList();
             }
-            return Success(result);
+
+            var response = new GetInstructorPaginationWrapper
+            {
+                StoreMinPrice = storeMinPrice,
+                StoreMaxPrice = storeMaxPrice,
+                Instructors = result
+            };
+            return Success(response);
 
         }
 

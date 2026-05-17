@@ -8,8 +8,6 @@ namespace Tradify.Core.Features.ShipmentTrackings.Commands.Models
 {
     public class CreateShipmentCommand : IRequest<Response<string>>
     {
-        public int OrderId { get; set; }
-        public CreateShipmentCommand(int orderId)
-        {  OrderId = orderId;   }
+        public int SubOrderId { get; set; }
     }
 }
