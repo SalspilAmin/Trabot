@@ -73,7 +73,8 @@ namespace Tradify.Core.Features.Cart.Commands.Handlers
 
                     // Remove items no longer in the request
                     var productsToRemove = existingCartProducts
-                        .Where(x => !requestedVariantIds.Contains((int)x.ProductVariantId))
+                        .Where(x => !requestedVariantIds.Contains((int)x.ProductVariantId)
+                        || x.Quantity == 0)
                         .ToList();
 
                     context.CartProducts.RemoveRange(productsToRemove);

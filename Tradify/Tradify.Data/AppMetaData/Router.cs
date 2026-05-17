@@ -360,5 +360,20 @@ namespace Tradify.Data.AppMetaData
 
         }
 
-     }
+        public static class Comments {
+            public const string prefix = Rule + "Comments";
+            public const string Addcomment = prefix + "/Add";
+            public const string Updatecomment = prefix + "/update";
+            public const string Deletecomment = prefix + "/Delete";
+        }
+        public static class ReplayOnComments
+        {
+            public const string prefix = Rule + "ReplayOnComments";
+            public const string AddReplayComment = prefix + "/Add";
+            public const string UpdateReplayComment = prefix + "/update";
+            public const string DeleteReplayComment = prefix + "/Delete";
+        }
+
+
+    }
 }

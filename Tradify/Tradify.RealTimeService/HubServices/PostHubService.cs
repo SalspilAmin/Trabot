@@ -23,14 +23,14 @@ namespace Tradify.RealTimeService.HubServices
             this.userConnectionRepository = userConnection;
             this.hubContext = hubcontext;
         }
-      public async Task NotifyAllAboutPost(PostResult post)
+        public async Task NotifyAllAboutPost(PostResult post)
         {
             try
             {
-                if (hubContext.Clients == null) 
+                if (hubContext.Clients == null)
                     return;
 
-             
+
                 await hubContext.Clients.All.SendAsync("ReceivePost", post);
 
             }
@@ -38,6 +38,7 @@ namespace Tradify.RealTimeService.HubServices
             {
                 throw;
             }
+        }
             #region Comments
 
         public async Task NotifyAddComment(CommentResult comment)
@@ -82,4 +83,4 @@ namespace Tradify.RealTimeService.HubServices
     }
 
 }
-}
+

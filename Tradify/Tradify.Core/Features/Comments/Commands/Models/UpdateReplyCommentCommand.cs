@@ -6,8 +6,11 @@ using Tradify.Core.Bases;
 
 namespace Tradify.Core.Features.Comments.Commands.Models
 {
-    public class DeleteReplyCommentCommand : IRequest<Response<string>>
+    public class UpdateReplyCommentCommand :
+     IRequest<Response<string>>
     {
-        public int CommentId { get; set; } 
+        public int ReplyId { get; set; }
+
+        public string Content { get; set; }
     }
 }

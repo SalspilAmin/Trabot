@@ -18,7 +18,19 @@ namespace Tradify.Core.Features.Comments.Commands.Handler
      ResponseHandler,
      IRequestHandler<AddCommentCommand, Response<int?>>,
             IRequestHandler<UpdateCommentCommand, Response<string>>,
-    IRequestHandler<DeleteCommentCommand, Response<string>>
+    IRequestHandler<DeleteCommentCommand, Response<string>>,
+         IRequestHandler<
+        AddReplyCommentCommand,
+        Response<int?>>,
+
+    IRequestHandler<
+        UpdateReplyCommentCommand,
+        Response<string>>,
+
+    IRequestHandler<
+        DeleteReplyCommentCommand,
+        Response<string>>
+
     {
         private readonly ICommentService commentService;
         private readonly IMapper mapper;
@@ -121,5 +133,95 @@ namespace Tradify.Core.Features.Comments.Commands.Handler
             }
         }
 
+        public async Task<Response<string>> Handle(DeleteReplyCommentCommand request, CancellationToken cancellationToken)
+        {
+
+
+            try
+            {
+                var reply =
+                    await replyOFCommentService
+                        .GetByIdAsync(
+                            request.CommentId);
+
+                if (reply == null)
+                    return NotFound<string>(
+                        localizationService.Get("NotFound"));
+                reply.IsDeleted = true;
+                
+
+                await replyOFCommentService
+                    .SaveChangesAsync();
+
+                return Success(
+                    localizationService.Get("Success"));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest<string>(
+                    ex.Message);
+            }
+
+        }
+
+        public async Task<Response<string>> Handle(UpdateReplyCommentCommand request, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var reply =
+                    await replyOFCommentService
+                        .GetByIdAsync(
+                            request.ReplyId);
+
+                if (reply == null)
+                    return NotFound<string>(localizationService.Get("NotFound"));
+
+                reply.Content = request.Content;
+
+                
+
+                await replyOFCommentService
+                    .SaveChangesAsync();
+
+                return Success(localizationService.Get("Success"));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest<string>(
+                    ex.Message);
+            }
+        }
+
+        public async Task<Response<int?>> Handle(AddReplyCommentCommand request, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var reply =
+                    mapper.Map<ReplyOFComment>(
+                        request);
+
+                var result =
+                    await replyOFCommentService.AddAsync(
+                        reply);
+
+                await replyOFCommentService.SaveChangesAsync();
+
+                var notifyReply =
+                    mapper.Map<ReplyCommentResult>(
+                        result);
+
+                await postHubService
+                    .NotifyAddReply(
+                        notifyReply);
+
+                return Created<int?>(
+                    result.Id);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest<int?>(
+                    ex.Message);
+            }
+        }
     }
 }
