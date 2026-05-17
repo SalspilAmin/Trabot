@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Tradify.Core.Features.Store.Queries.Results;
+using Tradify.Core.Wrappers;
 
 namespace Tradify.Core.Features.Instructor.Queries.Results
 {
@@ -14,6 +15,8 @@ namespace Tradify.Core.Features.Instructor.Queries.Results
         public int YearsOfExperience { get; set; }
         public decimal PricePerSession { get; set; }
         public decimal FinalPrice { get; set; }
+
+
         public decimal Discount { get; set; }
 
         public double AverageRating { get; set; }
@@ -24,5 +27,14 @@ namespace Tradify.Core.Features.Instructor.Queries.Results
 
 
     }
-  
+
+    public class GetInstructorPaginationWrapper
+    {
+        public decimal StoreMinPrice { get; set; }
+
+        public decimal StoreMaxPrice { get; set; }
+
+        public PaginatedResult<GetInstructorPagnitionRespons> Instructors { get; set; }
+    }
+
 }

@@ -19,6 +19,7 @@ namespace Tradify.Core.Features.Booking.Queries.Results
 
         public string StoreName { get; set; }
         public string InstructorName { get; set; }
+        public int InstructorId { get; set; }   
 
     }
 }

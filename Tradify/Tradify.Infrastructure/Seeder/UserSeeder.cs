@@ -45,7 +45,7 @@ namespace Tradify.Infrastructure.Seeder
                 await _userManager.AddToRoleAsync(defaultuser, "Admin");
             }
 
-            // User For Seller List 
+            // User For Seller List  // Passward (Seller@2026 )
             var sellers = new List<User>()
             {
                 // Product Stores
@@ -65,7 +65,16 @@ namespace Tradify.Infrastructure.Seeder
                   CreateUser("FlashStudioSeller11", "flashstudio@gmail.com", "01180056092"),// Photography Studio             UserId(15)
                   CreateUser("SmileCareClinicSeller12", "smilecareclinic@gmail.com", "01181056092")//Dental Clinic           UserId(16)
             };
+            foreach (var seller in sellers)
+            {
+                var existingseller = await _userManager.FindByEmailAsync(seller.Email);
 
+                if (existingseller == null)
+                {
+                    await _userManager.CreateAsync(seller, "Instructor@2026");
+                    await _userManager.AddToRoleAsync(seller, "Instructor");
+                }
+            }
 
             var instructorsUsers = new List<User>()
             {

@@ -10,14 +10,19 @@ namespace Tradify.Data.Entities
     {
         public int Id { get; set; }
 
-
-        public string TrackingNumber { get; set; }
-
         public ShipmentStatus ShipmentStatus { get; set; }
 
-        public DateTime UpdatedAt { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        
+        public string? Notes { get; set; }
+        public int ShipmentId { get; set; }
+
+        [ForeignKey(nameof(ShipmentId))]
+        public virtual Shipments Shipment { get; set; }
+
+       // public string TrackingNumber { get; set; }
+
+
 
     }
 }

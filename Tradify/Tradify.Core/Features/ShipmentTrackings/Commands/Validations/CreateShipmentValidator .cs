@@ -27,9 +27,10 @@ namespace Tradify.Core.Features.ShipmentTrackings.Commands.Validations
         #region Validations
         public void ApplyValidation()
         {
-            RuleFor(x => x.OrderId)
-                .GreaterThan(0)
-                .WithMessage(localize.Get("Required"));
+            RuleFor(x => x.SubOrderId)
+                .GreaterThan(0).WithMessage(localize.Get("IdMustBeGreaterThanZero"))
+                .NotEmpty().WithMessage(localize.Get("NotEmpty"))
+                .NotNull().WithMessage(localize.Get("Required"));
 
 
         }
