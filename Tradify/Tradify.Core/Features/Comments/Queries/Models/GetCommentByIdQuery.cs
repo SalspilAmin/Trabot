@@ -3,13 +3,13 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Tradify.Core.Bases;
+using Tradify.Data.Helpers.Results;
 
-namespace Tradify.Core.Features.Comments.Commands.Models
+namespace Tradify.Core.Features.Comments.Queries.Models
 {
-    public class DeleteCommentCommand :
-      IRequest<Response<string>>
+    public class GetCommentByIdQuery :
+      IRequest<Response<CommentResult>>
     {
         public int CommentId { get; set; }
-        public int PostId { get; set; }
     }
 }

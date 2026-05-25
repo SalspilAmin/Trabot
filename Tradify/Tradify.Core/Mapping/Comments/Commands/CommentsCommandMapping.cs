@@ -16,7 +16,9 @@ namespace Tradify.Core.Mapping.Comments
 
             CreateMap<Comment, CommentResult>()
                 .ForMember(dest => dest.UserName,
-                    opt => opt.MapFrom(src => src.User.UserName));
+                    opt => opt.MapFrom(src => src.User.UserName)).ForMember(dest => dest.ReplayOnCommentNumber,
+                    opt => opt.MapFrom(src =>
+                        src.ReplyOFComments != null ? src.ReplyOFComments.Count : 0));
             CreateMap<ReplyOFComment, ReplyCommentResult>()
     .ForMember(dest => dest.UserName,
         opt => opt.MapFrom(src =>

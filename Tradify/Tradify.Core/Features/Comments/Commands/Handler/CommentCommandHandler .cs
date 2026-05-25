@@ -37,19 +37,21 @@ namespace Tradify.Core.Features.Comments.Commands.Handler
         private readonly PostHubService postHubService;
         private readonly LocalizationService localizationService;
         private readonly IReplyOFCommentService replyOFCommentService;
+        private readonly IPostService postService;  
 
         public CommentCommandHandler(
             ICommentService commentService,
             IMapper mapper,
             PostHubService postHubService,
             LocalizationService localization,
-            IReplyOFCommentService replyOFCommentService) : base(localization)
+            IReplyOFCommentService replyOFCommentService,IPostService postService) : base(localization)
         {
             this.commentService = commentService;
             this.mapper = mapper;
             this.postHubService = postHubService;
             this.localizationService = localization;
             this.replyOFCommentService = replyOFCommentService;
+            this.postService = postService;
         }
 
         public async Task<Response<int?>> Handle(
@@ -59,8 +61,10 @@ namespace Tradify.Core.Features.Comments.Commands.Handler
             try
             {
                 var comment = mapper.Map<Comment>(request);
-
+                var  post = await postService.GetByIdAsync(request.PostId); 
                 var result = await commentService.AddAsync(comment);
+                post.Comments.Add(comment);
+                postService.SaveChangesAsync();
 
                 await commentService.SaveChangesAsync();
 
@@ -114,12 +118,14 @@ namespace Tradify.Core.Features.Comments.Commands.Handler
                 var comment =
                     await commentService.GetByIdAsync(
                         request.CommentId);
-
+                var post = await postService.GetByIdAsync(request.PostId);
                 if (comment == null)
                     return NotFound<string>(localizationService.Get("NotFound"));
 
                 comment.IsDeleted = true;
 
+                if(post == null) return NotFound<string>(localizationService.Get("NotFound"));
+                post.Comments.Remove(comment);
                 await commentService.SaveChangesAsync();
 
                 await postHubService
@@ -142,13 +148,16 @@ namespace Tradify.Core.Features.Comments.Commands.Handler
                 var reply =
                     await replyOFCommentService
                         .GetByIdAsync(
-                            request.CommentId);
+                            request.ReplayCommentId);
+                var comment = await commentService.GetByIdAsync(request.CommentId);
+                var post = await postService.GetByIdAsync(request.PostId);
 
-                if (reply == null)
+                if (reply == null || comment == null || post == null)
                     return NotFound<string>(
                         localizationService.Get("NotFound"));
                 reply.IsDeleted = true;
-                
+                comment.ReplyOFComments.Remove(reply);
+                    
 
                 await replyOFCommentService
                     .SaveChangesAsync();
@@ -200,9 +209,13 @@ namespace Tradify.Core.Features.Comments.Commands.Handler
                     mapper.Map<ReplyOFComment>(
                         request);
 
+                var  comment = await commentService.GetByIdAsync(request.CommentId);
+                if(comment == null) return NotFound<int?>(
+                        localizationService.Get("NotFound"));
                 var result =
                     await replyOFCommentService.AddAsync(
                         reply);
+                comment.ReplyOFComments.Add(reply);
 
                 await replyOFCommentService.SaveChangesAsync();
 

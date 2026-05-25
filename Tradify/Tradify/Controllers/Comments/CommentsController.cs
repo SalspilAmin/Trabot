@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Tradify.Bases;
 using Tradify.Core.Features.Comments.Commands.Models;
+using Tradify.Core.Features.Comments.Queries.Models;
 using Tradify.Data.AppMetaData;
 
 namespace Tradify.Controllers.Comments
@@ -47,6 +48,38 @@ namespace Tradify.Controllers.Comments
         }
         [HttpDelete(Router.ReplayOnComments.DeleteReplayComment)]
         public async Task<ActionResult> DeleteReplayComment([FromQuery] DeleteReplyCommentCommand request)
+        {
+            var result = await Mediator.Send(request);
+            return NewResult(result);
+        }
+        [HttpGet(Router.Comments.GetCommentsByPostId)]
+        public async Task<ActionResult> GetCommentsByPostId(
+    [FromQuery] GetCommentsByPostIdQuery request)
+        {
+            var result = await Mediator.Send(request);
+            return NewResult(result);
+        }
+
+        [HttpGet(Router.Comments.GetCommentsByCommentId)]
+        public async Task<ActionResult> GetCommentById(
+            [FromQuery] GetCommentByIdQuery request)
+        {
+            var result = await Mediator.Send(request);
+            return NewResult(result);
+        }
+
+
+        [HttpGet(Router.ReplayOnComments.GetReplayesByCommentId)]
+        public async Task<ActionResult> GetRepliesByCommentId(
+            [FromQuery] GetRepliesByCommentIdQuery request)
+        {
+            var result = await Mediator.Send(request);
+            return NewResult(result);
+        }
+
+        [HttpGet(Router.ReplayOnComments.Get)]
+        public async Task<ActionResult> GetReplyById(
+            [FromQuery] GetReplyByIdQuery request)
         {
             var result = await Mediator.Send(request);
             return NewResult(result);
