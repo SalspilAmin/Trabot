@@ -67,7 +67,8 @@ namespace Tradify.RealTimeService.HubServices
 
         #region Interactions
 
-        public async Task NotifyAddInteraction(PostInteractionResult interaction)
+    
+        public async Task NotifyAddInteraction(InteractionWithPostResult interaction)
         {
             await hubContext.Clients.All
                 .SendAsync("ReceiveInteraction", interaction);

@@ -379,6 +379,25 @@ namespace Tradify.Data.AppMetaData
             public const string GetReplayesByCommentId = prefix + "/Get/ByCommentId";
             public const string Get = prefix + "/Get/ByReplayId";
         }
+        public static class Interaction
+        {
+
+            public const string prefix = Rule + "Interaction";
+            public const string AddInteraction = prefix + "/Add";
+            public const string UpdateInteraction = prefix + "/Update";
+            public const string DeleteInteraction = prefix + "/Delete" + SignleRoute;
+            public const string GetInteractionByPostId = prefix + "/GetInteractions/post" + SignleRoute;
+            public const string GetInteractionById = prefix + "/GetInteractions" + SignleRoute;
+            public const string GetUserInteractionOnPost = prefix + "GetUserInteractionPost";
+        }
+
+       
+
+       
+
+       
+
+
 
 
     }

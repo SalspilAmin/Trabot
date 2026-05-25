@@ -45,8 +45,6 @@
     <Folder Include="Features\Comments\Queries\Results\" />
     <Folder Include="Features\Comments\Queries\Validations\" />
     <Folder Include="Features\Fawaterak\Queries\Validations\" />
-    <Folder Include="Features\Interactions\Commands\Handler\" />
-    <Folder Include="Features\Interactions\Queries\Handler\" />
     <Folder Include="Features\Interactions\Queries\Results\" />
     <Folder Include="Features\Interactions\Queries\Validations\" />
     <Folder Include="Features\Order\Queries\Validations\" />
