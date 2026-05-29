@@ -42,7 +42,7 @@ namespace Tradify.Controllers.Interaction
                     });
             return NewResult(result);   
         }
-        [HttpGet("post/{postId}")]
+        [HttpGet(Router.Interaction.GetInteractionByPostId)]
         public async Task<IActionResult>GetByPostId(int id)
         {
              var result = await Mediator.Send(

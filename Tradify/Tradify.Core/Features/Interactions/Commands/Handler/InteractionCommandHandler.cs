@@ -82,6 +82,8 @@ namespace Tradify.Core.Features.Interactions.Commands.Handler
                         localization.Get(
                             "NotFound"));
                 }
+                if (post.interactionWithPosts.FirstOrDefault(x => x.UserId == request.UserId) != null)
+                    return BadRequest<int?>(localization.Get("IsExist"));
 
                 var interaction =
                     mapper.Map<

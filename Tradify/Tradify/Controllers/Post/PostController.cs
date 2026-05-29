@@ -7,7 +7,7 @@ using Tradify.Data.AppMetaData;
 
 namespace Tradify.Controllers.Post
 {
-    [ApiController]
+
     public class PostController : AppControllerBase
     {
         [HttpPost(Router.Post.AddPost)]
@@ -32,7 +32,7 @@ namespace Tradify.Controllers.Post
         public async Task<IActionResult> GetPosts([FromQuery] GetPostPaginationQuery command)
         {
             var response = await Mediator.Send(command);
-            return NewResult(response);
+             return Ok(response);
         }
 
     }

@@ -58,13 +58,13 @@ namespace Tradify.Core.Features.Comments.Commands.Handler
             AddCommentCommand request,
             CancellationToken cancellationToken)
         {
+            
             try
             {
                 var comment = mapper.Map<Comment>(request);
                 var  post = await postService.GetByIdAsync(request.PostId); 
                 var result = await commentService.AddAsync(comment);
                 post.Comments.Add(comment);
-                postService.SaveChangesAsync();
 
                 await commentService.SaveChangesAsync();
 
@@ -119,12 +119,12 @@ namespace Tradify.Core.Features.Comments.Commands.Handler
                     await commentService.GetByIdAsync(
                         request.CommentId);
                 var post = await postService.GetByIdAsync(request.PostId);
-                if (comment == null)
+                if (comment == null || post ==null)
                     return NotFound<string>(localizationService.Get("NotFound"));
 
                 comment.IsDeleted = true;
 
-                if(post == null) return NotFound<string>(localizationService.Get("NotFound"));
+             
                 post.Comments.Remove(comment);
                 await commentService.SaveChangesAsync();
 
