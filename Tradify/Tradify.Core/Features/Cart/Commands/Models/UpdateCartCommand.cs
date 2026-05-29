@@ -11,8 +11,20 @@ namespace Tradify.Core.Features.Cart.Commands.Models
     {
         public int UserId { get; set; }
         public int CartId { get; set; }
-        public List<CartProductResult>? ProductsInCart { get; set; }
+        public List<CartProductsUpdateModel>? ProductsInCart { get; set; }
 
 
     }
+
+    public class CartProductsUpdateModel
+    {
+        public int Id { get; set; }
+        public int ProductVariantId { get; set; }
+
+ 
+        public int Quantity { get; set; }
+
+    }
+
+
 }

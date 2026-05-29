@@ -348,11 +348,57 @@ namespace Tradify.Data.AppMetaData
             public const string UpdateCart = prefix + "Update";
             public const string AddToCart = prefix + "/AddToCart";
         }
-        public static class Post {
+        public static class Post
+        {
 
             public const string prefix = Rule + "Post";
             public const string AddPost = prefix + "/AddPost";
+            public const string GetPostsOfUserByID = prefix+ "/GetPostsOfUserByID"+ SignleRoute;
+            public const string GetPostByID = prefix + "/GetPostByID" + SignleRoute;
+            public const string GetPosts = prefix + "/GetPosts";
+
+
         }
+
+        public static class Comments {
+            public const string prefix = Rule + "Comments";
+            
+            public const string Addcomment = prefix + "/Add";
+            public const string Updatecomment = prefix + "/update";
+            public const string Deletecomment = prefix + "/Delete";
+            public const string GetCommentsByPostId = prefix + "/Get/ByPostId";
+            public const string GetCommentsByCommentId = prefix + "/Get/ByCommentId";
+          
+        }
+        public static class ReplayOnComments
+        {
+            public const string prefix = Rule + "ReplayOnComments";
+            public const string AddReplayComment = prefix + "/Add";
+            public const string UpdateReplayComment = prefix + "/update";
+            public const string DeleteReplayComment = prefix + "/Delete";
+            public const string GetReplayesByCommentId = prefix + "/Get/ByCommentId";
+            public const string Get = prefix + "/Get/ByReplayId";
+        }
+        public static class Interaction
+        {
+
+            public const string prefix = Rule + "Interaction";
+            public const string AddInteraction = prefix + "/Add";
+            public const string UpdateInteraction = prefix + "/Update";
+            public const string DeleteInteraction = prefix + "/Delete" + SignleRoute;
+            public const string GetInteractionByPostId = prefix + "/GetInteractions/post" + SignleRoute;
+            public const string GetInteractionById = prefix + "/GetInteractions" + SignleRoute;
+            public const string GetUserInteractionOnPost = prefix + "GetUserInteractionPost";
+        }
+
+       
+
+       
+
+       
+
+
+
 
     }
 }
