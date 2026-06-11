@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -21,10 +22,13 @@ namespace Tradify.Service.Services
         private readonly IProductService productService;
         private readonly IOrderItemsService orderItemsService;
         private readonly IBookingsService bookingsService;
+        private readonly ILogger<ReviewService> logger;
+
         public ReviewService(IGenericRepository<Reviews> repository , IProductService productService 
             , ICurrentUserService currentUserService
             , ApplicationDbContext context , IInstructorsService instructorsService
-            , IOrderItemsService orderItemsService ,IBookingsService bookingsService) : base(repository)
+            , IOrderItemsService orderItemsService ,IBookingsService bookingsService
+            , ILogger<ReviewService> logger) : base(repository)
         {
             this.productService = productService;
             this.currentUserService = currentUserService;
@@ -32,6 +36,7 @@ namespace Tradify.Service.Services
             this.instructorsService = instructorsService; 
             this.orderItemsService = orderItemsService; 
             this.bookingsService = bookingsService; 
+            this.logger = logger;
         }
 
 
@@ -153,8 +158,8 @@ namespace Tradify.Service.Services
                 {
 
                     await transaction.RollbackAsync();
-                    return ("Failed", null);
-
+                    logger.LogError(ex, ex.Message);
+                    throw;
                 }
             }
         }

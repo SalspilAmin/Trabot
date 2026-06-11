@@ -1,6 +1,7 @@
 ﻿using Google;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -23,17 +24,20 @@ namespace Tradify.Service.Services
         private readonly IGenericRepository<Sellers> sellerRepo;
         private readonly ApplicationDbContext context;
         private readonly UserManager<User> userManager;
-        private readonly IAuthorizationService authorizationService;            
+        private readonly IAuthorizationService authorizationService;
+        private readonly ILogger<SellerService> logger;
 
 
 
-        public SellerService(IGenericRepository<Sellers> sellerRepo, UserManager<User> userManager, ApplicationDbContext context,IAuthorizationService authorization) : base(sellerRepo)
+        public SellerService(IGenericRepository<Sellers> sellerRepo,
+            ILogger<SellerService> logger,
+            UserManager<User> userManager, ApplicationDbContext context,IAuthorizationService authorization) : base(sellerRepo)
         {
             this.sellerRepo = sellerRepo;
             this.context = context;
             this.userManager = userManager;
             this.authorizationService = authorization;
-
+            this.logger = logger;
 
         }
 
@@ -96,8 +100,8 @@ namespace Tradify.Service.Services
                 {
 
                     await transaction.RollbackAsync();
-                    return ("Failed", null);
-
+                    logger.LogError(ex, ex.Message);
+                    throw;
                 }
             }
         }

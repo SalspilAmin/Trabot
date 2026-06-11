@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Tradify.Bases;
+using Tradify.Core.Features.Certification.Queries.Models;
 using Tradify.Core.Features.Fawaterak.Comands.Models;
 using Tradify.Core.Features.Order.Commands.Models;
 using Tradify.Core.Features.Order.Queries.Models;
@@ -8,7 +9,7 @@ using Tradify.Core.Features.User.Commands.Models;
 using Tradify.Core.Features.User.Queries.Models;
 using Tradify.Data.AppMetaData;
 
-namespace Tradify.Controllers
+namespace Tradify.Controllers.Order
 {
     
     [ApiController]
@@ -48,6 +49,15 @@ namespace Tradify.Controllers
             var resutl = await Mediator.Send(new DeleteOrderCommand(id));
             return Ok(resutl);
         }
+
+
+
+      
+
+
+
+
+
     }
 
   

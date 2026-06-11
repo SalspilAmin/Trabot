@@ -13,6 +13,7 @@ namespace Tradify.Core.Mapping.Orders
             GetOrderByIdMapping();
             OrderItemResultMapping();
             GetCustomerOrdersMapping();
+            GetSupOrderMapping();
         }
     }
 }

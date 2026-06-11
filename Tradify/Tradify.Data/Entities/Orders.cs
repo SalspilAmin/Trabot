@@ -37,18 +37,11 @@ namespace Tradify.Data.Entities
        
 
 
-        //public virtual  ICollection<Products>? products { get; set; }
         // ✅ الجديد
         public virtual ICollection<Tradify.Data.Entities.OrderItems> OrderItems { get; set; } = new List<OrderItems>();
 
         public virtual ICollection<SubOrders>? subOrders { get; set; }
 
-        //public int? ShipmentId { get; set; } = null;
-
-        //public int? ShipmentTrackingId { get; set; } = null;
-        ////[ForeignKey(nameof(ShipmentId))]
-        ////public virtual Shipments? Shipment { get; set; }
-        ////[ForeignKey(nameof(ShipmentTrackingId))]
-        ////public virtual ShipmentTracking? ShipmentTracking { get; set; }
+        
     }
 }

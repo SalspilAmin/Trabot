@@ -68,6 +68,10 @@ namespace Tradify.Data.AppMetaData
             public const string AddDiscount = prefix + "/AddDiscount";
             public const string DeleteDiscount = prefix + "/DeleteDiscount";
             public const string Paginated = prefix + "/Paginated";
+            public const string BestSelling = prefix + "/BestSelling";
+
+
+            
             public const string GetByID = prefix + "/Get" + SignleRoute;
             public const string UpdateProduct = prefix + "/Update" ;
             public const string Delete = prefix + "/Delete" + SignleRoute;
@@ -161,11 +165,18 @@ namespace Tradify.Data.AppMetaData
         public static class ShipmentTracking
         {
             public const string prefix = Rule + "ShipmentTracking";
-            public const string Add = prefix + "/AddShipmentTracking";
+            public const string Add = prefix + "/AddShipmentTracking/{subOrderId}";
+
+
             public const string UpdateStatus = prefix + "/UpdateShipmentStatus";
-            public const string GetShipmentByOrder = prefix + SignleRoute;
+            public const string GetShipmentBySubOrder = prefix + "/GetTracking/{subOrderId}";
+          
+            public const string BySeller = Rule + "Shipment" + "/BySeller";
+
+            public const string BySubShipment = prefix + "/GetTracking/{shipmentId}";
 
             
+
 
 
         }
@@ -328,6 +339,21 @@ namespace Tradify.Data.AppMetaData
 
             public const string GetOrderById = prefix + SignleRoute;
         }
+
+        public static class SupOrder
+        {
+            public const string prefix = Rule + "SupOrder";
+           
+            public const string Paginated = prefix + "/Paginated";
+            public const string BySeller = prefix + "/BySeller";
+
+            
+            public const string GetByOrder = prefix + "/ByOrder";
+
+        }
+
+
+
         public static class Seller
         {
             public const string prefix = Rule + "Seller";

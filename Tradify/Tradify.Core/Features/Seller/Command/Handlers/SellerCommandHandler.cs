@@ -102,38 +102,16 @@ namespace Tradify.Core.Features.Seller.Command.Handlers
             var seller = mapper.Map<Sellers>(request);
 
             var result = await sellerService.AddSellerAsync(seller, userId);
-        switch (result.Item1)
-        {
+            if (result.Item1 != "Success")
+            {
+                return BadRequest<string>(localize.Get(result.Item1));
+            }
+            else
+            {
+                return Success<string>("Success", meta: (result.Item2));
+            }
 
-            case "UserNotFound":
-                return BadRequest<string>(localize.Get("UserNotFound"));
-                break;
-            case "UserDeleted":
-                return BadRequest<string>(localize.Get("UserDeleted"));
-                break;
-            case "UserIsNotAssignedto(Seller_Role)":
-                return BadRequest<string>(localize.Get("UserIsNotAssignedto(Seller_Role)"));
-                break;
-            case "UserIsAlreadySeller":
-                return BadRequest<string>(localize.Get("UserIsAlreadySeller"));
-
-                break;
-
-                case "BusinessNameAlreadyExist":
-                return BadRequest<string>(localize.Get("BusinessNameAlreadyExist"));
-               
-                    break;
-                    
-                case "Failed":
-                    return BadRequest<string>(localize.Get("Failed"));
-                    break;
-                case "Success":
-                return Success<string>(result.Item1, meta: result.Item2);
-                break;
-               default: return BadRequest<string>(result.Item1);
         }
-
-    }
 
 
 

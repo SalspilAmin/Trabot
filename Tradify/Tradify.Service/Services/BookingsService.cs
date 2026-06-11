@@ -176,8 +176,7 @@ namespace Tradify.Service.Services
 
                     await transaction.RollbackAsync();
                     logger.LogError(ex, ex.Message);
-
-                    return ("Failed", null);
+                    throw;
 
                 }
             }
@@ -290,7 +289,7 @@ namespace Tradify.Service.Services
 
                     logger.LogError(ex, ex.Message);
 
-                    return "Failed";
+                    throw;
                 }
             }
         }

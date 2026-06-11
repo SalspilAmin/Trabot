@@ -1,8 +1,4 @@
-﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using Tradify.Core.Features.Order.Queries.Results;
+﻿
 using Tradify.Core.Features.ShipmentTrackings.Queries.Results;
 using Tradify.Data.Entities;
 
@@ -12,9 +8,36 @@ namespace Tradify.Core.Mapping.ShipmentTrackingMapping
     {
         public void GetShipmentByOrderIdMapping()
         {
-            CreateMap<ShipmentTracking, GetShipmentByOrderIdResponse>()
-             .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.ShipmentStatus));
+            CreateMap<Shipments, GetShipmentByOrderIdResponse>()
+             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+
+
+            .ForMember(dest => dest.TrackingNumber, opt => opt.MapFrom(src => src.TrackingNumber))
+
+               .ForMember(dest => dest.CurrentStatus, opt => opt.MapFrom(src => src.CurrentStatus))
+
+
+               
+
+                         .ForMember(dest => dest.ShipmentTrackings,
+        opt => opt.MapFrom(src => src.ShipmentTrackings));
+
+
+            CreateMap<ShipmentTracking, ShipmentTrackingRespons>()
+    .ForMember(dest => dest.Id,
+        opt => opt.MapFrom(src => src.Id))
+
+    .ForMember(dest => dest.ShipmentStatus,
+        opt => opt.MapFrom(src => src.ShipmentStatus))
+
+    .ForMember(dest => dest.CreatedAt,
+        opt => opt.MapFrom(src => src.CreatedAt))
+
+    .ForMember(dest => dest.Notes,
+        opt => opt.MapFrom(src => src.Notes));
+
 
         }
     }
-}
+    }
+

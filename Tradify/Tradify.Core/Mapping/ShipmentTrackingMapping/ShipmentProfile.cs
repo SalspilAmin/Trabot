@@ -10,6 +10,7 @@ namespace Tradify.Core.Mapping.ShipmentTrackingMapping
         public ShipmentProfile()
         {
             GetShipmentByOrderIdMapping();
+            GetSellerShipmentMapping();
         }
     }
     
