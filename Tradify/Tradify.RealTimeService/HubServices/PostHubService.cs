@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -22,15 +23,14 @@ namespace Tradify.RealTimeService.HubServices
             this.userConnectionRepository = userConnection;
             this.hubContext = hubcontext;
         }
-      public async Task NotifyAllAboutPost(PostResult post)
+        public async Task NotifyAllAboutPost(PostResult post)
         {
             try
             {
-                if (hubContext.Clients == null) 
+                if (hubContext.Clients == null)
                     return;
 
-                // السطر التالي يغنيك عن استدعاء قاعدة البيانات تماماً!
-                // سيرسل المنشور لكل شخص فاتح صفحة الـ HTML حالياً
+
                 await hubContext.Clients.All.SendAsync("ReceivePost", post);
 
             }
@@ -38,7 +38,50 @@ namespace Tradify.RealTimeService.HubServices
             {
                 throw;
             }
-
         }
+            #region Comments
+
+        public async Task NotifyAddComment(CommentResult comment)
+        {
+            await hubContext.Clients.All
+                .SendAsync("ReceiveComment", comment);
+        }
+
+        public async Task NotifyDeleteComment(int commentId)
+        {
+            await hubContext.Clients.All
+                .SendAsync("DeleteComment", commentId);
+        }
+
+        #endregion
+
+        #region Replies
+
+        public async Task NotifyAddReply(ReplyCommentResult reply)
+        {
+            await hubContext.Clients.All
+                .SendAsync("ReceiveReply", reply);
+        }
+
+        #endregion
+
+        #region Interactions
+
+    
+        public async Task NotifyAddInteraction(InteractionWithPostResult interaction)
+        {
+            await hubContext.Clients.All
+                .SendAsync("ReceiveInteraction", interaction);
+        }
+
+        public async Task NotifyRemoveInteraction(int interactionId)
+        {
+            await hubContext.Clients.All
+                .SendAsync("RemoveInteraction", interactionId);
+        }
+
+        #endregion
     }
+
 }
+
