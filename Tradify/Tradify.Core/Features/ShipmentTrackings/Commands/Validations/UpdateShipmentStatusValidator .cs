@@ -26,11 +26,14 @@ namespace Tradify.Core.Features.ShipmentTrackings.Commands.Validations
         #region Validations
         public void ApplyValidation()
         {
-            RuleFor(x => x.ShipmentTrackingId)
-             .GreaterThan(0).WithMessage(localize.Get("Required"));
-
+            RuleFor(x => x.ShipmentId)
+                .GreaterThan(0).WithMessage(localize.Get("IdMustBeGreaterThanZero"))
+                .NotEmpty().WithMessage(localize.Get("NotEmpty"))
+                .NotNull().WithMessage(localize.Get("Required"));
             RuleFor(x => x.Status)
-                .IsInEnum().WithMessage(localize.Get("InvalidShipmentStatus"));
+                .IsInEnum().WithMessage(localize.Get("InvalidShipmentStatus"))
+                 .NotEmpty().WithMessage(localize.Get("NotEmpty"))
+                .NotNull().WithMessage(localize.Get("Required")); ;
 
 
         }

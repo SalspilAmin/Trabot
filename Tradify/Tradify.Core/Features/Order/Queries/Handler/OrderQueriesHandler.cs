@@ -1,10 +1,13 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using Tradify.Core.Bases;
+using Tradify.Core.Features.InstructorService.Queries.Models;
+using Tradify.Core.Features.InstructorService.Queries.Results;
 using Tradify.Core.Features.Order.Queries.Models;
 using Tradify.Core.Features.Order.Queries.Results;
 using Tradify.Core.Features.User.Queries.Models;
@@ -12,6 +15,7 @@ using Tradify.Core.Features.User.Queries.Results;
 using Tradify.Core.Resources.Service;
 using Tradify.Core.Wrappers;
 using Tradify.Data.Entities.Identity;
+using Tradify.Data.Enums;
 using Tradify.Service.AbstractsServices;
 using Tradify.Service.Services;
 
@@ -19,6 +23,10 @@ namespace Tradify.Core.Features.Order.Queries.Handler
 {
     public class OrderQueriesHandler : ResponseHandler, IRequestHandler<GetOrderByIdQueiry, Response<OrderResultQueiry>>
                                                       , IRequestHandler<GetCustomerOrdersQuery, PaginatedResult<GetCustomerOrdersResponse>>
+                                                     , IRequestHandler<GetSupOrderByOrderIdQuery, List<GetSupOrderByOrderIdResponse>>
+                                                      , IRequestHandler<GetSellerSupOrderQuery, Response<PaginatedResult<GetSupOrderByOrderIdResponse>>>
+
+
     {
 
         private readonly LocalizationService localization;
@@ -28,9 +36,16 @@ namespace Tradify.Core.Features.Order.Queries.Handler
         private readonly IProductService productService;
         private readonly IMapper mapper;
         private readonly ICurrentUserService currentUserService;
+        private readonly ISubOrderService subOrderService;  
 
-
-        public OrderQueriesHandler(LocalizationService localization, ICurrentUserService currentUserService, IOrdersService ordersService, ICartService cartService, ICartProductService cartProductService, IProductService productService, IMapper mapper) : base(localization)
+        public OrderQueriesHandler(LocalizationService localization, 
+            ICurrentUserService currentUserService, 
+            IOrdersService ordersService, 
+            ICartService cartService, 
+            ICartProductService cartProductService, 
+            IProductService productService, 
+            IMapper mapper,
+            ISubOrderService subOrderService) : base(localization)
         {
 
             this.localization = localization;
@@ -39,7 +54,8 @@ namespace Tradify.Core.Features.Order.Queries.Handler
             this.cartProductService = cartProductService;
             this.productService = productService;
             this.mapper = mapper;
-            this.currentUserService = currentUserService;   
+            this.currentUserService = currentUserService;
+            this.subOrderService = subOrderService; 
         }
 
         public async Task<Response<OrderResultQueiry>> Handle(GetOrderByIdQueiry request, CancellationToken cancellationToken)
@@ -66,6 +82,7 @@ namespace Tradify.Core.Features.Order.Queries.Handler
             // 1️⃣ Query
             var orders =  ordersService.GetTableNoTracking()
                 .Where(o => o.CustomerId == userId)
+                .Include(x => x.subOrders)
                 .OrderByDescending(o => o.CreatedAt).AsQueryable();
 
             // 2️⃣ Pagination
@@ -77,5 +94,60 @@ namespace Tradify.Core.Features.Order.Queries.Handler
 
             return result;
         }
+
+
+        public async Task<Response<PaginatedResult<GetSupOrderByOrderIdResponse>>> Handle(GetSellerSupOrderQuery request, CancellationToken cancellationToken)
+        {
+            var ValidSeller = await currentUserService.GetValidSellerContextAsync();
+
+            if (ValidSeller.Error != null)
+                return BadRequest <PaginatedResult<GetSupOrderByOrderIdResponse>>(localization.Get(ValidSeller.Error));
+
+
+
+            // 2. Get Seller , Store
+            var seller = ValidSeller.Seller;
+            var store = ValidSeller.Store;
+
+            //3. Cheack If Store Type Is Product 
+
+            if (store.Type != StoreType.Product)
+                return BadRequest<PaginatedResult<GetSupOrderByOrderIdResponse>>(localization.Get("ThisActionAllowedForProductStoresOnly"));
+
+
+
+            // 1️⃣ Query
+            var suporders = subOrderService.GetTableNoTracking()
+                .Where(s=>s.StoreId == store.Id)
+                .Include(x => x.OrderItems)
+                  .ThenInclude(x => x.ProductVariant)
+                .OrderByDescending(o => o.CreatedAt).AsQueryable();
+
+            // 2️⃣ Pagination
+
+            var result = await mapper.ProjectTo<GetSupOrderByOrderIdResponse>(suporders)
+                .ToPaginationlist(request.PageNumber, request.PageSize);
+
+
+
+            return Success (result);
+        }
+
+        public async Task<List<GetSupOrderByOrderIdResponse>> Handle(GetSupOrderByOrderIdQuery request, CancellationToken cancellationToken)
+        {
+
+
+            var supOrder = await subOrderService.GetTableNoTracking()
+                  .Include(x => x.OrderItems)
+                  .ThenInclude(x => x.ProductVariant)
+                .Where(e => e.OrderId == request.OrderId).ToListAsync();
+
+
+
+            var result = mapper.Map<List<GetSupOrderByOrderIdResponse>>(supOrder);
+
+            return result;
+        }
+
     }
 }

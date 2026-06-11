@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Org.BouncyCastle.Asn1.Cms;
 using Org.BouncyCastle.Crypto;
 using System;
@@ -28,10 +29,12 @@ namespace Tradify.Service.Services
         private readonly ICurrentUserService currentUserService;
         private readonly ICateroriesService cateroriesService;
         private readonly ISellerService sellerService;
+        private readonly ILogger<ProductService> logger;
 
         public ProductService(IProductRepository repository, ApplicationDbContext context, IStoreService storeService,
                                      ICateroriesService cateroriesService,
-                                     ICurrentUserService currentUserService, ISellerService sellerService) : base(repository)
+                                     ICurrentUserService currentUserService, ISellerService sellerService
+            , ILogger<ProductService> logger) : base(repository)
         {
             productRepository = repository;
             this.context = context;
@@ -39,6 +42,7 @@ namespace Tradify.Service.Services
             this.cateroriesService = cateroriesService;
             this.currentUserService = currentUserService;
             this.sellerService = sellerService;
+            this.logger = logger;
         }
 
         public async Task<Products> GetByIdWithIncludesAsync(int id)
@@ -145,8 +149,8 @@ namespace Tradify.Service.Services
                 {
 
                     await transaction.RollbackAsync();
-                    return ("Failed", null, null);
-
+                    logger.LogError(ex, ex.Message);
+                    throw;
                 }
             }
 

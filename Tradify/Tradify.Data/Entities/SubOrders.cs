@@ -43,15 +43,10 @@ namespace Tradify.Data.Entities
         public virtual Shipments? Shipment { get; set; }
 
 
-        //public int? ShipmentId { get; set; }
+        [ForeignKey(nameof(StoreId))]
+        public virtual Stores Store { get; set; }
 
-
-        //[ForeignKey(nameof(ShipmentId))]
-        //public int? ShipmentTrackingId { get; set; }
-
-
-        //[ForeignKey(nameof(ShipmentTrackingId))]
-        //public virtual ShipmentTracking? ShipmentTracking { get; set; }
+       
 
     }
 }

@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -6,7 +8,6 @@ using Tradify.Data.Entities;
 using Tradify.Data.Entities.Appointments;
 using Tradify.Data.Entities.Identity;
 using Tradify.Data.Enums;
-using Microsoft.EntityFrameworkCore;
 using Tradify.Data.Helpers;
 using Tradify.Infrastructure.Context;
 using Tradify.Infrastructure.InfrastrucureBases;
@@ -21,16 +22,20 @@ namespace Tradify.Service.Services
         private readonly ApplicationDbContext context;
         private readonly UserManager<User> userManager;
         private readonly IInstructorsService instructorsService;
+        private readonly ILogger<EducationService> logger;
+
         public EducationService(IGenericRepository<Education> repository
             , ICurrentUserService currentUserService
             , ApplicationDbContext context
             , UserManager<User> userManager
-            , IInstructorsService instructorsService) : base(repository)
+            , IInstructorsService instructorsService ,
+ILogger<EducationService> logger) : base(repository)
         {
             this.currentUserService = currentUserService;
             this.context = context;
             this.userManager = userManager;
             this.instructorsService = instructorsService;
+            this.logger = logger;
         }
 
 
@@ -91,8 +96,8 @@ namespace Tradify.Service.Services
                 {
 
                     await transaction.RollbackAsync();
-                    return ("Failed", null);
-
+                    logger.LogError(ex, ex.Message);
+                    throw;
                 }
             }
         }

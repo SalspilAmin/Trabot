@@ -9,11 +9,11 @@ namespace Tradify.Core.Features.ShipmentTrackings.Queries.Models
 {
     public class GetShipmentByOrderIdQuery : IRequest<Response<GetShipmentByOrderIdResponse>>
     {
-        public int OrderId { get; set; }
+        public int SubOrderId { get; set; }
 
-        public GetShipmentByOrderIdQuery(int orderId)
+        public GetShipmentByOrderIdQuery(int subOrderId)
         {
-            OrderId = orderId;
+            SubOrderId = subOrderId;
         }
     }
 }

@@ -24,6 +24,13 @@ namespace Tradify.Controllers.Product
             var result = await Mediator.Send(query);
             return Ok(result);
         }
+
+        [HttpGet(Router.Product.BestSelling)]
+        public async Task<IActionResult> GetProductsBestSelling([FromQuery] GetProductBestSellingQuery query)
+        {
+            var result = await Mediator.Send(query);
+            return Ok(result);
+        }
         [HttpGet(Router.Product.List)]
         public async Task<IActionResult> GetProductsList([FromQuery] GetAllProductListQuery query)
         {

@@ -1,6 +1,7 @@
 ﻿using Google;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -23,12 +24,15 @@ namespace Tradify.Service.Services
 
         private readonly IStoreRepository storeRepository;
         private readonly ApplicationDbContext context;
+        private readonly ILogger<StoreService> logger;
 
-        public StoreService(IStoreRepository repository, ApplicationDbContext context)
+        public StoreService(IStoreRepository repository, ApplicationDbContext context, ILogger<StoreService> logger)
             : base(repository)
         {
             this.context = context;
             storeRepository = repository;
+            this.logger = logger;
+
         }
         public async Task<Stores> GetByIdWithIncludesAsync(int id)
         {
@@ -125,8 +129,8 @@ namespace Tradify.Service.Services
                 {
 
                     await transaction.RollbackAsync();
-                    return ("Failed", null) ;
-
+                    logger.LogError(ex, "CreateStore Failed");
+                    throw;
                 }
             }
         }

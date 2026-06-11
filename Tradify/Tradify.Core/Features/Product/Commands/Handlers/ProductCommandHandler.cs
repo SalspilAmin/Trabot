@@ -1,23 +1,13 @@
 ﻿using AutoMapper;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Tradify.Core.Bases;
 using Tradify.Core.Features.Product.Commands.Models;
-using Tradify.Core.Features.ProductVariant.Commands.Models;
-using Tradify.Core.Features.Store.Commands.Models;
-using Tradify.Core.Features.User.Commands.Models;
 using Tradify.Core.Resources.Service;
 using Tradify.Data.Entities;
-using Tradify.Infrastructure.InfrastrucureBases;
 using Tradify.Service.AbstractsServices;
 using Tradify.Service.AbstractsServices.AuthorizationServices;
 using Tradify.Service.Services;
-using Tradify.Service.Services.AuthorizationServices;
-using static Tradify.Data.AppMetaData.Router;
 
 namespace Tradify.Core.Features.Product.Commands.Handlers
 {

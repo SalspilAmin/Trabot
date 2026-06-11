@@ -29,9 +29,10 @@ namespace Tradify.Core.Features.Order.Commands.Handler
         private readonly IProductService productService;
         private readonly IMapper mapper;
         private readonly ICurrentUserService currentUserService;
+        private readonly ISubOrderService subOrderService;  
         public OrderCommandHandler(LocalizationService localization,IOrdersService ordersService,ICartService cartService
             ,ICartProductService cartProductService,IProductService productService,IMapper mapper
-            , ICurrentUserService currentUserService) : base(localization) 
+            , ICurrentUserService currentUserService, ISubOrderService subOrderService) : base(localization) 
         {
             this.localization = localization;
             this.ordersService = ordersService;
@@ -39,7 +40,8 @@ namespace Tradify.Core.Features.Order.Commands.Handler
             this.cartProductService = cartProductService;
             this.productService = productService;
             this.mapper = mapper;
-            this.currentUserService = currentUserService;   
+            this.currentUserService = currentUserService;
+            this.subOrderService = subOrderService; 
         }
 
         //public async Task<Response<int>> Handle(CreateOrderModel request, CancellationToken cancellationToken)
@@ -234,15 +236,14 @@ namespace Tradify.Core.Features.Order.Commands.Handler
         public async Task<Response<string>> Handle(DeleteOrderCommand request, CancellationToken cancellationToken)
         {
 
-            
-         // var userId = currentUserService.GetUserId();
+
+            var userId = currentUserService.GetUserId();
 
             // 1️⃣ Get Order
-            var order =  ordersService.GetTableAsTracking()
+            var order = await ordersService.GetTableAsTracking()
                 .Include(o=>o.subOrders)
                 .ThenInclude(s=>s.Shipment)
-                .FirstOrDefault(o => o.Id == request.OrderId);
-                //.FirstOrDefault(o => o.Id == request.OrderId && o.CanBeCanceled== userId);
+                .FirstOrDefaultAsync(o => o.Id == request.OrderId&&o.CustomerId== userId);
 
 
             if (order == null)
@@ -252,22 +253,31 @@ namespace Tradify.Core.Features.Order.Commands.Handler
 
             // 2️⃣ Check Payment / Shipment
             if (order.PaymentStatus == PaymentStatus.Paid)
-                return BadRequest<string>(localization.Get("CannotDeletePaidOrder"));
+                return BadRequest<string>(localization.Get("CannotCancelledPaidOrder"));
 
             if (order.subOrders.Any(s => s.Shipment != null))
                 return BadRequest<string>(localization.Get("OrderAlreadyShipped"));
 
-            //// 3️⃣ Delete Order Items (if needed)
-            //if (order.OrderItems != null && order.OrderItems.Count > 0)
-            //{
-            //    ordersService.RemoveRange(order.OrderItems);
-            //}
+            order.OrderStatus = OrderStatus.cancelled;
+            order.PaymentStatus= PaymentStatus.Cancelled;    
 
             // 4️⃣ Delete Order
-            await ordersService.DeleteAsync(order);
+            await ordersService.UpdateAsync(order);
+
+            var supOrder = order.subOrders.ToList();
+
+                foreach (var sup in supOrder)
+            { 
+                sup.Status= OrderStatus.cancelled;
+                await subOrderService.UpdateAsync(sup);
+
+            }
+
+            
+
             await ordersService.SaveChangesAsync();
 
-            return Success(localization.Get("OrderDeletedSuccessfully"));
+            return Success(localization.Get("OrderCancelledSuccessfully"));
         }
     }
 }
