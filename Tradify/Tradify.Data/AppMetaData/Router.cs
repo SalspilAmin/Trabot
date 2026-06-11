@@ -356,6 +356,8 @@ namespace Tradify.Data.AppMetaData
             public const string GetPostsOfUserByID = prefix+ "/GetPostsOfUserByID"+ SignleRoute;
             public const string GetPostByID = prefix + "/GetPostByID" + SignleRoute;
             public const string GetPosts = prefix + "/GetPosts";
+            public const string Delete = prefix + "/Delete";
+            public const string Update = prefix + "/Update";
 
 
         }

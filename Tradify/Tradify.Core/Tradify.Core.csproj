@@ -47,6 +47,8 @@
     <Folder Include="Features\Fawaterak\Queries\Validations\" />
     <Folder Include="Features\Interactions\Queries\Results\" />
     <Folder Include="Features\Interactions\Queries\Validations\" />
+    <Folder Include="Features\Messages\Queries\Handler\" />
+    <Folder Include="Features\Messages\Queries\Validators\" />
     <Folder Include="Features\Order\Queries\Validations\" />
     <Folder Include="Features\Post\Queries\Validations\" />
     <Folder Include="Features\Seller\Queries\Handlers\" />
@@ -54,6 +56,7 @@
     <Folder Include="Features\Seller\Queries\Results\" />
     <Folder Include="Mapping\Comments\Queries\" />
     <Folder Include="Mapping\Interactions\Queries\" />
+    <Folder Include="Mapping\MessageMapping\Queries\" />
     <Folder Include="Mapping\SellerMapping\Querry\" />
     <Folder Include="Mapping\Post\Queiry\" />
     <Folder Include="Mapping\ShipmentTrackingMapping\Command\" />

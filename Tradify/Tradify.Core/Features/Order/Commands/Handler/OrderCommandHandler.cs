@@ -42,47 +42,139 @@ namespace Tradify.Core.Features.Order.Commands.Handler
             this.currentUserService = currentUserService;   
         }
 
+        //public async Task<Response<int>> Handle(CreateOrderModel request, CancellationToken cancellationToken)
+        //{
+        //    // Check on Cart  
+        //    var Cart = cartService.GetCartByIdWithInclude(request.CartId);
+        //    if (Cart == null) return BadRequest<int>(localization.Get("NotFound"));
+
+
+
+        //    // list of product  that is in Cart
+        //    var ProductsVariantsList = Cart.CartProducts.Select(x => x.ProductVariant).ToList();
+
+        //    var order = mapper.Map<Tradify.Data.Entities.Orders>(request);
+        //    if (order != null)
+        //    {
+        //        var subOrdersList=new List<SubOrders>();
+        //        foreach (var item in ProductsVariantsList)
+        //        {
+
+        //            if (item.InStock != true || item.NumberOfProductInStock <= 0)
+        //                continue;
+
+
+        //                var cartproduct = Cart.CartProducts.FirstOrDefault(x => x.ProductVariantId == item.Id);
+
+        //            // Check If SubOrder For This Store Already Exists
+        //            var existingSubOrder = subOrdersList
+        //                .FirstOrDefault(x => x.StoreId == item.Product.StoreId);
+        //            // Create New SubOrder If Not Exists
+        //            if (existingSubOrder == null)
+        //            {
+        //                existingSubOrder = new SubOrders
+        //                {
+        //                    Order = order
+        //                    ,OrderId=order.Id,
+        //                    StoreId = item.Product.StoreId,
+        //                    Status = Data.Enums.OrderStatus.processing,
+        //                    Quantity = cartproduct.Quantity,
+        //                    ProductVAriantsId=item.Id,
+        //                    ProductVariants=item,
+        //                    Product=item.Product,
+        //                    OrderItems = new List<Tradify.Data.Entities.OrderItems>()
+        //                };
+
+        //                subOrdersList.Add(existingSubOrder);
+        //            }
+
+        //            var orderItem = new OrderItems
+        //            {
+        //                ProductVariantId = item.Id,
+        //                Quantity = cartproduct.Quantity,
+        //                Price = item.Price,
+        //                SubOrder = existingSubOrder
+        //            };
+
+
+
+        //                order.OrderItems.Add(orderItem);
+        //            existingSubOrder.OrderItems.Add(orderItem);
+        //            existingSubOrder.Quantity += cartproduct.Quantity;
+
+        //            // Reduce Stock
+        //            item.NumberOfProductInStock -= cartproduct.Quantity;
+
+
+
+
+        //        }
+        //        order.subOrders= subOrdersList;
+        //    }
+        //    var result = await ordersService.AddAsync(order);
+        //    if (result != null)
+        //    {
+
+        //        await ordersService.SaveChangesAsync();
+
+        //        return Success(result.Id);
+        //    }
+        //    return BadRequest<int>(localization.Get("TryAgainInAnotherTime"));
+
+
+
+
+
+        //}
         public async Task<Response<int>> Handle(CreateOrderModel request, CancellationToken cancellationToken)
         {
-            // Check on Cart  
+            // Check on Cart
             var Cart = cartService.GetCartByIdWithInclude(request.CartId);
-            if (Cart == null) return BadRequest<int>(localization.Get("NotFound"));
+            if (Cart == null)
+                return BadRequest<int>(localization.Get("NotFound"));
 
-
-
-            // list of product  that is in Cart
-            var ProductsVariantsList = Cart.CartProducts.Select(x => x.ProductVariant).ToList();
+            // List of products in cart
+            var ProductsVariantsList = Cart.CartProducts
+                .Select(x => x.ProductVariant)
+                .ToList();
 
             var order = mapper.Map<Tradify.Data.Entities.Orders>(request);
+
             if (order != null)
             {
-                var subOrdersList=new List<SubOrders>();
+                var subOrdersList = new List<SubOrders>();
+
+                // Initialize collections if needed
+                order.OrderItems ??= new List<OrderItems>();
+
                 foreach (var item in ProductsVariantsList)
                 {
-
                     if (item.InStock != true || item.NumberOfProductInStock <= 0)
                         continue;
-                   
 
-                        var cartproduct = Cart.CartProducts.FirstOrDefault(x => x.ProductVariantId == item.Id);
+                    var cartproduct = Cart.CartProducts
+                        .FirstOrDefault(x => x.ProductVariantId == item.Id);
 
-                    // Check If SubOrder For This Store Already Exists
+                    if (cartproduct == null)
+                        continue;
+
+                    // Check if SubOrder for this Store already exists
                     var existingSubOrder = subOrdersList
                         .FirstOrDefault(x => x.StoreId == item.Product.StoreId);
-                    // Create New SubOrder If Not Exists
+
+                    // Create new SubOrder if not exists
                     if (existingSubOrder == null)
                     {
                         existingSubOrder = new SubOrders
                         {
-                            Order = order
-                            ,OrderId=order.Id,
+                            Order = order,
                             StoreId = item.Product.StoreId,
                             Status = Data.Enums.OrderStatus.processing,
-                            Quantity = cartproduct.Quantity,
-                            ProductVAriantsId=item.Id,
-                            ProductVariants=item,
-                            Product=item.Product,
-                            OrderItems = new List<Tradify.Data.Entities.OrderItems>()
+                            Quantity = 0,
+                            ProductVAriantsId = item.Id,
+                            ProductVariants = item,
+                            Product = item.Product,
+                            OrderItems = new List<OrderItems>()
                         };
 
                         subOrdersList.Add(existingSubOrder);
@@ -96,37 +188,34 @@ namespace Tradify.Core.Features.Order.Commands.Handler
                         SubOrder = existingSubOrder
                     };
 
-
-                  
-                        order.OrderItems.Add(orderItem);
+                    order.OrderItems.Add(orderItem);
                     existingSubOrder.OrderItems.Add(orderItem);
                     existingSubOrder.Quantity += cartproduct.Quantity;
 
                     // Reduce Stock
                     item.NumberOfProductInStock -= cartproduct.Quantity;
-
-
-
-
                 }
-                order.subOrders= subOrdersList;
+
+                order.subOrders = subOrdersList;
+
+                // Calculate Total Amount from Order Items
+                order.ShippingPrice = request.ShippingPrice ?? 0;
+
+                order.TotalAmount =
+                    order.OrderItems.Sum(x => x.Price * x.Quantity)
+                    + order.ShippingPrice;
             }
+
             var result = await ordersService.AddAsync(order);
+
             if (result != null)
             {
-
                 await ordersService.SaveChangesAsync();
-
                 return Success(result.Id);
             }
+
             return BadRequest<int>(localization.Get("TryAgainInAnotherTime"));
-
-
-
-
-
         }
-
         public async Task<Response<int>> Handle(UpdateOrderCommandModel request, CancellationToken cancellationToken)
         {
             var order = await ordersService.GetByIdAsync(request.Id);

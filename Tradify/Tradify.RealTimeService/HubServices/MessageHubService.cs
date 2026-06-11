@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Text;
 using Tradify.Data.Entities.Chat;
 using Tradify.Data.Entities.Posts;
+using Tradify.Data.Helpers.Results;
 using Tradify.Infrastructure.AbstractsRepositories.UserConnectionRepositories;
 
 namespace Tradify.RealTimeService.HubServices
@@ -21,35 +22,34 @@ namespace Tradify.RealTimeService.HubServices
             this.hubContext = hubcontext;
         }
 
-        public async Task NotifyReceiverAboutPost(int UserId, Message message,MessageMediaPath? media = null)
+     
+
+
+
+        public async Task NotifyNewMessage(
+            int receiverId,
+            MessageNotificationResult message)
         {
-            try
-            {
-                // get userConnection
-                var ReciverUserConnection = await userConnectionRepository.GetByIdAsync(message.ReceiverId);
-
-                if (ReciverUserConnection is null)
-                {
-                    // No users are connected, so we don't need to send anything
-                    return;
-                }
-
-                if (hubContext.Clients is null)
-                {
-
-                    return;
-                }
-
-                await hubContext.Clients.Client(ReciverUserConnection.ConnectionId).SendAsync("ReceivePost",message,media  );
-
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
-
-
+            await hubContext.Clients
+                .Group($"User-{receiverId}")
+                .SendAsync(
+                    "ReceiveMessage",
+                    message);
         }
 
+        public async Task NotifyMessageRead(
+            int senderId,
+            int messageId)
+        {
+            await hubContext.Clients
+                .Group($"User-{senderId}")
+                .SendAsync(
+                    "MessageRead",
+                    messageId);
+        }
+
+
     }
-}
+
+ }
+
