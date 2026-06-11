@@ -30,7 +30,9 @@ namespace Tradify.Core.Features.Product.Queries.Handlers
                                                        , IRequestHandler<GetAllProductListQuery, List<GetProductPaginationReponse>>
                                                        , IRequestHandler<GetProductByStoreQuery, List<GetProductPaginationReponse>>
                                                        , IRequestHandler<GetProductDiscountQuery, PaginatedResult<GetProductDiscountResponse>>
-        
+                                                       , IRequestHandler<GetProductBestSellingQuery, PaginatedResult<GetSellerProductPaginationReponse>>
+
+
 
 
     {
@@ -571,6 +573,30 @@ namespace Tradify.Core.Features.Product.Queries.Handlers
         }
 
         #endregion
+
+        public async Task<PaginatedResult<GetSellerProductPaginationReponse>> Handle(GetProductBestSellingQuery  request, CancellationToken cancellationToken)
+        {
+
+            var products = productService.GetTableNoTracking()
+      .Select(p => new
+      {
+          Product = p,
+          TotalSold = p.ProductVariants
+              .SelectMany(v => v.OrderItems)
+              .Sum(oi => (int?)oi.Quantity) ?? 0
+      })
+      .Where(x => x.TotalSold > 0)
+      .OrderByDescending(x => x.TotalSold)
+      .Select(x => x.Product);
+
+
+            var result = await mapper
+                    .ProjectTo<GetSellerProductPaginationReponse>(products)
+                    .ToPaginationlist(request.PageNumber, request.PageSize);
+
+            return result;
+
+        }
     }
 
     #endregion

@@ -6,6 +6,7 @@ using Tradify.Infrastructure.Context;
 using Tradify.Infrastructure.InfrastrucureBases;
 using Tradify.Service.AbstractsServices;
 using Tradify.Service.ServiceBases;
+using static Tradify.Data.AppMetaData.Router;
 
 namespace Tradify.Service.Services
 {
@@ -66,22 +67,24 @@ namespace Tradify.Service.Services
 
 
 
-                    // 3️⃣ Check Payment
+                    // 6. Check Payment
                     if (subOrder.Order.PaymentStatus != PaymentStatus.Paid)
                     return ("OrderNotPaid", null, null);
+
+                    // 7. Check Canceld
 
                     if (subOrder.Status == OrderStatus.cancelled)
                         return ("SubOrderCancelled", null, null);
 
 
-                    // 4️⃣ Check already shipped
+                    // 8. Check already shipped
                     var alreadyShipped = await GetTableNoTracking()
                         .AnyAsync(s => s.SubOrderId == subOrder.Id);
 
                     if (alreadyShipped)
                     return ("AlreadyShipped", null, null);
 
-                    // 5️⃣ Create Tracking
+                    // 9. Create Tracking
                  
 
                     var tracking = GenerateTrackingNumber();
@@ -92,7 +95,7 @@ namespace Tradify.Service.Services
                         tracking = GenerateTrackingNumber();
                     }
 
-                    // 5️.Generate Tracking Number.
+                    // 10. Generate Tracking Number.
                     var shipment = new Shipments
                     {
                         TrackingNumber = tracking,
@@ -100,7 +103,7 @@ namespace Tradify.Service.Services
                         SubOrderId=subOrderId,  
                     };
 
-                    var shipmentTracking = new ShipmentTracking
+                    var shipmentTracking = new Tradify.Data.Entities.ShipmentTracking
                     {
                         ShipmentStatus = ShipmentStatus.Pending,
                         Notes = "Shipment Created"
@@ -122,15 +125,148 @@ namespace Tradify.Service.Services
                 catch (Exception ex)
 
                 {
-                    logger.LogError(ex, ex.Message);
-
-
                     await transaction.RollbackAsync();
-                    return ("Failed", null, null);
 
+
+                    logger.LogError(ex, ex.Message);
+                    throw;
                 }
             }
 
         }
+
+
+
+
+
+        public async Task<string> UpdateShipmentStatus(int ShipmentId, ShipmentStatus status)
+        {
+            using var transaction = await context.Database.BeginTransactionAsync();
+
+            try
+            {
+                // 1. Validate Seller
+                var validSeller = await currentUserService.GetValidSellerContextAsync();
+
+                if (validSeller.Error != null)
+                    return validSeller.Error;
+
+                var store = validSeller.Store;
+
+                // 2. Get Shipment
+                var shipment = await GetTableAsTracking()
+                    .Include(s => s.SubOrder)
+                    .ThenInclude(s => s.Order)
+                    .Include(s => s.ShipmentTrackings)
+                    .FirstOrDefaultAsync(s =>
+                        s.Id == ShipmentId &&
+                        s.SubOrder.StoreId == store.Id);
+
+                if (shipment == null)
+                    return "ShipmentNotFound";
+
+                // 2️⃣ منع نفس الحالة
+                if (shipment.CurrentStatus == status)
+                    return "StatusAlreadySet";
+
+                // 3️⃣ منع التعديل بعد النهاية
+                if (shipment.CurrentStatus == ShipmentStatus.Delivered ||
+                    shipment.CurrentStatus == ShipmentStatus.Returned)
+                {
+                    return "CannotUpdateFinalStatus";
+                }
+                // 3. Update Shipment Current Status
+                shipment.CurrentStatus = status;
+                shipment.UpdatedAt = DateTime.UtcNow;
+                await UpdateAsync(shipment);
+                // 4. Add Tracking History
+                var tracking = new Tradify.Data.Entities.ShipmentTracking
+                {
+                    ShipmentId = shipment.Id,
+                    ShipmentStatus = status,
+                    Notes = $"Shipment Is {status}"
+                };
+
+                await context.ShipmentTracking.AddAsync(tracking);
+
+                var suporder = await subOrderService.GetTableAsTracking().FirstOrDefaultAsync(
+                    s=>s.Id == shipment.SubOrderId);
+
+                if (suporder == null)
+                    return "SuporderNotFound";
+
+                // 5. Update SubOrder Status
+                switch (status)
+                {
+                    case ShipmentStatus.Pending:
+                        suporder.Status = OrderStatus.processing;
+                        break;
+
+                    case ShipmentStatus.Shipped:
+                        suporder.Status = OrderStatus.shipped;
+                        break;
+
+                    case ShipmentStatus.Delivered:
+                        suporder.Status = OrderStatus.delivered;
+                        break;
+
+                    case ShipmentStatus.Returned:
+                        suporder.Status = OrderStatus.cancelled;
+                        break;
+                }
+                 context.SubOrders.Update(suporder);
+
+                var allSubOrders = await subOrderService.GetTableNoTracking()
+                                                .Where(x => x.OrderId == suporder.OrderId)
+                                                .ToListAsync();
+
+                var mainOrderStatus = CalculateOrderStatus(allSubOrders);
+
+                var mainOrder = await context.Orders
+                    .FirstOrDefaultAsync(x => x.Id == suporder.OrderId);
+
+                if (mainOrder != null)
+                {
+                    mainOrder.OrderStatus = mainOrderStatus;
+
+                    context.Orders.Update(mainOrder);
+
+                    await context.SaveChangesAsync();
+                }
+
+
+                await context.SaveChangesAsync();
+
+                await transaction.CommitAsync();
+
+                return "Success";
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+
+                logger.LogError(ex, ex.Message);
+
+                throw;
+            }
+        }
+
+        public OrderStatus CalculateOrderStatus (List<SubOrders> subOrders)
+        {
+            if (subOrders.All(x => x.Status == OrderStatus.delivered))
+                return OrderStatus.delivered;
+
+            if (subOrders.All(x => x.Status == OrderStatus.cancelled))
+                return OrderStatus.cancelled;
+
+            if (subOrders.Any(x => x.Status == OrderStatus.shipped))
+                return OrderStatus.InProgress;
+
+            if (subOrders.Any(x => x.Status == OrderStatus.delivered))
+                return OrderStatus.PartiallyDelivered;
+
+            return OrderStatus.processing;
+        }
     }
+
 }

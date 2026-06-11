@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Tradify.Data.Entities;
@@ -7,7 +9,6 @@ using Tradify.Infrastructure.Context;
 using Tradify.Infrastructure.InfrastrucureBases;
 using Tradify.Service.AbstractsServices;
 using Tradify.Service.ServiceBases;
-using Microsoft.EntityFrameworkCore;
 
 
 namespace Tradify.Service.Services
@@ -23,11 +24,14 @@ namespace Tradify.Service.Services
         private readonly ICurrentUserService currentUserService;
         private readonly ICateroriesService cateroriesService;
         private readonly ISellerService sellerService;
-        private readonly IProductService productService;    
+        private readonly IProductService productService;
+        private readonly ILogger<ProductVariantService> logger;
 
         public ProductVariantService(IProductVariantRepository repository, ApplicationDbContext context, IStoreService storeService,
                                      ICateroriesService cateroriesService,
-                                     ICurrentUserService currentUserService, ISellerService sellerService, IProductService productService) : base(repository)
+                                     ICurrentUserService currentUserService,
+                                     ILogger<ProductVariantService> logger
+            , ISellerService sellerService, IProductService productService) : base(repository)
         {
            this. repository = repository;
             this.context = context;
@@ -35,7 +39,8 @@ namespace Tradify.Service.Services
             this.cateroriesService = cateroriesService;
             this.currentUserService = currentUserService;
             this.sellerService = sellerService;
-            this.productService = productService;   
+            this.productService = productService;  
+            this.logger = logger;
         }
 
 
@@ -115,8 +120,8 @@ namespace Tradify.Service.Services
                 {
 
                     await transaction.RollbackAsync();
-                    return ("Failed", null);
-
+                    logger.LogError(ex, ex.Message);
+                    throw;
                 }
             }
 

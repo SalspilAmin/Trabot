@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Tradify.Data.Entities;
@@ -7,7 +9,6 @@ using Tradify.Infrastructure.Context;
 using Tradify.Infrastructure.InfrastrucureBases;
 using Tradify.Service.AbstractsServices;
 using Tradify.Service.ServiceBases;
-using Microsoft.EntityFrameworkCore;
 
 
 namespace Tradify.Service.Services
@@ -19,17 +20,18 @@ namespace Tradify.Service.Services
         private readonly ICurrentUserService currentUserService;
         private readonly ICategoryRepository repository;
         private readonly IStoreService storeService;
+        private readonly ILogger<CateroriesService> logger;
 
         public CateroriesService(ICategoryRepository repository, ApplicationDbContext context,
             ISellerService sellerService, ICurrentUserService currentUserService,
-            IStoreService storeService) : base(repository)
+            IStoreService storeService , ILogger<CateroriesService> logger) : base(repository)
         {
             this.repository = repository;
             this.sellerService = sellerService;
             this.currentUserService = currentUserService;
             this.context = context;
             this.storeService = storeService;
-
+            this.logger = logger;
         }
 
 
@@ -110,8 +112,8 @@ namespace Tradify.Service.Services
                 {
 
                     await transaction.RollbackAsync();
-                    return ("Failed", null);
-
+                    logger.LogError(ex, ex.Message);
+                    throw;
                 }
             }
 
@@ -214,8 +216,8 @@ namespace Tradify.Service.Services
                 {
 
                     await transaction.RollbackAsync();
-                    return ("Failed");
-
+                    logger.LogError(ex, ex.Message);
+                    throw;
                 }
             }
 

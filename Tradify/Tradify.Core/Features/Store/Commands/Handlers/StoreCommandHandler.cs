@@ -76,42 +76,53 @@ namespace Tradify.Core.Features.Store.Commands.Handlers
 
 
             var result = await storeService.AddStoreAsync(store);
-            switch (result.Item1)
+
+
+
+            if (result.Item1 != "Success")
             {
+                return BadRequest<string>(localize.Get(result.Item1));
+            }
+            else
+            {
+                return Success<string>("Success", meta: (result.Item2));
+            }
+            //switch (result.Item1)
+            //{
 
-                case "SellerNotFound":
-                    return BadRequest<string>(localize.Get("SellerNotFound"));
-                    break;
-                case "SellerNotActive":
-                    return BadRequest<string>(localize.Get("SellerNotActive"));
-                    break;
+            //    case "SellerNotFound":
+            //        return BadRequest<string>(localize.Get("SellerNotFound"));
+            //        break;
+            //    case "SellerNotActive":
+            //        return BadRequest<string>(localize.Get("SellerNotActive"));
+            //        break;
 
-                case "UserNotFound":
-                    return BadRequest<string>(localize.Get("UserNotFound"));
-                    break;
+            //    case "UserNotFound":
+            //        return BadRequest<string>(localize.Get("UserNotFound"));
+            //        break;
 
                     
-                case "SellerConectWithDeletedUser":
-                    return BadRequest<string>(localize.Get("SellerConectWithDeletedUser"));
-                    break;
-                case "SellerAlreadyHasStore":
-                    return BadRequest<string>(localize.Get("SellerAlreadyHasStore"));
+            //    case "SellerConectWithDeletedUser":
+            //        return BadRequest<string>(localize.Get("SellerConectWithDeletedUser"));
+            //        break;
+            //    case "SellerAlreadyHasStore":
+            //        return BadRequest<string>(localize.Get("SellerAlreadyHasStore"));
 
-                    break;
+            //        break;
 
-                case "StoreNameAlreadyExists":
-                    return BadRequest<string>(localize.Get("StoreNameAlreadyExists"));
+            //    case "StoreNameAlreadyExists":
+            //        return BadRequest<string>(localize.Get("StoreNameAlreadyExists"));
 
-                    break;
+            //        break;
 
-                case "Failed":
-                    return BadRequest<string>(localize.Get("Failed"));
-                    break;
-                case "Success":
-                    return Success<string>(result.Item1, meta: result.Item2);
-                    break;
-                default: return BadRequest<string>(result.Item1);
-            }
+            //    case "Failed":
+            //        return BadRequest<string>(localize.Get("Failed"));
+            //        break;
+            //    case "Success":
+            //        return Success<string>(result.Item1, meta: result.Item2);
+            //        break;
+            //    default: return BadRequest<string>(result.Item1);
+            //}
             
 
         }
@@ -129,24 +140,9 @@ namespace Tradify.Core.Features.Store.Commands.Handlers
 
             if (result.Item1 != "Success")
             {
-                switch (result.Item1)
-                {
-                    case "SellerNotFound":
-                        return BadRequest<string>(localize.Get("SellerNotFound"));
-                    case "SellerNotActive":
-                        return BadRequest<string>(localize.Get("SellerNotActive"));
-                    case "UserNotFound":
-                        return BadRequest<string>(localize.Get("UserNotFound"));
-                    case "SellerConectWithDeletedUser":
-                        return BadRequest<string>(localize.Get("SellerConectWithDeletedUser"));
-                    case "SellerAlreadyHasStore":
-                        return BadRequest<string>(localize.Get("SellerAlreadyHasStore"));
-                    case "StoreNameAlreadyExists":
-                        return BadRequest<string>(localize.Get("StoreNameAlreadyExists"));
-                    default:
-                        return BadRequest<string>(localize.Get("Failed"));
-                }
+                return BadRequest<string>(localize.Get(result.Item1));
             }
+           
 
             var storeId = result.Item2.Value;
 

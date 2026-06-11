@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,7 +10,6 @@ using Tradify.Infrastructure.Context;
 using Tradify.Infrastructure.InfrastrucureBases;
 using Tradify.Service.AbstractsServices;
 using Tradify.Service.ServiceBases;
-using Microsoft.EntityFrameworkCore;
 
 
 namespace Tradify.Service.Services
@@ -19,16 +20,19 @@ namespace Tradify.Service.Services
         private readonly ApplicationDbContext context;
         private readonly UserManager<User> userManager;
         private readonly IInstructorsService instructorsService;
+        private readonly ILogger<CertificationsService> logger;
+
         public CertificationsService(IGenericRepository<Certifications> repository
              , ICurrentUserService currentUserService
             , ApplicationDbContext context
             , UserManager<User> userManager
-            , IInstructorsService instructorsService) : base(repository)
+            , IInstructorsService instructorsService , ILogger<CertificationsService> logger) : base(repository)
         {
             this.currentUserService = currentUserService;
             this.context = context;
             this.userManager = userManager;
             this.instructorsService = instructorsService;
+            this.logger = logger;   
         }
 
 
@@ -88,8 +92,8 @@ namespace Tradify.Service.Services
                 {
 
                     await transaction.RollbackAsync();
-                    return ("Failed", null);
-
+                    logger.LogError(ex, ex.Message);
+                    throw;
                 }
             }
         }

@@ -20,12 +20,18 @@ using Tradify.RealTimeService.AddDependencies;
 using Tradify.RealTimeService.HubNegotiation;
 using Tradify.Service.Dependencies;
 using Twilio.TwiML.Voice;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+     .AddJsonOptions(options =>
+     {
+         options.JsonSerializerOptions.Converters
+             .Add(new JsonStringEnumConverter());
+     }); 
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("First")).UseLazyLoadingProxies());
@@ -109,10 +115,6 @@ using (var scope = app.Services.CreateScope())
     // await InstructorReviewSeeder.SeedAsync(context);
   //  await ProductSeeder.SeedAsync(context);
    // await ProductReviewSeeder.SeedAsync(context);
-
-
-
-
 
 }
 
