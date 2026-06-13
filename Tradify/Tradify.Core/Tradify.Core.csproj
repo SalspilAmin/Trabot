@@ -47,7 +47,6 @@
     <Folder Include="Features\Fawaterak\Queries\Validations\" />
     <Folder Include="Features\Interactions\Queries\Results\" />
     <Folder Include="Features\Interactions\Queries\Validations\" />
-    <Folder Include="Features\Messages\Queries\Handler\" />
     <Folder Include="Features\Messages\Queries\Validators\" />
     <Folder Include="Features\Order\Queries\Validations\" />
     <Folder Include="Features\Post\Queries\Validations\" />

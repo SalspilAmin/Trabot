@@ -10,6 +10,7 @@ namespace Tradify.Core.Features.Messages.Queries.Models
     public class GetUnreadMessagesQuery :
      IRequest<Response<List<MessageResult>>>
     {
+        public GetUnreadMessagesQuery() { }
         public int UserId { get; set; }
     }
 }

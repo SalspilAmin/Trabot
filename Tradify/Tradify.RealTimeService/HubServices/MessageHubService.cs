@@ -22,27 +22,46 @@ namespace Tradify.RealTimeService.HubServices
             this.hubContext = hubcontext;
         }
 
-     
+
 
 
 
         public async Task NotifyNewMessage(
-            int receiverId,
-            MessageNotificationResult message)
+        int receiverId,
+    MessageNotificationResult message)
         {
+            var userConnection =
+                await userConnectionRepository
+                    .GetByUserId(receiverId);
+
+            if (userConnection == null)
+                return;
+            var connection = userConnection.FirstOrDefault();
+
+            if (connection == null)
+            {
+                return;
+            }
+
             await hubContext.Clients
-                .Group($"User-{receiverId}")
+                .Client(userConnection.FirstOrDefault().ConnectionId)
                 .SendAsync(
                     "ReceiveMessage",
                     message);
         }
-
         public async Task NotifyMessageRead(
-            int senderId,
-            int messageId)
+       int senderId,
+       int messageId)
         {
+            var userConnection =
+                await userConnectionRepository
+                    .GetByUserId(senderId);
+
+            if (userConnection.Count == 0 )
+                return;
+
             await hubContext.Clients
-                .Group($"User-{senderId}")
+                .Client(userConnection.FirstOrDefault().ConnectionId)
                 .SendAsync(
                     "MessageRead",
                     messageId);

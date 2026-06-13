@@ -32,6 +32,22 @@ namespace Tradify.Core.Mapping.MessageMapping
                     src.MessageMediaPaths
                         .Where(x => !x.IsDeleted)
                         .Select(x => x.MediaPath)));
+            CreateMap<MessageResult, MessageNotificationResult>()
+               .ForMember(
+                   dest => dest.MessageId,
+                   opt => opt.MapFrom(src => src.Id)
+               );
+            CreateMap<Message, MessageNotificationResult>()
+           .ForMember(dest => dest.MessageId,
+               opt => opt.MapFrom(src => src.Id))
+           .ForMember(dest => dest.SenderId,
+               opt => opt.MapFrom(src => src.SenderId))
+           .ForMember(dest => dest.ReceiverId,
+               opt => opt.MapFrom(src => src.ReceiverId))
+           .ForMember(dest => dest.Content,
+               opt => opt.MapFrom(src => src.Content))
+           .ForMember(dest => dest.CreatedAt,
+               opt => opt.MapFrom(src => src.CreatedAt));
         }
     }
 }

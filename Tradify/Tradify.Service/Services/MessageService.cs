@@ -48,7 +48,9 @@ namespace Tradify.Service.Services
 
         public async Task<List<Message>> GetUnreadMessagesAsync(int userId)
         {
-            return await context.Messages
+
+
+            var messages= await context.Messages
 
         .Include(x => x.SenderUser)
 
@@ -66,6 +68,8 @@ namespace Tradify.Service.Services
         .OrderByDescending(x => x.CreatedAt)
 
         .ToListAsync();
+
+            return messages;
         }
     }
 }

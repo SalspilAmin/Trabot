@@ -10,8 +10,8 @@ namespace Tradify.Core.Features.Messages.Queries.Models
     public class GetConversationQuery :
      IRequest<Response<List<MessageResult>>>
     {
-        public int UserOneId { get; set; }
+        public int SenderId { get; set; }
 
-        public int UserTwoId { get; set; }
+        public int ReceiverId { get; set; }
     }
 }
