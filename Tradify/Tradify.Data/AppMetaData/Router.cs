@@ -81,10 +81,14 @@ namespace Tradify.Data.AppMetaData
 
 
         }
-        
+        public static class Dashpoard
+        {
+            public const string prefix = Rule + "Dashpoard";
+            public const string Admin = prefix + "/Admin" ;
 
+        }
 
-            public static class Instructor
+        public static class Instructor
             {
                    public const string prefix = Rule + "Instructor";
                    public const string Add = prefix + "/AddInstructor";
