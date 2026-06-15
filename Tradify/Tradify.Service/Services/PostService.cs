@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using Tradify.Data.Entities.Posts;
+using Tradify.Infrastructure.Context;
 using Tradify.Infrastructure.InfrastrucureBases;
 using Tradify.Service.AbstractsServices;
 using Tradify.Service.ServiceBases;
@@ -13,9 +15,11 @@ namespace Tradify.Service.Services
     public class PostService : Service<Post>, IPostService
     {
         private readonly UserManager<Tradify.Data.Entities.Identity.User> _userManager; 
-        public PostService(IGenericRepository<Post> repository, UserManager<Tradify.Data.Entities.Identity.User> userManager) : base(repository)
+        private  readonly ApplicationDbContext context;
+        public PostService(IGenericRepository<Post> repository, UserManager<Tradify.Data.Entities.Identity.User> userManager,ApplicationDbContext context) : base(repository)
         {
             _userManager = userManager;
+            this.context = context;     
         }
 
         public async Task<List<Post>?> GetPostsOfUsers(int userId)
@@ -29,7 +33,14 @@ namespace Tradify.Service.Services
             return User.Posts.ToList(); 
              
         }
+        public async Task<Post?> GetPostByIdWithIncludesAsync(int postId)
+        {
+            return await context.Posts
+                .Include(x => x.ImageOrVideo_Paths)
+                .Include(x => x.interactionWithPosts)
+                .Include(x => x.Comments)
+                .FirstOrDefaultAsync(x => x.Id == postId && !x.IsDeleted);
+        }
 
-       
     }
 }

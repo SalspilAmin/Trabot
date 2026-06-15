@@ -386,6 +386,8 @@ namespace Tradify.Data.AppMetaData
             public const string GetPostsOfUserByID = prefix+ "/GetPostsOfUserByID"+ SignleRoute;
             public const string GetPostByID = prefix + "/GetPostByID" + SignleRoute;
             public const string GetPosts = prefix + "/GetPosts";
+            public const string Delete = prefix + "/Delete";
+            public const string Update = prefix + "/Update";
 
 
         }
@@ -419,6 +421,17 @@ namespace Tradify.Data.AppMetaData
             public const string GetInteractionByPostId = prefix + "/GetInteractions/post" + SignleRoute;
             public const string GetInteractionById = prefix + "/GetInteractions" + SignleRoute;
             public const string GetUserInteractionOnPost = prefix + "GetUserInteractionPost";
+        }
+        public static class Message
+        {
+            public const string prefix = Rule + "Message";
+            public const string AddMessage = prefix + "/AddMessage";
+            public const string Update = prefix + "/Update";
+            public const string Delete = prefix + "/Delete";
+            public const string IsRead = prefix + "/IsRead";
+            public const string GetById = prefix + SignleRoute;
+            public const string Conversation = prefix + "/Conversation";
+            public const string UnReadMessages = prefix + "/UnReadMessages" + SignleRoute;
         }
 
        
