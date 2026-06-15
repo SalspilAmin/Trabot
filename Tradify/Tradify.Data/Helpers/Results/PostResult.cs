@@ -12,6 +12,7 @@ namespace Tradify.Data.Helpers.Results
         public string? Caption { get; set; }
 
         public int? UserId { get; set; }
+        public string UserName { get; set; }
         public DateTimeOffset CreatedDate { get; set; } = DateTimeOffset.UtcNow;
         public PostType PostType { get; set; }
 

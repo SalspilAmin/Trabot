@@ -20,7 +20,7 @@ namespace Tradify.Core.Features.Order.Commands.Models
         public int CartId { get; set; }
 
         public decimal? ShippingPrice { get; set; }
-        public decimal? TotalAmount { get; set; }
+       
 
         
     }

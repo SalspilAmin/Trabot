@@ -22,7 +22,7 @@ namespace Tradify.Controllers.Post
             var response = await Mediator.Send(new GetPostsOfUsersQueriy(id) );
             return NewResult(response);
         }
-        [HttpGet(Router.Post.GetPostByID)]
+        [HttpGet(Router.Post.GetPostByID)] 
         public async Task<IActionResult> GetPostByID([FromRoute] int id)
         {
             var response = await Mediator.Send(new GetPostByIdQuery(id));
@@ -33,6 +33,18 @@ namespace Tradify.Controllers.Post
         {
             var response = await Mediator.Send(command);
              return Ok(response);
+        }
+        [HttpDelete(Router.Post.Delete)]
+        public async Task<IActionResult> DeletePosts([FromQuery] int PostId)
+        {
+            var response = await Mediator.Send(new DeletePostCommand() { PostId=PostId});
+            return NewResult(response);
+        }
+        [HttpPost(Router.Post.Update)]
+        public async Task<IActionResult> UpdatePost([FromForm] UpdatePostCommand command)
+        {
+            var response = await Mediator.Send(command);
+            return NewResult(response);
         }
 
     }

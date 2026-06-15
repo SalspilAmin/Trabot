@@ -28,9 +28,7 @@ namespace Tradify.Core.Features.Order.Commands.Validations
                 .NotNull().WithMessage(localization.Get("Required"));
             RuleFor(x => x.ShippingPrice).NotEmpty().WithMessage(localization.Get("NotEmpty"))
                 .NotNull().WithMessage(localization.Get("Required"));
-            RuleFor(x => x.TotalAmount).NotEmpty().WithMessage(localization.Get("NotEmpty"))
-                .NotNull().WithMessage(localization.Get("Required"))
-                .GreaterThan(x => x.ShippingPrice).WithMessage(localization.Get("AddCorrectValue"));
+           
    
           }
     }

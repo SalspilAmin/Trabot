@@ -9,5 +9,6 @@ namespace Tradify.Service.AbstractsServices
     public interface IPostService : IPostRepository
     {
         public Task<List<Post>?> GetPostsOfUsers(int userId);
+        Task<Post?> GetPostByIdWithIncludesAsync(int postId);
     }
 }

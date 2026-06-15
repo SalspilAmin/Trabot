@@ -18,6 +18,8 @@ namespace Tradify.Core.Mapping.Post
                 .ForMember(dest => dest.CommentsNumber,
                     opt => opt.MapFrom(src =>
                         src.Comments != null ? src.Comments.Count : 0))
+                      .ForMember(dest => dest.UserName,
+                opt => opt.MapFrom(src => src.User != null ? src.User.UserName : null))
 
                 .ForMember(dest => dest.interactionWithPostsNumber,
                     opt => opt.MapFrom(src =>
@@ -34,12 +36,21 @@ namespace Tradify.Core.Mapping.Post
                 .ForMember(dest => dest.interactionWithPostsNumber,
                     opt => opt.MapFrom(src =>
                         src.interactionWithPosts != null ? src.interactionWithPosts.Count : 0))
-
+                  .ForMember(dest => dest.UserName,
+                opt => opt.MapFrom(src => src.User != null ? src.User.UserName : null))
                 .ForMember(dest => dest.ImageOrVideo_Paths,
                     opt => opt.MapFrom(src => src.ImageOrVideo_Paths)).ReverseMap();
+                        
 
 
-            
+
+
+
+
+
+
+
+
         }
     }
 }

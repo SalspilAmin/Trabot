@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Serilog;
@@ -19,6 +20,7 @@ using Tradify.Service.Services;
 namespace Tradify.Core.Features.Post.Commands.Handler
 {
     public class PostCommandHandler :  ResponseHandler,IRequestHandler<AddPostModelCommand,Response<int?>>
+        ,IRequestHandler<UpdatePostCommand,Response<int>>,IRequestHandler<DeletePostCommand,Response<string>> 
     {
         #region Fields
         private readonly LocalizationService localization;
@@ -55,6 +57,7 @@ namespace Tradify.Core.Features.Post.Commands.Handler
         #region Methods
         public async Task<Response<int?>> Handle(AddPostModelCommand request, CancellationToken cancellationToken)
         {
+            request.MediaFilles ??= new List<IFormFile>();
             using (var transaction = await postService.BeginTransactionAsync())
             {
 
@@ -150,6 +153,230 @@ namespace Tradify.Core.Features.Post.Commands.Handler
             }
         }
 
-        #endregion
+        public async Task<Response<string>> Handle(DeletePostCommand request,CancellationToken cancellationToken)
+        {
+            using var transaction =
+                await postService.BeginTransactionAsync();
+
+            try
+            {
+                var post =
+                    await postService.GetPostByIdWithIncludesAsync(
+                        request.PostId);
+
+                if (post == null)
+                    return NotFound<string>(
+                        localization.Get("NotFound"));
+
+                // Delete files from cloud
+                if (post.ImageOrVideo_Paths != null)
+                {
+                    foreach (var media in post.ImageOrVideo_Paths)
+                    {
+                        await fileService.DeleteImageAsync(
+                            media.Image_Or_VideoPath);
+                    }
+                }
+
+                // Delete interactions
+                if (post.interactionWithPosts != null)
+                {
+                    foreach (var interaction in post.interactionWithPosts)
+                    {
+                        interaction.IsDeleted = true;
+                    }
+                }
+
+                // Delete comments
+                if (post.Comments != null)
+                {
+                    foreach (var comment in post.Comments)
+                    {
+                        comment.IsDeleted = true;
+                    }
+                }
+
+                // Delete media records
+                if (post.ImageOrVideo_Paths != null)
+                {
+                    foreach (var media in post.ImageOrVideo_Paths)
+                    {
+                        media.IsDeleted = true;
+                    }
+                }
+
+                // Delete post
+                post.IsDeleted = true;
+
+                await postService.SaveChangesAsync();
+
+                await transaction.CommitAsync();
+
+                return Success("Post deleted successfully");
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                return BadRequest<string>(ex.Message);
+            }
+        }
+
+        public async Task<Response<int>> Handle(UpdatePostCommand request,CancellationToken cancellationToken)
+        {
+            using var transaction =
+                await postService.BeginTransactionAsync();
+
+            try
+            {
+                var post =
+                    await postService
+                    .GetPostByIdWithIncludesAsync(request.PostId);
+
+                if (post == null)
+                    return NotFound<int>(
+                        localization.Get("NotFound"));
+
+                // Validation
+                if (request.NewMediaFiles?.Any() == true &&
+                    !request.ReplaceMedia)
+                {
+                    return BadRequest<int>(
+                        "ReplaceMedia must be true when uploading media.");
+                }
+
+                // Update text fields
+                post.Content = request.Content;
+                post.Caption = request.Caption;
+                post.IsUpdated = true;
+
+                // Handle media replacement
+                if (request.ReplaceMedia)
+                {
+                    // Delete old media
+                    if (post.ImageOrVideo_Paths != null)
+                    {
+                        foreach (var media in post.ImageOrVideo_Paths
+                                     .Where(x => !x.IsDeleted))
+                        {
+                            await fileService.DeleteImageAsync(
+                                media.Image_Or_VideoPath);
+
+                            media.IsDeleted = true;
+                            media.IsUpdated = true;
+                        }
+                        post.ImageOrVideo_Paths = null; 
+                    }
+                    
+
+                    // Upload new files
+                    if (request.NewMediaFiles != null &&
+                        request.NewMediaFiles.Any())
+                    {
+                        List<string> uploadedUrls = new();
+                        List<string> errors = new();
+
+                        foreach (var file in request.NewMediaFiles)
+                        {
+                            var uploadResult =
+                                await fileService.UploadImageAsync(
+                                    file,
+                                    UploadFolder.Post.ToString());
+
+                            switch (uploadResult.Error)
+                            {
+                                case "NoFile":
+                                    errors.Add(localization.Get("ImageNotFound"));
+                                    break;
+
+                                case "InvalidImageType":
+                                    errors.Add(localization.Get("Allowedextensions"));
+                                    break;
+
+                                case "InvalidFileType":
+                                    errors.Add(localization.Get("Allowedextensions"));
+                                    break;
+
+                                case "FileTooLarge":
+                                    errors.Add(localization.Get("MaxSizeIs5MB"));
+                                    break;
+
+                                case "FailedToUploadImage":
+                                    errors.Add(localization.Get("FailedToUploadImage"));
+                                    break;
+
+                                case "Success":
+                                    uploadedUrls.Add(uploadResult.Url);
+                                    break;
+                            }
+                        }
+
+                        if (errors.Any())
+                        {
+                            foreach (var url in uploadedUrls)
+                            {
+                                await fileService.DeleteImageAsync(url);
+                            }
+
+                            await transaction.RollbackAsync();
+
+                            return BadRequest<int>(
+                                string.Join(", ", errors));
+                        }
+
+                        foreach (var url in uploadedUrls)
+                        {
+                            var media = new ImageOrVideoPath
+                            {
+                                PostId = post.Id,
+                                Posts = post,
+                                Image_Or_VideoPath = url
+                            };
+
+                            await imageOrVideoPathService.AddAsync(media);
+                        }
+
+                        post.PostType = PostType.ImageOrVideo;
+                    }
+                    else
+                    {
+                        // User removed all media
+                        post.PostType = PostType.Text;
+                    }
+                }
+
+                // Prevent empty post
+                bool hasMedia =
+                    post.ImageOrVideo_Paths != null &&
+                    post.ImageOrVideo_Paths.Any(x => !x.IsDeleted);
+
+                bool hasText =
+                    !string.IsNullOrWhiteSpace(post.Content) ||
+                    !string.IsNullOrWhiteSpace(post.Caption);
+
+                if (!hasText && !hasMedia)
+                {
+                    return BadRequest<int>(
+                        "Post cannot be empty.");
+                }
+
+                await postService.SaveChangesAsync();
+
+                // Optional SignalR Notification
+                // var notifyPost = mapper.Map<PostResult>(post);
+                // await postHubService.NotifyPostUpdated(notifyPost);
+
+                await transaction.CommitAsync();
+
+                return Success(post.Id);
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+
+                return BadRequest<int>(ex.Message);
+            }
+        }
     }
+        #endregion
 }
+
