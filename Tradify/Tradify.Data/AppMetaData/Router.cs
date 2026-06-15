@@ -81,11 +81,36 @@ namespace Tradify.Data.AppMetaData
 
 
         }
-        public static class Dashpoard
+        public static class Dashpoard 
         {
             public const string prefix = Rule + "Dashpoard";
-            public const string Admin = prefix + "/Admin" ;
+            public const string Admin = prefix + "/admin" ;
+            public const string OrdersChart = prefix + "/admin"+ "/orders-chart";
+        public const string BookingChart = prefix + "/admin" + "/booking-chart";
 
+        public const string RevenueChart = prefix + "/admin" + "/RevenueChart";
+            public const string TopStores = prefix + "/admin" + "/top-stores";
+
+            public const string SellerProduct = prefix + "/sellerProduct";
+
+
+            public const string SellerProductOrdersChart = prefix + "/sellerProduct" + "/orders-chart";
+            public const string SellerProductRevenueChart = prefix + "/sellerProduct" + "/RevenueChart";
+            public const string TopProductsSelling = prefix + "/sellerProduct" + "/top-products-Selling";
+            public const string TopRatedProducts = prefix + "/sellerProduct" + "/top-Rated-Products";
+
+
+            public const string SellerService = prefix + "/sellerService";
+
+            public const string SellerServiceBookingChart = prefix + "/sellerService" + "/BookingChart";
+            public const string TopInstructor = prefix + "/sellerService" + "/top-Instructor";
+
+            public const string Instructor = prefix + "/instructor";
+
+            public const string InstructorSessionsChart = prefix + "/instructor" + "/SessionsChart";
+            public const string UpcomingAppointments = prefix + "/instructor" + "/upcoming-appointments";
+
+            
         }
 
         public static class Instructor
@@ -368,7 +393,9 @@ namespace Tradify.Data.AppMetaData
             public const string Update = prefix + "/Update";
             public const string Active = prefix + "/Active" + SignleRoute;
             public const string DisActive = prefix + "/DisActive" + SignleRoute;
+            public const string NotHaveStore = prefix + "/notHaveStore";
 
+            
         }
 
         public static class Cart

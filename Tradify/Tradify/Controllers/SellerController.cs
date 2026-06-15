@@ -13,6 +13,7 @@ namespace Tradify.Controllers
    
     public class SellerController : AppControllerBase
     {
+
         [HttpPost(Router.Seller.Create)]
 
         public async Task<IActionResult> Create([FromForm] AddSellerCommand command)
@@ -35,6 +36,13 @@ namespace Tradify.Controllers
             return Ok(result);
         }
 
+
+        [HttpGet(Router.Seller.NotHaveStore)]
+        public async Task<IActionResult> GetSellerNotHaveStore([FromQuery] GetSellerNotHaveStoreQuery query)
+        {
+            var result = await Mediator.Send(query);
+            return Ok(result);
+        }
         [HttpGet(Router.Seller.Profile)]
         public async Task<IActionResult> Profile([FromForm] GetSellerProfileQuery query)
         {

@@ -186,7 +186,7 @@ namespace Tradify.Core.Features.Order.Commands.Handler
                     {
                         ProductVariantId = item.Id,
                         Quantity = cartproduct.Quantity,
-                        Price = item.Price,
+                        Price = item.FinalPrice,
                         SubOrder = existingSubOrder
                     };
 

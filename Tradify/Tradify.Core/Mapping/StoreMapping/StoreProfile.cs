@@ -14,6 +14,7 @@ namespace Tradify.Core.Mapping.StoreMapping
             AddStoreMapping();
             GetStoreByIdMapping();
             GetStoresPaginationMapping();
+            TopStoresMapping();
         }
     }
 }
