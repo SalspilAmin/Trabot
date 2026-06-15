@@ -13,6 +13,7 @@ namespace Tradify.Core.Mapping.InstructorMapping
             GetInstructorByIdMapping();
             GetInstructorPagnitionMapping();
             GetInstructorWithDiscountMapping();
+            GetRecommendedInstructorsMapping();
         }
     }
    
