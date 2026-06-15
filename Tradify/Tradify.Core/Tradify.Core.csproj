@@ -50,8 +50,6 @@
     <Folder Include="Features\Order\Queries\Validations\" />
     <Folder Include="Features\Post\Queries\Validations\" />
     <Folder Include="Features\Seller\Queries\Handlers\" />
-    <Folder Include="Features\Seller\Queries\Models\" />
-    <Folder Include="Features\Seller\Queries\Results\" />
     <Folder Include="Mapping\Comments\Queries\" />
     <Folder Include="Mapping\Interactions\Queries\" />
     <Folder Include="Mapping\SellerMapping\Querry\" />

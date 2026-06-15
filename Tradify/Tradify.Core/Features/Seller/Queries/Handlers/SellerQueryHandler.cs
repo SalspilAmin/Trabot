@@ -22,6 +22,7 @@ namespace Tradify.Core.Features.Seller.Queries.Handlers
     public class SellerQueryHandler : ResponseHandler, IRequestHandler<GetSellerByIdQuery, Response<GetSellerByIdResponse>>
                                                      , IRequestHandler<GetAllSellerQuery, PaginatedResult<GetAllSellerResponse>>
                                                      , IRequestHandler<GetSellerProfileQuery, Response<GetSellerByIdResponse>>
+                                                     , IRequestHandler<GetSellerNotHaveStoreQuery, PaginatedResult<GetAllSellerResponse>>
 
 
 
@@ -78,6 +79,26 @@ namespace Tradify.Core.Features.Seller.Queries.Handlers
         }
 
 
+        public async Task<PaginatedResult<GetAllSellerResponse>> Handle(GetSellerNotHaveStoreQuery request, CancellationToken cancellationToken)
+        {
+
+
+            var sellers = sellerService.GetTableNoTracking()
+    .Where(s => s.Store == null)
+    .AsQueryable();
+
+            if (request.IsActive.HasValue)
+            {
+                sellers = sellers.IgnoreQueryFilters()
+                                   .Where(v => v.IsActive == request.IsActive);
+            }
+
+            var result = await mapper
+                .ProjectTo<GetAllSellerResponse>(sellers)
+                .ToPaginationlist(request.PageNumber, request.PageSize);
+
+            return result;
+        }
 
 
         // Get seller By Id

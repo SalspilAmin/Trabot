@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Tradify.Core.Features.Dashpoard.Queries.Results
+namespace Tradify.Core.Features.Dashpoard.Admin.Queries.Results
 {
     public class GetAdminDashboardResponse
     {

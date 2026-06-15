@@ -11,6 +11,9 @@ namespace Tradify.Core.Mapping.DashboardMapping
             public DashpoardProfille()
             {
             GetAdminDashboardMapping();
+            SellerProductDashpoardMapping();
+            ServiceSellerDashboardMapping();
+            GetInstructorDashboardMapping();
             }
         }
     

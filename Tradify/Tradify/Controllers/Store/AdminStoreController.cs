@@ -8,10 +8,13 @@ using Tradify.Core.Features.Store.Queries.Models;
 using Tradify.Core.Features.User.Commands.Models;
 using Tradify.Data.AppMetaData;
 using Tradify.Data.Entities;
+using Tradify.Data.Helpers;
 
 namespace Tradify.Controllers.Store
 {
-   public class AdminStoreController : AppControllerBase
+    [Authorize(Roles = RolesHelper.Admin)]
+
+    public class AdminStoreController : AppControllerBase
     {
         [HttpPost(Router.Store.Add)]
         public async Task<IActionResult> Add([FromForm] AddStoreCommand command)

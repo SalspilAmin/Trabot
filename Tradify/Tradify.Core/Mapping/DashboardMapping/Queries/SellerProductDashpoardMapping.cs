@@ -3,18 +3,18 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Tradify.Core.Features.Dashpoard.Admin.Queries.Results;
-using Tradify.Core.Features.Education.Queries.Results;
-using Tradify.Data.Entities.Appointments;
+using Tradify.Core.Features.Dashpoard.ProductSeller.Queries.Results;
 using Tradify.Service.Services.Dashpoard;
 
 namespace Tradify.Core.Mapping.DashboardMapping
 {
 
-    public partial class DashpoardProfille 
+    public partial class DashpoardProfille : Profile
     {
-        public void GetAdminDashboardMapping()
+        public void SellerProductDashpoardMapping()
         {
-            CreateMap<AdminDashboardDto, GetAdminDashboardResponse>();
+            CreateMap<SellerProductDashboardDto, SellerProductDashboardResponse>();
+
         }
     }
 }
