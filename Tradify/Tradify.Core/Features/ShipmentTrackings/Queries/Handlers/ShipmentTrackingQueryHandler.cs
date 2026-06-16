@@ -74,6 +74,9 @@ namespace Tradify.Core.Features.Categorie.Queries.Handlers
                 .Include(s => s.ShipmentTrackings)
                 .FirstOrDefaultAsync(s => s.SubOrderId == request.SubOrderId);
 
+            Console.WriteLine($"Request Id = {request.SubOrderId}");
+            Console.WriteLine($"Shipment Found = {shipment != null}");
+            
             if (shipment == null)
                 return NotFound<GetShipmentByOrderIdResponse>(localization.Get("ShipmentNotFound"));
 
