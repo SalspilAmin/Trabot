@@ -11,6 +11,7 @@ namespace Tradify.Core.Mapping.ShipmentTrackingMapping
         {
             GetShipmentByOrderIdMapping();
             GetSellerShipmentMapping();
+            GetShipmentTrackingByShipmentMapping();
         }
     }
     

@@ -222,7 +222,7 @@ namespace Tradify.Data.AppMetaData
           
             public const string BySeller = Rule + "Shipment" + "/BySeller";
 
-            public const string BySubShipment = prefix + "/GetTracking/{shipmentId}";
+            public const string BySubShipment = prefix + "Shipment" + "/GetTracking/{shipmentId}";
 
             
 
