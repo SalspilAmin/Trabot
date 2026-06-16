@@ -21,6 +21,8 @@ using Tradify.RealTimeService.HubNegotiation;
 using Tradify.Service.Dependencies;
 using Twilio.TwiML.Voice;
 using System.Text.Json.Serialization;
+using Tradify.Service.AbstractsServices;
+using Tradify.Service.Services.Ai;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,6 +37,16 @@ builder.Configuration.AddJsonFile("Secret.json");
 #region Dependencies
 builder.Services.AddInfrasturcureDepndencies().AddServicesDepencies().AddCoreDependencies().AddRealTimeDepndencies()
     .AdServiceRegisteration(builder.Configuration);
+
+//Ai
+builder.Services.AddHttpClient<
+    IAiService,
+    AiService>(client =>
+    {
+        client.BaseAddress =
+            new Uri("https://product-recommendation-hcez.vercel.app");
+    });
+
 
 builder.Services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 builder.Services.AddTransient<IUrlHelper>(x =>

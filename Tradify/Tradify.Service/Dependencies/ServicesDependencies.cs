@@ -18,6 +18,7 @@ using Tradify.Service.Services.FawaterakServices;
 using Tradify.Service.AbstractsServices.AuthorizationServices;
 using Tradify.Service.Services.AuthorizationServices;
 using Tradify.Service.Services.Dashpoard;
+using Tradify.Service.Services.Ai;
 
 namespace Tradify.Service.Dependencies
 {
@@ -68,6 +69,7 @@ namespace Tradify.Service.Dependencies
             services.AddTransient<IInstructorsService, InstructorsService>();
             services.AddTransient<IServiceService, ServiceService>();
             services.AddTransient<IDashboardService, DashboardService>();
+            //services.AddTransient<IAiService, AiService>();
 
 
 

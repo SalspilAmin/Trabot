@@ -112,6 +112,26 @@ namespace Tradify.Data.AppMetaData
 
             
         }
+        
+
+
+            public static class Ai
+        {
+            public const string prefix = Rule + "Ai";
+
+            public const string ProductRecommendation = prefix + "/product-recommendation";
+        }
+            public static class Recommendation
+        {
+            public const string prefix = Rule + "Recommendation";
+           
+            public const string Instructors = prefix + "/Instructors";
+
+            public const string TopRatedProduct = prefix + "/TopRated" + "/Product";
+
+            public const string TopRatedInstructor = prefix + "/TopRated" + "/Instructor";
+
+        }
 
         public static class Instructor
             {
