@@ -14,7 +14,7 @@ namespace Tradify.Core.Mapping.ShipmentTrackingMapping
 
             .ForMember(dest => dest.TrackingNumber, opt => opt.MapFrom(src => src.TrackingNumber))
 
-               .ForMember(dest => dest.CurrentStatus, opt => opt.MapFrom(src => src.CurrentStatus))
+               .ForMember(dest => dest.CurrentStatus, opt => opt.MapFrom(src => src.CurrentStatus.ToString()))
 
 
                
@@ -28,7 +28,7 @@ namespace Tradify.Core.Mapping.ShipmentTrackingMapping
         opt => opt.MapFrom(src => src.Id))
 
     .ForMember(dest => dest.ShipmentStatus,
-        opt => opt.MapFrom(src => src.ShipmentStatus))
+        opt => opt.MapFrom(src => src.ShipmentStatus.ToString()))
 
     .ForMember(dest => dest.CreatedAt,
         opt => opt.MapFrom(src => src.CreatedAt))
