@@ -11,7 +11,7 @@ namespace Tradify.Core.Features.ShipmentTrackings.Queries.Results
         public int Id { get; set; }
 
         public string TrackingNumber { get; set; }
-        public ShipmentStatus CurrentStatus { get; set; }
+        public string CurrentStatus { get; set; }
 
         public ICollection<ShipmentTrackingRespons>? ShipmentTrackings { get; set; }
 
@@ -21,7 +21,7 @@ namespace Tradify.Core.Features.ShipmentTrackings.Queries.Results
     {
         public int Id { get; set; }
 
-        public ShipmentStatus ShipmentStatus { get; set; }
+        public string ShipmentStatus { get; set; }
 
         public DateTime CreatedAt { get; set; }
 

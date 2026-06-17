@@ -10,6 +10,6 @@ namespace Tradify.Core.Features.ShipmentTrackings.Queries.Results
         public int Id { get; set; }
 
         public string TrackingNumber { get; set; }
-        public ShipmentStatus CurrentStatus { get; set; }
+        public string CurrentStatus { get; set; }
     }
 }

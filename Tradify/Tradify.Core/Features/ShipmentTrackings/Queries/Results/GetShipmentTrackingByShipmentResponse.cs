@@ -9,7 +9,7 @@ namespace Tradify.Core.Features.ShipmentTrackings.Queries.Results
     {
         public int Id { get; set; }
 
-        public ShipmentStatus ShipmentStatus { get; set; }
+        public string ShipmentStatus { get; set; }
 
         public DateTime CreatedAt { get; set; }
 
