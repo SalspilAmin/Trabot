@@ -252,8 +252,7 @@ namespace Tradify.Core.Features.Order.Commands.Handler
             
 
             // 2️⃣ Check Payment / Shipment
-            if (order.PaymentStatus == PaymentStatus.Paid)
-                return BadRequest<string>(localization.Get("CannotCancelledPaidOrder"));
+           
 
             if (order.subOrders.Any(s => s.Shipment != null))
                 return BadRequest<string>(localization.Get("OrderAlreadyShipped"));
